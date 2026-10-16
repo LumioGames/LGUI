@@ -1,13 +1,12 @@
-# 公开快照说明
+# 开源发布边界
 
-LGUI 来自一次隔离的 FairyGUI 浏览器优先与 Unity/PuerTS 验证。仓库根保留原“验证”目录的相对层级，便于恢复脚本依赖；不包含 LumioEngine、LumioGameNext 或其他私有项目。
+LGUI 从独立跨端验证快照整理为 Agent UI 插件。源码与历史证据保留；安装包通过 tools/pack.mjs 的明确清单产生，仅包含工具、技能、文档、许可和运行模板。旧记录中的路径归一化仍见源码 publication-manifest.json；原机 SHA 与公开归一化文本 SHA 可能不同。
 
-- 共享业务、布局、FairyGUI 源工程、生成美术、正式发布图集和宿主源码纳入版本控制。
-- 编辑器改动以固定上游提交上的完整 patch 提供；bootstrap 在本地恢复依赖。没有重新分发整个品牌化网页编辑器。
-- 调研时抓取的第三方网页、文档和源码快照不随包发布；报告中的固定上游链接保留作查证入口。第三方许可文本与实际分发的 runtime 署名继续保留。
-- 原报告保留历史判定。公开副本把原机绝对路径替换为 `[LGUI_ROOT]`、`[LOCAL_WORKSPACE]` 或 `[LOCAL_HOME]`；变换记录见 `publication-manifest.json`。原报告内的 SHA 描述原机记录；路径归一化后的公开副本可能有不同 SHA。
-- HTML 已针对仓库布局重新生成，截图内嵌。本机 Windows Player 二进制、安装包、Unity 许可证、缓存、浏览器 profile 和临时连接凭据不随源码发布。
-- HTML 中本机 Player 输出路径仅作记录。可通过文档中的固定版本流程自行构建；此前尚未生成分发 ZIP。
-- 用户验收通过与自动化结果分别记录。最后的原生说明补丁已构建，但没有补丁后运行复验报告；开源整理不把该状态提升为完整自动化通过。
+- 原始业务、适配层、正式 FairyGUI 工程、美术及选定发布资源在仓库中维护单一来源。
+- 兼容入口由根 plugin.json 生成；包不得依赖根外文件或个人机器路径。
+- 上游编辑器通过固定提交与 patch 恢复，不重新分发品牌化编辑器构建。三套 npm 依赖及可选 PuerTS 在用户工作区恢复。
+- 插件包排除历史日志、浏览器状态、安装器、node_modules、上游检出、Unity 缓存、凭据和原生 Player。包根 SHA 清单可独立验证。
+- 历史失败保留在源码中；用户接受、编译、运行与视觉通过分别记录。末版原生说明补丁历史上只有成功构建，没有补丁后运行报告。
+- 公开 GitHub 源码、可安装插件包和官方公共目录收录分别交付；本次不自动申请目录上架。
 
-原创代码许可见 `LICENSE`；第三方和素材范围见 `THIRD_PARTY_NOTICES.md`。
+使用 [安装指南](docs/install.md)，维护者遵循 [发布流程](docs/release.md)。原创许可见 [LICENSE](LICENSE)，第三方、素材与二进制再发行限制见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

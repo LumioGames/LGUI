@@ -1,6 +1,9 @@
 # Dependencies restored by bootstrap. Keep manifests, lockfiles and patches.
 **/node_modules/
 /repos/
+/artifacts/
+/test-output/
+/.lgui/
 /unity-migration/packages/
 
 # Unity import/build caches and per-user state.

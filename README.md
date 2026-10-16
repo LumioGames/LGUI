@@ -1,82 +1,59 @@
 # LGUI
 
-面向 Agent 创作、浏览器优先并可迁移 Unity 的 UI 原型。
+面向 Agent 创作的开源 UI 开发插件：浏览器优先，通过 FairyGUI 与共享 TypeScript 业务迁移到 Unity/PuerTS。[English overview](README.en.md)
 
-这是一个独立的 FairyGUI 跨端验证工程，不是 LumioEngine 或 LumioGameNext，也不依赖这两个工程。它验证了 Agent 与网页编辑器共享编辑会话、纯 TypeScript 业务、独立浏览器 UI，以及 Unity 原生 UI 的迁移路径。
+安装后先初始化配置和工程目录，再编辑、保存、发布与验证。背包是可运行的参考示例；通用能力是工作区初始化、固定依赖恢复、共用编辑会话和快照发布，后续 UI 可复用这些工作流。
 
-完整方案、踩坑和最佳实践见 [HTML 文档](交付/FairyGUI-跨端UI方案与最佳实践.html)。原始报告和证据保留各自阶段的结果；最新网页入口是 `/fidelity/`，旧 `/web/` 页面用于历史对照。
+## 安装与第一次使用
 
-## 结构与复用边界
-
-- `unity-migration/complex-inventory/shared/`：装备、消耗、出售、奖励、查询和 JSON 存档规则；直接组合 `prototype/shared/model.ts` 的奖励逻辑，共享层不依赖 DOM、Unity 或文件系统。
-- `unity-migration/complex-inventory/fidelity/`：当前网页、皮肤和透明详情图、fixture、验收脚本；`layout-shared.js` 提供跨端几何及展示函数。
-- `unity-migration/complex-inventory/project/`：正式 FairyGUI 源工程；`published/fidelity/` 为对应发布物，Unity 使用四页图集。
-- `unity-migration/InventoryUnity/`：Unity 原生适配、场景和构建入口。
-- `闭环验证/`：本地 Agent 会话桥、请求示例与编辑闭环记录。
-
-网页使用 FairyGUI-dom 的真实 DOM 控件，当前 fidelity 页面在运行时分层组装；Unity 使用正式 ComplexMain / ItemSlot 包与 FairyGUI-unity 原生渲染，**不使用 WebView 或 Unity WebGL**。两端执行同一份业务 IIFE 与布局字节；原生使用共享 presentation，网页仍保留既有展示投影。控件、事件、字体测量、存储和释放由平台适配负责。
-
-网页和 Unity 是独立会话与存储，共享存档 schema，不是在线状态同步。当前 fidelity 展示真实 24 个物品组件，`virtualList=false`；不要将旧压力测试结果视为此页面的规模性能结论。
-
-## 准备依赖
-
-本次基线为 Node.js 24.18.0、Unity **6000.6.6f1**、PuerTS Core / V8 **3.0.3**。Unity Windows IL2CPP 构建还需要对应模块及本机 C++ 工具链。
-
-在仓库根目录先预检：
+本轮目标：Codex CLI **0.160.0**、Claude Code **2.1.283**，Node **24.18.0**。命令实测范围见 [验证证据](docs/evidence.md)。
 
 ```sh
-node scripts/bootstrap.mjs --dry-run
+# Codex
+codex plugin marketplace add LumioGames/LGUI --ref main
+codex plugin add lgui@lumio-lgui
+
+# Claude Code
+claude plugin marketplace add LumioGames/LGUI
+claude plugin install lgui@lumio-lgui
 ```
 
-预检不等于安装完成。首次构建或验收前，显式恢复依赖：
+新开会话，调用 Codex 的 `$lgui-setup` 或 Claude 的 `/lgui:lgui-setup`：
 
-```sh
-node scripts/bootstrap.mjs --install
-# 需要 Unity 本地 PuerTS 包时：
-node scripts/bootstrap.mjs --install --unity
-```
+> 在 D:/UI/MyGame 初始化 LGUI 配置和目录，恢复网页依赖并启动示例。
 
-npm 依赖分属仓库根、`toolchain-test/` 和 `repos/editor-online/`，使用各自锁文件安装；SDK 0.7.0 与编辑器使用的 Core/backend/functions 0.2.4 不应混装。第三方检出、node_modules 和 Unity 本地包不入库，由 bootstrap 按固定来源恢复。`--unity` 不等于安装或激活 Unity 编辑器。
+没有目标目录时先询问。插件缓存、用户工程与临时验证目录分开；不在缓存里安装依赖或保存工程。完整手工命令、发布包安装、更新和卸载见 [安装指南](docs/install.md)。网页示例运行于 http://127.0.0.1:4182/fidelity/ ，编辑器运行于 http://127.0.0.1:5199/?agent=1 。
 
-仓库保留原验证目录的相对层级。不要单独移动 complex-inventory：构建脚本仍引用奖励模型、编辑器构建依赖、FairyGUI-dom 及工具链目录。
+## 工作流
 
-## 运行当前网页
+需求与参考 → 初始化 → 工程编辑 → 预检提交 → 保存读回 → 导出发布 → 网页验证 → 原生验证 → 版本发布。
 
-完成依赖恢复后，在仓库根执行：
+| 技能 | 使用目标 |
+|---|---|
+| lgui-setup | 安装后的配置与目录初始化、诊断、固定依赖恢复 |
+| lgui-author | 参考拆层、素材来源、组件实例/XML、九宫格、动效与响应式实现 |
+| lgui-edit | 与人共用编辑会话、query/preflight/transact/undo/save/export |
+| lgui-verify | 独立浏览器交互、持久化、布局与截图验证 |
+| lgui-unity | Unity/PuerTS 资源准备、原生验证与 Windows IL2CPP 构建 |
 
-```sh
-node unity-migration/complex-inventory/scripts/build-app.mjs
-node unity-migration/complex-inventory/fidelity/build-fidelity.mjs
-node unity-migration/complex-inventory/scripts/serve.mjs
-```
+[工作流与命令](docs/workflow.md) · [架构与目录](docs/architecture.md) · [兼容矩阵](docs/compatibility.md) · [故障排查](docs/troubleshooting.md)
 
-打开 **http://127.0.0.1:4182/fidelity/**。服务会占用当前终端；后续检查另开终端执行。
+团队提供的 UI 设计 skill 已去重整合到 lgui-author，保留五份按需分册；[来源与整合说明](docs/imported-ui-skill.md)列出新增经验和适用边界。
 
-页面按窗口尺寸重排。固定设计为 1586×992；754/794 宽窗口为四列，486 为三列，390 为两列。图片保持主体比例，文字、数量、按钮和业务状态可交互。自适应不表示与设计稿逐像素相同。
+## 当前能力与限制
 
-## Unity 原生路径
+共享业务保持纯 TS，布局数据可跨端使用；字体、资源加载、事件、存储与生命周期由平台适配处理。Agent 与人共享同一会话、队列、revision、精确重试和撤销历史。保存写浏览器工作区，显式 ZIP 导出后再发布；localhost relay 是 HTTP CLI，未伪装成 MCP。
 
-依赖恢复后先同步正式资源：
+网页 fidelity 仍使用 FairyGUI-dom 手工组件组装；Unity 使用正式发布包和原生 FairyGUI-unity/PuerTS，不是 WebView 或 WebGL。展示投影尚未全部去重，两端存储不在线同步。背包的 24 格、固定 ID 和设计画布只属于示例。参考美术提取脚本不等于任意图片自动分层器。
 
-```sh
-node unity-migration/complex-inventory/scripts/setup-fidelity-unity.mjs
-```
+Unity 目标为 **6000.6.6f1 + PuerTS Core/V8 3.0.3**，Windows Player 需要 IL2CPP/C++ 工具链和本机许可证。准备、构建与运行步骤见 [原生流程](skills/lgui-unity/references/native.md)。
 
-然后使用 Unity 6000.6.6f1 打开 `unity-migration/InventoryUnity/`。自动准备、生成互通代码、构建和测试入口为 `unity-migration/complex-inventory/scripts/run-fidelity.ps1`，顺序及参数见 HTML 文档。
+[官方 Unity CLI 调研与构建路径](docs/unity-cli.md)列出可用于打包、诊断、测试和 Agent 发现的能力，以及本轮实际验证范围。
 
-保留 `Packages/manifest.json` 的相对路径、资源 `.meta` 与 PuerTS 兼容补丁。关闭 UI 仅释放视图和监听，业务 VM 保留；宿主退出才关闭应用并释放 VM。默认发行配置不开启文件命令测试泵，只有显式验证目录才启用。
+用户历史验收通过；历史说明高度补丁当时只有构建结果。本轮补做 Windows Player 运行：52 条业务/生命周期与 16 条文本边界检查通过，并查看可见窗口截图。历史失败、隐藏窗口黑图、客户端测试范围和未测项均见 [证据](docs/evidence.md)；本轮不新增用户验收结论。
 
-## 验收状态
+## 维护与许可
 
-用户已明确表示**验收通过**。这与分阶段自动化结果分别记录：
+[贡献](CONTRIBUTING.md) · [可重复打包与 CI](docs/release.md) · [发布边界](PUBLICATION.md)
 
-- 网页 Chrome / Edge 控件专项各 182 条断言通过；窄窗与弹层专项各 74 条通过。它们不是物理输入法或手机验收，也不是逐像素视觉证明。
-- 最近完整 Editor 运行的 28 条业务及生命周期断言通过；请求 794×727，实际 GameView 仍为 390×844，整体保留 `partial`。
-- 最近完整 Windows IL2CPP Player 运行的 46 条业务及生命周期断言通过，但 canonical 说明第三行裁切，故当轮整体为 `failed`。
-- 原生说明高度补丁随后已实施；末版 Windows x64 IL2CPP **Release 构建成功**。尚无补丁后 Player 运行复验报告，不能沿用旧 46 条宣称末版完整通过。当前未生成 ZIP。
-
-历史 Development、旧页面和旧压力结果不并入新版通过数。源码、发布、编译、运行、视觉和用户接受是不同证据层级。
-
-## 许可
-
-仓库原创代码采用 [MIT](LICENSE)，Copyright © 2026 LumioGames。第三方代码、资源、品牌和依赖保留各自许可及来源记录；根 MIT 不改变其授权。Unity 编辑器、许可证和系统字体不随仓库分发。
+原创工作采用 [MIT](LICENSE)，Copyright © 2026 LumioGames。保留 [第三方通知与素材来源](THIRD_PARTY_NOTICES.md)。不分发 Unity、系统字体、许可证或上游编辑器构建。公开 GitHub 仓库、可安装插件包、官方插件目录收录是三种不同状态；本次不自动申请官方目录上架。

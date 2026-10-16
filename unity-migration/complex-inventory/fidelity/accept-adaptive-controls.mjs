@@ -13,7 +13,7 @@ const normalized=view=>({...view,revision:0});
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const rectInside=(r,v)=>r&&r.width>0&&r.height>0&&r.x>=-.01&&r.y>=-.01&&r.x+r.width<=v.width+.01&&r.y+r.height<=v.height+.01;
 const numeric=text=>Number(text.replace(/[^0-9]/g,''));
-const local=value=>{const url=new URL(value);assert.equal(url.origin,'http://127.0.0.1:4182','Only the supplied local server is permitted');return url;};
+const local=value=>{const url=new URL(value);assert.equal(url.origin,`http://127.0.0.1:${process.env.LGUI_WEB_PORT||4182}`,'Only the supplied local server is permitted');return url;};
 
 export const EXPECTATIONS={
  viewport:{width:754,height:743,deviceScaleFactor:1},
@@ -28,7 +28,7 @@ export async function runAdaptiveAcceptance(argv=process.argv.slice(2)){
  const flag=(key,fallback)=>{const index=argv.indexOf(key);return index<0?fallback:argv[index+1];};
  const channel=flag('--browser',process.env.BROWSER||'chrome');assert(['chrome','edge'].includes(channel));
  const label=flag('--label',channel);assert.match(label,/^[\w-]+$/);
- const url=flag('--url','http://127.0.0.1:4182/fidelity/');local(url);
+ const url=flag('--url',`http://127.0.0.1:${process.env.LGUI_WEB_PORT||4182}/fidelity/`);local(url);
  const output=path.join(here,'evidence',`adaptive-controls-${new Date().toISOString().replaceAll(':','-')}-${label}`);
  await fs.mkdir(output,{recursive:true});
  const report={schemaVersion:1,startedAt:new Date().toISOString(),url,channel,status:'running',expectations:EXPECTATIONS,checks:[],steps:[],screenshots:[],layouts:[],detailImages:[],controlArt:[],errors:[],requests:[],requestFailures:[],blockedExternal:[],limitations:[EXPECTATIONS.inputMethod,EXPECTATIONS.scope,'Alpha/source identity and geometry checks do not replace human inspection of artwork, text glyphs, or 1:1 reference likeness.']};

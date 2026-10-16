@@ -18,7 +18,7 @@ export const EXPECTATIONS={
  scope:'Playwright DOM input on an isolated local browser; not OS input, Computer Use, a mobile-device test or physical IME.',
  visualPolicy:'No pixel similarity threshold. Canonical screenshot, 1280 uniform geometry and narrow fit are separate from root reference overlays and regional human review.',
 };
-function loopback(value){const url=new URL(value);assert.equal(url.protocol,'http:','Only local HTTP is permitted');assert.equal(url.hostname,'127.0.0.1','Only the explicit loopback host is permitted');assert.equal(url.port,'4182','Only the supplied local fidelity server is permitted');return url;}
+function loopback(value){const url=new URL(value);assert.equal(url.protocol,'http:','Only local HTTP is permitted');assert.equal(url.hostname,'127.0.0.1','Only the explicit loopback host is permitted');assert.equal(url.port,process.env.LGUI_WEB_PORT||'4182','Only the supplied local fidelity server is permitted');return url;}
 function failure(code,message){const error=new Error(message);error.code=code;return error;}
 export async function probePage(value){
  const url=loopback(value);
@@ -34,7 +34,7 @@ function numberText(text){return Number(text.replace(/[^0-9]/g,''));}
 
 export async function runAcceptance(argv=process.argv.slice(2)){
  const flag=(name,fallback)=>{const index=argv.indexOf(name);return index<0?fallback:argv[index+1];};
- const url=flag('--url','http://127.0.0.1:4182/fidelity/');loopback(url);
+ const url=flag('--url',`http://127.0.0.1:${process.env.LGUI_WEB_PORT||4182}/fidelity/`);loopback(url);
  const probeOnly=argv.includes('--probe-only');
  const label=flag('--label',probeOnly?'probe':'browser');assert.match(label,/^[a-zA-Z0-9_-]+$/);
  const channel=flag('--browser',process.env.BROWSER||'chrome');assert(['chrome','edge'].includes(channel));
@@ -116,7 +116,7 @@ export async function runAcceptance(argv=process.argv.slice(2)){
   report.initialDomImageUrls=visualUrls;
   const referenceUrl=url=>decodeURIComponent(new URL(url).pathname).endsWith('/art/reference.png')||decodeURIComponent(new URL(url).pathname).endsWith('/reference.png');
   check('page never requests or displays the full reference image',!report.requests.some(request=>referenceUrl(request.url))&&!visualUrls.some(value=>!value.startsWith('data:')&&!value.startsWith('blob:')&&referenceUrl(value))&&!images.some(image=>image.matchesReferencePixels));
-  check('more than 20 decomposed image assets are rendered and requested',new Set(visualUrls.filter(url=>url.startsWith('http://127.0.0.1:4182/'))).size>20&&new Set(images.map(image=>image.url)).size>20,{renderedUrls:visualUrls.length,requestedImages:images.length});
+  check('more than 20 decomposed image assets are rendered and requested',new Set(visualUrls.filter(value=>value.startsWith(new URL(url).origin+'/'))).size>20&&new Set(images.map(image=>image.url)).size>20,{renderedUrls:visualUrls.length,requestedImages:images.length});
 
   await click('primary');let current=await waitFor(r=>r.view.equipment.weapon?.id==='sword-1','real equip');
   check('actual primary control equips selected sword',current.ok&&current.view.usedSlots===23&&(await testid('primary').innerText()).includes('卸下'));

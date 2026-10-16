@@ -1,0 +1,4723 @@
+{
+  "date": "2026-10-16",
+  "baseCommit": "3c53360",
+  "environment": {
+    "os": "Windows x64",
+    "node": "24.18.0",
+    "codex": "0.160.0",
+    "claudeCode": "2.1.283",
+    "claudeConfiguredModel": "glm-5.3[1m]",
+    "chrome": "155.0.8059.84",
+    "edge": "155.0.4283.45",
+    "unity": "6000.6.6f1",
+    "puerts": "3.0.3",
+    "unityCli": "1.0.0-beta.13"
+  },
+  "coreTests": {
+    "passed": 44,
+    "failed": 0,
+    "rawSha256": "024e7addbaac0468204282818f129124f38b9ee9ac8249965f79f09c692d559d"
+  },
+  "records": [
+    {
+      "source": "workspace/闭环验证/evidence/2026-10-16T12-08-19-637Z-chrome-persistent/report.json",
+      "sha256": "3b27689c48cce52f683b6c3f96e6aa0fb300fdaf961c7aa0772d48cfb9de9182",
+      "scope": "process restart, original package workspace",
+      "status": "persistent_restart_passed",
+      "completedAt": "2026-10-16T12:08:39.686Z",
+      "checks": [
+        {
+          "name": "save before shutdown is verified",
+          "passed": true
+        },
+        {
+          "name": "before-process-close browser process disconnected",
+          "passed": true
+        },
+        {
+          "name": "independent CLI sees this browser client",
+          "passed": true
+        },
+        {
+          "name": "independent CLI reads the same session identity",
+          "passed": true
+        },
+        {
+          "name": "restart creates another live session",
+          "passed": true
+        },
+        {
+          "name": "restart restores saved title and clean state",
+          "passed": true
+        },
+        {
+          "name": "restart retains IDs, controller, transition and resources",
+          "passed": true
+        },
+        {
+          "name": "old process identity is rejected",
+          "passed": true
+        },
+        {
+          "name": "old identity rejection preserves complete state",
+          "passed": true
+        },
+        {
+          "name": "no external requests attempted",
+          "passed": true
+        },
+        {
+          "name": "no unexpected browser errors",
+          "passed": true
+        },
+        {
+          "name": "after-process-restart browser process disconnected",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "source": "workspace/闭环验证/evidence/2026-10-16T12-10-01-113Z-chrome/report.json",
+      "sha256": "54fc7ff1240cff61dcb9e80cd070e01c7f2fb97e43f2fd26b89058acaf8bf5b3",
+      "scope": "real editor session roundtrip",
+      "status": "browser_closed_loop_passed",
+      "startedAt": "2026-10-16T12:10:01.116Z",
+      "completedAt": "2026-10-16T12:10:10.395Z",
+      "checks": [
+        {
+          "name": "correct Inventory IDs",
+          "passed": true
+        },
+        {
+          "name": "UI/backend revision aligned at baseline",
+          "passed": true
+        },
+        {
+          "name": "relay rejects missing token and wrong client",
+          "passed": true
+        },
+        {
+          "name": "concurrent same-revision writes have one winner",
+          "passed": true
+        },
+        {
+          "name": "Inspector preserves unrelated project content",
+          "passed": true
+        },
+        {
+          "name": "Inspector commits through shared session",
+          "passed": true
+        },
+        {
+          "name": "UI mutation reaches Agent query without save",
+          "passed": true
+        },
+        {
+          "name": "Agent preserves unrelated project content",
+          "passed": true
+        },
+        {
+          "name": "Agent applies three property classes",
+          "passed": true
+        },
+        {
+          "name": "Agent remains on UI session and aligned revision",
+          "passed": true
+        },
+        {
+          "name": "exact retry is idempotent",
+          "passed": true
+        },
+        {
+          "name": "request ID cannot be reused for another payload",
+          "passed": true
+        },
+        {
+          "name": "stale write explicitly fails",
+          "passed": true
+        },
+        {
+          "name": "missing target explicitly fails",
+          "passed": true
+        },
+        {
+          "name": "missing save target explicitly fails",
+          "passed": true
+        },
+        {
+          "name": "negative writes preserve complete state",
+          "passed": true
+        },
+        {
+          "name": "Agent undo shares preexisting UI history",
+          "passed": true
+        },
+        {
+          "name": "UI redo restores Agent transaction",
+          "passed": true
+        },
+        {
+          "name": "Agent saves shared browser workspace with verified readback",
+          "passed": true
+        },
+        {
+          "name": "UI save persists Agent and Inspector edits",
+          "passed": true
+        },
+        {
+          "name": "ZIP import never silently writes source archive",
+          "passed": true
+        },
+        {
+          "name": "refresh/reopen retains IDs, resources, controller, gears and transition",
+          "passed": true
+        },
+        {
+          "name": "export ZIP contains final text, transition, controller and image references",
+          "passed": true
+        },
+        {
+          "name": "no external upload attempted",
+          "passed": true
+        },
+        {
+          "name": "no unexpected page/console errors",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "source": "workspace/unity-migration/complex-inventory/fidelity/evidence/adaptive-controls-2026-10-16T12-08-18.824Z-chrome/result.json",
+      "sha256": "f0040deec0d9fa2e7a56103f29fabf6f306d6d02193c871af8d1ff98d2852d7a",
+      "scope": "browser interaction and layout",
+      "status": "passed",
+      "startedAt": "2026-10-16T12:08:18.832Z",
+      "completedAt": "2026-10-16T12:08:38.113Z",
+      "checks": [
+        {
+          "name": "real local FairyGUI DOM without canvas or iframe",
+          "passed": true
+        },
+        {
+          "name": "target viewport is 754x743 with native scale one",
+          "passed": true
+        },
+        {
+          "name": "actual root CSS transform preserves native scale",
+          "passed": true
+        },
+        {
+          "name": "adaptive page begins with the shared 24-stack fixture",
+          "passed": true
+        },
+        {
+          "name": "24 real cells form four columns and six rows",
+          "passed": true
+        },
+        {
+          "name": "every cell is fully visible and its center is hit-testable",
+          "passed": true
+        },
+        {
+          "name": "quantity fields stay completely within their own cells",
+          "passed": true
+        },
+        {
+          "name": "sword-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "axe-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "bow-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "staff-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "shield-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "helmet-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "armor-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "boots-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "ring-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "amulet-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "bluePotion-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "staminaPotion-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "antidote-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "elixir-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "herb-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "mushroom-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "ore-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "crystal-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "leather-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "key-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "scroll-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "coinPouch-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "gem-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "all visible body text has effective font at least 16px",
+          "passed": true
+        },
+        {
+          "name": "main pane fills height without large top and bottom letterboxes",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial: real search tabs buttons and frame skins use their art insets",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameLeft: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameRight: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameFooter: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-searchBg: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-primary-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sell-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-progressFrame: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sort-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-compass: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-compass: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-primary: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sellCoins: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sellCoins: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sell: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameLeft: both panel side borders actually paint the full center height",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameRight: both panel side borders actually paint the full center height",
+          "passed": true
+        },
+        {
+          "name": "ring-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "ring-1 presents the manifest-declared standalone detail asset",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail uses an independent alpha image with transparent corners",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail preserves natural aspect ratio",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail has no quantity DOM overlay",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-compass: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-compass: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-primary: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-sellCoins: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-sellCoins: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-sell: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "primary: actual text center is inside its button hit area",
+          "passed": true
+        },
+        {
+          "name": "actual visible equipment text click equips the selected ring",
+          "passed": true
+        },
+        {
+          "name": "primary: actual text center is inside its button hit area",
+          "passed": true
+        },
+        {
+          "name": "actual visible unequip text click returns stable ring",
+          "passed": true
+        },
+        {
+          "name": "key-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "key-1 presents the manifest-declared standalone detail asset",
+          "passed": true
+        },
+        {
+          "name": "key-1 detail uses an independent alpha image with transparent corners",
+          "passed": true
+        },
+        {
+          "name": "key-1 detail preserves natural aspect ratio",
+          "passed": true
+        },
+        {
+          "name": "key-1 detail has no quantity DOM overlay",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-compass: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-compass: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-primary: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-sellCoins: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-sellCoins: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-sell: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 presents the manifest-declared standalone detail asset",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 detail uses an independent alpha image with transparent corners",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 detail preserves natural aspect ratio",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 detail has no quantity DOM overlay",
+          "passed": true
+        },
+        {
+          "name": "actual primary is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual use consumes exactly one and updates visible quantity",
+          "passed": true
+        },
+        {
+          "name": "actual sell is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "both real sell-confirm buttons fit viewport",
+          "passed": true
+        },
+        {
+          "name": "opening sell confirmation leaves shared state unchanged",
+          "passed": true
+        },
+        {
+          "name": "actual cancel is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "real cancel preserves shared state and removes popup",
+          "passed": true
+        },
+        {
+          "name": "actual sell is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "sell confirmation remains in viewport when reopened",
+          "passed": true
+        },
+        {
+          "name": "actual confirm is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "real sale confirmation consumes one and credits exact price",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "actual menu_save is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual primary is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "actual menu_load is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "anchored menu save/load restores full actual business state",
+          "passed": true
+        },
+        {
+          "name": "save writes actual local storage",
+          "passed": true
+        },
+        {
+          "name": "actual sort is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all five real sorting choices fit viewport",
+          "passed": true
+        },
+        {
+          "name": "actual sort_name is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "anchored sort menu changes actual business order",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "actual menu_reward is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all reward popup buttons fit viewport",
+          "passed": true
+        },
+        {
+          "name": "actual reward-progress is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "real adaptive reward progress uses shared rules",
+          "passed": true
+        },
+        {
+          "name": "rebuilt reward popup remains anchored inside viewport",
+          "passed": true
+        },
+        {
+          "name": "actual reward-claim is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "real adaptive reward claim credits ten coins",
+          "passed": true
+        },
+        {
+          "name": "actual cancel is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "resize 1024x768 preserves business and one listener",
+          "passed": true
+        },
+        {
+          "name": "resize 754x743 preserves business and one listener",
+          "passed": true
+        },
+        {
+          "name": "resize 820x743 preserves business and one listener",
+          "passed": true
+        },
+        {
+          "name": "resize 754x743 preserves business and one listener",
+          "passed": true
+        },
+        {
+          "name": "return to target retains native scale",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "storage menu stays anchored after repeated resize",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual sort is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "sorting menu stays anchored after repeated resize",
+          "passed": true
+        },
+        {
+          "name": "actual sort_default is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual sell is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "resize dismisses an unconfirmed sale without committing business",
+          "passed": true
+        },
+        {
+          "name": "post-resize adaptive grid still exposes all 24 usable cells",
+          "passed": true
+        },
+        {
+          "name": "794x727 live-sized adaptive layout exposes a complete four-by-six grid",
+          "passed": true
+        },
+        {
+          "name": "ring-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "ring-1 presents the manifest-declared standalone detail asset",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail uses an independent alpha image with transparent corners",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail preserves natural aspect ratio",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail has no quantity DOM overlay",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring: real search tabs buttons and frame skins use their art insets",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameLeft: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameRight: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameFooter: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-searchBg: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-primary-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sell-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-progressFrame: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sort-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-compass: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-compass: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-primary: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sellCoins: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sellCoins: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sell: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameLeft: both panel side borders actually paint the full center height",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameRight: both panel side borders actually paint the full center height",
+          "passed": true
+        },
+        {
+          "name": "actual sort is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "794x727 sorting choices remain fully in viewport",
+          "passed": true
+        },
+        {
+          "name": "actual sort_default is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual sell is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "794x727 sell confirmation buttons stay in viewport",
+          "passed": true
+        },
+        {
+          "name": "actual cancel is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "794x727 modal cancellation preserves actual business",
+          "passed": true
+        },
+        {
+          "name": "sword-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "canonical 1586x992 retains native scale and its complete six-by-four grid",
+          "passed": true
+        },
+        {
+          "name": "canonical sword still shows the real three shared attributes",
+          "passed": true
+        },
+        {
+          "name": "canonical basic controls remain inside viewport",
+          "passed": true
+        },
+        {
+          "name": "canonical compass preserves its original reference ornament",
+          "passed": true
+        },
+        {
+          "name": "canonical sellCoins preserves its original reference ornament",
+          "passed": true
+        },
+        {
+          "name": "all resources remain local and successful",
+          "passed": true
+        },
+        {
+          "name": "no browser or host errors",
+          "passed": true
+        },
+        {
+          "name": "source artifacts stayed unchanged throughout this run",
+          "passed": true
+        }
+      ],
+      "rawVisualStatus": "not-assessed"
+    },
+    {
+      "source": "workspace/unity-migration/complex-inventory/fidelity/evidence/narrow-2026-10-16T12-08-38.206Z-chrome/result.json",
+      "sha256": "8e7587a55d852969d8fe962ea3b476f41771e4e3babcd66a7fa8dd30b1fa68cd",
+      "scope": "browser interaction and layout",
+      "status": "passed",
+      "startedAt": "2026-10-16T12:08:38.207Z",
+      "completedAt": "2026-10-16T12:08:47.491Z",
+      "checks": [
+        {
+          "name": "486x727: initial fixture is 24 real items and 12480 coins",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: ring-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: key-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/key-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest-four-characters: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest-four-characters: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: quest controls really disable use and sale",
+          "passed": true
+        },
+        {
+          "name": "486x727: redPotion-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/redPotion-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel sale is atomic",
+          "passed": true
+        },
+        {
+          "name": "486x727: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm-reopen: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm-reopen: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: confirm actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: sort actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sort-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: sort_name actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_save actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_load actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: actual save/load restores full business",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_reward actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: reward-progress actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: reward-claim actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/claimed-reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/claimed-reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: no host errors and no extra subscriptions",
+          "passed": true
+        },
+        {
+          "name": "390x844: initial fixture is 24 real items and 12480 coins",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: ring-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: key-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/key-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest-four-characters: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest-four-characters: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: quest controls really disable use and sale",
+          "passed": true
+        },
+        {
+          "name": "390x844: redPotion-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/redPotion-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel sale is atomic",
+          "passed": true
+        },
+        {
+          "name": "390x844: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm-reopen: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm-reopen: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: confirm actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: sort actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sort-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: sort_name actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_save actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_load actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: actual save/load restores full business",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_reward actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: reward-progress actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: reward-claim actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/claimed-reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/claimed-reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: wide smoke 754 preserves state",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: wide smoke 794 preserves state",
+          "passed": true
+        },
+        {
+          "name": "390x844: no host errors and no extra subscriptions",
+          "passed": true
+        },
+        {
+          "name": "source artifacts are unchanged throughout narrow and wide smoke runs",
+          "passed": true
+        },
+        {
+          "name": "no browser errors, failed or external requests",
+          "passed": true
+        }
+      ],
+      "rawVisualStatus": "not-assessed"
+    },
+    {
+      "source": "workspace/unity-migration/complex-inventory/fidelity/evidence/adaptive-controls-2026-10-16T12-09-40.248Z-edge/result.json",
+      "sha256": "f2a0db6cea2815c074b39055d2718c0ac87573a98ac3450e461d5a69b745d73f",
+      "scope": "browser interaction and layout",
+      "status": "passed",
+      "startedAt": "2026-10-16T12:09:40.249Z",
+      "completedAt": "2026-10-16T12:09:51.458Z",
+      "checks": [
+        {
+          "name": "real local FairyGUI DOM without canvas or iframe",
+          "passed": true
+        },
+        {
+          "name": "target viewport is 754x743 with native scale one",
+          "passed": true
+        },
+        {
+          "name": "actual root CSS transform preserves native scale",
+          "passed": true
+        },
+        {
+          "name": "adaptive page begins with the shared 24-stack fixture",
+          "passed": true
+        },
+        {
+          "name": "24 real cells form four columns and six rows",
+          "passed": true
+        },
+        {
+          "name": "every cell is fully visible and its center is hit-testable",
+          "passed": true
+        },
+        {
+          "name": "quantity fields stay completely within their own cells",
+          "passed": true
+        },
+        {
+          "name": "sword-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "axe-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "bow-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "staff-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "shield-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "helmet-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "armor-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "boots-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "ring-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "amulet-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "bluePotion-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "staminaPotion-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "antidote-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "elixir-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "herb-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "mushroom-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "ore-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "crystal-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "leather-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "key-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "scroll-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "coinPouch-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "gem-1 uses real quantity and no grid name label",
+          "passed": true
+        },
+        {
+          "name": "all visible body text has effective font at least 16px",
+          "passed": true
+        },
+        {
+          "name": "main pane fills height without large top and bottom letterboxes",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial: real search tabs buttons and frame skins use their art insets",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameLeft: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameRight: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameFooter: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-searchBg: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-primary-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sell-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-progressFrame: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sort-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-compass: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-compass: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-primary: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sellCoins: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sellCoins: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-sell: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameLeft: both panel side borders actually paint the full center height",
+          "passed": true
+        },
+        {
+          "name": "adaptive-754x743-initial-frameRight: both panel side borders actually paint the full center height",
+          "passed": true
+        },
+        {
+          "name": "ring-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "ring-1 presents the manifest-declared standalone detail asset",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail uses an independent alpha image with transparent corners",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail preserves natural aspect ratio",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail has no quantity DOM overlay",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-compass: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-compass: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-primary: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-sellCoins: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-sellCoins: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-ring-two-character-label-sell: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "primary: actual text center is inside its button hit area",
+          "passed": true
+        },
+        {
+          "name": "actual visible equipment text click equips the selected ring",
+          "passed": true
+        },
+        {
+          "name": "primary: actual text center is inside its button hit area",
+          "passed": true
+        },
+        {
+          "name": "actual visible unequip text click returns stable ring",
+          "passed": true
+        },
+        {
+          "name": "key-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "key-1 presents the manifest-declared standalone detail asset",
+          "passed": true
+        },
+        {
+          "name": "key-1 detail uses an independent alpha image with transparent corners",
+          "passed": true
+        },
+        {
+          "name": "key-1 detail preserves natural aspect ratio",
+          "passed": true
+        },
+        {
+          "name": "key-1 detail has no quantity DOM overlay",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-compass: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-compass: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-primary: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-sellCoins: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-sellCoins: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-quest-four-character-label-sell: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 presents the manifest-declared standalone detail asset",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 detail uses an independent alpha image with transparent corners",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 detail preserves natural aspect ratio",
+          "passed": true
+        },
+        {
+          "name": "redPotion-1 detail has no quantity DOM overlay",
+          "passed": true
+        },
+        {
+          "name": "actual primary is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual use consumes exactly one and updates visible quantity",
+          "passed": true
+        },
+        {
+          "name": "actual sell is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "both real sell-confirm buttons fit viewport",
+          "passed": true
+        },
+        {
+          "name": "opening sell confirmation leaves shared state unchanged",
+          "passed": true
+        },
+        {
+          "name": "actual cancel is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "real cancel preserves shared state and removes popup",
+          "passed": true
+        },
+        {
+          "name": "actual sell is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "sell confirmation remains in viewport when reopened",
+          "passed": true
+        },
+        {
+          "name": "actual confirm is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "real sale confirmation consumes one and credits exact price",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "actual menu_save is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual primary is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "actual menu_load is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "anchored menu save/load restores full actual business state",
+          "passed": true
+        },
+        {
+          "name": "save writes actual local storage",
+          "passed": true
+        },
+        {
+          "name": "actual sort is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all five real sorting choices fit viewport",
+          "passed": true
+        },
+        {
+          "name": "actual sort_name is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "anchored sort menu changes actual business order",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "actual menu_reward is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all reward popup buttons fit viewport",
+          "passed": true
+        },
+        {
+          "name": "actual reward-progress is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "real adaptive reward progress uses shared rules",
+          "passed": true
+        },
+        {
+          "name": "rebuilt reward popup remains anchored inside viewport",
+          "passed": true
+        },
+        {
+          "name": "actual reward-claim is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "real adaptive reward claim credits ten coins",
+          "passed": true
+        },
+        {
+          "name": "actual cancel is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "resize 1024x768 preserves business and one listener",
+          "passed": true
+        },
+        {
+          "name": "resize 754x743 preserves business and one listener",
+          "passed": true
+        },
+        {
+          "name": "resize 820x743 preserves business and one listener",
+          "passed": true
+        },
+        {
+          "name": "resize 754x743 preserves business and one listener",
+          "passed": true
+        },
+        {
+          "name": "return to target retains native scale",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "storage menu stays anchored after repeated resize",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual sort is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "sorting menu stays anchored after repeated resize",
+          "passed": true
+        },
+        {
+          "name": "actual sort_default is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual sell is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "resize dismisses an unconfirmed sale without committing business",
+          "passed": true
+        },
+        {
+          "name": "post-resize adaptive grid still exposes all 24 usable cells",
+          "passed": true
+        },
+        {
+          "name": "794x727 live-sized adaptive layout exposes a complete four-by-six grid",
+          "passed": true
+        },
+        {
+          "name": "ring-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "ring-1 presents the manifest-declared standalone detail asset",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail uses an independent alpha image with transparent corners",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail preserves natural aspect ratio",
+          "passed": true
+        },
+        {
+          "name": "ring-1 detail has no quantity DOM overlay",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring: real search tabs buttons and frame skins use their art insets",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameLeft: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameRight: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameFooter: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-searchBg: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-tab-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-primary-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sell-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-progressFrame: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sort-skin: source and destination caps leave a nonempty center",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-compass: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-compass: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-primary: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sellCoins: actual adaptive ornament uses its Alpha asset",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sellCoins: actual ornament has transparent background and preserves image ratio",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-sell: visible icon and text form a centered nonoverlapping group",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameLeft: both panel side borders actually paint the full center height",
+          "passed": true
+        },
+        {
+          "name": "adaptive-794x727-ring-frameRight: both panel side borders actually paint the full center height",
+          "passed": true
+        },
+        {
+          "name": "actual sort is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "794x727 sorting choices remain fully in viewport",
+          "passed": true
+        },
+        {
+          "name": "actual sort_default is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "all storage and rewards menu items fit the current viewport",
+          "passed": true
+        },
+        {
+          "name": "actual menu is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "actual sell is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "794x727 sell confirmation buttons stay in viewport",
+          "passed": true
+        },
+        {
+          "name": "actual cancel is fully inside viewport before click",
+          "passed": true
+        },
+        {
+          "name": "794x727 modal cancellation preserves actual business",
+          "passed": true
+        },
+        {
+          "name": "sword-1 is fully inside viewport before selection",
+          "passed": true
+        },
+        {
+          "name": "canonical 1586x992 retains native scale and its complete six-by-four grid",
+          "passed": true
+        },
+        {
+          "name": "canonical sword still shows the real three shared attributes",
+          "passed": true
+        },
+        {
+          "name": "canonical basic controls remain inside viewport",
+          "passed": true
+        },
+        {
+          "name": "canonical compass preserves its original reference ornament",
+          "passed": true
+        },
+        {
+          "name": "canonical sellCoins preserves its original reference ornament",
+          "passed": true
+        },
+        {
+          "name": "all resources remain local and successful",
+          "passed": true
+        },
+        {
+          "name": "no browser or host errors",
+          "passed": true
+        },
+        {
+          "name": "source artifacts stayed unchanged throughout this run",
+          "passed": true
+        }
+      ],
+      "rawVisualStatus": "not-assessed"
+    },
+    {
+      "source": "workspace/unity-migration/complex-inventory/fidelity/evidence/narrow-2026-10-16T12-09-51.540Z-edge/result.json",
+      "sha256": "8cc43adc5c823df2e866e44f7bbfdbb29f4fe7523a65801a2b89fb60c7a415cf",
+      "scope": "browser interaction and layout",
+      "status": "passed",
+      "startedAt": "2026-10-16T12:09:51.541Z",
+      "completedAt": "2026-10-16T12:10:00.762Z",
+      "checks": [
+        {
+          "name": "486x727: initial fixture is 24 real items and 12480 coins",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: ring-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: key-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/key-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest-four-characters: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest-four-characters: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: quest controls really disable use and sale",
+          "passed": true
+        },
+        {
+          "name": "486x727: redPotion-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/redPotion-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel sale is atomic",
+          "passed": true
+        },
+        {
+          "name": "486x727: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm-reopen: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm-reopen: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: confirm actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: sort actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sort-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: sort_name actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_save actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_load actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: actual save/load restores full business",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_reward actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: reward-progress actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: reward-claim actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/claimed-reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/claimed-reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: no host errors and no extra subscriptions",
+          "passed": true
+        },
+        {
+          "name": "390x844: initial fixture is 24 real items and 12480 coins",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: ring-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: key-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/key-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest-four-characters: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest-four-characters: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: quest controls really disable use and sale",
+          "passed": true
+        },
+        {
+          "name": "390x844: redPotion-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/redPotion-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel sale is atomic",
+          "passed": true
+        },
+        {
+          "name": "390x844: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm-reopen: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm-reopen: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: confirm actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: sort actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sort-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: sort_name actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_save actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_load actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: actual save/load restores full business",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_reward actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: reward-progress actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: reward-claim actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/claimed-reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/claimed-reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: wide smoke 754 preserves state",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: wide smoke 794 preserves state",
+          "passed": true
+        },
+        {
+          "name": "390x844: no host errors and no extra subscriptions",
+          "passed": true
+        },
+        {
+          "name": "source artifacts are unchanged throughout narrow and wide smoke runs",
+          "passed": true
+        },
+        {
+          "name": "no browser errors, failed or external requests",
+          "passed": true
+        }
+      ],
+      "rawVisualStatus": "not-assessed"
+    },
+    {
+      "source": "workspace/unity-migration/complex-inventory/fidelity/evidence/unity-plugin-player/fidelity-acceptance-player-1792152812980.json",
+      "sha256": "061d29ec950fed4a790af9114acac1189d541c7a022b42fc04ac2b98da4472c2",
+      "scope": "hidden Player: functional only; black screenshots",
+      "status": "passed",
+      "startedAt": "2026-10-16T12:13:19.581Z",
+      "completedAt": "2026-10-16T12:13:32.980Z",
+      "checks": [
+        {
+          "name": "native host starts with the real 24-stack fixture",
+          "passed": true
+        },
+        {
+          "name": "one shared listener and one live V8 runtime",
+          "passed": true
+        },
+        {
+          "name": "24 native fixed components are truthfully reported",
+          "passed": true
+        },
+        {
+          "name": "Unity runs the exact browser business bundle",
+          "passed": true
+        },
+        {
+          "name": "Unity runs the exact shared layout TextAsset",
+          "passed": true
+        },
+        {
+          "name": "native FairyGUI text shows grouped wallet and all three real sword stats",
+          "passed": true
+        },
+        {
+          "name": "initial-actual-player: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "actual FairyGUI primary event equips stable sword",
+          "passed": true
+        },
+        {
+          "name": "actual FairyGUI primary event unequips stable sword",
+          "passed": true
+        },
+        {
+          "name": "actual slot and use events consume one",
+          "passed": true
+        },
+        {
+          "name": "sale confirmation does not commit before consent",
+          "passed": true
+        },
+        {
+          "name": "real confirmation controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real cancellation leaves state unchanged",
+          "passed": true
+        },
+        {
+          "name": "real confirmation sells one for exact price",
+          "passed": true
+        },
+        {
+          "name": "real filesystem menu controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real menu save writes the dedicated filesystem save",
+          "passed": true
+        },
+        {
+          "name": "actual menu load restores full shared business",
+          "passed": true
+        },
+        {
+          "name": "shared Chinese query returns three kinds",
+          "passed": true
+        },
+        {
+          "name": "real sort choices fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "actual sort menu changes shared sort",
+          "passed": true
+        },
+        {
+          "name": "real reward controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real reward events reuse original rules and add ten coins",
+          "passed": true
+        },
+        {
+          "name": "limited close/reopen keeps one VM and preserves full state",
+          "passed": true
+        },
+        {
+          "name": "one V8 Tick runs per Unity Update",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 1280x800",
+          "passed": true
+        },
+        {
+          "name": "player-1280x800-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 1280x800",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 794x727",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 794x727",
+          "passed": true
+        },
+        {
+          "name": "794: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 486x727",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 486x727",
+          "passed": true
+        },
+        {
+          "name": "486: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 390x844",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 390x844",
+          "passed": true
+        },
+        {
+          "name": "390: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native sale modal buttons fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-sale-modal: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native filesystem menu fits actual Screen",
+          "passed": true
+        },
+        {
+          "name": "390: native reward modal buttons fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-rewards-modal: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native sort choices fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "normal shutdown releases listener and disposes runtime exactly once",
+          "passed": true
+        }
+      ],
+      "textFitChecks": [
+        {
+          "capture": "initial-actual-player",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-1280x800-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-sale-modal",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-rewards-modal",
+          "field": "description",
+          "passed": true
+        }
+      ],
+      "resolutions": [
+        {
+          "requested": {
+            "width": 1280,
+            "height": 800
+          },
+          "actual": {
+            "width": 1280,
+            "height": 800
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 794,
+            "height": 727
+          },
+          "actual": {
+            "width": 794,
+            "height": 727
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 486,
+            "height": 727
+          },
+          "actual": {
+            "width": 486,
+            "height": 727
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 390,
+            "height": 844
+          },
+          "actual": {
+            "width": 390,
+            "height": 844
+          },
+          "matched": true
+        }
+      ],
+      "rawVisualStatus": "pending-human-review"
+    },
+    {
+      "source": "workspace/unity-migration/complex-inventory/fidelity/evidence/unity-plugin-player-visible/fidelity-acceptance-player-1792152985562.json",
+      "sha256": "8fed071036ceccc73c402805f21537387810e79e83bc77f008b99eb49376e20b",
+      "scope": "visible Player after original runner build",
+      "status": "passed",
+      "startedAt": "2026-10-16T12:16:09.727Z",
+      "completedAt": "2026-10-16T12:16:25.562Z",
+      "checks": [
+        {
+          "name": "native host starts with the real 24-stack fixture",
+          "passed": true
+        },
+        {
+          "name": "one shared listener and one live V8 runtime",
+          "passed": true
+        },
+        {
+          "name": "24 native fixed components are truthfully reported",
+          "passed": true
+        },
+        {
+          "name": "Unity runs the exact browser business bundle",
+          "passed": true
+        },
+        {
+          "name": "Unity runs the exact shared layout TextAsset",
+          "passed": true
+        },
+        {
+          "name": "native FairyGUI text shows grouped wallet and all three real sword stats",
+          "passed": true
+        },
+        {
+          "name": "initial-actual-player: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "actual FairyGUI primary event equips stable sword",
+          "passed": true
+        },
+        {
+          "name": "actual FairyGUI primary event unequips stable sword",
+          "passed": true
+        },
+        {
+          "name": "actual slot and use events consume one",
+          "passed": true
+        },
+        {
+          "name": "sale confirmation does not commit before consent",
+          "passed": true
+        },
+        {
+          "name": "real confirmation controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real cancellation leaves state unchanged",
+          "passed": true
+        },
+        {
+          "name": "real confirmation sells one for exact price",
+          "passed": true
+        },
+        {
+          "name": "real filesystem menu controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real menu save writes the dedicated filesystem save",
+          "passed": true
+        },
+        {
+          "name": "actual menu load restores full shared business",
+          "passed": true
+        },
+        {
+          "name": "shared Chinese query returns three kinds",
+          "passed": true
+        },
+        {
+          "name": "real sort choices fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "actual sort menu changes shared sort",
+          "passed": true
+        },
+        {
+          "name": "real reward controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real reward events reuse original rules and add ten coins",
+          "passed": true
+        },
+        {
+          "name": "limited close/reopen keeps one VM and preserves full state",
+          "passed": true
+        },
+        {
+          "name": "one V8 Tick runs per Unity Update",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 1280x800",
+          "passed": true
+        },
+        {
+          "name": "player-1280x800-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 1280x800",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 794x727",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 794x727",
+          "passed": true
+        },
+        {
+          "name": "794: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 486x727",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 486x727",
+          "passed": true
+        },
+        {
+          "name": "486: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 390x844",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 390x844",
+          "passed": true
+        },
+        {
+          "name": "390: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native sale modal buttons fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-sale-modal: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native filesystem menu fits actual Screen",
+          "passed": true
+        },
+        {
+          "name": "390: native reward modal buttons fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-rewards-modal: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native sort choices fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "normal shutdown releases listener and disposes runtime exactly once",
+          "passed": true
+        }
+      ],
+      "textFitChecks": [
+        {
+          "capture": "initial-actual-player",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-1280x800-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-sale-modal",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-rewards-modal",
+          "field": "description",
+          "passed": true
+        }
+      ],
+      "resolutions": [
+        {
+          "requested": {
+            "width": 1280,
+            "height": 800
+          },
+          "actual": {
+            "width": 1280,
+            "height": 800
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 794,
+            "height": 727
+          },
+          "actual": {
+            "width": 794,
+            "height": 727
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 486,
+            "height": 727
+          },
+          "actual": {
+            "width": 486,
+            "height": 727
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 390,
+            "height": 844
+          },
+          "actual": {
+            "width": 390,
+            "height": 844
+          },
+          "matched": true
+        }
+      ],
+      "rawVisualStatus": "pending-human-review"
+    },
+    {
+      "source": "workspace/unity-migration/complex-inventory/fidelity/evidence/unity-cli-player-visible/fidelity-acceptance-player-1792153441796.json",
+      "sha256": "6c6532ed0bdbd0b81bcf1a79d1714d3d1af3fc90c9bd1dab9cc24125870db401",
+      "scope": "visible Player after official Unity CLI build",
+      "status": "passed",
+      "startedAt": "2026-10-16T12:23:45.638Z",
+      "completedAt": "2026-10-16T12:24:01.796Z",
+      "checks": [
+        {
+          "name": "native host starts with the real 24-stack fixture",
+          "passed": true
+        },
+        {
+          "name": "one shared listener and one live V8 runtime",
+          "passed": true
+        },
+        {
+          "name": "24 native fixed components are truthfully reported",
+          "passed": true
+        },
+        {
+          "name": "Unity runs the exact browser business bundle",
+          "passed": true
+        },
+        {
+          "name": "Unity runs the exact shared layout TextAsset",
+          "passed": true
+        },
+        {
+          "name": "native FairyGUI text shows grouped wallet and all three real sword stats",
+          "passed": true
+        },
+        {
+          "name": "initial-actual-player: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "actual FairyGUI primary event equips stable sword",
+          "passed": true
+        },
+        {
+          "name": "actual FairyGUI primary event unequips stable sword",
+          "passed": true
+        },
+        {
+          "name": "actual slot and use events consume one",
+          "passed": true
+        },
+        {
+          "name": "sale confirmation does not commit before consent",
+          "passed": true
+        },
+        {
+          "name": "real confirmation controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real cancellation leaves state unchanged",
+          "passed": true
+        },
+        {
+          "name": "real confirmation sells one for exact price",
+          "passed": true
+        },
+        {
+          "name": "real filesystem menu controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real menu save writes the dedicated filesystem save",
+          "passed": true
+        },
+        {
+          "name": "actual menu load restores full shared business",
+          "passed": true
+        },
+        {
+          "name": "shared Chinese query returns three kinds",
+          "passed": true
+        },
+        {
+          "name": "real sort choices fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "actual sort menu changes shared sort",
+          "passed": true
+        },
+        {
+          "name": "real reward controls fit actual viewport",
+          "passed": true
+        },
+        {
+          "name": "real reward events reuse original rules and add ten coins",
+          "passed": true
+        },
+        {
+          "name": "limited close/reopen keeps one VM and preserves full state",
+          "passed": true
+        },
+        {
+          "name": "one V8 Tick runs per Unity Update",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 1280x800",
+          "passed": true
+        },
+        {
+          "name": "player-1280x800-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 1280x800",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 794x727",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 794x727",
+          "passed": true
+        },
+        {
+          "name": "794: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-794x727-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 486x727",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 486x727",
+          "passed": true
+        },
+        {
+          "name": "486: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-486x727-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "Player actually adopts 390x844",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-sword: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player: all 24 physical item bounds fit actual Screen 390x844",
+          "passed": true
+        },
+        {
+          "name": "390: actual adaptive scale is one",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-ring: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-quest: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native sale modal buttons fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-sale-modal: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native filesystem menu fits actual Screen",
+          "passed": true
+        },
+        {
+          "name": "390: native reward modal buttons fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "player-390x844-rewards-modal: screenshot matches actual Screen dimensions",
+          "passed": true
+        },
+        {
+          "name": "390: native sort choices fit actual Screen",
+          "passed": true
+        },
+        {
+          "name": "normal shutdown releases listener and disposes runtime exactly once",
+          "passed": true
+        }
+      ],
+      "textFitChecks": [
+        {
+          "capture": "initial-actual-player",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-1280x800-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-794x727-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-486x727-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-sword",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-ring",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-quest",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-quest",
+          "field": "itemNote",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-sale-modal",
+          "field": "description",
+          "passed": true
+        },
+        {
+          "capture": "player-390x844-rewards-modal",
+          "field": "description",
+          "passed": true
+        }
+      ],
+      "resolutions": [
+        {
+          "requested": {
+            "width": 1280,
+            "height": 800
+          },
+          "actual": {
+            "width": 1280,
+            "height": 800
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 794,
+            "height": 727
+          },
+          "actual": {
+            "width": 794,
+            "height": 727
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 486,
+            "height": 727
+          },
+          "actual": {
+            "width": 486,
+            "height": 727
+          },
+          "matched": true
+        },
+        {
+          "requested": {
+            "width": 390,
+            "height": 844
+          },
+          "actual": {
+            "width": 390,
+            "height": 844
+          },
+          "matched": true
+        }
+      ],
+      "rawVisualStatus": "pending-human-review"
+    },
+    {
+      "source": "package-workspace/闭环验证/evidence/2026-10-16T12-16-50-014Z-chrome-persistent/report.json",
+      "sha256": "26657aa6e35a35960f79005f947454046eb17bc419937425503606100c22a36d",
+      "scope": "preserved failure: IndexedDB backing store under deep Windows profile path",
+      "status": "failed",
+      "completedAt": "2026-10-16T12:17:22.446Z",
+      "checks": [],
+      "failure": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded."
+    },
+    {
+      "source": "package-workspace/闭环验证/evidence/2026-10-16T12-21-41-987Z-chrome/report.json",
+      "sha256": "014627b4c5f5d7adfd7828497d30d2c670e20e7a11bf61390c197938d6b66b5b",
+      "scope": "archive workspace: real editor roundtrip",
+      "status": "browser_closed_loop_passed",
+      "startedAt": "2026-10-16T12:21:41.995Z",
+      "completedAt": "2026-10-16T12:21:50.477Z",
+      "checks": [
+        {
+          "name": "correct Inventory IDs",
+          "passed": true
+        },
+        {
+          "name": "UI/backend revision aligned at baseline",
+          "passed": true
+        },
+        {
+          "name": "relay rejects missing token and wrong client",
+          "passed": true
+        },
+        {
+          "name": "concurrent same-revision writes have one winner",
+          "passed": true
+        },
+        {
+          "name": "Inspector preserves unrelated project content",
+          "passed": true
+        },
+        {
+          "name": "Inspector commits through shared session",
+          "passed": true
+        },
+        {
+          "name": "UI mutation reaches Agent query without save",
+          "passed": true
+        },
+        {
+          "name": "Agent preserves unrelated project content",
+          "passed": true
+        },
+        {
+          "name": "Agent applies three property classes",
+          "passed": true
+        },
+        {
+          "name": "Agent remains on UI session and aligned revision",
+          "passed": true
+        },
+        {
+          "name": "exact retry is idempotent",
+          "passed": true
+        },
+        {
+          "name": "request ID cannot be reused for another payload",
+          "passed": true
+        },
+        {
+          "name": "stale write explicitly fails",
+          "passed": true
+        },
+        {
+          "name": "missing target explicitly fails",
+          "passed": true
+        },
+        {
+          "name": "missing save target explicitly fails",
+          "passed": true
+        },
+        {
+          "name": "negative writes preserve complete state",
+          "passed": true
+        },
+        {
+          "name": "Agent undo shares preexisting UI history",
+          "passed": true
+        },
+        {
+          "name": "UI redo restores Agent transaction",
+          "passed": true
+        },
+        {
+          "name": "Agent saves shared browser workspace with verified readback",
+          "passed": true
+        },
+        {
+          "name": "UI save persists Agent and Inspector edits",
+          "passed": true
+        },
+        {
+          "name": "ZIP import never silently writes source archive",
+          "passed": true
+        },
+        {
+          "name": "refresh/reopen retains IDs, resources, controller, gears and transition",
+          "passed": true
+        },
+        {
+          "name": "export ZIP contains final text, transition, controller and image references",
+          "passed": true
+        },
+        {
+          "name": "no external upload attempted",
+          "passed": true
+        },
+        {
+          "name": "no unexpected page/console errors",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "source": "package-workspace/闭环验证/evidence/2026-10-16T12-22-28-068Z-chrome-persistent/report.json",
+      "sha256": "2700e388c67b386868fb7aaaec5899be07add392c31aaff1ae73924dd33ec1f8",
+      "scope": "archive workspace: shorter temp profile fixes persistent restart",
+      "status": "persistent_restart_passed",
+      "completedAt": "2026-10-16T12:22:34.128Z",
+      "checks": [
+        {
+          "name": "save before shutdown is verified",
+          "passed": true
+        },
+        {
+          "name": "before-process-close browser process disconnected",
+          "passed": true
+        },
+        {
+          "name": "independent CLI sees this browser client",
+          "passed": true
+        },
+        {
+          "name": "independent CLI reads the same session identity",
+          "passed": true
+        },
+        {
+          "name": "restart creates another live session",
+          "passed": true
+        },
+        {
+          "name": "restart restores saved title and clean state",
+          "passed": true
+        },
+        {
+          "name": "restart retains IDs, controller, transition and resources",
+          "passed": true
+        },
+        {
+          "name": "old process identity is rejected",
+          "passed": true
+        },
+        {
+          "name": "old identity rejection preserves complete state",
+          "passed": true
+        },
+        {
+          "name": "no external requests attempted",
+          "passed": true
+        },
+        {
+          "name": "no unexpected browser errors",
+          "passed": true
+        },
+        {
+          "name": "after-process-restart browser process disconnected",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "source": "package-workspace/unity-migration/complex-inventory/fidelity/evidence/narrow-2026-10-16T12-16-40.185Z-chrome/result.json",
+      "sha256": "19bca507ab3989ced9ea577acbabeab9331b58106c23412b7762acac04d9cea5",
+      "scope": "archive workspace: narrow layout",
+      "status": "passed",
+      "startedAt": "2026-10-16T12:16:40.186Z",
+      "completedAt": "2026-10-16T12:16:49.643Z",
+      "checks": [
+        {
+          "name": "486x727: initial fixture is 24 real items and 12480 coins",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/initial-sword: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: ring-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/ring: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: key-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/key-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest-four-characters: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/quest-four-characters: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: quest controls really disable use and sale",
+          "passed": true
+        },
+        {
+          "name": "486x727: redPotion-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/redPotion-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727/potion: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel sale is atomic",
+          "passed": true
+        },
+        {
+          "name": "486x727: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm-reopen: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/sell-confirm-reopen: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: confirm actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: sort actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/sort-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: sort_name actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_save actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_load actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: actual save/load restores full business",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727: menu_reward actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: reward-progress actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: reward-claim actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727/claimed-reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "486x727/claimed-reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "486x727: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "486x727: no host errors and no extra subscriptions",
+          "passed": true
+        },
+        {
+          "name": "390x844: initial fixture is 24 real items and 12480 coins",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/initial-sword: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: ring-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/ring: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: key-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/key-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest-four-characters: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/quest-four-characters: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: quest controls really disable use and sale",
+          "passed": true
+        },
+        {
+          "name": "390x844: redPotion-1 actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/redPotion-1: actual trimmed file and natural image ratio are preserved",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/potion: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel sale is atomic",
+          "passed": true
+        },
+        {
+          "name": "390x844: sell actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm-reopen: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/sell-confirm-reopen: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: confirm actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: sort actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/sort-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: sort_name actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_save actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: primary actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_load actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: actual save/load restores full business",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/storage-menu: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844: menu_reward actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: reward-progress actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844: reward-claim actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/claimed-reward-popup: every real overlay button and its text is inside the window",
+          "passed": true
+        },
+        {
+          "name": "390x844/claimed-reward-popup: popup message is not clipped and does not cross an action button",
+          "passed": true
+        },
+        {
+          "name": "390x844: cancel actual hit area is in viewport",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-754: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: wide smoke 754 preserves state",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: viewport is filled at actual native scale",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: all 24 equal-aspect cells are visible and hit-testable",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: grid uses over 80 percent of the available list height",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: panels follow controls without large letterboxes",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: visible body font is at least 16px",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: resize keeps one business subscription",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: detail text, art and action areas do not overlap or truncate",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: primary icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844/wide-smoke-794: sell icon and full text fit without clipping and stay centered",
+          "passed": true
+        },
+        {
+          "name": "390x844: wide smoke 794 preserves state",
+          "passed": true
+        },
+        {
+          "name": "390x844: no host errors and no extra subscriptions",
+          "passed": true
+        },
+        {
+          "name": "source artifacts are unchanged throughout narrow and wide smoke runs",
+          "passed": true
+        },
+        {
+          "name": "no browser errors, failed or external requests",
+          "passed": true
+        }
+      ],
+      "rawVisualStatus": "not-assessed"
+    }
+  ],
+  "hostRawDigests": [
+    {
+      "file": "codex-direct.jsonl",
+      "sha256": "20e509cb7fe85b303f57193c076c1a1b67c546faa46a5ed86130d7217589a7be"
+    },
+    {
+      "file": "codex-indirect.jsonl",
+      "sha256": "f9f97011da527e162f755760deb463ec7fdf0ec292bbaa1c5ca93eb034f71ed6"
+    },
+    {
+      "file": "codex-indirect-retry.jsonl",
+      "sha256": "abbb53c2f4524f9d45a05cc464a957bbc0fabfa671d0cd54df77064280cfaf1f"
+    },
+    {
+      "file": "codex-missing.jsonl",
+      "sha256": "c9a51c9a1d914d987161b6b4d49af7e00185ed23ae9be42bb361166c98b6460b"
+    },
+    {
+      "file": "codex-negative.jsonl",
+      "sha256": "473bf42d1db7c7b6d77941dbc2166c95f84e3e28502b52f35e3b64bfdf86279d"
+    },
+    {
+      "file": "claude-direct.json",
+      "sha256": "3de4a3af17c265d38bea8092fdd0525cecd09af764aa92e9343ac6c88a1715ef"
+    },
+    {
+      "file": "claude-indirect.json",
+      "sha256": "3b6247da7cabdd47c8be7b9a516c75f815c40a1131c1ef2fea83cf75509cd0cf"
+    },
+    {
+      "file": "claude-indirect-retry.json",
+      "sha256": "18781ddc31ecf402c3ebffe16f0adfbcb672dc100e8d5e1d5e48b47aae323d98"
+    },
+    {
+      "file": "claude-missing.json",
+      "sha256": "546ef4413b74393cd3833e075c929f894ff23e0c22512c8a8b7faea855030261"
+    },
+    {
+      "file": "claude-negative.json",
+      "sha256": "1d5e116af89c93f77dd463bfa0a87f0e58316c67178a6efcee7289000de54587"
+    },
+    {
+      "file": "codex-final.jsonl",
+      "sha256": "b6dd867f49278ac7e10f374a8d8bec174dea537805fd4aeca40e8c2ac787760a"
+    },
+    {
+      "file": "claude-final.json",
+      "sha256": "e6636eba7e918fb3925094c718e5b0815de311aaa16f6dd900e6d126560d5b47"
+    },
+    {
+      "file": "codex-ui-skill.jsonl",
+      "sha256": "289f5a52a80b5aa256b040a9d7661a163c3907435813d06e0ad46d3eb20344a7"
+    },
+    {
+      "file": "claude-ui-skill.json",
+      "sha256": "a14e93041f1b3cd0370d61bc7470c6adfda2a2d2bfbe2b8332d39013c46956fb"
+    }
+  ],
+  "images": [
+    {
+      "file": "player-1280x800-sword.png",
+      "sha256": "aa3a78b65a050471b6c9bf497d0f5535f10c48275e4b21d6e125bc60fa4fbdb1"
+    },
+    {
+      "file": "player-794x727-sword.png",
+      "sha256": "d2c46e5b04b1fa7cd64b9a85b02b8b6660aac2a5badf6e3e6eb0ef33e27dcc2f"
+    },
+    {
+      "file": "player-486x727-sword.png",
+      "sha256": "9aca2a39c522f37ddd61651dd5fabcfc1bb1d6cd92b0ff96a64a26dc21a7e690"
+    },
+    {
+      "file": "player-390x844-sword.png",
+      "sha256": "e544bf71170ae50ca24aa1359f8704491d5796a357c94b3f1c749fe44aea2b6a"
+    },
+    {
+      "file": "player-390x844-rewards-modal.png",
+      "sha256": "c22123c6eeb1e23a4e20856f4e5de16f18079d7d5c2bc30e193c37d2f108a23e"
+    },
+    {
+      "file": "player-390x844-sale-modal.png",
+      "sha256": "9e0df43c1228d806fba679ba86fea9c434157d1de6b548c679dcb83fcf389f94"
+    }
+  ],
+  "unityCli": {
+    "binarySha256": "9a63636402d8a087e9b67621f31b15fbe0f48eba130a91bdefb88b68aa717b20",
+    "buildResultSha256": "62c66b376c48f44ef310e4cc8e5d55ae07c34aea783dd8d87840e22a54a07dd2",
+    "buildLogSha256": "34139b7b9dc5b8a4c97df97165ef87ae6639b908e80920376450279a1756502a",
+    "buildVerdict": "Succeeded, Windows x64 IL2CPP Release, zero build errors/warnings; CLI also reports an initial license-client validation message, subsequent license update succeeds"
+  },
+  "limitations": [
+    "Raw logs and browser profiles kept outside repository; summaries intentionally omit personal paths/tokens/session IDs.",
+    "No new human acceptance claimed; model reviewed selected screenshots separately.",
+    "Host negative and missing-input cases plus direct and controlled indirect invocation are covered, not a broad statistical routing eval."
+  ],
+  "uiSkill": {
+    "archiveSha256": "e0ac8457ea7214d34a74f3297b570d5cff7096a87e06cb383a94b4504d25a858",
+    "license": "MIT, confirmed by contributor",
+    "skillsAfterMerge": 5,
+    "clientBoundaryChecks": "Codex and Claude read installed author/component references, correctly reject arbitrary structural transaction and propertyId 2, ask for missing inputs; read-only"
+  }
+}
