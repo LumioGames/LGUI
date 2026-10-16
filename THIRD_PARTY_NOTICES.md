@@ -4,6 +4,8 @@
 
 ## 运行时与编辑工具
 
+2026-10-16 导入的 fairygui-ui 设计技能由维护者确认为团队原创，并授权随 LGUI 按 MIT 发布；来源摘要与去重/适配记录见 [UI skill 来源](docs/imported-ui-skill.md)。它不是另一个第三方依赖或独立插件。
+
 | 组件 | 本次固定版本 | 许可与应保留的署名 |
 | --- | --- | --- |
 | [FairyGUI-dom](https://github.com/fairygui/FairyGUI-dom/tree/fade49fc33bdcd5673351e04637d4cc08d2297f3) | `fade49fc33bdcd5673351e04637d4cc08d2297f3` | MIT，Copyright © 2021 FairyGUI；保留根 LICENSE 与源码内通知 |

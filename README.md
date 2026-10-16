@@ -31,12 +31,14 @@ claude plugin install lgui@lumio-lgui
 | 技能 | 使用目标 |
 |---|---|
 | lgui-setup | 安装后的配置与目录初始化、诊断、固定依赖恢复 |
-| lgui-author | 参考拆层、素材来源、响应式布局与实现 |
+| lgui-author | 参考拆层、素材来源、组件实例/XML、九宫格、动效与响应式实现 |
 | lgui-edit | 与人共用编辑会话、query/preflight/transact/undo/save/export |
 | lgui-verify | 独立浏览器交互、持久化、布局与截图验证 |
 | lgui-unity | Unity/PuerTS 资源准备、原生验证与 Windows IL2CPP 构建 |
 
 [工作流与命令](docs/workflow.md) · [架构与目录](docs/architecture.md) · [兼容矩阵](docs/compatibility.md) · [故障排查](docs/troubleshooting.md)
+
+团队提供的 UI 设计 skill 已去重整合到 lgui-author，保留五份按需分册；[来源与整合说明](docs/imported-ui-skill.md)列出新增经验和适用边界。
 
 ## 当前能力与限制
 
