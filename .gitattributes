@@ -1,0 +1,17 @@
+# Preserve byte identity for bundles, evidence hashes and published assets.
+# Normalize deliberate source text only; do not rewrite frozen artifacts.
+* -text
+*.md text eol=lf
+*.ts text eol=lf
+*.cs text eol=lf
+*.ps1 text eol=lf
+*.mjs text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+AGENTS.md text eol=lf
+LICENSE text eol=lf
+
+# The shared runtime layout is a frozen, cross-host byte input.
+unity-migration/complex-inventory/fidelity/layout-shared.js -text
