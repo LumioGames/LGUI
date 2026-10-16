@@ -14,4 +14,8 @@ run(path.join(root,'tools/validate.mjs'),[packageRoot]);
 run(path.join(packageRoot,'tools/lgui.mjs'),['init','--workspace',workspace]);
 run(path.join(packageRoot,'tools/lgui.mjs'),['init','--workspace',workspace]);
 run(path.join(packageRoot,'tools/lgui.mjs'),['doctor','--workspace',workspace]);
+const inventoryWorkspace=path.join(parent,'inventory-workspace');
+run(path.join(packageRoot,'tools/lgui.mjs'),['init','--workspace',inventoryWorkspace,'--template','inventory']);
+run(path.join(packageRoot,'tools/lgui.mjs'),['init','--workspace',inventoryWorkspace]);
+run(path.join(packageRoot,'tools/lgui.mjs'),['test','--workspace',workspace]);
 console.log(JSON.stringify({status:'passed',packageRoot,workspace,archive:path.basename(archive),scope:'Extracted archive, unrelated cwd, no dependencies in package or ancestor, no dependency restoration.'}));

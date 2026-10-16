@@ -11,7 +11,7 @@ const run = (...args) => spawnSync(process.execPath, [cli, ...args], {cwd: os.tm
 test('initialization works from unrelated cwd, repeats safely, and preserves user changes', () => {
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-test-'));
   const workspace = path.join(parent, 'user workspace');
-  assert.equal(run('init', '--workspace', workspace).status, 0);
+  assert.equal(run('init', '--workspace', workspace, '--template', 'inventory').status, 0);
   assert.ok(fs.existsSync(path.join(workspace, '.lgui/workspace.json')));
   assert.ok(fs.existsSync(path.join(workspace, 'unity-migration/complex-inventory/fidelity/index.html')));
   assert.equal(run('init', '--workspace', workspace).status, 0);

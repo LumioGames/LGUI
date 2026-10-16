@@ -8,12 +8,12 @@ node tools/generate.mjs
 node tools/generate.mjs --check
 node tools/validate.mjs
 node --test tests/*.test.mjs scripts/bootstrap.test.mjs prototype/model.test.ts unity-migration/complex-inventory/shared/complex-inventory.test.mjs unity-migration/complex-inventory/fidelity/*.test.mjs unity-migration/complex-inventory/scripts/layout.test.mjs
-node tools/pack.mjs
-node tools/validate.mjs artifacts/lgui-0.1.0
-node tools/package-smoke.mjs artifacts/lgui-0.1.0.tar.gz
+node tools/pack.mjs artifacts/plugin
+node tools/validate.mjs artifacts/plugin
+node tools/package-smoke.mjs artifacts/plugin.tar.gz
 ```
 
-pack 输出新的目录、tar.gz 与 SHA256，不覆盖现有目录。按版本替换最后的路径。包内 package-integrity.json 列出所有文件和摘要，允许清单排除历史日志、依赖、凭据、缓存和本机安装程序。解压后从另一个 cwd 和全新工作区运行 init/bootstrap/build/serve，验证包没有借用仓库或上级文件。
+pack 输出新的目录、tar.gz 与 SHA256，不覆盖现有目录；重复验证需选择新的输出名。发布时可选择 `artifacts/lgui-<version>`。版本始终读取根 plugin.json。包内 package-integrity.json 列出所有文件和摘要，包含两种模板引用的全部资源；允许清单排除日志、依赖、凭据、缓存和安装程序。解压后在另一个 cwd 验证默认空工程与显式 inventory，再恢复新空工程依赖并运行 build/serve。自定义 UI 通过工程清单复跑网页与 Unity。
 
 3. 双端用真实 marketplace install，记录版本、缓存目录（公开记录归一化）、skill discovery、代表性执行、缺少输入与负例。桌面 onboarding、客户端登录缺失、Unity/license 缺失必须单独写未测；不以 schema 替代。
 4. 运行浏览器编辑保存/重开及 UI 功能/视觉检查。Unity 需要本机许可证与 IL2CPP；本次历史状态不自动变化。更新 docs/evidence.md，保留历史失败。

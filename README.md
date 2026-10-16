@@ -2,7 +2,7 @@
 
 面向 Agent 创作的开源 UI 开发插件：浏览器优先，通过 FairyGUI 与共享 TypeScript 业务迁移到 Unity/PuerTS。[English overview](README.en.md)
 
-安装后先初始化配置和工程目录，再编辑、保存、发布与验证。背包是可运行的参考示例；通用能力是工作区初始化、固定依赖恢复、共用编辑会话和快照发布，后续 UI 可复用这些工作流。
+安装后先初始化空工程与配置，再编辑、保存、发布与验证。网页构建、服务、测试和 Unity 步骤由工作区项目清单选择；背包是显式选择的参考示例。
 
 ## 安装与第一次使用
 
@@ -20,9 +20,9 @@ claude plugin install lgui@lumio-lgui
 
 新开会话，调用 Codex 的 `$lgui-setup` 或 Claude 的 `/lgui:lgui-setup`：
 
-> 在 D:/UI/MyGame 初始化 LGUI 配置和目录，恢复网页依赖并启动示例。
+> 在 D:/UI/MyGame 初始化空 UI 工程，恢复网页依赖并启动预览。
 
-没有目标目录时先询问。插件缓存、用户工程与临时验证目录分开；不在缓存里安装依赖或保存工程。完整手工命令、发布包安装、更新和卸载见 [安装指南](docs/install.md)。网页示例运行于 http://127.0.0.1:4182/fidelity/ ，编辑器运行于 http://127.0.0.1:5199/?agent=1 。
+没有目标目录时先询问。插件缓存、用户工程与临时验证目录分开。空工程默认网页为 http://127.0.0.1:4182/；需要背包时使用 `init --template inventory`，入口为 `/fidelity/`。端口可配置。编辑器默认 http://127.0.0.1:5199/?agent=1 。[工程入口与 0.1.0 迁移](docs/projects.md) · [安装、更新和卸载](docs/install.md)。
 
 ## 工作流
 
@@ -47,6 +47,8 @@ claude plugin install lgui@lumio-lgui
 网页 fidelity 仍使用 FairyGUI-dom 手工组件组装；Unity 使用正式发布包和原生 FairyGUI-unity/PuerTS，不是 WebView 或 WebGL。展示投影尚未全部去重，两端存储不在线同步。背包的 24 格、固定 ID 和设计画布只属于示例。参考美术提取脚本不等于任意图片自动分层器。
 
 Unity 目标为 **6000.6.6f1 + PuerTS Core/V8 3.0.3**，Windows Player 需要 IL2CPP/C++ 工具链和本机许可证。准备、构建与运行步骤见 [原生流程](skills/lgui-unity/references/native.md)。
+
+0.2.0 默认空工程提供可运行的最小 FairyGUI 网页与正式源组件。Unity 工程、资源适配与功能验收由项目声明；未配置的步骤明确报错，不回退背包。通用执行器支持配置 Unity 工程与 C# prepare/generate/build 方法，也支持官方 Unity CLI。它不自动设计任意 UI 或生成完整原生应用。
 
 [官方 Unity CLI 调研与构建路径](docs/unity-cli.md)列出可用于打包、诊断、测试和 Agent 发现的能力，以及本轮实际验证范围。
 

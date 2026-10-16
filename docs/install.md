@@ -26,9 +26,9 @@ claude plugin list
 
 对 Agent 说：
 
-> 使用 LGUI，在 D:/UI/MyGame 初始化配置和目录，恢复网页依赖并启动示例。
+> 使用 LGUI，在 D:/UI/MyGame 初始化空工程，恢复网页依赖并启动预览。
 
-没有工作目录时技能应先询问。它会创建 `.lgui/workspace.json` 与参考工程，再诊断依赖；不会把项目写进安装缓存。手工操作（PowerShell；替换为真实路径）：
+没有工作目录时技能应先询问。它会创建 `.lgui/workspace.json`、`.lgui/project.json` 与最小空 UI，再诊断依赖。参考背包需要显式 `--template inventory`。手工操作（PowerShell；替换为真实路径）：
 
 ```powershell
 $Lgui = 'D:/Plugins/lgui/tools/lgui.mjs'
@@ -41,7 +41,7 @@ node $Lgui build-web --workspace $Workspace
 node $Lgui serve --workspace $Workspace
 ```
 
-打开 http://127.0.0.1:4182/fidelity/ 。服务保持前台；Ctrl+C 结束。另一个终端执行 `node $Lgui editor --workspace $Workspace`，打开 http://127.0.0.1:5199/?agent=1 。具体编辑、保存与导出见 [工作流](workflow.md)。初始化提供背包参考模板，后续 UI 用自己的资源、业务和验收条件适配。
+空工程打开 http://127.0.0.1:4182/，背包 recipe 打开 `/fidelity/`。服务保持前台；Ctrl+C 结束。另一个终端执行 `node $Lgui editor --workspace $Workspace`，打开 http://127.0.0.1:5199/?agent=1 。[工程入口与旧版本迁移](projects.md)说明如何接入自己的网页、Unity 工程与验收；具体编辑、保存与导出见 [工作流](workflow.md)。
 
 端口冲突时在工作区 `.lgui/workspace.json` 修改 `webPort` / `editorPort`（1024–65535），然后重新启动；诊断和验证使用同一配置。临时覆盖可设 `LGUI_WEB_PORT` / `LGUI_EDITOR_PORT`。不要停止其他工程的服务来占用默认端口。
 
@@ -67,7 +67,7 @@ claude plugin marketplace update lumio-lgui
 claude plugin update lgui@lumio-lgui
 ```
 
-重启/新开会话加载新缓存。用 `doctor` 比较插件与 workspace 版本；旧工程先提交或备份，初始化新目录后比较迁移。不要对已编辑工程强制重跑 init。
+重启/新开会话加载新缓存。用 `doctor` 比较插件与 workspace 版本。0.1.0 工程保留全部文件，按 [迁移说明](projects.md)新增明确的工程清单；不要对已编辑工程强制重跑 init。
 
 ```sh
 codex plugin remove lgui@lumio-lgui

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "name": "UI project",
+  "web": {"root": "web", "path": "/"},
+  "runtime": {"fairyguiDirectory": "platforms/unity/FairyGUI"},
+  "commands": {
+    "build-web": {"script": "scripts/build-web.mjs"},
+    "test": {"script": "scripts/test.mjs"},
+    "verify-browser": {"script": "scripts/verify-browser.mjs"}
+  }
+}

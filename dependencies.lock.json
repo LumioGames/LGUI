@@ -90,8 +90,8 @@
   "npm": [
     {
       "directory": ".",
-      "packageJsonSha256": "9fae1ea2ae67cc55c62fc7b2b3c978a281fd8576e7501ff8e42bf00d2e696b9b",
-      "packageLockSha256": "0aa3c617cf63f162de29f33bf666006756d2eb364ff862442e6cd44e7b5f86ac",
+      "packageJsonSha256": "82a0a338f53435aa3755279f3aebd7365b0e45a4d96653844f639e547ae226f5",
+      "packageLockSha256": "8155135bcca069bca8aaed0bda453db0fec33bea9d5735a7259009e2ae965080",
       "required": {
         "playwright": "1.64.1",
         "ajv": "8.20.0",

@@ -17,5 +17,13 @@ export function templateFiles(root) {
 export function pluginFiles(root) {
   return ['plugin.json','template-files.json','README.md','README.en.md','PUBLICATION.md','CONTRIBUTING.md','AGENTS.md','CLAUDE.md',
     '.claude-plugin/plugin.json','.codex-plugin/plugin.json','.agents/plugins/marketplace.json','.claude-plugin/marketplace.json',
-    ...filesUnder(root,'skills'),...filesUnder(root,'tools'),...filesUnder(root,'docs')];
+    ...filesUnder(root,'skills'),...filesUnder(root,'tools'),...filesUnder(root,'docs'),...filesUnder(root,'templates')];
+}
+export function projectTemplates(root){
+  const common=['package.json','package-lock.json','dependencies.lock.json','LICENSE','THIRD_PARTY_NOTICES.md','patches','scripts/bootstrap.mjs','scripts/bootstrap.test.mjs','toolchain-test/package.json','toolchain-test/package-lock.json'].flatMap(item=>filesUnder(root,item));
+  const direct=file=>({source:file,path:file});
+  return {
+    blank:[...common.map(direct),...filesUnder(root,'templates/blank').map(file=>({source:file,path:file.slice('templates/blank/'.length)}))],
+    inventory:[...templateFiles(root).map(direct),{source:'templates/inventory/project.json',path:'.lgui/project.json'},{source:'templates/inventory/test.mjs',path:'.lgui/inventory-test.mjs'}]
+  };
 }

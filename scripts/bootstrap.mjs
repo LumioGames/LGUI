@@ -294,6 +294,11 @@ export async function main(args = process.argv.slice(2)) {
   }
   const options = parseOptions(args);
   const lock = json(inside('dependencies.lock.json'));
+  const projectFile=inside('.lgui/project.json');
+  if(fs.existsSync(projectFile)){
+    const runtime=json(projectFile).runtime?.fairyguiDirectory;
+    if(runtime){inside(runtime+'/Scripts');inside(runtime+'/LICENSE');lock.unityCopy={...lock.unityCopy,destination:runtime+'/Scripts',licenseDestination:runtime+'/LICENSE'};}
+  }
   for (const repo of lock.repositories) if (repo.patch) checkHash(inside(repo.patch), repo.patchSha256);
   checkHash(inside(lock.puerts.unboxPatch.patch), lock.puerts.unboxPatch.patchSha256);
   // Check distributed manifests, but the editor clone is intentionally absent before install.
