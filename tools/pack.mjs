@@ -11,7 +11,8 @@ const output=path.resolve(process.argv[2]||path.join(root,'artifacts',`lgui-${ma
 if(fs.existsSync(output)) throw Error('Choose a new package output directory; existing output is never overwritten.');
 const check=spawnSync(process.execPath,[path.join(root,'tools/generate.mjs'),'--check'],{stdio:'inherit',windowsHide:true});
 if(check.status!==0)process.exit(check.status||1);
-const files=[...new Set([...pluginFiles(root),...readJson(path.join(root,'template-files.json')).files.map(f=>f.path)])].sort();
+const templates=readJson(path.join(root,'template-files.json'));
+const files=[...new Set([...pluginFiles(root),...templates.files.map(f=>f.path),...Object.values(templates.templates).flat().map(entry=>entry.source)])].sort();
 const inventory=[];
 for(const file of files){
   const source=contained(root,file),destination=contained(output,file),bytes=fs.readFileSync(source);

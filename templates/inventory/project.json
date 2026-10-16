@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "Inventory reference",
+  "web": {"root": "unity-migration/complex-inventory", "path": "/fidelity/"},
+  "commands": {
+    "build-web": [{"script": "unity-migration/complex-inventory/scripts/build-app.mjs"}, {"script": "unity-migration/complex-inventory/fidelity/build-fidelity.mjs"}],
+    "serve": {"script": "unity-migration/complex-inventory/scripts/serve.mjs"},
+    "test": {"script": ".lgui/inventory-test.mjs"},
+    "verify-browser": [{"script": "unity-migration/complex-inventory/fidelity/accept-adaptive-controls.mjs"}, {"script": "unity-migration/complex-inventory/fidelity/accept-narrow-layout.mjs"}],
+    "verify-editor": {"script": "闭环验证/browser-acceptance.mjs"},
+    "unity-setup": [{"script": "unity-migration/complex-inventory/scripts/publish-fidelity-project.mjs"}, {"script": "unity-migration/complex-inventory/scripts/setup-fidelity-unity.mjs"}],
+    "unity": {"runner": "powershell", "script": "unity-migration/complex-inventory/scripts/run-fidelity.ps1"}
+  }
+}

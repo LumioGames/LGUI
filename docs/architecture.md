@@ -8,6 +8,7 @@ LGUI 把 Agent 的需求与参考转换为可编辑、可保存、可验证的 F
 |---|---|---|
 | 可安装插件 | 根 plugin.json、skills/、tools/ | 工具从自身安装位置找资源；所有项目命令显式指定工作区 |
 | 宿主适配 | .claude-plugin/、.codex-plugin/、.agents/plugins/ | generate 从根 manifest 生成，禁止分叉手改 |
+| 工程模板与路由 | templates/blank/、templates/inventory/、tools/workflows.mjs | 默认空工程；项目清单配置网页与 Unity；不隐式选择示例 |
 | 业务与布局 | unity-migration/complex-inventory/shared/、fidelity/layout-shared.js | pure TS；shared 引用 prototype/shared/model.ts 奖励规则 |
 | 网页适配 | complex-inventory/fidelity/ | FairyGUI-dom DOM 组件手工组装；存储、字体、事件在平台层 |
 | 原生适配 | unity-migration/InventoryUnity/Assets/ | FairyGUI-unity 正式包、PuerTS；无 WebView/WebGL |
@@ -28,6 +29,6 @@ LGUI 把 Agent 的需求与参考转换为可编辑、可保存、可验证的 F
 
 ## 三个目录
 
-插件缓存只读；用户工程由 `init --workspace` 复制允许清单；临时验证目录独立。初始化配置为 `.lgui/workspace.json`，不存个人路径或凭据。脚本由自身位置定位模板，项目操作由显式工作区定位；不依赖启动 cwd。路径检查包含符号链接/Windows junction，禁止缓存与工程重叠。重跑 init 在写入前检查全部文件，用户修改会中止；它不是升级覆盖工具。
+插件缓存只读；用户工程由 `init --workspace` 复制允许清单，默认 blank，inventory 显式选择；临时验证目录独立。`.lgui/workspace.json` 记录模板/版本/端口，`.lgui/project.json` 记录实际工程脚本、网页根和 Unity 构建方法。参见 [工程配置](projects.md)。脚本由自身位置或工作区定位，不依赖启动 cwd。路径检查包含符号链接/Windows junction，禁止缓存与工程重叠。重跑 init 在写入前检查全部文件，用户修改会中止；它不是升级覆盖工具。
 
 包不包含恢复的上游仓库、node_modules、浏览器状态、Unity 安装器和 Player。依赖恢复后产生的数据都在工作区。插件运行期需要 Node 和用户显式安装的固定依赖；“自包含”指分发的代码/模板/引用不逃出包根，不代表捆绑操作系统、浏览器和 Unity。

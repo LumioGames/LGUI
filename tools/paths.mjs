@@ -15,7 +15,7 @@ export const within = (root, target) => {
   return !relative || (!relative.startsWith('..' + path.sep) && relative !== '..' && !path.isAbsolute(relative));
 };
 export function contained(root, relative) {
-  if (!relative || relative.includes('\\') || relative.includes(':') || relative.split('/').some(p => !p || p === '.' || p === '..')) throw Error(`Unsafe package path: ${relative}`);
+  if (typeof relative!=='string' || !relative || relative.includes('\\') || relative.includes(':') || relative.split('/').some(p => !p || p === '.' || p === '..')) throw Error(`Unsafe package path: ${relative}`);
   const target = path.resolve(root, relative);
   if (!within(resolved(root), resolved(target))) throw Error(`Path escapes root: ${relative}`);
   let current = target;

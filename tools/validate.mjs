@@ -33,6 +33,15 @@ for(const name of skills){
 }
 const inventory=readJson(path.join(root,'template-files.json'));assert.equal(inventory.version,plugin.version);
 for(const file of inventory.files)assert.equal(sha256(fs.readFileSync(contained(root,file.path))),file.sha256,`Template digest: ${file.path}`);
+assert.equal(inventory.schemaVersion,2);
+for(const name of ['blank','inventory']){
+  assert(inventory.templates?.[name]?.length,`Missing ${name} template`);
+  const destinations=new Set();
+  for(const entry of inventory.templates[name]){
+    contained(root,entry.path);assert(!destinations.has(entry.path),`Duplicate template destination ${entry.path}`);destinations.add(entry.path);
+    assert.equal(sha256(fs.readFileSync(contained(root,entry.source))),entry.sha256,`Template source digest: ${entry.source}`);
+  }
+}
 if(fs.existsSync(path.join(root,'package-integrity.json'))){
   const integrity=readJson(path.join(root,'package-integrity.json'));assert.equal(integrity.version,plugin.version);
   const names=new Set(integrity.files.map(file=>file.path));
