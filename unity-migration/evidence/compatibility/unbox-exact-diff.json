@@ -1,0 +1,22 @@
+[
+  {
+    "line": 102,
+    "before": "            return il2cpp::vm::Object::Unbox(obj);",
+    "after": "            return il2cpp_object_unbox(obj);"
+  },
+  {
+    "line": 757,
+    "before": "    return (defaultValue && il2cpp::vm::Class::IsValuetype(il2cpp::vm::Class::FromIl2CppType(il2cpp::vm::Method::GetParam(method, index), false))) ? Object::Unbox(defaultValue) : defaultValue;",
+    "after": "    return (defaultValue && il2cpp::vm::Class::IsValuetype(il2cpp::vm::Class::FromIl2CppType(il2cpp::vm::Method::GetParam(method, index), false))) ? il2cpp_object_unbox(defaultValue) : defaultValue;"
+  },
+  {
+    "line": 1063,
+    "before": "        void* ptr = Object::Unbox(obj);",
+    "after": "        void* ptr = il2cpp_object_unbox(obj);"
+  },
+  {
+    "line": 1078,
+    "before": "    return DataTransfer::CopyValueType(apis, env, targetClass, Object::Unbox(obj), len);",
+    "after": "    return DataTransfer::CopyValueType(apis, env, targetClass, il2cpp_object_unbox(obj), len);"
+  }
+]

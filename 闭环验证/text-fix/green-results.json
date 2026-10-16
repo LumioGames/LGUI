@@ -1,0 +1,318 @@
+{
+  "coreVersion": "0.2.4",
+  "projectPath": "[LGUI_ROOT]\\toolchain-test\\project\\Inventory.fairy",
+  "records": [
+    {
+      "name": "Chinese text change reaches Core",
+      "command": {
+        "kind": "setDisplayNodeProps",
+        "selector": {
+          "packageId": "invtest1",
+          "componentResourceId": "main0001",
+          "displayNodeId": "title"
+        },
+        "props": {
+          "textProperties": {
+            "text": "网页已修复：奖励可领取",
+            "font": "",
+            "fontSize": 30,
+            "color": "#f8da8a",
+            "align": 0,
+            "vAlign": 0,
+            "leading": 3,
+            "letterSpacing": 0,
+            "autoSize": 0,
+            "singleLine": false,
+            "autoClearText": false,
+            "demoText": "",
+            "templateVarsEnabled": false,
+            "faceDilate": 0,
+            "outlineSoftness": 0,
+            "underlaySoftness": 0,
+            "ubbEnabled": false,
+            "underline": false,
+            "italic": false,
+            "bold": false,
+            "strikethrough": false,
+            "strokeColor": null,
+            "strokeSize": 1,
+            "shadowColor": null,
+            "shadowOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "font change reaches Core",
+      "command": {
+        "kind": "setDisplayNodeProps",
+        "selector": {
+          "packageId": "invtest1",
+          "componentResourceId": "main0001",
+          "displayNodeId": "title"
+        },
+        "props": {
+          "textProperties": {
+            "text": "旅者背包 · Agent 已编辑",
+            "font": "Arial",
+            "fontSize": 30,
+            "color": "#f8da8a",
+            "align": 0,
+            "vAlign": 0,
+            "leading": 3,
+            "letterSpacing": 0,
+            "autoSize": 0,
+            "singleLine": false,
+            "autoClearText": false,
+            "demoText": "",
+            "templateVarsEnabled": false,
+            "faceDilate": 0,
+            "outlineSoftness": 0,
+            "underlaySoftness": 0,
+            "ubbEnabled": false,
+            "underline": false,
+            "italic": false,
+            "bold": false,
+            "strikethrough": false,
+            "strokeColor": null,
+            "strokeSize": 1,
+            "shadowColor": null,
+            "shadowOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "font size change reaches Core",
+      "command": {
+        "kind": "setDisplayNodeProps",
+        "selector": {
+          "packageId": "invtest1",
+          "componentResourceId": "main0001",
+          "displayNodeId": "title"
+        },
+        "props": {
+          "textProperties": {
+            "text": "旅者背包 · Agent 已编辑",
+            "font": "",
+            "fontSize": 26,
+            "color": "#f8da8a",
+            "align": 0,
+            "vAlign": 0,
+            "leading": 3,
+            "letterSpacing": 0,
+            "autoSize": 0,
+            "singleLine": false,
+            "autoClearText": false,
+            "demoText": "",
+            "templateVarsEnabled": false,
+            "faceDilate": 0,
+            "outlineSoftness": 0,
+            "underlaySoftness": 0,
+            "ubbEnabled": false,
+            "underline": false,
+            "italic": false,
+            "bold": false,
+            "strikethrough": false,
+            "strokeColor": null,
+            "strokeSize": 1,
+            "shadowColor": null,
+            "shadowOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "color change reaches Core",
+      "command": {
+        "kind": "setDisplayNodeProps",
+        "selector": {
+          "packageId": "invtest1",
+          "componentResourceId": "main0001",
+          "displayNodeId": "title"
+        },
+        "props": {
+          "textProperties": {
+            "text": "旅者背包 · Agent 已编辑",
+            "font": "",
+            "fontSize": 30,
+            "color": "#123456",
+            "align": 0,
+            "vAlign": 0,
+            "leading": 3,
+            "letterSpacing": 0,
+            "autoSize": 0,
+            "singleLine": false,
+            "autoClearText": false,
+            "demoText": "",
+            "templateVarsEnabled": false,
+            "faceDilate": 0,
+            "outlineSoftness": 0,
+            "underlaySoftness": 0,
+            "ubbEnabled": false,
+            "underline": false,
+            "italic": false,
+            "bold": false,
+            "strikethrough": false,
+            "strokeColor": null,
+            "strokeSize": 1,
+            "shadowColor": null,
+            "shadowOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "text and all Inspector style controls reach Core together",
+      "command": {
+        "kind": "setDisplayNodeProps",
+        "selector": {
+          "packageId": "invtest1",
+          "componentResourceId": "main0001",
+          "displayNodeId": "title"
+        },
+        "props": {
+          "textProperties": {
+            "text": "样式完整保留",
+            "font": "Arial",
+            "fontSize": 28,
+            "color": "#AABBCC",
+            "align": 1,
+            "vAlign": 1,
+            "leading": 5,
+            "letterSpacing": 2,
+            "autoSize": 0,
+            "singleLine": true,
+            "autoClearText": true,
+            "demoText": "",
+            "templateVarsEnabled": true,
+            "faceDilate": 0,
+            "outlineSoftness": 0,
+            "underlaySoftness": 0,
+            "ubbEnabled": true,
+            "underline": true,
+            "italic": true,
+            "bold": true,
+            "strikethrough": true,
+            "strokeColor": null,
+            "strokeSize": 1,
+            "shadowColor": null,
+            "shadowOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "common layout and text changes remain composable",
+      "command": {
+        "kind": "setDisplayNodeProps",
+        "selector": {
+          "packageId": "invtest1",
+          "componentResourceId": "main0001",
+          "displayNodeId": "title"
+        },
+        "props": {
+          "position": {
+            "x": 38,
+            "y": 26
+          },
+          "textProperties": {
+            "text": "位置和文本一起改",
+            "font": "",
+            "fontSize": 30,
+            "color": "#f8da8a",
+            "align": 0,
+            "vAlign": 0,
+            "leading": 3,
+            "letterSpacing": 0,
+            "autoSize": 0,
+            "singleLine": false,
+            "autoClearText": false,
+            "demoText": "",
+            "templateVarsEnabled": false,
+            "faceDilate": 0,
+            "outlineSoftness": 0,
+            "underlaySoftness": 0,
+            "ubbEnabled": false,
+            "underline": false,
+            "italic": false,
+            "bold": false,
+            "strikethrough": false,
+            "strokeColor": null,
+            "strokeSize": 1,
+            "shadowColor": null,
+            "shadowOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "text input editing uses the same valid contract",
+      "command": {
+        "kind": "setDisplayNodeProps",
+        "selector": {
+          "packageId": "invtest1",
+          "componentResourceId": "main0001",
+          "displayNodeId": "search"
+        },
+        "props": {
+          "textProperties": {
+            "text": "药水",
+            "font": "",
+            "fontSize": 20,
+            "color": "#ffffff",
+            "align": 0,
+            "vAlign": 0,
+            "leading": 3,
+            "letterSpacing": 0,
+            "autoSize": 0,
+            "singleLine": true,
+            "autoClearText": false,
+            "demoText": "",
+            "templateVarsEnabled": false,
+            "faceDilate": 0,
+            "outlineSoftness": 0,
+            "underlaySoftness": 0,
+            "ubbEnabled": false,
+            "underline": false,
+            "italic": false,
+            "bold": false,
+            "strikethrough": false,
+            "strokeColor": null,
+            "strokeSize": 1,
+            "shadowColor": null,
+            "shadowOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "issues": []
+    }
+  ]
+}

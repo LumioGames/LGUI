@@ -1,0 +1,3259 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared",
+  "reference": {
+    "file": "../art/reference.png",
+    "width": 1586,
+    "height": 992,
+    "sha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b"
+  },
+  "assets": {
+    "environmentLeft": {
+      "file": "skin/environmentLeft.png",
+      "sourceRect": {
+        "x": 0,
+        "y": 0,
+        "width": 127,
+        "height": 992
+      },
+      "role": "environment edge, no interactive content",
+      "sourcePixelsSha256": "0e8c6db44b373ffbbf31c0c2a167ae7d67ee97d3858fd499826aaab396a2f20b",
+      "sha256": "21eb3985edd50ea2c2ea16c02d79a054bd3b9f7049c509d88c260de8d06629ff",
+      "bytes": 205263,
+      "width": 127,
+      "height": 992
+    },
+    "environmentRight": {
+      "file": "skin/environmentRight.png",
+      "sourceRect": {
+        "x": 1453,
+        "y": 0,
+        "width": 133,
+        "height": 992
+      },
+      "role": "environment edge, decorative banner lettering only",
+      "sourcePixelsSha256": "399ea9e2b5337a0449d64b5f6ea8c60910ae7dba79f926e9c560c1b6c848645c",
+      "sha256": "568742588acc51f57a58b4872857c70c810817180cf628c9679a81502e1495c9",
+      "bytes": 264403,
+      "width": 133,
+      "height": 992
+    },
+    "environmentTop": {
+      "file": "skin/environmentTop.png",
+      "sourceRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1586,
+        "height": 17
+      },
+      "role": "environment edge",
+      "sourcePixelsSha256": "38e6bc3948494b27c71cb8cf5a7c19ce719c4131529d25e2a7afa7648e0f541b",
+      "sha256": "6bd04d574045e54744acadde24140663bbd0e15110c18d2f0e17139a93631c8e",
+      "bytes": 29169,
+      "width": 1586,
+      "height": 17
+    },
+    "environmentBottom": {
+      "file": "skin/environmentBottom.png",
+      "sourceRect": {
+        "x": 0,
+        "y": 976,
+        "width": 1586,
+        "height": 16
+      },
+      "role": "environment edge",
+      "sourcePixelsSha256": "49dabc987cbc52bffc8973a9b14eb27030837d914ce47d7d603e3afbbd150f9c",
+      "sha256": "016c0662de98bd4e7b96d8110989ba70ddbe768cc18e55ac07415d30c2c87fa5",
+      "bytes": 27640,
+      "width": 1586,
+      "height": 16
+    },
+    "headerFill": {
+      "file": "skin/headerFill.png",
+      "sourceRect": {
+        "x": 560,
+        "y": 20,
+        "width": 530,
+        "height": 105
+      },
+      "role": "quiet environment/header texture",
+      "sourcePixelsSha256": "5413494d4f0a7ae54468b5c41d81353b0a3f8f5b529177a5063b087835c2e5b2",
+      "sha256": "34da0feedfb5f6bc909ac76ead93cf7627036e539731cadeb20f1c8807a542bb",
+      "bytes": 48784,
+      "width": 530,
+      "height": 105
+    },
+    "headerLeftMiddle": {
+      "file": "skin/headerLeftMiddle.png",
+      "sourceRect": {
+        "x": 127,
+        "y": 0,
+        "width": 986,
+        "height": 137
+      },
+      "role": "exact header branding, quiet environment and underline",
+      "drawAtSourceRect": true,
+      "rasterTextAllowed": true,
+      "notEditableBodyText": true,
+      "sourcePixelsSha256": "f79759784ac74e9c7d8dfedb637b15e7204e8e6e8aeed79eede64b54a167376e",
+      "sha256": "f3244f3a07e09a1946003f62123ea8c098f3b303138a194443fcb2609fd46da9",
+      "bytes": 167326,
+      "width": 986,
+      "height": 137
+    },
+    "headerRightLower": {
+      "file": "skin/headerRightLower.png",
+      "sourceRect": {
+        "x": 1113,
+        "y": 62,
+        "width": 340,
+        "height": 75
+      },
+      "role": "exact decorative motto and lower underline",
+      "drawAtSourceRect": true,
+      "rasterTextAllowed": true,
+      "notEditableBodyText": true,
+      "sourcePixelsSha256": "102e88a8e4a7e2fed9e8a4c260f251243c494861d6a3cb32c87acc9ba09b5c5b",
+      "sha256": "f17ad1fb9a6f39967e3eac2d7ed05fb26a015967aa546f3b159bd12d23972a84",
+      "bytes": 30917,
+      "width": 340,
+      "height": 75
+    },
+    "headerRightUpper": {
+      "file": "skin/headerRightUpper.png",
+      "sourceRect": {
+        "x": 1296,
+        "y": 0,
+        "width": 157,
+        "height": 62
+      },
+      "role": "exact static divider and close chrome",
+      "drawAtSourceRect": true,
+      "sourcePixelsSha256": "f95a51bf60ece766dcb680ff6e100a2a540bad6ad6c0b21171a14b1755b10425",
+      "sha256": "fcd49c2af7df2f2242ea0bb43a17b858605015c01ea24cbb2d174da0f342b822",
+      "bytes": 11655,
+      "width": 157,
+      "height": 62
+    },
+    "headerCoinBlank": {
+      "file": "skin/headerCoinBlank.png",
+      "sourceRect": {
+        "x": 1280,
+        "y": 17,
+        "width": 16,
+        "height": 45
+      },
+      "role": "blank texture for the variable coin-value area",
+      "intendedFillRect": {
+        "x": 1113,
+        "y": 17,
+        "width": 183,
+        "height": 45
+      },
+      "allowHorizontalStretch": true,
+      "containsBakedCoinValue": false,
+      "sourcePixelsSha256": "94f32df3af63296e645910737685136e75c1431e4d7b278ce632fe8f88d0b8cc",
+      "sha256": "46988688b6d659fb2cf6060545c459120b71515dd95889d2cbcb1e13a1e2e07e",
+      "bytes": 1063,
+      "width": 16,
+      "height": 45
+    },
+    "panelFill": {
+      "file": "skin/panelFill.png",
+      "sourceRect": {
+        "x": 420,
+        "y": 214,
+        "width": 8,
+        "height": 620
+      },
+      "role": "blank vertical gap between item cells; no labels or selected glow",
+      "sourcePixelsSha256": "a7ad79605bb43b503087f26d4b542554e628d7b0858f18e139f5b8328326c135",
+      "sha256": "8d8513fed22a8ecc44f1a533278ee66a8f0feacb2554381cae7039bdac13369a",
+      "bytes": 5679,
+      "width": 8,
+      "height": 620
+    },
+    "headerBranding": {
+      "file": "skin/headerBranding.png",
+      "sourceRect": {
+        "x": 132,
+        "y": 26,
+        "width": 420,
+        "height": 99
+      },
+      "role": "decorative branding",
+      "rasterTextAllowed": true,
+      "notEditableBodyText": true,
+      "sourcePixelsSha256": "25b7e1f36146adbf87846abe96db18ce4d9764cf0789b21e6565df54e4324362",
+      "sha256": "47a09cda968eb1bbdb9e34ff7fb04ad76d75929590334de12793f89b619734c8",
+      "bytes": 76288,
+      "width": 420,
+      "height": 99
+    },
+    "logo": {
+      "file": "skin/logo.png",
+      "sourceRect": {
+        "x": 132,
+        "y": 27,
+        "width": 119,
+        "height": 99
+      },
+      "role": "decorative compass logo",
+      "sourcePixelsSha256": "4ad60d8e3913aa022baf438ed2dbdcf8d4e77d7fbf2e2cbb506d4de065516911",
+      "sha256": "1bf50a41e045cf8cfb8741c615123262c2880caa5e6a35db5f48286694a7ee23",
+      "bytes": 20292,
+      "width": 119,
+      "height": 99
+    },
+    "coin": {
+      "file": "skin/coin.png",
+      "sourceRect": {
+        "x": 1113,
+        "y": 17,
+        "width": 45,
+        "height": 45
+      },
+      "role": "coin ornament",
+      "sourcePixelsSha256": "3823720334315539f17ebf853bd09146b7eea81c0892c733b77d85df8c321f1c",
+      "sha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387",
+      "bytes": 6209,
+      "width": 45,
+      "height": 45
+    },
+    "close": {
+      "file": "skin/close.png",
+      "sourceRect": {
+        "x": 1372,
+        "y": 19,
+        "width": 39,
+        "height": 39
+      },
+      "role": "close glyph",
+      "sourcePixelsSha256": "51b085e5fa08a7624c26f143a548981c7e9308a428ae436392999b85e412dcf9",
+      "sha256": "9b0affedb97f67e7ef24b676fdbaa05ceae261e505c704cc67a20ac93203fa92",
+      "bytes": 3350,
+      "width": 39,
+      "height": 39
+    },
+    "compass": {
+      "file": "skin/compass.png",
+      "sourceRect": {
+        "x": 1162,
+        "y": 701,
+        "width": 44,
+        "height": 39
+      },
+      "role": "button ornament",
+      "sourcePixelsSha256": "4b849835a55d94e948b6afb7b7a818b29097eaa3ced069860cbd701fd01803b3",
+      "sha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2",
+      "bytes": 5404,
+      "width": 44,
+      "height": 39
+    },
+    "sellCoins": {
+      "file": "skin/sellCoins.png",
+      "sourceRect": {
+        "x": 1163,
+        "y": 779,
+        "width": 43,
+        "height": 33
+      },
+      "role": "button ornament",
+      "sourcePixelsSha256": "d2e657129ee586c8c677d7de439efa7a0cea4374d8d84584194fdfa87bf74ffc",
+      "sha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875",
+      "bytes": 3690,
+      "width": 43,
+      "height": 33
+    },
+    "searchIcon": {
+      "file": "skin/searchIcon.png",
+      "sourceRect": {
+        "x": 165,
+        "y": 165,
+        "width": 29,
+        "height": 29
+      },
+      "role": "search ornament",
+      "sourcePixelsSha256": "a7a804d704397474ef0881c358e378b17714c76a07f96369c79010f58199af94",
+      "sha256": "d469ed3b37bec5bc4cd2147418c805bd5c9c29cff76c965336b363e58d144486",
+      "bytes": 1998,
+      "width": 29,
+      "height": 29
+    },
+    "capacityIcon": {
+      "file": "skin/capacityIcon.png",
+      "sourceRect": {
+        "x": 155,
+        "y": 891,
+        "width": 35,
+        "height": 36
+      },
+      "role": "footer bag ornament",
+      "sourcePixelsSha256": "34963957dc75b02412edde3be4da77c1cc6cada52bf5a0a97dcad0563a18359a",
+      "sha256": "2085040ee2ba86014bccac608152c86a8fde5eb162d8e37d7e68854dca21ae59",
+      "bytes": 3208,
+      "width": 35,
+      "height": 36
+    },
+    "menu": {
+      "file": "skin/menu.png",
+      "sourceRect": {
+        "x": 1404,
+        "y": 890,
+        "width": 34,
+        "height": 38
+      },
+      "role": "menu glyph",
+      "sourcePixelsSha256": "ad0b60d32c92539934fe9f11a2a9d255a72ba83f52790b49b03246c85725150a",
+      "sha256": "e424c2eccbf8fcd719874cd5e793f5b0e4e019daa96b148360f47214d1abda79",
+      "bytes": 2637,
+      "width": 34,
+      "height": 38
+    },
+    "sortArrow": {
+      "file": "skin/sortArrow.png",
+      "sourceRect": {
+        "x": 1325,
+        "y": 902,
+        "width": 22,
+        "height": 17
+      },
+      "role": "dropdown glyph",
+      "sourcePixelsSha256": "f319b57c686a88635cf31441eaa1dd8d13703a4a42b7c8b1d4cc9d94b3774a62",
+      "sha256": "1e86f7724e0e1a746422dcefa06ecc43aaa55dc8002a5ce9229b711990cbaedd",
+      "bytes": 916,
+      "width": 22,
+      "height": 17
+    },
+    "detailSword": {
+      "file": "skin/detailSword.png",
+      "sourceRect": {
+        "x": 1040,
+        "y": 150,
+        "width": 194,
+        "height": 392
+      },
+      "role": "reference detail artwork and underlying nonsemantic panel texture",
+      "opaqueReferencePanelTexture": true,
+      "sourcePixelsSha256": "b6e7c7528aeb8624ab56739baef8f662c303e784b0bebc4ac796f3c2fb5fa2df",
+      "sha256": "b878203d7ec888402c952ce0303358c241b4cad1fb45c60cac13ac5eec1359c1",
+      "bytes": 167622,
+      "width": 194,
+      "height": 392
+    },
+    "statAttack": {
+      "file": "skin/statAttack.png",
+      "sourceRect": {
+        "x": 1233,
+        "y": 337,
+        "width": 34,
+        "height": 33
+      },
+      "role": "stat ornament",
+      "sourcePixelsSha256": "b2d6a584586a804cdb91791e6929256ad5e18f1b219a76374798f282a70a3e97",
+      "sha256": "d13b103c0e2e0146baedfbb95a9d661c0524305a47f19f5ba647a8ae376e26e3",
+      "bytes": 2956,
+      "width": 34,
+      "height": 33
+    },
+    "statCrit": {
+      "file": "skin/statCrit.png",
+      "sourceRect": {
+        "x": 1233,
+        "y": 396,
+        "width": 34,
+        "height": 33
+      },
+      "role": "stat ornament",
+      "sourcePixelsSha256": "3ca59838da593f20e57ed7fb022b29d1bd168ef14e876779f201065d1173f981",
+      "sha256": "a1e28bb240f3e2084a15b6b9837a679437094d8a05ba38007c8d0dc6c7467134",
+      "bytes": 2837,
+      "width": 34,
+      "height": 33
+    },
+    "statDurability": {
+      "file": "skin/statDurability.png",
+      "sourceRect": {
+        "x": 1233,
+        "y": 455,
+        "width": 34,
+        "height": 33
+      },
+      "role": "stat ornament",
+      "sourcePixelsSha256": "89923e1ec321dd6303474ce47b8b976d5cbe24a882d5e144f2f0646053ae7ee4",
+      "sha256": "7392df94362da8e01d61b56bf0f09e3c32ff087e1acea577baa29289cfa366be",
+      "bytes": 2898,
+      "width": 34,
+      "height": 33
+    },
+    "detailDivider": {
+      "file": "skin/detailDivider.png",
+      "sourceRect": {
+        "x": 1230,
+        "y": 291,
+        "width": 188,
+        "height": 15
+      },
+      "role": "decorative horizontal divider; sword excluded",
+      "sourcePixelsSha256": "2bcdafc6d51c75cceb4e7a7cf46400db988a681403cd31a5319adc6552e102cf",
+      "sha256": "3ceaf93af3370e10e3c74653499fc05130aa07b2da73eef8dca0c93ac8d14b01",
+      "bytes": 4873,
+      "width": 188,
+      "height": 15
+    },
+    "detailLowerDivider": {
+      "file": "skin/detailLowerDivider.png",
+      "sourceRect": {
+        "x": 1047,
+        "y": 533,
+        "width": 371,
+        "height": 13
+      },
+      "role": "decorative horizontal divider",
+      "sourcePixelsSha256": "6b875d76d0d861d48fb9045bad3a1181184b366f9cd39fe629ba76ae7b303947",
+      "sha256": "7a08d4309b1bb55fbe26a2e66ecba66cce5de93cae5b45f978c451c95a4916ff",
+      "bytes": 7456,
+      "width": 371,
+      "height": 13
+    },
+    "frameLeft": {
+      "file": "skin/frameLeft.png",
+      "sourceRect": {
+        "x": 132,
+        "y": 137,
+        "width": 879,
+        "height": 723
+      },
+      "role": "frame-only",
+      "mode": "frame",
+      "insets": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "sourcePixelsSha256": "2e7961d24533e14860538407022a2bc72ed8c1f52b71b37ba71e83237ec7174e",
+      "transparentCenter": {
+        "x": 12,
+        "y": 12,
+        "width": 855,
+        "height": 699
+      },
+      "borderImage": {
+        "slice": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "fill": false
+      },
+      "semanticCenterRemoved": true,
+      "sha256": "964464357e163682a35c745b01b563564d943f5860f427d1f195876ba2226247",
+      "bytes": 67276,
+      "width": 879,
+      "height": 723
+    },
+    "frameRight": {
+      "file": "skin/frameRight.png",
+      "sourceRect": {
+        "x": 1017,
+        "y": 137,
+        "width": 433,
+        "height": 723
+      },
+      "role": "frame-only",
+      "mode": "frame",
+      "insets": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "sourcePixelsSha256": "aecacc58eded19d8f8ca2633f50903cb10d5fe1cca8870b745b8db3592defff7",
+      "transparentCenter": {
+        "x": 12,
+        "y": 12,
+        "width": 409,
+        "height": 699
+      },
+      "borderImage": {
+        "slice": [
+          12,
+          12,
+          12,
+          12
+        ],
+        "fill": false
+      },
+      "semanticCenterRemoved": true,
+      "sha256": "341c899865bbb68077a5f7813ccc3474882cbb50127a70b5e273541872678a92",
+      "bytes": 60386,
+      "width": 433,
+      "height": 723
+    },
+    "detailBackground": {
+      "file": "skin/detailBackground.png",
+      "sourceRect": {
+        "x": 1017,
+        "y": 137,
+        "width": 433,
+        "height": 723
+      },
+      "role": "reference detail-panel background with all dynamic content removed",
+      "mode": "masked",
+      "drawAtSourceRect": true,
+      "maskSources": [
+        {
+          "control": "detailIcon",
+          "sourceRect": {
+            "x": 1040,
+            "y": 150,
+            "width": 194,
+            "height": 392
+          },
+          "padding": 0
+        },
+        {
+          "control": "detailTitle",
+          "sourceRect": {
+            "x": 1258,
+            "y": 190,
+            "width": 166,
+            "height": 42
+          },
+          "padding": 2
+        },
+        {
+          "control": "rarity",
+          "sourceRect": {
+            "x": 1259,
+            "y": 238,
+            "width": 165,
+            "height": 30
+          },
+          "padding": 2
+        },
+        {
+          "control": "description",
+          "sourceRect": {
+            "x": 1047,
+            "y": 564,
+            "width": 374,
+            "height": 85
+          },
+          "padding": 2
+        },
+        {
+          "control": "primary",
+          "sourceRect": {
+            "x": 1047,
+            "y": 685,
+            "width": 370,
+            "height": 65
+          },
+          "padding": 2
+        },
+        {
+          "control": "sell",
+          "sourceRect": {
+            "x": 1047,
+            "y": 763,
+            "width": 370,
+            "height": 65
+          },
+          "padding": 2
+        },
+        {
+          "control": "detail.stats[0].labelRect",
+          "sourceRect": {
+            "x": 1274,
+            "y": 340,
+            "width": 80,
+            "height": 33
+          },
+          "padding": 2
+        },
+        {
+          "control": "detail.stats[0].valueRect",
+          "sourceRect": {
+            "x": 1362,
+            "y": 339,
+            "width": 57,
+            "height": 35
+          },
+          "padding": 2
+        },
+        {
+          "control": "detail.stats[1].labelRect",
+          "sourceRect": {
+            "x": 1274,
+            "y": 399,
+            "width": 80,
+            "height": 33
+          },
+          "padding": 2
+        },
+        {
+          "control": "detail.stats[1].valueRect",
+          "sourceRect": {
+            "x": 1362,
+            "y": 398,
+            "width": 57,
+            "height": 35
+          },
+          "padding": 2
+        },
+        {
+          "control": "detail.stats[2].labelRect",
+          "sourceRect": {
+            "x": 1274,
+            "y": 458,
+            "width": 80,
+            "height": 33
+          },
+          "padding": 2
+        },
+        {
+          "control": "detail.stats[2].valueRect",
+          "sourceRect": {
+            "x": 1362,
+            "y": 457,
+            "width": 57,
+            "height": 35
+          },
+          "padding": 2
+        }
+      ],
+      "sourcePixelsSha256": "aecacc58eded19d8f8ca2633f50903cb10d5fe1cca8870b745b8db3592defff7",
+      "transparentMasks": [
+        {
+          "control": "detailIcon",
+          "sourceRect": {
+            "x": 1040,
+            "y": 150,
+            "width": 194,
+            "height": 392
+          },
+          "padding": 0,
+          "localRect": {
+            "x": 23,
+            "y": 13,
+            "width": 194,
+            "height": 392
+          },
+          "expandedSourceRect": {
+            "x": 1040,
+            "y": 150,
+            "width": 194,
+            "height": 392
+          }
+        },
+        {
+          "control": "detailTitle",
+          "sourceRect": {
+            "x": 1258,
+            "y": 190,
+            "width": 166,
+            "height": 42
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 239,
+            "y": 51,
+            "width": 170,
+            "height": 46
+          },
+          "expandedSourceRect": {
+            "x": 1256,
+            "y": 188,
+            "width": 170,
+            "height": 46
+          }
+        },
+        {
+          "control": "rarity",
+          "sourceRect": {
+            "x": 1259,
+            "y": 238,
+            "width": 165,
+            "height": 30
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 240,
+            "y": 99,
+            "width": 169,
+            "height": 34
+          },
+          "expandedSourceRect": {
+            "x": 1257,
+            "y": 236,
+            "width": 169,
+            "height": 34
+          }
+        },
+        {
+          "control": "description",
+          "sourceRect": {
+            "x": 1047,
+            "y": 564,
+            "width": 374,
+            "height": 85
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 28,
+            "y": 425,
+            "width": 378,
+            "height": 89
+          },
+          "expandedSourceRect": {
+            "x": 1045,
+            "y": 562,
+            "width": 378,
+            "height": 89
+          }
+        },
+        {
+          "control": "primary",
+          "sourceRect": {
+            "x": 1047,
+            "y": 685,
+            "width": 370,
+            "height": 65
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 28,
+            "y": 546,
+            "width": 374,
+            "height": 69
+          },
+          "expandedSourceRect": {
+            "x": 1045,
+            "y": 683,
+            "width": 374,
+            "height": 69
+          }
+        },
+        {
+          "control": "sell",
+          "sourceRect": {
+            "x": 1047,
+            "y": 763,
+            "width": 370,
+            "height": 65
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 28,
+            "y": 624,
+            "width": 374,
+            "height": 69
+          },
+          "expandedSourceRect": {
+            "x": 1045,
+            "y": 761,
+            "width": 374,
+            "height": 69
+          }
+        },
+        {
+          "control": "detail.stats[0].labelRect",
+          "sourceRect": {
+            "x": 1274,
+            "y": 340,
+            "width": 80,
+            "height": 33
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 255,
+            "y": 201,
+            "width": 84,
+            "height": 37
+          },
+          "expandedSourceRect": {
+            "x": 1272,
+            "y": 338,
+            "width": 84,
+            "height": 37
+          }
+        },
+        {
+          "control": "detail.stats[0].valueRect",
+          "sourceRect": {
+            "x": 1362,
+            "y": 339,
+            "width": 57,
+            "height": 35
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 343,
+            "y": 200,
+            "width": 61,
+            "height": 39
+          },
+          "expandedSourceRect": {
+            "x": 1360,
+            "y": 337,
+            "width": 61,
+            "height": 39
+          }
+        },
+        {
+          "control": "detail.stats[1].labelRect",
+          "sourceRect": {
+            "x": 1274,
+            "y": 399,
+            "width": 80,
+            "height": 33
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 255,
+            "y": 260,
+            "width": 84,
+            "height": 37
+          },
+          "expandedSourceRect": {
+            "x": 1272,
+            "y": 397,
+            "width": 84,
+            "height": 37
+          }
+        },
+        {
+          "control": "detail.stats[1].valueRect",
+          "sourceRect": {
+            "x": 1362,
+            "y": 398,
+            "width": 57,
+            "height": 35
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 343,
+            "y": 259,
+            "width": 61,
+            "height": 39
+          },
+          "expandedSourceRect": {
+            "x": 1360,
+            "y": 396,
+            "width": 61,
+            "height": 39
+          }
+        },
+        {
+          "control": "detail.stats[2].labelRect",
+          "sourceRect": {
+            "x": 1274,
+            "y": 458,
+            "width": 80,
+            "height": 33
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 255,
+            "y": 319,
+            "width": 84,
+            "height": 37
+          },
+          "expandedSourceRect": {
+            "x": 1272,
+            "y": 456,
+            "width": 84,
+            "height": 37
+          }
+        },
+        {
+          "control": "detail.stats[2].valueRect",
+          "sourceRect": {
+            "x": 1362,
+            "y": 457,
+            "width": 57,
+            "height": 35
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 343,
+            "y": 318,
+            "width": 61,
+            "height": 39
+          },
+          "expandedSourceRect": {
+            "x": 1360,
+            "y": 455,
+            "width": 61,
+            "height": 39
+          }
+        }
+      ],
+      "dynamicContentRemoved": true,
+      "maskFill": "zero RGBA; draw a nonsemantic base texture below the holes",
+      "unmaskedPixelCount": 121730,
+      "unmaskedPixelsMatchReference": true,
+      "sha256": "4bf6896db517194866765574bb66ee71fd9e320a0f688e4ce7b16a3fec8e26c9",
+      "bytes": 174528,
+      "width": 433,
+      "height": 723
+    },
+    "frameFooter": {
+      "file": "skin/frameFooter.png",
+      "sourceRect": {
+        "x": 132,
+        "y": 870,
+        "width": 1318,
+        "height": 74
+      },
+      "role": "frame-only",
+      "mode": "frame",
+      "insets": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "sourcePixelsSha256": "62912fa40113833b3edbab4d1bb3dafc359683e0e924f0a7b2adb0e295353862",
+      "transparentCenter": {
+        "x": 9,
+        "y": 9,
+        "width": 1300,
+        "height": 56
+      },
+      "borderImage": {
+        "slice": [
+          9,
+          9,
+          9,
+          9
+        ],
+        "fill": false
+      },
+      "semanticCenterRemoved": true,
+      "sha256": "ca16943d90fd4e0125d71b2a540d1b566f0940acb897292658791595d18a72a5",
+      "bytes": 26085,
+      "width": 1318,
+      "height": 74
+    },
+    "slotNormalFrame": {
+      "file": "skin/slotNormalFrame.png",
+      "sourceRect": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "role": "normal rare frame only",
+      "mode": "frame",
+      "insets": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "sourcePixelsSha256": "abae8da091a6fe16766dd3ee7c83bd1543d5135246220ea0fe14228ee36c660e",
+      "transparentCenter": {
+        "x": 8,
+        "y": 8,
+        "width": 112,
+        "height": 121
+      },
+      "borderImage": {
+        "slice": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "fill": false
+      },
+      "semanticCenterRemoved": true,
+      "sha256": "32aff72ae057f351134a0ba13892a0b7abcfc95d4f4dfe1cb94329da809e685f",
+      "bytes": 9994,
+      "width": 128,
+      "height": 137
+    },
+    "slotSelectedFrame": {
+      "file": "skin/slotSelectedFrame.png",
+      "sourceRect": {
+        "x": 144,
+        "y": 217,
+        "width": 138,
+        "height": 147
+      },
+      "role": "reference selected gold frame/glow only",
+      "mode": "frame",
+      "insets": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "placementOffset": {
+        "x": -5,
+        "y": -5
+      },
+      "sourcePixelsSha256": "568a6539af60182825c64bd6a91065ee5ea8d6682d5bbdc705ce3c746d7bea14",
+      "transparentCenter": {
+        "x": 9,
+        "y": 9,
+        "width": 120,
+        "height": 129
+      },
+      "borderImage": {
+        "slice": [
+          9,
+          9,
+          9,
+          9
+        ],
+        "fill": false
+      },
+      "semanticCenterRemoved": true,
+      "sha256": "1bcf3721c8e70d7be7003e02573d3fe4612faac16c8e01173363b7dbe9230f3a",
+      "bytes": 13760,
+      "width": 138,
+      "height": 147
+    },
+    "progressFrame": {
+      "file": "skin/progressFrame.png",
+      "sourceRect": {
+        "x": 293,
+        "y": 895,
+        "width": 420,
+        "height": 24
+      },
+      "role": "progress outline only",
+      "mode": "frame",
+      "insets": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "sourcePixelsSha256": "e77c0202eef4a55bd1f38539844b23d71ddae20d357301c90b2f6f8547754a18",
+      "transparentCenter": {
+        "x": 4,
+        "y": 4,
+        "width": 412,
+        "height": 16
+      },
+      "borderImage": {
+        "slice": [
+          4,
+          4,
+          4,
+          4
+        ],
+        "fill": false
+      },
+      "semanticCenterRemoved": true,
+      "sha256": "06913784ad01867fbfdbbcd38137d006aecb1f5badf2da6b7e626c8a92726deb",
+      "bytes": 6072,
+      "width": 420,
+      "height": 24
+    },
+    "progressFill": {
+      "file": "skin/progressFill.png",
+      "sourceRect": {
+        "x": 310,
+        "y": 901,
+        "width": 12,
+        "height": 10
+      },
+      "role": "clean gold progress texture",
+      "sourcePixelsSha256": "f019587a67308dd21aa7675333eb13a74208ce61ec46e19540f6fd4200aef08d",
+      "sha256": "01ef0a6bdbb549336a0a160bd73783b145beda609753baea2e2fb0738806e6d7",
+      "bytes": 381,
+      "width": 12,
+      "height": 10
+    },
+    "primaryBg": {
+      "file": "skin/primaryBg.png",
+      "sourceRect": {
+        "x": 1047,
+        "y": 685,
+        "width": 370,
+        "height": 65
+      },
+      "role": "stretchable button without action lettering",
+      "mode": "skin",
+      "insets": [
+        10,
+        14,
+        10,
+        14
+      ],
+      "centerTextureSourceRect": {
+        "x": 1065,
+        "y": 702,
+        "width": 70,
+        "height": 29
+      },
+      "sourcePixelsSha256": "769baadd0ebdc7d270f34c2c9f7babae950f35d37af14c358b9379e4d1698d0e",
+      "centerTextureSourcePixelsSha256": "07a87c06c687039fac1b698b8e4aa6ed2491e7658c4449a4d2a323fa36c9f860",
+      "replacedCenter": {
+        "x": 14,
+        "y": 10,
+        "width": 342,
+        "height": 45
+      },
+      "semanticCenterRemoved": true,
+      "borderImage": {
+        "slice": [
+          10,
+          14,
+          10,
+          14
+        ],
+        "fill": true
+      },
+      "sha256": "d3d09c55a4d9da984d5092f2a08c6b935b52fd3472f744cdc63d40b3801f4b3c",
+      "bytes": 46483,
+      "width": 370,
+      "height": 65
+    },
+    "secondaryBg": {
+      "file": "skin/secondaryBg.png",
+      "sourceRect": {
+        "x": 1047,
+        "y": 763,
+        "width": 370,
+        "height": 65
+      },
+      "role": "stretchable button without action lettering",
+      "mode": "skin",
+      "insets": [
+        10,
+        14,
+        10,
+        14
+      ],
+      "centerTextureSourceRect": {
+        "x": 1066,
+        "y": 780,
+        "width": 65,
+        "height": 29
+      },
+      "sourcePixelsSha256": "314923d7fb5446a9a3cd08eef37203bb0e2a5379c8f7596a871a59386de5796e",
+      "centerTextureSourcePixelsSha256": "513388c3034f5bf3ffa6f47254dfd5272c27212520aa4d9ec48ab5b05cf300f9",
+      "replacedCenter": {
+        "x": 14,
+        "y": 10,
+        "width": 342,
+        "height": 45
+      },
+      "semanticCenterRemoved": true,
+      "borderImage": {
+        "slice": [
+          10,
+          14,
+          10,
+          14
+        ],
+        "fill": true
+      },
+      "sha256": "64929b4ff2b4e897edaf42956edfb0ef7d9f82cb271386a28e541cf4c047a40b",
+      "bytes": 23893,
+      "width": 370,
+      "height": 65
+    },
+    "searchBg": {
+      "file": "skin/searchBg.png",
+      "sourceRect": {
+        "x": 149,
+        "y": 155,
+        "width": 299,
+        "height": 46
+      },
+      "role": "stretchable input without prompt or magnifier",
+      "mode": "skin",
+      "insets": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "centerTextureSourceRect": {
+        "x": 402,
+        "y": 165,
+        "width": 30,
+        "height": 23
+      },
+      "sourcePixelsSha256": "230938ab104bbde71cfb7e94feb3afa86af48551919d7fbd0a31c49ddc2e0e79",
+      "centerTextureSourcePixelsSha256": "6239cae544be89bb8a7d9b748b87a3ac28e416ae24802d7a4997ccb9ddc134e1",
+      "replacedCenter": {
+        "x": 6,
+        "y": 6,
+        "width": 287,
+        "height": 34
+      },
+      "semanticCenterRemoved": true,
+      "borderImage": {
+        "slice": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "fill": true
+      },
+      "sha256": "5d3b3cd4cdd1f5b0fb012e18c5c713a75866ddede628135d373c6427c3cc5fe3",
+      "bytes": 6593,
+      "width": 299,
+      "height": 46
+    },
+    "tabNormalBg": {
+      "file": "skin/tabNormalBg.png",
+      "sourceRect": {
+        "x": 571,
+        "y": 156,
+        "width": 101,
+        "height": 45
+      },
+      "role": "stretchable tab without category lettering",
+      "mode": "skin",
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "centerTextureSourceRect": {
+        "x": 580,
+        "y": 165,
+        "width": 12,
+        "height": 24
+      },
+      "sourcePixelsSha256": "1b53be4495173d21aa55917d1158544fb16e75463043427bb35856cea2887e19",
+      "centerTextureSourcePixelsSha256": "76c9238887ebf806ab50fd4b95a28b58f616f0f202d78dafac9f2da8aff0ba6e",
+      "replacedCenter": {
+        "x": 5,
+        "y": 5,
+        "width": 91,
+        "height": 35
+      },
+      "semanticCenterRemoved": true,
+      "borderImage": {
+        "slice": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "fill": true
+      },
+      "sha256": "4fe501a3b522a79c487192886ae0d288267ba228bb3363cf891ec344eb50ad37",
+      "bytes": 2716,
+      "width": 101,
+      "height": 45
+    },
+    "tabSelectedBg": {
+      "file": "skin/tabSelectedBg.png",
+      "sourceRect": {
+        "x": 466,
+        "y": 156,
+        "width": 99,
+        "height": 45
+      },
+      "role": "stretchable selected tab without category lettering",
+      "mode": "skin",
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "centerTextureSourceRect": {
+        "x": 474,
+        "y": 165,
+        "width": 13,
+        "height": 24
+      },
+      "sourcePixelsSha256": "014c0cae43b6e41aa964dbecbcc552f1bb6dbc0f029eeb542bd551be5f866b7d",
+      "centerTextureSourcePixelsSha256": "fb028f3d405e4c391f7f3a13209bfba17e5c2a0f2059d95498afe10bc68b2e74",
+      "replacedCenter": {
+        "x": 5,
+        "y": 5,
+        "width": 89,
+        "height": 35
+      },
+      "semanticCenterRemoved": true,
+      "borderImage": {
+        "slice": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "fill": true
+      },
+      "sha256": "3dcd52ee5b14d81833fe8dce70adaf7cd098d147981d2a79d1e654146443ca6c",
+      "bytes": 5579,
+      "width": 99,
+      "height": 45
+    },
+    "sortBg": {
+      "file": "skin/sortBg.png",
+      "sourceRect": {
+        "x": 1141,
+        "y": 883,
+        "width": 216,
+        "height": 49
+      },
+      "role": "stretchable dropdown without sort lettering or arrow",
+      "mode": "skin",
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "centerTextureSourceRect": {
+        "x": 1148,
+        "y": 891,
+        "width": 8,
+        "height": 29
+      },
+      "sourcePixelsSha256": "6e3e30a5fad17002c42751fc0cc0cbe06f032b7fb847438cd58a23a3003156ee",
+      "centerTextureSourcePixelsSha256": "f4af82e49819aaab2cd38d2a119ae187671f595f4cf7fc58efbe8f46b36709b5",
+      "replacedCenter": {
+        "x": 5,
+        "y": 5,
+        "width": 206,
+        "height": 39
+      },
+      "semanticCenterRemoved": true,
+      "borderImage": {
+        "slice": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "fill": true
+      },
+      "sha256": "0de0323d5b9b62c0fe7f124f8af872f957eca8fc02d86d2e31814abd082e0ddc",
+      "bytes": 4386,
+      "width": 216,
+      "height": 49
+    },
+    "slot00": {
+      "file": "skin/slot00.png",
+      "sourceRect": {
+        "x": 149,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "sword",
+      "index": 0,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 105,
+        "y": 112,
+        "width": 11,
+        "height": 18
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": true,
+      "mode": "normalSword",
+      "sourcePixelsSha256": "72cf015b5fe750dfd3e0f4d297052d882b8f498572bdd6274b4ee656ca753644",
+      "selectionPerimeterReplacedFrom": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "selectionPerimeterSourcePixelsSha256": "abae8da091a6fe16766dd3ee7c83bd1543d5135246220ea0fe14228ee36c660e",
+      "selectionPerimeterInset": 8,
+      "bakedSelectionRemoved": true,
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32",
+      "bytes": 40214,
+      "width": 128,
+      "height": 137
+    },
+    "slot01": {
+      "file": "skin/slot01.png",
+      "sourceRect": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "axe",
+      "index": 1,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 105,
+        "y": 112,
+        "width": 10,
+        "height": 18
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "abae8da091a6fe16766dd3ee7c83bd1543d5135246220ea0fe14228ee36c660e",
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349",
+      "bytes": 41439,
+      "width": 128,
+      "height": 137
+    },
+    "slot02": {
+      "file": "skin/slot02.png",
+      "sourceRect": {
+        "x": 430,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "bow",
+      "index": 2,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 104,
+        "y": 112,
+        "width": 10,
+        "height": 18
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "06f1ee76d70d1cee0a59ec8c6eef279fd11944124f0a836cbb82991e514f2b9b",
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b",
+      "bytes": 35846,
+      "width": 128,
+      "height": 137
+    },
+    "slot03": {
+      "file": "skin/slot03.png",
+      "sourceRect": {
+        "x": 570,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "staff",
+      "index": 3,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 103,
+        "y": 112,
+        "width": 11,
+        "height": 18
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "fc89497634f92ed7b64ffb99153290b6afa256005f0ef5e5be8353f5523e925b",
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151",
+      "bytes": 37423,
+      "width": 128,
+      "height": 137
+    },
+    "slot04": {
+      "file": "skin/slot04.png",
+      "sourceRect": {
+        "x": 711,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "shield",
+      "index": 4,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 11,
+        "height": 19
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "5f356692f9e411fb513296152ee67f5af4d1fa23398391a3224aa71164970b03",
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98",
+      "bytes": 44186,
+      "width": 128,
+      "height": 137
+    },
+    "slot05": {
+      "file": "skin/slot05.png",
+      "sourceRect": {
+        "x": 851,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "helmet",
+      "index": 5,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 110,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "542eb6247ff4e435e002e2e820e6d74e27349aeb972be706799e60e5d081e3e0",
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f",
+      "bytes": 41475,
+      "width": 128,
+      "height": 137
+    },
+    "slot06": {
+      "file": "skin/slot06.png",
+      "sourceRect": {
+        "x": 149,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "armor",
+      "index": 6,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 105,
+        "y": 111,
+        "width": 11,
+        "height": 18
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "459a7105c7429dd01ea2f6dde382daa017fb897ad014a2cb36f2a147b916a156",
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842",
+      "bytes": 43203,
+      "width": 128,
+      "height": 137
+    },
+    "slot07": {
+      "file": "skin/slot07.png",
+      "sourceRect": {
+        "x": 289,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "boots",
+      "index": 7,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 105,
+        "y": 111,
+        "width": 10,
+        "height": 18
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "059f65f4384619544861606a037bb97f27d7a79dbb59c996280537f278f0aa85",
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20",
+      "bytes": 39399,
+      "width": 128,
+      "height": 137
+    },
+    "slot08": {
+      "file": "skin/slot08.png",
+      "sourceRect": {
+        "x": 430,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "ring",
+      "index": 8,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 18
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "4def2a4593af238cb4a5b8d5b2052ab42163411d5a30f9705346a38414ca1844",
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9",
+      "bytes": 38308,
+      "width": 128,
+      "height": 137
+    },
+    "slot09": {
+      "file": "skin/slot09.png",
+      "sourceRect": {
+        "x": 570,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "amulet",
+      "index": 9,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 11,
+        "height": 18
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "19c11e8e1d624fc2b326a9cc2185dceddd1024bcba9b42252c0a7d6de5f83a49",
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11",
+      "bytes": 36194,
+      "width": 128,
+      "height": 137
+    },
+    "slot10": {
+      "file": "skin/slot10.png",
+      "sourceRect": {
+        "x": 711,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "redPotion",
+      "index": 10,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "referenceQuantity": 8,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "1821881ec1673c4abacf1f95a8e6381ef75665de1fa8a61ffed7c54956ed5efe",
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8",
+      "bytes": 41153,
+      "width": 128,
+      "height": 137
+    },
+    "slot11": {
+      "file": "skin/slot11.png",
+      "sourceRect": {
+        "x": 851,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "bluePotion",
+      "index": 11,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 109,
+        "y": 111,
+        "width": 12,
+        "height": 18
+      },
+      "referenceQuantity": 5,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "1975fb686b95c1fb33cf4e2da70db799904c106d7cbdae3033cc2d5b0517b75d",
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945",
+      "bytes": 41855,
+      "width": 128,
+      "height": 137
+    },
+    "slot12": {
+      "file": "skin/slot12.png",
+      "sourceRect": {
+        "x": 149,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "staminaPotion",
+      "index": 12,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "referenceQuantity": 3,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "b78db87b913c628bae8fc73efdfb1a8fcf7a0865211dcb4f68b7a8ed2eda6688",
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5",
+      "bytes": 40477,
+      "width": 128,
+      "height": 137
+    },
+    "slot13": {
+      "file": "skin/slot13.png",
+      "sourceRect": {
+        "x": 289,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "antidote",
+      "index": 13,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "referenceQuantity": 2,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "fa73c4466a970e31cff37d87e9fc3e150be724cb13a8428934c0d88c472b7c9d",
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e",
+      "bytes": 41614,
+      "width": 128,
+      "height": 137
+    },
+    "slot14": {
+      "file": "skin/slot14.png",
+      "sourceRect": {
+        "x": 430,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "elixir",
+      "index": 14,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "1cffe49f512542a94e019f03db816ea86bfcfca9d89c38ab77e602ffc336e426",
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d",
+      "bytes": 40442,
+      "width": 128,
+      "height": 137
+    },
+    "slot15": {
+      "file": "skin/slot15.png",
+      "sourceRect": {
+        "x": 570,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "herb",
+      "index": 15,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 94,
+        "y": 111,
+        "width": 22,
+        "height": 19
+      },
+      "referenceQuantity": 12,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "078d03a302dbc204a8da12801c6465e180626e77aae74de4d93433c2bfe9637c",
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f",
+      "bytes": 41373,
+      "width": 128,
+      "height": 137
+    },
+    "slot16": {
+      "file": "skin/slot16.png",
+      "sourceRect": {
+        "x": 711,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "mushroom",
+      "index": 16,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "referenceQuantity": 7,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "c346c2beba1fea9643c21a2f9787307bfc34ee3a662328af7657f54140b0c78b",
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534",
+      "bytes": 43683,
+      "width": 128,
+      "height": 137
+    },
+    "slot17": {
+      "file": "skin/slot17.png",
+      "sourceRect": {
+        "x": 851,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "ore",
+      "index": 17,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 108,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "referenceQuantity": 9,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "5c3ee12f93c852efb32f023075bcad67225c63ed189f5787156dcd5fe9ad1d8a",
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec",
+      "bytes": 41851,
+      "width": 128,
+      "height": 137
+    },
+    "slot18": {
+      "file": "skin/slot18.png",
+      "sourceRect": {
+        "x": 149,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "crystal",
+      "index": 18,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "referenceQuantity": 4,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "005b63d26b1c6cb05bc05f5b3cd299e777c72db8d928772f4ebb4e9019f8a9bc",
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd",
+      "bytes": 44024,
+      "width": 128,
+      "height": 137
+    },
+    "slot19": {
+      "file": "skin/slot19.png",
+      "sourceRect": {
+        "x": 289,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "leather",
+      "index": 19,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "referenceQuantity": 6,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "a8a26e52e60c272648aacb12fe695bf1235a28bb23d9512f8057dc71a16bb4a7",
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043",
+      "bytes": 41861,
+      "width": 128,
+      "height": 137
+    },
+    "slot20": {
+      "file": "skin/slot20.png",
+      "sourceRect": {
+        "x": 430,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "key",
+      "index": 20,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "referenceQuantity": 1,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "0cd9f38d48fce662e94a3b1703c8786bbf8a87467163ac1eb727c9dec440934d",
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e",
+      "bytes": 36495,
+      "width": 128,
+      "height": 137
+    },
+    "slot21": {
+      "file": "skin/slot21.png",
+      "sourceRect": {
+        "x": 570,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "scroll",
+      "index": 21,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 102,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "referenceQuantity": 3,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "d05133d4ba34a737cbd33344d4b3374fe2499d90f0d5a59553489ee8a89b0ec8",
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b",
+      "bytes": 41617,
+      "width": 128,
+      "height": 137
+    },
+    "slot22": {
+      "file": "skin/slot22.png",
+      "sourceRect": {
+        "x": 711,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "coinPouch",
+      "index": 22,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 94,
+        "y": 111,
+        "width": 22,
+        "height": 19
+      },
+      "referenceQuantity": 18,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "efa60fc262a0079c342114d05db0c6dad783b6a4c1d46b57f7755105fc72d610",
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8",
+      "bytes": 40758,
+      "width": 128,
+      "height": 137
+    },
+    "slot23": {
+      "file": "skin/slot23.png",
+      "sourceRect": {
+        "x": 851,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "role": "reference item tile with original baked quantity",
+      "kind": "gem",
+      "index": 23,
+      "bakedQuantity": true,
+      "quantityRect": {
+        "x": 109,
+        "y": 111,
+        "width": 12,
+        "height": 19
+      },
+      "referenceQuantity": 2,
+      "bakedSelection": false,
+      "mode": "crop",
+      "sourcePixelsSha256": "b7715366a6aae096fa225863b8c743a32b855ff8f2dcef7c99a5426279e8d4d8",
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8",
+      "bytes": 40157,
+      "width": 128,
+      "height": 137
+    },
+    "leftBackground": {
+      "file": "skin/leftBackground.png",
+      "sourceRect": {
+        "x": 132,
+        "y": 137,
+        "width": 879,
+        "height": 723
+      },
+      "role": "reference left-panel texture with all dynamic controls and item slots removed",
+      "mode": "masked",
+      "drawAtSourceRect": true,
+      "maskSources": [
+        {
+          "control": "search",
+          "sourceRect": {
+            "x": 149,
+            "y": 155,
+            "width": 299,
+            "height": 46
+          },
+          "padding": 2
+        },
+        {
+          "control": "tab_all",
+          "sourceRect": {
+            "x": 466,
+            "y": 156,
+            "width": 99,
+            "height": 45
+          },
+          "padding": 2
+        },
+        {
+          "control": "tab_equipment",
+          "sourceRect": {
+            "x": 571,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "padding": 2
+        },
+        {
+          "control": "tab_consumable",
+          "sourceRect": {
+            "x": 678,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "padding": 2
+        },
+        {
+          "control": "tab_material",
+          "sourceRect": {
+            "x": 784,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "padding": 2
+        },
+        {
+          "control": "tab_quest",
+          "sourceRect": {
+            "x": 890,
+            "y": 156,
+            "width": 96,
+            "height": 45
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[0]",
+          "sourceRect": {
+            "x": 149,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[1]",
+          "sourceRect": {
+            "x": 289,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[2]",
+          "sourceRect": {
+            "x": 430,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[3]",
+          "sourceRect": {
+            "x": 570,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[4]",
+          "sourceRect": {
+            "x": 711,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[5]",
+          "sourceRect": {
+            "x": 851,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[6]",
+          "sourceRect": {
+            "x": 149,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[7]",
+          "sourceRect": {
+            "x": 289,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[8]",
+          "sourceRect": {
+            "x": 430,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[9]",
+          "sourceRect": {
+            "x": 570,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[10]",
+          "sourceRect": {
+            "x": 711,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[11]",
+          "sourceRect": {
+            "x": 851,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[12]",
+          "sourceRect": {
+            "x": 149,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[13]",
+          "sourceRect": {
+            "x": 289,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[14]",
+          "sourceRect": {
+            "x": 430,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[15]",
+          "sourceRect": {
+            "x": 570,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[16]",
+          "sourceRect": {
+            "x": 711,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[17]",
+          "sourceRect": {
+            "x": 851,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[18]",
+          "sourceRect": {
+            "x": 149,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[19]",
+          "sourceRect": {
+            "x": 289,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[20]",
+          "sourceRect": {
+            "x": 430,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[21]",
+          "sourceRect": {
+            "x": 570,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[22]",
+          "sourceRect": {
+            "x": 711,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slots[23]",
+          "sourceRect": {
+            "x": 851,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2
+        },
+        {
+          "control": "slotSelectedFrame",
+          "sourceRect": {
+            "x": 144,
+            "y": 217,
+            "width": 138,
+            "height": 147
+          },
+          "padding": 8
+        }
+      ],
+      "sourcePixelsSha256": "2e7961d24533e14860538407022a2bc72ed8c1f52b71b37ba71e83237ec7174e",
+      "transparentMasks": [
+        {
+          "control": "search",
+          "sourceRect": {
+            "x": 149,
+            "y": 155,
+            "width": 299,
+            "height": 46
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 15,
+            "y": 16,
+            "width": 303,
+            "height": 50
+          },
+          "expandedSourceRect": {
+            "x": 147,
+            "y": 153,
+            "width": 303,
+            "height": 50
+          }
+        },
+        {
+          "control": "tab_all",
+          "sourceRect": {
+            "x": 466,
+            "y": 156,
+            "width": 99,
+            "height": 45
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 332,
+            "y": 17,
+            "width": 103,
+            "height": 49
+          },
+          "expandedSourceRect": {
+            "x": 464,
+            "y": 154,
+            "width": 103,
+            "height": 49
+          }
+        },
+        {
+          "control": "tab_equipment",
+          "sourceRect": {
+            "x": 571,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 437,
+            "y": 17,
+            "width": 105,
+            "height": 49
+          },
+          "expandedSourceRect": {
+            "x": 569,
+            "y": 154,
+            "width": 105,
+            "height": 49
+          }
+        },
+        {
+          "control": "tab_consumable",
+          "sourceRect": {
+            "x": 678,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 544,
+            "y": 17,
+            "width": 105,
+            "height": 49
+          },
+          "expandedSourceRect": {
+            "x": 676,
+            "y": 154,
+            "width": 105,
+            "height": 49
+          }
+        },
+        {
+          "control": "tab_material",
+          "sourceRect": {
+            "x": 784,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 650,
+            "y": 17,
+            "width": 105,
+            "height": 49
+          },
+          "expandedSourceRect": {
+            "x": 782,
+            "y": 154,
+            "width": 105,
+            "height": 49
+          }
+        },
+        {
+          "control": "tab_quest",
+          "sourceRect": {
+            "x": 890,
+            "y": 156,
+            "width": 96,
+            "height": 45
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 756,
+            "y": 17,
+            "width": 100,
+            "height": 49
+          },
+          "expandedSourceRect": {
+            "x": 888,
+            "y": 154,
+            "width": 100,
+            "height": 49
+          }
+        },
+        {
+          "control": "slots[0]",
+          "sourceRect": {
+            "x": 149,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 15,
+            "y": 83,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 147,
+            "y": 220,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[1]",
+          "sourceRect": {
+            "x": 289,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 155,
+            "y": 83,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 287,
+            "y": 220,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[2]",
+          "sourceRect": {
+            "x": 430,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 296,
+            "y": 83,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 428,
+            "y": 220,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[3]",
+          "sourceRect": {
+            "x": 570,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 436,
+            "y": 83,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 568,
+            "y": 220,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[4]",
+          "sourceRect": {
+            "x": 711,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 577,
+            "y": 83,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 709,
+            "y": 220,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[5]",
+          "sourceRect": {
+            "x": 851,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 717,
+            "y": 83,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 849,
+            "y": 220,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[6]",
+          "sourceRect": {
+            "x": 149,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 15,
+            "y": 237,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 147,
+            "y": 374,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[7]",
+          "sourceRect": {
+            "x": 289,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 155,
+            "y": 237,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 287,
+            "y": 374,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[8]",
+          "sourceRect": {
+            "x": 430,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 296,
+            "y": 237,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 428,
+            "y": 374,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[9]",
+          "sourceRect": {
+            "x": 570,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 436,
+            "y": 237,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 568,
+            "y": 374,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[10]",
+          "sourceRect": {
+            "x": 711,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 577,
+            "y": 237,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 709,
+            "y": 374,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[11]",
+          "sourceRect": {
+            "x": 851,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 717,
+            "y": 237,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 849,
+            "y": 374,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[12]",
+          "sourceRect": {
+            "x": 149,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 15,
+            "y": 390,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 147,
+            "y": 527,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[13]",
+          "sourceRect": {
+            "x": 289,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 155,
+            "y": 390,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 287,
+            "y": 527,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[14]",
+          "sourceRect": {
+            "x": 430,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 296,
+            "y": 390,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 428,
+            "y": 527,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[15]",
+          "sourceRect": {
+            "x": 570,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 436,
+            "y": 390,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 568,
+            "y": 527,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[16]",
+          "sourceRect": {
+            "x": 711,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 577,
+            "y": 390,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 709,
+            "y": 527,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[17]",
+          "sourceRect": {
+            "x": 851,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 717,
+            "y": 390,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 849,
+            "y": 527,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[18]",
+          "sourceRect": {
+            "x": 149,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 15,
+            "y": 543,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 147,
+            "y": 680,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[19]",
+          "sourceRect": {
+            "x": 289,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 155,
+            "y": 543,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 287,
+            "y": 680,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[20]",
+          "sourceRect": {
+            "x": 430,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 296,
+            "y": 543,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 428,
+            "y": 680,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[21]",
+          "sourceRect": {
+            "x": 570,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 436,
+            "y": 543,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 568,
+            "y": 680,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[22]",
+          "sourceRect": {
+            "x": 711,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 577,
+            "y": 543,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 709,
+            "y": 680,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slots[23]",
+          "sourceRect": {
+            "x": 851,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 717,
+            "y": 543,
+            "width": 132,
+            "height": 141
+          },
+          "expandedSourceRect": {
+            "x": 849,
+            "y": 680,
+            "width": 132,
+            "height": 141
+          }
+        },
+        {
+          "control": "slotSelectedFrame",
+          "sourceRect": {
+            "x": 144,
+            "y": 217,
+            "width": 138,
+            "height": 147
+          },
+          "padding": 8,
+          "localRect": {
+            "x": 4,
+            "y": 72,
+            "width": 154,
+            "height": 163
+          },
+          "expandedSourceRect": {
+            "x": 136,
+            "y": 209,
+            "width": 154,
+            "height": 163
+          }
+        }
+      ],
+      "dynamicContentRemoved": true,
+      "maskFill": "zero RGBA; draw a nonsemantic base texture below the holes",
+      "unmaskedPixelCount": 142230,
+      "unmaskedPixelsMatchReference": true,
+      "sha256": "e216c21c2bf8a805ff481266bf882ef180fe0b070bbf976ed50fc23a25318e09",
+      "bytes": 170742,
+      "width": 879,
+      "height": 723
+    },
+    "footerBackground": {
+      "file": "skin/footerBackground.png",
+      "sourceRect": {
+        "x": 132,
+        "y": 870,
+        "width": 1318,
+        "height": 74
+      },
+      "role": "reference footer texture with variable text, progress and sort control removed",
+      "mode": "masked",
+      "drawAtSourceRect": true,
+      "maskSources": [
+        {
+          "control": "summary",
+          "sourceRect": {
+            "x": 201,
+            "y": 894,
+            "width": 92,
+            "height": 35
+          },
+          "padding": 2
+        },
+        {
+          "control": "progress",
+          "sourceRect": {
+            "x": 293,
+            "y": 895,
+            "width": 420,
+            "height": 24
+          },
+          "padding": 0
+        },
+        {
+          "control": "sort",
+          "sourceRect": {
+            "x": 1141,
+            "y": 883,
+            "width": 216,
+            "height": 49
+          },
+          "padding": 0
+        }
+      ],
+      "sourcePixelsSha256": "62912fa40113833b3edbab4d1bb3dafc359683e0e924f0a7b2adb0e295353862",
+      "transparentMasks": [
+        {
+          "control": "summary",
+          "sourceRect": {
+            "x": 201,
+            "y": 894,
+            "width": 92,
+            "height": 35
+          },
+          "padding": 2,
+          "localRect": {
+            "x": 67,
+            "y": 22,
+            "width": 96,
+            "height": 39
+          },
+          "expandedSourceRect": {
+            "x": 199,
+            "y": 892,
+            "width": 96,
+            "height": 39
+          }
+        },
+        {
+          "control": "progress",
+          "sourceRect": {
+            "x": 293,
+            "y": 895,
+            "width": 420,
+            "height": 24
+          },
+          "padding": 0,
+          "localRect": {
+            "x": 161,
+            "y": 25,
+            "width": 420,
+            "height": 24
+          },
+          "expandedSourceRect": {
+            "x": 293,
+            "y": 895,
+            "width": 420,
+            "height": 24
+          }
+        },
+        {
+          "control": "sort",
+          "sourceRect": {
+            "x": 1141,
+            "y": 883,
+            "width": 216,
+            "height": 49
+          },
+          "padding": 0,
+          "localRect": {
+            "x": 1009,
+            "y": 13,
+            "width": 216,
+            "height": 49
+          },
+          "expandedSourceRect": {
+            "x": 1141,
+            "y": 883,
+            "width": 216,
+            "height": 49
+          }
+        }
+      ],
+      "dynamicContentRemoved": true,
+      "maskFill": "zero RGBA; draw a nonsemantic base texture below the holes",
+      "unmaskedPixelCount": 73172,
+      "unmaskedPixelsMatchReference": true,
+      "sha256": "09e21c423f274ce925b4d370e5371b02a47aac12220aa71c721e981a0bcc67b8",
+      "bytes": 73472,
+      "width": 1318,
+      "height": 74
+    },
+    "compassAlpha": {
+      "file": "skin/compassAlpha.png",
+      "width": 978,
+      "height": 1054,
+      "sha256": "96ee372046abb8dca626b13a72eceba719c23f50114ef833f5d45e5f01c306a8",
+      "bytes": 265092,
+      "role": "Independent transparent adaptive UI ornament",
+      "sourceAsset": "compass",
+      "sourceRect": {
+        "x": 1162,
+        "y": 701,
+        "width": 44,
+        "height": 39
+      },
+      "referenceCropSha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2",
+      "transparentPixels": 815719,
+      "generation": {
+        "tool": "built-in image_gen",
+        "useCase": "background-extraction",
+        "transparentBackground": true,
+        "prompt": "Use case: background-extraction. Edit target: the attached tiny raster compass ornament cropped from our game UI reference. Remove ONLY its entire textured orange/gold rectangular background. Preserve the exact dark near-black compass rose / four-point navigational star outline, its internal ring, asymmetrical spear points, line widths, orientation, proportions, and all original icon geometry. Output that same single dark compass ornament isolated on a genuinely transparent alpha background, tightly framed with a small transparent margin. It is a small button icon and will be shown at 36px. Do not redesign, add points, add a button, add text, add shadows, add a gold rectangle, recolor the icon, or draw a checkerboard.",
+        "file": "skin/provenance/compassAlpha.generated.png",
+        "sha256": "cd5a455c52deb5c594b96364e250baf94f7a43bd011c9c93ccca7830ebb1d257",
+        "width": 1332,
+        "height": 1181
+      },
+      "trimRect": {
+        "left": 174,
+        "top": 54,
+        "width": 978,
+        "height": 1054
+      },
+      "alphaThreshold": 8,
+      "padding": 2,
+      "note": "Image-generation background extraction, not a pixel-identical reference layer; canonical reference crops remain unchanged. Subsequent processing is a rectangular crop only."
+    },
+    "sellCoinsAlpha": {
+      "file": "skin/sellCoinsAlpha.png",
+      "width": 610,
+      "height": 517,
+      "sha256": "5b21946d4de33d73dc57f6b251c6799b37889392048f52cfb787539b14c1ff22",
+      "bytes": 343892,
+      "role": "Independent transparent adaptive UI ornament",
+      "sourceAsset": "sellCoins",
+      "sourceRect": {
+        "x": 1163,
+        "y": 779,
+        "width": 43,
+        "height": 33
+      },
+      "referenceCropSha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875",
+      "transparentPixels": 83941,
+      "generation": {
+        "tool": "built-in image_gen",
+        "useCase": "background-extraction",
+        "transparentBackground": true,
+        "prompt": "Use case: background-extraction. Edit target: the attached tiny raster silver coin-stack ornament cropped from our game UI reference. Remove ONLY the entire dark rectangular background. Preserve exactly the same three overlapping stacks of flat silver coins, their count, silhouettes, placement, perspective, gray colors and highlight strokes. Output the same single silver coin-stack ornament on a genuinely transparent alpha background, tightly framed with a small transparent margin. It is a button icon and will be shown at 36px. Do not redesign, add coins, add a button, add text, add a backing square, add shadow or draw checkerboard.",
+        "file": "skin/provenance/sellCoinsAlpha.generated.png",
+        "sha256": "15f5ceff95437f8c846de3002db54e8ef65e0b90636f31e42275fb27fdff3166",
+        "width": 1431,
+        "height": 1099
+      },
+      "trimRect": {
+        "left": 438,
+        "top": 292,
+        "width": 610,
+        "height": 517
+      },
+      "alphaThreshold": 8,
+      "padding": 2,
+      "note": "Image-generation background extraction, not a pixel-identical reference layer; canonical reference crops remain unchanged. Subsequent processing is a rectangular crop only."
+    },
+    "coinAlpha": {
+      "file": "skin/coinAlpha.png",
+      "width": 929,
+      "height": 932,
+      "sha256": "c7e4f1532b6ad30e5eca091ccee7d0bde6012483970e7ecd1a90b59c48d875ae",
+      "bytes": 2041718,
+      "role": "Independent transparent adaptive UI ornament",
+      "sourceAsset": "coin",
+      "sourceRect": {
+        "x": 1113,
+        "y": 17,
+        "width": 45,
+        "height": 45
+      },
+      "referenceCropSha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387",
+      "transparentPixels": 188063,
+      "generation": {
+        "tool": "built-in image_gen",
+        "useCase": "background-extraction",
+        "transparentBackground": true,
+        "prompt": "Use case: background-extraction. Edit target: attached gold coin UI ornament. Remove only the dark square background. Preserve the same slightly tilted single antique gold coin, its circular rim, shaded bevel, engraved four-point compass/star emblem, warm gold colors, original silhouette and proportions. Output the isolated same coin on a genuinely transparent alpha background, tightly framed with a small transparent margin. This will be a 28px header currency icon. Do not add numbers, letters, more coins, a button, a backing square, glow, cast shadow, or checkerboard. Keep the original icon geometry and orientation.",
+        "file": "skin/provenance/coinAlpha.generated.png",
+        "sha256": "db91af48255b8595273b9a44cd047de4affa04c61d16af6945ffea9df2b36a1f",
+        "width": 1254,
+        "height": 1254
+      },
+      "trimRect": {
+        "left": 163,
+        "top": 164,
+        "width": 929,
+        "height": 932
+      },
+      "alphaThreshold": 8,
+      "padding": 2,
+      "note": "Image-generation background extraction, not a pixel-identical reference layer; canonical reference crops remain unchanged. Subsequent processing is a rectangular crop only."
+    }
+  },
+  "notes": [
+    "All art is sliced from the existing generated reference. No full-screen reference background is produced.",
+    "Slot crops contain original quantity glyphs: cover quantityRect with an opaque UI patch and render native variable text.",
+    "Header branding is explicitly decorative raster lettering; other body/button text is native and editable.",
+    "Frame centers are zero RGBA, not hidden copies of reference controls. Buttons reconstruct their semantic center from a blank texture crop.",
+    "Rectangles are integer source-pixel bounds chosen from the visible reference; first-pass visual review is still required."
+  ],
+  "generatedAt": "2026-10-16T10:18:29.256Z",
+  "assetCount": 69,
+  "scope": "Reference crops and masked UI skins retain exact unmasked source pixels. Additional adaptive alpha ornaments use separately recorded image-generation background extraction; they are not pixel-identical original layers. Visual fidelity and runtime integration remain to be verified."
+}

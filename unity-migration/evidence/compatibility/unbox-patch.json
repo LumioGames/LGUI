@@ -1,0 +1,18 @@
+{
+  "appliedAtUtc": "2026-10-16T09:07:55.3726095Z",
+  "unity": "6000.6.6f1 (d20c9ac777da)",
+  "puerts": "Unity_v3.0.3 / d8871238a3774fd10600995a5325e4b2ab4e39fb",
+  "target": "packages/puerts-core/Editor/Resources/puerts/xil2cpp/Puerts_il2cpp.cpp.txt",
+  "originalBackup": "Puerts_il2cpp.cpp.original.txt",
+  "originalSha256": "318425f7f5eb857b5fc1f664e77b68ff569a99a62641c02ae4819261b0f03aaf",
+  "patchedSha256": "3e3b479159fdd56c94ed08f4a7e756dbbfa36b9b4c714e99a40e5fc8f6ec9b83",
+  "changedLines": [
+    102,
+    757,
+    1063,
+    1078
+  ],
+  "replacement": "Object::Unbox(...) -> il2cpp_object_unbox(...) (including the fully qualified first call)",
+  "redBuild": "../il2cpp-build-first/build-20261016-085952.log",
+  "scope": "Exactly four function-call replacements; no host, scene, TS, UI, package metadata, Unity installation or cache changes."
+}

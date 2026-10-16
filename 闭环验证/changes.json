@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-16 America/Los_Angeles",
+  "baseCommit": "45f0bef93bb16d507552b673ace6d5af417a8a0f",
+  "files": [
+    {
+      "path": "scripts/internal/verify-inspector-host-layouts.mjs",
+      "sha256": "bbdb743401b74c2403d222e27716053172723dd4242bdc54610b4eb1def48e81",
+      "bytes": 6351
+    },
+    {
+      "path": "src/editor/modules/ProjectSessionModule.ts",
+      "sha256": "6412f89ffda8dc447daed24c1000c81845dd7f616de126dbce923dea997187fc",
+      "bytes": 12458
+    },
+    {
+      "path": "src/editor/services/BrowserLiveSessionBridge.ts",
+      "sha256": "e6de5ce4625a45a76bcfc8fde548482d5c0719190b6a40748e4a15896fbffd2c",
+      "bytes": 66202
+    },
+    {
+      "path": "src/editor/ui/InspectorController.ts",
+      "sha256": "760efd8e132664b7173693a1056e09b4376c5610533c69e201681e01dc278931",
+      "bytes": 13922
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "ecf90cfa034363dd819f22e91c39d2c50749e2ada9e86872b32ce83a6cfca26b",
+      "bytes": 524
+    },
+    {
+      "path": "vite.config.ts",
+      "sha256": "95474427a5bd1e529d0809c4fcb4e102179fdedb47ec622290647b27249f5789",
+      "bytes": 385
+    },
+    {
+      "path": "scripts/agent-relay.mjs",
+      "sha256": "a9041295cabd008ff14857b2394f31a721b30b25e069efe0bf1718227387e400",
+      "bytes": 4954
+    },
+    {
+      "path": "scripts/internal/verify-agent-relay.test.mjs",
+      "sha256": "c5fabbed44428b302af4b55ce8d643034efd3d4e79951727d5f6bae14c19b06e",
+      "bytes": 2901
+    },
+    {
+      "path": "scripts/internal/verify-agent-session.mjs",
+      "sha256": "9b9b38107407f722a39f2a10af46af30aa168f4cb62ba69e65f378ae23967c2d",
+      "bytes": 4568
+    },
+    {
+      "path": "src/editor/services/BrowserAgentSession.ts",
+      "sha256": "cd3b8eb4f75bc9ac8f24ef861b7304cfcc9842bd76b4c6f8970141a53a2cf56f",
+      "bytes": 10006
+    },
+    {
+      "path": "src/editor/services/BrowserAgentTransport.ts",
+      "sha256": "84ad0fce9b8259878251f1c3e29cc0cc221a4bdad4c66cd17ecb366cc4c60ed4",
+      "bytes": 1603
+    }
+  ],
+  "reports": [
+    {
+      "name": "chrome",
+      "report": "evidence/2026-10-16T07-57-12-927Z-chrome/report.json",
+      "status": "browser_closed_loop_passed",
+      "checks": 23,
+      "passed": true,
+      "errors": 0
+    },
+    {
+      "name": "edge",
+      "report": "evidence/2026-10-16T07-59-58-225Z-edge/report.json",
+      "status": "browser_closed_loop_passed",
+      "checks": 25,
+      "passed": true,
+      "errors": 0
+    },
+    {
+      "name": "persistentChrome",
+      "report": "evidence/2026-10-16T07-59-58-237Z-chrome-persistent/report.json",
+      "status": "persistent_restart_passed",
+      "checks": 12,
+      "passed": true,
+      "errors": 0
+    }
+  ],
+  "dom": [
+    {
+      "name": "chrome",
+      "checks": 10,
+      "passed": true,
+      "errors": 0
+    },
+    {
+      "name": "edge",
+      "checks": 10,
+      "passed": true,
+      "errors": 0
+    }
+  ],
+  "patchSha256": "5410c78d4fb46fe542ef0a4843d2f4474ea17a88c4b0f1de6f84b43cc1fcd6be",
+  "processes": {
+    "listeners": [
+      {
+        "port": 5199,
+        "address": "127.0.0.1",
+        "pid": 13344,
+        "parentPid": 2632,
+        "commandLine": "\"node\"   \"[LGUI_ROOT]\\repos\\editor-online\\node_modules\\.bin\\\\..\\vite\\bin\\vite.js\" --host 127.0.0.1 --port 5199 --strictPort"
+      },
+      {
+        "port": 4181,
+        "address": "127.0.0.1",
+        "pid": 32512,
+        "parentPid": 20660,
+        "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" 验证/闭环验证/serve-roundtrip.mjs"
+      },
+      {
+        "port": 4179,
+        "address": "127.0.0.1",
+        "pid": 14312,
+        "parentPid": 27276,
+        "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" 验证/scripts/serve.mjs"
+      }
+    ],
+    "editorLaunchParents": [
+      {
+        "pid": 2632,
+        "parentPid": 33048,
+        "commandLine": "C:\\WINDOWS\\system32\\cmd.exe /d /s /c vite --host 127.0.0.1 --port 5199 --strictPort"
+      },
+      {
+        "pid": 33048,
+        "parentPid": 13936,
+        "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Program Files\\nodejs/node_modules/npm/bin/npm-cli.js\" run dev -- --port 5199 --strictPort"
+      }
+    ],
+    "note": "All test browsers and temporary test servers ended; retained local services and editor launch wrappers are listed."
+  },
+  "note": "Local token file and browser profile are not shareable source artifacts."
+}

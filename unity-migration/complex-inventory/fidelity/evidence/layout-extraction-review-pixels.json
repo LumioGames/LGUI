@@ -1,0 +1,72 @@
+[
+  {
+    "before": "narrow-layout-2026-10-16T10-36-32.842Z/486-sword.png",
+    "after": "narrow-layout-2026-10-16T10-40-20.122Z/486-sword.png",
+    "width": 486,
+    "height": 727,
+    "differentPixels": 0,
+    "percentDifferent": 0,
+    "maxChannelDelta": 0,
+    "meanChannelDelta": 0
+  },
+  {
+    "before": "narrow-layout-2026-10-16T10-36-32.842Z/486-ring.png",
+    "after": "narrow-layout-2026-10-16T10-40-20.122Z/486-ring.png",
+    "width": 486,
+    "height": 727,
+    "differentPixels": 0,
+    "percentDifferent": 0,
+    "maxChannelDelta": 0,
+    "meanChannelDelta": 0
+  },
+  {
+    "before": "narrow-layout-2026-10-16T10-36-32.842Z/390-sword.png",
+    "after": "narrow-layout-2026-10-16T10-40-20.122Z/390-sword.png",
+    "width": 390,
+    "height": 844,
+    "differentPixels": 0,
+    "percentDifferent": 0,
+    "maxChannelDelta": 0,
+    "meanChannelDelta": 0
+  },
+  {
+    "before": "narrow-layout-2026-10-16T10-36-32.842Z/390-ring.png",
+    "after": "narrow-layout-2026-10-16T10-40-20.122Z/390-ring.png",
+    "width": 390,
+    "height": 844,
+    "differentPixels": 0,
+    "percentDifferent": 0,
+    "maxChannelDelta": 0,
+    "meanChannelDelta": 0
+  },
+  {
+    "before": "adaptive-controls-2026-10-16T10-20-28.108Z-chrome-control-art-rounded-pixels/adaptive-754x743-initial-controls.png",
+    "after": "adaptive-controls-2026-10-16T10-40-19.878Z-shared-layout-review/adaptive-754x743-initial-controls.png",
+    "width": 754,
+    "height": 743,
+    "differentPixels": 3118,
+    "percentDifferent": 0.5565650759877334,
+    "maxChannelDelta": 220,
+    "meanChannelDelta": 0.2906276440411123
+  },
+  {
+    "before": "adaptive-controls-2026-10-16T10-20-28.108Z-chrome-control-art-rounded-pixels/adaptive-794x727-ring-controls.png",
+    "after": "adaptive-controls-2026-10-16T10-40-19.878Z-shared-layout-review/adaptive-794x727-ring-controls.png",
+    "width": 794,
+    "height": 727,
+    "differentPixels": 3459,
+    "percentDifferent": 0.5992328987350105,
+    "maxChannelDelta": 219,
+    "meanChannelDelta": 0.303232519919571
+  },
+  {
+    "before": "adaptive-controls-2026-10-16T10-20-28.108Z-chrome-control-art-rounded-pixels/canonical-basic-1586x992.png",
+    "after": "adaptive-controls-2026-10-16T10-40-19.878Z-shared-layout-review/canonical-basic-1586x992.png",
+    "width": 1586,
+    "height": 992,
+    "differentPixels": 0,
+    "percentDifferent": 0,
+    "maxChannelDelta": 0,
+    "meanChannelDelta": 0
+  }
+]

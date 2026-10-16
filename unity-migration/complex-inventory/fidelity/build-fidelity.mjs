@@ -1,0 +1,15 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {stripTypeScriptTypes} from 'node:module';
+import {createHash} from 'node:crypto';
+const here=path.dirname(fileURLToPath(import.meta.url)),root=path.dirname(here),verification=path.resolve(root,'../..');
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+await fs.mkdir(path.join(here,'vendor'),{recursive:true});
+const app=await fs.readFile(path.join(root,'dist/ComplexInventoryApp.txt'));
+await fs.writeFile(path.join(here,'app.js'),app);
+await fs.writeFile(path.join(here,'fidelity.js'),stripTypeScriptTypes(await fs.readFile(path.join(here,'fidelity.ts'),'utf8')));
+await fs.copyFile(path.join(verification,'repos/fairygui-dom/dist/fairygui.module.js'),path.join(here,'vendor/fairygui.module.js'));
+await fs.copyFile(path.join(verification,'repos/fairygui-dom/LICENSE'),path.join(here,'vendor/FairyGUI-LICENSE.txt'));
+const result={built:true,timestamp:new Date().toISOString(),sharedBundleSha256:hash(app),bytes:app.length,source:'../dist/ComplexInventoryApp.txt',noNewDependencies:true};
+await fs.writeFile(path.join(here,'build.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));

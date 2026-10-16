@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="112,114">
+  <displayList>
+    <graph id="border" name="border" type="rect" lineColor="#54758c" fillColor="#102334" xy="0,0" size="112,114" touchable="false"/>
+    <graph id="tile" name="tile" type="rect" lineSize="0" lineColor="#54758c" fillColor="#081521" xy="2,2" size="108,110" alpha="0.9" touchable="false"/>
+    <loader id="icon" name="icon" url="ui://invtest1icx00000" align="center" vAlign="middle" fill="scale" xy="0,0" size="112,106" touchable="false"/>
+    <text id="quantity" name="quantity" text="1" font="Arial" fontSize="19" color="#f5eddb" align="right" autoSize="none" xy="70,71" size="35,25" touchable="false"/>
+    <text id="label" name="label" text="苍纹长剑" font="Arial" fontSize="12" color="#d6d5cb" align="center" autoSize="none" singleLine="true" xy="5,94" size="102,17" touchable="false"/>
+    <graph id="selected" name="selected" type="rect" lineSize="3" lineColor="#f2bd61" fillColor="#00000000" xy="0,0" size="112,114" visible="false" touchable="false"/>
+  </displayList>
+</component>

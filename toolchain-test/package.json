@@ -1,0 +1,15 @@
+{
+  "name": "fairygui-verification-toolchain",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "node create-project.mjs && node verify-agent.mjs && node export-dom-images.mjs"
+  },
+  "dependencies": {
+    "@openfairygui/core": "0.7.0",
+    "@openfairygui/functions": "0.7.0",
+    "@openfairygui/backend": "0.7.0",
+    "@openfairygui/cli": "0.7.0",
+    "@openfairygui/mcp": "0.7.0"
+  }
+}

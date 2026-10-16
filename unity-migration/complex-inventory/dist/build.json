@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-10-16T09:35:17.779Z",
+  "format": "IIFE ES2020",
+  "entry": "[LGUI_ROOT]\\unity-migration\\complex-inventory\\shared\\entry.ts",
+  "bundleSha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e",
+  "bytes": 26852,
+  "modelSha256": "e3162e7d648a61dd5817918a8e2a753b4899f97fde0a15c124ca2c9a28742cf6",
+  "modelUnchanged": true,
+  "inputs": [
+    "\u0000@oxc-project+runtime@0.139.0/helpers/esm/typeof.js",
+    "\u0000@oxc-project+runtime@0.139.0/helpers/esm/toPrimitive.js",
+    "\u0000@oxc-project+runtime@0.139.0/helpers/esm/toPropertyKey.js",
+    "\u0000@oxc-project+runtime@0.139.0/helpers/esm/defineProperty.js",
+    "[LGUI_ROOT]/prototype/shared/model.ts",
+    "[LGUI_ROOT]/unity-migration/complex-inventory/shared/catalog.ts",
+    "[LGUI_ROOT]/unity-migration/complex-inventory/shared/model.ts",
+    "[LGUI_ROOT]/unity-migration/complex-inventory/shared/index.ts",
+    "[LGUI_ROOT]/unity-migration/complex-inventory/shared/entry.ts"
+  ]
+}

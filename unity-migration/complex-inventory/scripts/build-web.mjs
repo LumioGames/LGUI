@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {stripTypeScriptTypes} from 'node:module';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'), verification=path.resolve(root,'../..');
+await fs.mkdir(path.join(root,'web/vendor'),{recursive:true});
+await fs.copyFile(path.join(root,'dist/ComplexInventoryApp.txt'),path.join(root,'web/app.js'));
+await fs.cp(path.join(root,'published/dom'),path.join(root,'web/assets/Inventory'),{recursive:true});
+await fs.writeFile(path.join(root,'web/dom.js'),stripTypeScriptTypes(await fs.readFile(path.join(root,'web/dom.ts'),'utf8')));
+for(const [src,dst]of [['dist/fairygui.module.js','fairygui.module.js'],['LICENSE','FairyGUI-LICENSE.txt']])await fs.copyFile(path.join(verification,'repos/fairygui-dom',src),path.join(root,'web/vendor',dst));
+console.log(JSON.stringify({built:true,root,compiler:process.version+' stripTypeScriptTypes',sameBundle:true}));

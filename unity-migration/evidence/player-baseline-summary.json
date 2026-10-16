@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "completedAtUtc": "2026-10-16T09:13:45.2406260Z",
+  "status": "passed",
+  "build": "compatibility/baseline-player-build.json",
+  "buildHashes": "compatibility/baseline-build-hashes.json",
+  "inputMethod": "Formal file commands on Unity main thread; game windows launched visibly, no GUI automation, physical input or OS event simulation.",
+  "runs": [
+    {
+      "count": 30,
+      "status": "passed",
+      "checks": 22,
+      "cycles": 200,
+      "strictErrors": true,
+      "acceptance": "evidence\\player-baseline-il2cpp-30\\acceptance-player-ef0e7888.json",
+      "acceptanceSha256": "492080d49322377af34e46fb3b5efadfa93aec44393ba6a9bf68c5b4b5f17bf9",
+      "log": "evidence\\player-baseline-il2cpp-30\\player-20261016-091008.log",
+      "logSha256": "ba4c4616e652e8542ccf95f969012299b3780e0c3f8669dcd610fddd587c62b5",
+      "logRuntimeProblemMatches": [],
+      "screenshots": 5,
+      "initial": {
+        "physicalRows": 7,
+        "readyMs": 2798.9464000000003,
+        "unityAllocatedBytes": 71897993,
+        "managedMemoryBytes": 1216512
+      },
+      "final": {
+        "physicalRows": 7,
+        "updateFrames": 1990,
+        "managedMemoryBytes": 1441792,
+        "session": {
+          "open": true,
+          "listenerCount": 1,
+          "notifications": 5,
+          "opens": 202,
+          "closes": 201,
+          "closedCallbacks": 0,
+          "modelRevision": 6,
+          "count": 30
+        },
+        "maxRenderMs": 1.6688,
+        "tickCalls": 1990,
+        "coins": 20,
+        "errors": [],
+        "unityAllocatedBytes": 72091881
+      },
+      "quit": {
+        "processId": 33672,
+        "exited": true,
+        "exitCode": null,
+        "checkedAtUtc": "2026-10-16T09:11:35.0072035Z",
+        "ready": false,
+        "runtimeInstances": 1,
+        "runtimeDisposals": 1,
+        "listenerCount": 0,
+        "closedCallbacks": 0,
+        "errors": []
+      },
+      "limitations": [
+        "UI commands call the platform adapter; this does not prove physical input dispatch.",
+        "Command roundtrip includes file polling and at least two Unity frames; it is not pure UI latency.",
+        "Runtime instance/listener counts do not establish absence of native or managed resource leaks."
+      ]
+    },
+    {
+      "count": 300,
+      "status": "passed",
+      "checks": 22,
+      "cycles": 20,
+      "strictErrors": true,
+      "acceptance": "evidence\\player-baseline-il2cpp-300\\acceptance-player-0ede34c5.json",
+      "acceptanceSha256": "747f8911f8813eeea09f57674e6b734f7113dcf1445afcaed748a4f780a8915f",
+      "log": "evidence\\player-baseline-il2cpp-300\\player-20261016-091157.log",
+      "logSha256": "d85006379176dc7b2c81c41a3ef58a576bc51a996a6d9f2ac4cd460e511801c5",
+      "logRuntimeProblemMatches": [],
+      "screenshots": 5,
+      "initial": {
+        "physicalRows": 7,
+        "readyMs": 2622.9421,
+        "unityAllocatedBytes": 71890218,
+        "managedMemoryBytes": 1396736
+      },
+      "final": {
+        "physicalRows": 7,
+        "updateFrames": 280,
+        "managedMemoryBytes": 1671168,
+        "session": {
+          "open": true,
+          "listenerCount": 1,
+          "notifications": 5,
+          "opens": 22,
+          "closes": 21,
+          "closedCallbacks": 0,
+          "modelRevision": 6,
+          "count": 300
+        },
+        "maxRenderMs": 1.5731000000000002,
+        "tickCalls": 280,
+        "coins": 20,
+        "errors": [],
+        "unityAllocatedBytes": 72090139
+      },
+      "quit": {
+        "processId": 33344,
+        "exited": true,
+        "exitCode": 0,
+        "checkedAtUtc": "2026-10-16T09:12:29.667678Z",
+        "ready": false,
+        "runtimeInstances": 1,
+        "runtimeDisposals": 1,
+        "listenerCount": 0,
+        "closedCallbacks": 0,
+        "errors": []
+      },
+      "limitations": [
+        "UI commands call the platform adapter; this does not prove physical input dispatch.",
+        "Command roundtrip includes file polling and at least two Unity frames; it is not pure UI latency.",
+        "Runtime instance/listener counts do not establish absence of native or managed resource leaks."
+      ]
+    },
+    {
+      "count": 3000,
+      "status": "passed",
+      "checks": 22,
+      "cycles": 20,
+      "strictErrors": true,
+      "acceptance": "evidence\\player-baseline-il2cpp-3000\\acceptance-player-840cbb3c.json",
+      "acceptanceSha256": "596401034dd76d58defd7ebd1511474d08f88b9676883fb70f211a9e125437c3",
+      "log": "evidence\\player-baseline-il2cpp-3000\\player-20261016-091230.log",
+      "logSha256": "ceba9f7a977bdbdbff8ce3d5b7d870e5855ada1575abc5aceda777fa25e25813",
+      "logRuntimeProblemMatches": [],
+      "screenshots": 5,
+      "initial": {
+        "physicalRows": 7,
+        "readyMs": 2649.9003,
+        "unityAllocatedBytes": 71890483,
+        "managedMemoryBytes": 8073216
+      },
+      "final": {
+        "physicalRows": 7,
+        "updateFrames": 329,
+        "managedMemoryBytes": 11612160,
+        "session": {
+          "open": true,
+          "listenerCount": 1,
+          "notifications": 5,
+          "opens": 22,
+          "closes": 21,
+          "closedCallbacks": 0,
+          "modelRevision": 6,
+          "count": 3000
+        },
+        "maxRenderMs": 4.9489,
+        "tickCalls": 329,
+        "coins": 20,
+        "errors": [],
+        "unityAllocatedBytes": 72089837
+      },
+      "quit": {
+        "processId": 31940,
+        "exited": true,
+        "exitCode": 0,
+        "checkedAtUtc": "2026-10-16T09:13:12.9128506Z",
+        "ready": false,
+        "runtimeInstances": 1,
+        "runtimeDisposals": 1,
+        "listenerCount": 0,
+        "closedCallbacks": 0,
+        "errors": []
+      },
+      "limitations": [
+        "UI commands call the platform adapter; this does not prove physical input dispatch.",
+        "Command roundtrip includes file polling and at least two Unity frames; it is not pure UI latency.",
+        "Runtime instance/listener counts do not establish absence of native or managed resource leaks."
+      ]
+    }
+  ],
+  "processesRemaining": 0,
+  "exitCodeLimitation": "30-item process exit confirmed; its exit status was not captured and remains null. 300/3000 process handles were retained and returned exit code 0.",
+  "performanceLimitation": "GC.GetTotalMemory(false), Profiler and instrumented render counters are observations, not proof of no managed/native leaks or production frame-time benchmarks. Cold startup and file polling affect elapsed/roundtrip timings."
+}

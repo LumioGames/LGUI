@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1280,800">
+  <displayList>
+    <image id="backdrop" name="backdrop" src="cxback01" xy="0,0" size="1280,800" touchable="false"/>
+    <graph id="panel" name="panel" type="rect" lineColor="#8f734f" fillColor="#06111b" xy="68,110" size="1144,630" alpha="0.9" touchable="false"/>
+    <text id="title" name="title" text="旅者背包" font="Arial" fontSize="42" color="#e8d5af" autoSize="none" xy="88,30" size="760,54" touchable="false"/>
+    <text id="subtitle" name="subtitle" text="TRAVELER&apos;S INVENTORY" font="Arial" fontSize="13" color="#bb9e6a" autoSize="none" xy="92,86" size="720,22" touchable="false"/>
+    <text id="coins" name="coins" text="12,480 金币" font="Arial" fontSize="25" color="#f0d49c" align="right" autoSize="none" xy="972,40" size="192,34" touchable="false"/>
+    <component id="close" name="close" src="cxbtn001" xy="1176,28" size="42,42">
+      <Button title="×"/>
+    </component>
+    <graph id="searchbg" name="searchbg" type="rect" lineColor="#607b87" fillColor="#081a28" xy="92,128" size="254,42" alpha="0.95" touchable="false"/>
+    <inputtext id="search" name="search" text="" font="Arial" fontSize="17" color="#e9ddc4" autoSize="none" singleLine="true" prompt="搜索物品…" xy="98,134" size="242,30"/>
+    <component id="tab_all" name="tab_all" src="cxbtn001" xy="360,130" size="84,38">
+      <Button title="全部"/>
+    </component>
+    <component id="tab_equipment" name="tab_equipment" src="cxbtn001" xy="450,130" size="84,38">
+      <Button title="装备"/>
+    </component>
+    <component id="tab_consumable" name="tab_consumable" src="cxbtn001" xy="540,130" size="84,38">
+      <Button title="消耗品"/>
+    </component>
+    <component id="tab_material" name="tab_material" src="cxbtn001" xy="630,130" size="84,38">
+      <Button title="材料"/>
+    </component>
+    <component id="tab_quest" name="tab_quest" src="cxbtn001" xy="720,130" size="84,38">
+      <Button title="任务"/>
+    </component>
+    <list id="list" name="list" layout="flow_hz" lineGap="10" colGap="8" lineItemCount="6" defaultItem="ui://invtest1cxslot01" overflow="scroll" scrollBar="hidden" xy="92,190" size="712,486"/>
+    <graph id="detailbg" name="detailbg" type="rect" lineColor="#957848" fillColor="#081725" xy="828,128" size="360,548" alpha="0.94" touchable="false"/>
+    <loader id="detailIcon" name="detailIcon" url="ui://invtest1icx00000" align="center" vAlign="middle" fill="scale" xy="906,142" size="204,204" touchable="false"/>
+    <text id="detailTitle" name="detailTitle" text="苍纹长剑" font="Arial" fontSize="25" color="#f0dfb9" autoSize="none" xy="852,350" size="312,34" touchable="false"/>
+    <text id="rarity" name="rarity" text="稀有 · 武器" font="Arial" fontSize="17" color="#83c7e5" autoSize="none" xy="852,390" size="312,24" touchable="false"/>
+    <text id="stats" name="stats" text="攻击 +18&#xA;装备槽：weapon" font="Arial" fontSize="18" color="#ded8c7" autoSize="none" xy="852,426" size="312,68" touchable="false"/>
+    <text id="description" name="description" text="锻有苍蓝纹路的旅行长剑。&#xA;同槽旧装备自动放回背包。" font="Arial" fontSize="16" color="#b7bdbd" autoSize="none" xy="852,504" size="312,72" touchable="false"/>
+    <component id="primary" name="primary" src="cxbtn001" xy="852,590" size="312,40">
+      <Button title="装备"/>
+    </component>
+    <component id="sell" name="sell" src="cxbtn001" xy="852,636" size="312,32">
+      <Button title="出售"/>
+    </component>
+    <text id="summary" name="summary" text="24 / 30 格 · 装备与旅途补给" font="Arial" fontSize="17" color="#c8bb9e" autoSize="none" xy="92,699" size="520,28" touchable="false"/>
+    <component id="sort" name="sort" src="cxbtn001" xy="732,699" size="110,36">
+      <Button title="默认排序"/>
+    </component>
+    <component id="save" name="save" src="cxbtn001" xy="850,699" size="90,36">
+      <Button title="保存"/>
+    </component>
+    <component id="load" name="load" src="cxbtn001" xy="948,699" size="90,36">
+      <Button title="恢复"/>
+    </component>
+    <component id="reward" name="reward" src="cxbtn001" xy="1046,699" size="142,36">
+      <Button title="旅途奖励"/>
+    </component>
+    <text id="notice" name="notice" text="选择道具查看详情；装备、使用与出售由同一份 TypeScript 业务处理。" font="Arial" fontSize="14" color="#94a8b6" autoSize="none" xy="92,750" size="1096,24" touchable="false"/>
+  </displayList>
+  <transition name="enter">
+    <item time="0" type="Alpha" duration="12" tween="true" startValue="0.00" endValue="1.00"/>
+  </transition>
+</component>

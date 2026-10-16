@@ -1,0 +1,22 @@
+[
+  {
+    "path": "验证/unity-migration/build/windows-il2cpp/InventoryValidation.exe",
+    "bytes": 667136,
+    "sha256": "ee7acb7d4b6849b8adbeeb24986d74926a9b665342afa7db40d0857907b0d162"
+  },
+  {
+    "path": "验证/unity-migration/build/windows-il2cpp/GameAssembly.dll",
+    "bytes": 11123712,
+    "sha256": "405c02f5dc65573c0b4c0b3aea70abe13dee5b251c1e9dfcb00fa7307dd2dba4"
+  },
+  {
+    "path": "验证/unity-migration/evidence/il2cpp-unbox-build/build-20261016-090826.log",
+    "bytes": 47905,
+    "sha256": "142e09dd2c89a27a19d60b9cee98fd06de977f2cfd2a7abd271e2d6b41162b78"
+  },
+  {
+    "path": "验证/unity-migration/evidence/il2cpp-unbox-generate/generate-20261016-090759.log",
+    "bytes": 219568,
+    "sha256": "42bb3cca537f98b746671d46611e876c58a6ff2d8d5a5787b3794987c0607875"
+  }
+]

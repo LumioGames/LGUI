@@ -1,0 +1,21 @@
+{
+  "status": "pending-runtime",
+  "initialCount": 30,
+  "snapshotSchema": ["ready", "response", "rawTsResponse", "ui", "metrics", "errors"],
+  "steps": [
+    {"op": "snapshot", "expect": {"ready": true, "response.session.open": true, "response.session.listenerCount": 1, "response.view.coins": 0, "response.view.items.length": 30, "ui.transitionPresent": true, "ui.virtualList": true}},
+    {"op": "query", "args": {"query": "治疗药水"}, "expect": {"response.view.visible.length": 10}},
+    {"op": "query", "args": {"query": ""}, "expect": {"response.view.visible.length": 30}},
+    {"op": "claim", "args": {"id": "item-1"}, "expect": {"response.ok": true, "response.view.coins": 10, "ui.popup": true}},
+    {"op": "confirm", "expect": {"ui.popup": false}},
+    {"op": "claim", "args": {"id": "item-1"}, "expect": {"response.ok": false, "response.error.code": "claim_rejected", "response.view.coins": 10}},
+    {"op": "progress", "expect": {"response.view.items[0].state": "ready"}},
+    {"op": "scroll", "args": {"y": 550}, "expectAfterFrames": {"ui.scrollY": ">0", "ui.physicalRows": "<30"}},
+    {"op": "close", "expect": {"response.session.open": false, "response.session.listenerCount": 0, "ui.open": false}},
+    {"op": "progress", "expect": {"response.session.closedCallbacks": 0}},
+    {"op": "open", "expect": {"response.session.listenerCount": 1, "response.view.coins": 10, "metrics.runtimeInstances": 1}},
+    {"repeat": 20, "ops": ["close", "open"], "expect": {"response.session.listenerCount": 1, "response.session.closedCallbacks": 0, "metrics.runtimeInstances": 1, "metrics.tickCalls": "one-per-Update"}}
+  ],
+  "separateRealInputChecks": ["Chinese IME", "click progress and claim", "wheel scrolling", "popup drag and confirm", "close and reopen button", "wide and narrow real viewport", "entry alpha transition"],
+  "platformScope": "Editor and Windows Player evaluated separately; no mobile or IL2CPP claim without an actual run"
+}

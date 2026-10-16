@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "adapter": "legacy-fairygui-dom-loose-images",
+  "source": "complex Inventory same-source uncompressed Laya profile",
+  "packages": {
+    "invtest1": {
+      "name": "Inventory",
+      "images": {
+        "icon0001": "icon0001.png",
+        "icx00000": "icx00000.png",
+        "icx00001": "icx00001.png",
+        "icx00002": "icx00002.png",
+        "icx00003": "icx00003.png",
+        "icx00004": "icx00004.png",
+        "icx00005": "icx00005.png",
+        "icx00006": "icx00006.png",
+        "icx00007": "icx00007.png",
+        "icx00008": "icx00008.png",
+        "icx00009": "icx00009.png",
+        "icx00010": "icx00010.png",
+        "icx00011": "icx00011.png",
+        "icx00012": "icx00012.png",
+        "icx00013": "icx00013.png",
+        "icx00014": "icx00014.png",
+        "icx00015": "icx00015.png",
+        "icx00016": "icx00016.png",
+        "icx00017": "icx00017.png",
+        "icx00018": "icx00018.png",
+        "icx00019": "icx00019.png",
+        "icx00020": "icx00020.png",
+        "icx00021": "icx00021.png",
+        "icx00022": "icx00022.png",
+        "icx00023": "icx00023.png",
+        "cxback01": "cxback01.png"
+      }
+    }
+  }
+}

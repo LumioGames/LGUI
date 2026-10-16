@@ -1,0 +1,10 @@
+✔ relay binds only the documented 127.0.0.1 origin (0.7782ms)
+✔ real loopback relay authenticates, targets one client and reports uncertain timeout (100.3628ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 187.2116

@@ -1,0 +1,16 @@
+✔ initial JSON view uses the real three-state Inventory data (2.1257ms)
+✔ claim eligibility and duplicate rejection follow the shared Inventory model (1.7901ms)
+✔ query and progress operate on Chinese names and preserve claimed items (0.5162ms)
+✔ 250 repeated opens and closes keep one listener and no callbacks while closed (52.0371ms)
+✔ closing a UI session preserves rewards and query in the global business instance (0.4227ms)
+✔ malformed JSON and unsupported commands return errors without changing state (0.6046ms)
+✔ 300 and 3000 items use the same model and lifecycle contract (21.9972ms)
+✔ IIFE runs without platform globals and repeated evaluation preserves the one Inventory (41.3891ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 208.1476

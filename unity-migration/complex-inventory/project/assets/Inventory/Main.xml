@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="900,650">
+  <displayList>
+    <graph id="background" name="background" xy="0,0" size="900,650" touchable="false" type="rect" lineSize="0" fillColor="#0b1626"/>
+    <text id="title" name="title" xy="46,29" size="640,42" touchable="false" text="旅者背包 · 网页保存闭环" fontSize="30" color="#8df0c4" autoSize="none"/>
+    <graph id="searchbg" name="searchbg" xy="28,83" size="510,48" touchable="false" type="rect" lineSize="0" fillColor="#1a304a"/>
+    <inputtext id="search" name="search" xy="32,89" size="500,40" text="" fontSize="20" color="#ffffff" autoSize="none" singleLine="true" prompt="搜索道具，支持中文"/>
+    <component id="update" name="update" src="button01" xy="554,88" size="132,40">
+      <Button title="推进任务"/>
+    </component>
+    <component id="reward" name="reward" src="button01" xy="704,88" size="132,40">
+      <Button title="奖励说明"/>
+    </component>
+    <component id="close" name="close" src="button01" xy="738,24" size="132,40">
+      <Button title="关闭"/>
+    </component>
+    <list id="list" name="list" xy="32,154" size="836,412" lineGap="8" defaultItem="ui://invtest1itemrow1" overflow="scroll" scrollBar="hidden"/>
+    <text id="summary" name="summary" xy="32,588" size="836,32" touchable="false" text="0 个道具 · 未达成 / 可领取 / 已领取" fontSize="18" color="#98b8d8" autoSize="none"/>
+  </displayList>
+  <transition name="enter">
+    <item time="0" type="Alpha" duration="12" tween="true" label="fade" startValue="0.00" endValue="1.00"/>
+  </transition>
+</component>

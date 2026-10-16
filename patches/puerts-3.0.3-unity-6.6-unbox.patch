@@ -1,0 +1,40 @@
+diff --git a/Editor/Resources/puerts/xil2cpp/Puerts_il2cpp.cpp.txt b/Editor/Resources/puerts/xil2cpp/Puerts_il2cpp.cpp.txt
+index 647dc1b..ff94298 100644
+--- a/Editor/Resources/puerts/xil2cpp/Puerts_il2cpp.cpp.txt
++++ b/Editor/Resources/puerts/xil2cpp/Puerts_il2cpp.cpp.txt
+@@ -99,7 +99,7 @@ static void* ObjectAllocate(Il2CppClass *klass)
+         if (klass->has_references)
+         {
+             auto obj = il2cpp::vm::Object::New(klass);
+-            return il2cpp::vm::Object::Unbox(obj);
++            return il2cpp_object_unbox(obj);
+         }
+         else
+         {
+@@ -754,7 +754,7 @@ void* GetDefaultValuePtr(const MethodInfo* method, uint32_t index)
+ #else
+     Il2CppObject* defaultValue = Parameter::GetDefaultParameterValueObject(method, &method->parameters[index], &isExplicitySetNullDefaultValue);
+ #endif
+-    return (defaultValue && il2cpp::vm::Class::IsValuetype(il2cpp::vm::Class::FromIl2CppType(il2cpp::vm::Method::GetParam(method, index), false))) ? Object::Unbox(defaultValue) : defaultValue;
++    return (defaultValue && il2cpp::vm::Class::IsValuetype(il2cpp::vm::Class::FromIl2CppType(il2cpp::vm::Method::GetParam(method, index), false))) ? il2cpp_object_unbox(defaultValue) : defaultValue;
+ }
+ 
+ typedef void(*LogCallbackFunc)(const char* value);
+@@ -1060,7 +1060,7 @@ static pesapi_value TryTranslatePrimitiveWithClass(struct pesapi_ffi* apis, pesa
+             int32_t utf16len = il2cpp::utils::StringUtils::GetLength((Il2CppString*)obj);
+             return ${invokePapi('create_string_utf16')}(env, reinterpret_cast<const uint16_t *>(utf16), utf16len);
+         }
+-        void* ptr = Object::Unbox(obj);
++        void* ptr = il2cpp_object_unbox(obj);
+         return TryTranslatePrimitivePtr(apis, env, type->type, ptr);
+     }
+     
+@@ -1075,7 +1075,7 @@ pesapi_value TranslateValueType(struct pesapi_ffi* apis, pesapi_env env, Il2CppC
+         len = targetClass->instance_size - sizeof(Il2CppObject);
+     }
+ 
+-    return DataTransfer::CopyValueType(apis, env, targetClass, Object::Unbox(obj), len);
++    return DataTransfer::CopyValueType(apis, env, targetClass, il2cpp_object_unbox(obj), len);
+ }
+ 
+ pesapi_value TryTranslateValueType(struct pesapi_ffi* apis, pesapi_env env, Il2CppObject* obj)

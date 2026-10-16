@@ -1,0 +1,782 @@
+[
+  {
+    "id": "invtest1",
+    "name": "Inventory",
+    "resources": [
+      {
+        "id": "button01",
+        "name": "Btn",
+        "kind": "component",
+        "size": {
+          "width": 132,
+          "height": 40
+        },
+        "extensionType": "Button",
+        "children": [
+          {
+            "id": "btnbg",
+            "name": "btnbg",
+            "kind": "graph",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "size": {
+              "width": 132,
+              "height": 40
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "graphType": 1,
+            "fillColor": "#ff2868a6",
+            "lineColor": "#ff000000",
+            "lineSize": 0,
+            "gears": []
+          },
+          {
+            "id": "title",
+            "name": "title",
+            "kind": "text",
+            "position": {
+              "x": 0,
+              "y": 6
+            },
+            "size": {
+              "width": 132,
+              "height": 28
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "text": "操作",
+            "font": "",
+            "fontSize": 18,
+            "color": "#ffffffff",
+            "align": 1,
+            "vAlign": 0,
+            "singleLine": false,
+            "autoSize": 0,
+            "gears": []
+          }
+        ],
+        "controllers": [],
+        "transitions": []
+      },
+      {
+        "id": "icon0001",
+        "name": "icon",
+        "kind": "image",
+        "dimensions": {
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": "itemrow1",
+        "name": "ItemRow",
+        "kind": "component",
+        "size": {
+          "width": 820,
+          "height": 72
+        },
+        "extensionType": "",
+        "children": [
+          {
+            "id": "rowbg",
+            "name": "rowbg",
+            "kind": "graph",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "size": {
+              "width": 820,
+              "height": 72
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "graphType": 1,
+            "fillColor": "#ff14283e",
+            "lineColor": "#ff000000",
+            "lineSize": 0,
+            "gears": []
+          },
+          {
+            "id": "icon",
+            "name": "icon",
+            "kind": "image",
+            "position": {
+              "x": 12,
+              "y": 12
+            },
+            "size": {
+              "width": 48,
+              "height": 48
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "resource": {
+              "packageId": "invtest1",
+              "resourceId": "icon0001"
+            },
+            "gears": []
+          },
+          {
+            "id": "label",
+            "name": "label",
+            "kind": "text",
+            "position": {
+              "x": 78,
+              "y": 10
+            },
+            "size": {
+              "width": 430,
+              "height": 26
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "text": "道具",
+            "font": "",
+            "fontSize": 20,
+            "color": "#ffdce9ff",
+            "align": 0,
+            "vAlign": 0,
+            "singleLine": false,
+            "autoSize": 0,
+            "gears": []
+          },
+          {
+            "id": "status",
+            "name": "status",
+            "kind": "text",
+            "position": {
+              "x": 78,
+              "y": 39
+            },
+            "size": {
+              "width": 430,
+              "height": 22
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "text": "未达成",
+            "font": "",
+            "fontSize": 15,
+            "color": "#ffa6b7ca",
+            "align": 0,
+            "vAlign": 0,
+            "singleLine": false,
+            "autoSize": 0,
+            "gears": [
+              {
+                "kind": "text",
+                "controllerName": "state",
+                "defaultValue": {
+                  "text": "未达成"
+                },
+                "states": [
+                  {
+                    "pageId": "locked",
+                    "value": {
+                      "text": "未达成"
+                    }
+                  },
+                  {
+                    "pageId": "ready",
+                    "value": {
+                      "text": "可领取"
+                    }
+                  },
+                  {
+                    "pageId": "claimed",
+                    "value": {
+                      "text": "已领取"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "claim",
+            "name": "claim",
+            "kind": "component",
+            "position": {
+              "x": 670,
+              "y": 16
+            },
+            "size": {
+              "width": 132,
+              "height": 40
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": true,
+            "grayed": false,
+            "resource": {
+              "packageId": "invtest1",
+              "resourceId": "button01"
+            },
+            "instanceProperties": {
+              "extensionType": "Button",
+              "title": "未达成",
+              "selectedTitle": "",
+              "icon": "",
+              "selectedIcon": "",
+              "titleColor": "",
+              "titleFontSize": 0,
+              "controller": "",
+              "page": "",
+              "checked": false,
+              "sound": "",
+              "soundVolumeScale": 1
+            },
+            "gears": [
+              {
+                "kind": "look",
+                "controllerName": "state",
+                "defaultValue": {
+                  "alpha": 1,
+                  "rotation": 0,
+                  "grayed": true,
+                  "touchable": false
+                },
+                "states": [
+                  {
+                    "pageId": "locked",
+                    "value": {
+                      "alpha": 1,
+                      "rotation": 0,
+                      "grayed": true,
+                      "touchable": false
+                    }
+                  },
+                  {
+                    "pageId": "ready",
+                    "value": {
+                      "alpha": 1,
+                      "rotation": 0,
+                      "grayed": false,
+                      "touchable": true
+                    }
+                  },
+                  {
+                    "pageId": "claimed",
+                    "value": {
+                      "alpha": 1,
+                      "rotation": 0,
+                      "grayed": true,
+                      "touchable": false
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "text",
+                "controllerName": "state",
+                "defaultValue": {
+                  "text": "未达成"
+                },
+                "states": [
+                  {
+                    "pageId": "locked",
+                    "value": {
+                      "text": "未达成"
+                    }
+                  },
+                  {
+                    "pageId": "ready",
+                    "value": {
+                      "text": "可领取"
+                    }
+                  },
+                  {
+                    "pageId": "claimed",
+                    "value": {
+                      "text": "已领取"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "controllers": [
+          {
+            "name": "state",
+            "selectedIndex": 0,
+            "pages": [
+              {
+                "id": "locked",
+                "name": "locked"
+              },
+              {
+                "id": "ready",
+                "name": "ready"
+              },
+              {
+                "id": "claimed",
+                "name": "claimed"
+              }
+            ],
+            "actions": []
+          }
+        ],
+        "transitions": []
+      },
+      {
+        "id": "main0001",
+        "name": "Main",
+        "kind": "component",
+        "size": {
+          "width": 900,
+          "height": 650
+        },
+        "extensionType": "",
+        "children": [
+          {
+            "id": "background",
+            "name": "background",
+            "kind": "graph",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "size": {
+              "width": 900,
+              "height": 650
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "graphType": 1,
+            "fillColor": "#ff0b1626",
+            "lineColor": "#ff000000",
+            "lineSize": 0,
+            "gears": []
+          },
+          {
+            "id": "title",
+            "name": "title",
+            "kind": "text",
+            "position": {
+              "x": 46,
+              "y": 29
+            },
+            "size": {
+              "width": 640,
+              "height": 42
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "text": "旅者背包 · 网页保存闭环",
+            "font": "",
+            "fontSize": 30,
+            "color": "#ff8df0c4",
+            "align": 0,
+            "vAlign": 0,
+            "singleLine": false,
+            "autoSize": 0,
+            "gears": []
+          },
+          {
+            "id": "searchbg",
+            "name": "searchbg",
+            "kind": "graph",
+            "position": {
+              "x": 28,
+              "y": 83
+            },
+            "size": {
+              "width": 510,
+              "height": 48
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "graphType": 1,
+            "fillColor": "#ff1a304a",
+            "lineColor": "#ff000000",
+            "lineSize": 0,
+            "gears": []
+          },
+          {
+            "id": "search",
+            "name": "search",
+            "kind": "textInput",
+            "position": {
+              "x": 32,
+              "y": 89
+            },
+            "size": {
+              "width": 500,
+              "height": 40
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": true,
+            "grayed": false,
+            "text": "",
+            "font": "",
+            "fontSize": 20,
+            "color": "#ffffffff",
+            "align": 0,
+            "vAlign": 0,
+            "singleLine": true,
+            "autoSize": 0,
+            "promptText": "搜索道具，支持中文",
+            "password": false,
+            "maxLength": 0,
+            "restrict": "",
+            "gears": []
+          },
+          {
+            "id": "update",
+            "name": "update",
+            "kind": "component",
+            "position": {
+              "x": 554,
+              "y": 88
+            },
+            "size": {
+              "width": 132,
+              "height": 40
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": true,
+            "grayed": false,
+            "resource": {
+              "packageId": "invtest1",
+              "resourceId": "button01"
+            },
+            "instanceProperties": {
+              "extensionType": "Button",
+              "title": "推进任务",
+              "selectedTitle": "",
+              "icon": "",
+              "selectedIcon": "",
+              "titleColor": "",
+              "titleFontSize": 0,
+              "controller": "",
+              "page": "",
+              "checked": false,
+              "sound": "",
+              "soundVolumeScale": 1
+            },
+            "gears": []
+          },
+          {
+            "id": "reward",
+            "name": "reward",
+            "kind": "component",
+            "position": {
+              "x": 704,
+              "y": 88
+            },
+            "size": {
+              "width": 132,
+              "height": 40
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": true,
+            "grayed": false,
+            "resource": {
+              "packageId": "invtest1",
+              "resourceId": "button01"
+            },
+            "instanceProperties": {
+              "extensionType": "Button",
+              "title": "奖励说明",
+              "selectedTitle": "",
+              "icon": "",
+              "selectedIcon": "",
+              "titleColor": "",
+              "titleFontSize": 0,
+              "controller": "",
+              "page": "",
+              "checked": false,
+              "sound": "",
+              "soundVolumeScale": 1
+            },
+            "gears": []
+          },
+          {
+            "id": "close",
+            "name": "close",
+            "kind": "component",
+            "position": {
+              "x": 738,
+              "y": 24
+            },
+            "size": {
+              "width": 132,
+              "height": 40
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": true,
+            "grayed": false,
+            "resource": {
+              "packageId": "invtest1",
+              "resourceId": "button01"
+            },
+            "instanceProperties": {
+              "extensionType": "Button",
+              "title": "关闭",
+              "selectedTitle": "",
+              "icon": "",
+              "selectedIcon": "",
+              "titleColor": "",
+              "titleFontSize": 0,
+              "controller": "",
+              "page": "",
+              "checked": false,
+              "sound": "",
+              "soundVolumeScale": 1
+            },
+            "gears": []
+          },
+          {
+            "id": "list",
+            "name": "list",
+            "kind": "list",
+            "position": {
+              "x": 32,
+              "y": 154
+            },
+            "size": {
+              "width": 836,
+              "height": 412
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": true,
+            "grayed": false,
+            "defaultItem": "ui://invtest1itemrow1",
+            "lineGap": 8,
+            "overflow": 2,
+            "scrollType": 1,
+            "scrollBarDisplay": 3,
+            "gears": []
+          },
+          {
+            "id": "summary",
+            "name": "summary",
+            "kind": "text",
+            "position": {
+              "x": 32,
+              "y": 588
+            },
+            "size": {
+              "width": 836,
+              "height": 32
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "text": "0 个道具 · 未达成 / 可领取 / 已领取",
+            "font": "",
+            "fontSize": 18,
+            "color": "#ff98b8d8",
+            "align": 0,
+            "vAlign": 0,
+            "singleLine": false,
+            "autoSize": 0,
+            "gears": []
+          }
+        ],
+        "controllers": [],
+        "transitions": [
+          {
+            "name": "enter",
+            "autoPlay": false,
+            "autoPlayTimes": 1,
+            "autoPlayDelay": 0,
+            "options": 0,
+            "items": [
+              {
+                "timeSeconds": 0,
+                "durationSeconds": 0.5,
+                "actionType": 4,
+                "targetNodeId": "",
+                "tween": true,
+                "startValue": [
+                  0
+                ],
+                "endValue": [
+                  1
+                ],
+                "easeType": 5,
+                "repeat": 0,
+                "yoyo": false,
+                "label": "fade"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "reward01",
+        "name": "Reward",
+        "kind": "component",
+        "size": {
+          "width": 480,
+          "height": 300
+        },
+        "extensionType": "",
+        "children": [
+          {
+            "id": "rewardbg",
+            "name": "rewardbg",
+            "kind": "graph",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "size": {
+              "width": 480,
+              "height": 300
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "graphType": 1,
+            "fillColor": "#ff18334c",
+            "lineColor": "#ff000000",
+            "lineSize": 0,
+            "gears": []
+          },
+          {
+            "id": "title",
+            "name": "title",
+            "kind": "text",
+            "position": {
+              "x": 24,
+              "y": 24
+            },
+            "size": {
+              "width": 432,
+              "height": 40
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "text": "奖励已领取",
+            "font": "",
+            "fontSize": 28,
+            "color": "#ffdce9ff",
+            "align": 0,
+            "vAlign": 0,
+            "singleLine": false,
+            "autoSize": 0,
+            "gears": []
+          },
+          {
+            "id": "body",
+            "name": "body",
+            "kind": "text",
+            "position": {
+              "x": 24,
+              "y": 84
+            },
+            "size": {
+              "width": 432,
+              "height": 116
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": false,
+            "grayed": false,
+            "text": "你的物品已放入背包。\n这是一段用于验证换行和长文本显示的说明。",
+            "font": "",
+            "fontSize": 20,
+            "color": "#ffdce9ff",
+            "align": 0,
+            "vAlign": 0,
+            "singleLine": false,
+            "autoSize": 0,
+            "gears": []
+          },
+          {
+            "id": "confirm",
+            "name": "confirm",
+            "kind": "component",
+            "position": {
+              "x": 174,
+              "y": 232
+            },
+            "size": {
+              "width": 132,
+              "height": 40
+            },
+            "alpha": 1,
+            "rotation": 0,
+            "visible": true,
+            "touchable": true,
+            "grayed": false,
+            "resource": {
+              "packageId": "invtest1",
+              "resourceId": "button01"
+            },
+            "instanceProperties": {
+              "extensionType": "Button",
+              "title": "确认",
+              "selectedTitle": "",
+              "icon": "",
+              "selectedIcon": "",
+              "titleColor": "",
+              "titleFontSize": 0,
+              "controller": "",
+              "page": "",
+              "checked": false,
+              "sound": "",
+              "soundVolumeScale": 1
+            },
+            "gears": []
+          }
+        ],
+        "controllers": [],
+        "transitions": []
+      }
+    ]
+  }
+]

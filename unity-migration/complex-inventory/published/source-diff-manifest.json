@@ -1,0 +1,256 @@
+{
+  "baseline": [
+    {
+      "path": "assets/Inventory/Btn.xml",
+      "size": 417,
+      "sha256": "3467670d6b4aa7336d13eec8fdad1a9d1cfe2b05e112f1ca6ee7dd5878a1d154"
+    },
+    {
+      "path": "assets/Inventory/icon.png",
+      "size": 147,
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "assets/Inventory/ItemRow.xml",
+      "size": 1209,
+      "sha256": "6957e5ab77a1486790514f25ec42399503ef76f4268411fa88795f0ce6f311c9"
+    },
+    {
+      "path": "assets/Inventory/Main.xml",
+      "size": 1608,
+      "sha256": "3cb7e430b2c604dd8b10445ad902e7f6e3e8cc52058788568428056d5cfb1b17"
+    },
+    {
+      "path": "assets/Inventory/package.xml",
+      "size": 550,
+      "sha256": "156b00055ce9f98a531ebfab10f43a335805e042aab2155149d23df1c9824791"
+    },
+    {
+      "path": "assets/Inventory/Reward.xml",
+      "size": 751,
+      "sha256": "74ddb6c7da56d62124709c6dadf67661048bf260a28ca9dae6aa1f5b519090c4"
+    },
+    {
+      "path": "Inventory.fairy",
+      "size": 118,
+      "sha256": "25c87f86ef704e473bcf963fef88fa5b7f96e4b01018454c14e64fc3823e1839"
+    },
+    {
+      "path": "settings/Adaptation.json",
+      "size": 2,
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "settings/Common.json",
+      "size": 2,
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "settings/Publish.json",
+      "size": 74,
+      "sha256": "38ae21b145d54820ce70c6a104c2800041d9d44e87906ad091ec754865dd83cd"
+    }
+  ],
+  "complex": [
+    {
+      "path": "assets/Inventory/Btn.xml",
+      "size": 417,
+      "sha256": "3467670d6b4aa7336d13eec8fdad1a9d1cfe2b05e112f1ca6ee7dd5878a1d154"
+    },
+    {
+      "path": "assets/Inventory/ComplexBtn.xml",
+      "size": 620,
+      "sha256": "699d986a388c45f5fa59f271341d6173f99f69cd22f046ce7ec00ddabf47a810"
+    },
+    {
+      "path": "assets/Inventory/ComplexMain.xml",
+      "size": 4658,
+      "sha256": "cd12bd2bac37e315a76e72fc6503ef9fe379ac3ef6d983f8ba672191447cb541"
+    },
+    {
+      "path": "assets/Inventory/cxback01.png",
+      "size": 1823210,
+      "sha256": "29d817ee381518852ef2394e78eba02adefdcbe8ebf7376e5751bb8feb0988cd"
+    },
+    {
+      "path": "assets/Inventory/Detail.xml",
+      "size": 1438,
+      "sha256": "8318a3b5ca8490daef28d2d57295e9f59c48da574a7d62dafb6fa42948613cf8"
+    },
+    {
+      "path": "assets/Inventory/icon.png",
+      "size": 147,
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "assets/Inventory/icx00000.png",
+      "size": 118306,
+      "sha256": "3646c46af7f77bf8b404bb4365424b7592cfb787c3714845653df924e1dafa9c"
+    },
+    {
+      "path": "assets/Inventory/icx00001.png",
+      "size": 144146,
+      "sha256": "e67f627d14020268059423596ccbe06cfdd1634a30f31c0ff0dc7395dfd4b7d5"
+    },
+    {
+      "path": "assets/Inventory/icx00002.png",
+      "size": 115452,
+      "sha256": "2f8e89ded30cb074c92593684ff349d327896d21fd6e1281cd5600fb6d95534f"
+    },
+    {
+      "path": "assets/Inventory/icx00003.png",
+      "size": 113961,
+      "sha256": "d18c65b6a90e6f312cb1f3ffb96fc7bc152e5fdbc00a0f3d679e0a3ee9959e03"
+    },
+    {
+      "path": "assets/Inventory/icx00004.png",
+      "size": 154971,
+      "sha256": "5cdaff5a4b2be05553f219417ac9aaa864285ecae104a8540efa5dfdc0ca6a9c"
+    },
+    {
+      "path": "assets/Inventory/icx00005.png",
+      "size": 145217,
+      "sha256": "2f092ebca043171d2e7a413d6101544e1cd2e0294d35c739948cbddb19063ae7"
+    },
+    {
+      "path": "assets/Inventory/icx00006.png",
+      "size": 159528,
+      "sha256": "11c609ba7f939929fac3336df8e610d7cc6aa2ec96b2d9357524dcf2dc9a816d"
+    },
+    {
+      "path": "assets/Inventory/icx00007.png",
+      "size": 147851,
+      "sha256": "5b2eba6c2e2572e66fc4b1b310105a99c969d22ec9540ed1daab5c340c8b5963"
+    },
+    {
+      "path": "assets/Inventory/icx00008.png",
+      "size": 144817,
+      "sha256": "520c18185dfeecbfb3d139ed3048ae959b477da01b10affdc9b5a95b6ce69ba5"
+    },
+    {
+      "path": "assets/Inventory/icx00009.png",
+      "size": 123072,
+      "sha256": "adeac4894cca70a66540b6e62720a91d8aa45c49895153edc2f9d37a61306d94"
+    },
+    {
+      "path": "assets/Inventory/icx00010.png",
+      "size": 142093,
+      "sha256": "a4aae9e25b67403d1b9efbb70dc81778b66cd910676e8313a0a1b30e205cb02c"
+    },
+    {
+      "path": "assets/Inventory/icx00011.png",
+      "size": 148694,
+      "sha256": "c8fa854ca859b4ee541fabe90ab25c3411f27aa344460c573c7a87bf1573ab72"
+    },
+    {
+      "path": "assets/Inventory/icx00012.png",
+      "size": 144520,
+      "sha256": "9bae52824055d357ea3ffa7b1a765911ce2031873eedd191f33b0121d6a6efbf"
+    },
+    {
+      "path": "assets/Inventory/icx00013.png",
+      "size": 149620,
+      "sha256": "3f8395101397b3d1a966bec77563b72a059f09b9ce9e6eb1d5ead40cd5d18760"
+    },
+    {
+      "path": "assets/Inventory/icx00014.png",
+      "size": 140372,
+      "sha256": "6bcb70141b2deaa7ed85858dc12ebc037898cdb1f8172b905fbe7e70a8c8aaa0"
+    },
+    {
+      "path": "assets/Inventory/icx00015.png",
+      "size": 172444,
+      "sha256": "4b42490e534335a7bfd5f8a824fd68f28722f229284e7058ea6fdc97382c075d"
+    },
+    {
+      "path": "assets/Inventory/icx00016.png",
+      "size": 174635,
+      "sha256": "7ad97f5e6cb0eb5be8e98dee27677a78ad4fadd4841673d19c4863c63b99871a"
+    },
+    {
+      "path": "assets/Inventory/icx00017.png",
+      "size": 159845,
+      "sha256": "1cf6a67d3d5d92a83926f29dfd1691f887a58f0526f0da9615d09cee43cbbda3"
+    },
+    {
+      "path": "assets/Inventory/icx00018.png",
+      "size": 158507,
+      "sha256": "356efb922c4407deb1a9130c5bde61be06750db62575a11b2bfb8058e51d1634"
+    },
+    {
+      "path": "assets/Inventory/icx00019.png",
+      "size": 155844,
+      "sha256": "04ffb8573b8f3586d046a6cfd8184c7aacceecf6fef591df0b6826cf98641472"
+    },
+    {
+      "path": "assets/Inventory/icx00020.png",
+      "size": 121941,
+      "sha256": "f19cbac24fd4e538597f72101a9433daf0afc01796cf8d94a7a889c91b790de8"
+    },
+    {
+      "path": "assets/Inventory/icx00021.png",
+      "size": 153174,
+      "sha256": "234b6edfa98c75869d06e961593a15de96108c5098346ebf6d0d47b3e6f5e80f"
+    },
+    {
+      "path": "assets/Inventory/icx00022.png",
+      "size": 158782,
+      "sha256": "409fe8530ded2e576f526d53bb8375fa0cafa8fe9fad3c95aa5ae6b60db25972"
+    },
+    {
+      "path": "assets/Inventory/icx00023.png",
+      "size": 142416,
+      "sha256": "12add61ff4d8084312ddc3bfc49d50b19b6f4d1f9de3e79e48bd0f288915e15f"
+    },
+    {
+      "path": "assets/Inventory/ItemRow.xml",
+      "size": 1209,
+      "sha256": "6957e5ab77a1486790514f25ec42399503ef76f4268411fa88795f0ce6f311c9"
+    },
+    {
+      "path": "assets/Inventory/ItemSlot.xml",
+      "size": 1073,
+      "sha256": "dd5199d835c70cf601a4a90515215bfbb2fd0eff14b7f31029f8b750a21345ff"
+    },
+    {
+      "path": "assets/Inventory/Main.xml",
+      "size": 1608,
+      "sha256": "3cb7e430b2c604dd8b10445ad902e7f6e3e8cc52058788568428056d5cfb1b17"
+    },
+    {
+      "path": "assets/Inventory/package.xml",
+      "size": 3283,
+      "sha256": "0072c065d051e0be64f222a8987a473cb89b06362e09f84e9127818c1a5375e0"
+    },
+    {
+      "path": "assets/Inventory/Reward.xml",
+      "size": 751,
+      "sha256": "74ddb6c7da56d62124709c6dadf67661048bf260a28ca9dae6aa1f5b519090c4"
+    },
+    {
+      "path": "Inventory.fairy",
+      "size": 118,
+      "sha256": "25c87f86ef704e473bcf963fef88fa5b7f96e4b01018454c14e64fc3823e1839"
+    },
+    {
+      "path": "settings/Adaptation.json",
+      "size": 2,
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "settings/Common.json",
+      "size": 2,
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "settings/Publish.json",
+      "size": 74,
+      "sha256": "38ae21b145d54820ce70c6a104c2800041d9d44e87906ad091ec754865dd83cd"
+    }
+  ],
+  "modifiedBaseline": [
+    "assets/Inventory/package.xml"
+  ],
+  "oldResourceEntriesPreserved": true,
+  "originalDirectoryUnchanged": true
+}

@@ -1,0 +1,4528 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "id": "invtest1",
+    "name": "Inventory"
+  },
+  "design": {
+    "width": 1586,
+    "height": 992
+  },
+  "components": {
+    "ComplexMain": {
+      "id": "cxmain01",
+      "url": "ui://invtest1cxmain01"
+    },
+    "ItemSlot": {
+      "id": "cxslot01",
+      "url": "ui://invtest1cxslot01"
+    },
+    "Detail": {
+      "id": "cxdetl01",
+      "url": "ui://invtest1cxdetl01"
+    },
+    "ComplexBtn": {
+      "id": "cxbtn001",
+      "url": "ui://invtest1cxbtn001"
+    }
+  },
+  "skins": {
+    "environmentLeft": {
+      "id": "fs000000",
+      "name": "Fidelity_environmentLeft",
+      "url": "ui://invtest1fs000000",
+      "file": "fs000000.png",
+      "width": 127,
+      "height": 992,
+      "sha256": "21eb3985edd50ea2c2ea16c02d79a054bd3b9f7049c509d88c260de8d06629ff",
+      "sourceFile": "fidelity/skin/environmentLeft.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 0,
+        "y": 0,
+        "width": 127,
+        "height": 992
+      }
+    },
+    "environmentRight": {
+      "id": "fs000001",
+      "name": "Fidelity_environmentRight",
+      "url": "ui://invtest1fs000001",
+      "file": "fs000001.png",
+      "width": 133,
+      "height": 992,
+      "sha256": "568742588acc51f57a58b4872857c70c810817180cf628c9679a81502e1495c9",
+      "sourceFile": "fidelity/skin/environmentRight.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1453,
+        "y": 0,
+        "width": 133,
+        "height": 992
+      }
+    },
+    "environmentTop": {
+      "id": "fs000002",
+      "name": "Fidelity_environmentTop",
+      "url": "ui://invtest1fs000002",
+      "file": "fs000002.png",
+      "width": 1586,
+      "height": 17,
+      "sha256": "6bd04d574045e54744acadde24140663bbd0e15110c18d2f0e17139a93631c8e",
+      "sourceFile": "fidelity/skin/environmentTop.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1586,
+        "height": 17
+      }
+    },
+    "environmentBottom": {
+      "id": "fs000003",
+      "name": "Fidelity_environmentBottom",
+      "url": "ui://invtest1fs000003",
+      "file": "fs000003.png",
+      "width": 1586,
+      "height": 16,
+      "sha256": "016c0662de98bd4e7b96d8110989ba70ddbe768cc18e55ac07415d30c2c87fa5",
+      "sourceFile": "fidelity/skin/environmentBottom.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 0,
+        "y": 976,
+        "width": 1586,
+        "height": 16
+      }
+    },
+    "headerFill": {
+      "id": "fs000004",
+      "name": "Fidelity_headerFill",
+      "url": "ui://invtest1fs000004",
+      "file": "fs000004.png",
+      "width": 530,
+      "height": 105,
+      "sha256": "34da0feedfb5f6bc909ac76ead93cf7627036e539731cadeb20f1c8807a542bb",
+      "sourceFile": "fidelity/skin/headerFill.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 560,
+        "y": 20,
+        "width": 530,
+        "height": 105
+      }
+    },
+    "headerLeftMiddle": {
+      "id": "fs000005",
+      "name": "Fidelity_headerLeftMiddle",
+      "url": "ui://invtest1fs000005",
+      "file": "fs000005.png",
+      "width": 986,
+      "height": 137,
+      "sha256": "f3244f3a07e09a1946003f62123ea8c098f3b303138a194443fcb2609fd46da9",
+      "sourceFile": "fidelity/skin/headerLeftMiddle.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 127,
+        "y": 0,
+        "width": 986,
+        "height": 137
+      }
+    },
+    "headerRightLower": {
+      "id": "fs000006",
+      "name": "Fidelity_headerRightLower",
+      "url": "ui://invtest1fs000006",
+      "file": "fs000006.png",
+      "width": 340,
+      "height": 75,
+      "sha256": "f17ad1fb9a6f39967e3eac2d7ed05fb26a015967aa546f3b159bd12d23972a84",
+      "sourceFile": "fidelity/skin/headerRightLower.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1113,
+        "y": 62,
+        "width": 340,
+        "height": 75
+      }
+    },
+    "headerRightUpper": {
+      "id": "fs000007",
+      "name": "Fidelity_headerRightUpper",
+      "url": "ui://invtest1fs000007",
+      "file": "fs000007.png",
+      "width": 157,
+      "height": 62,
+      "sha256": "fcd49c2af7df2f2242ea0bb43a17b858605015c01ea24cbb2d174da0f342b822",
+      "sourceFile": "fidelity/skin/headerRightUpper.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1296,
+        "y": 0,
+        "width": 157,
+        "height": 62
+      }
+    },
+    "headerCoinBlank": {
+      "id": "fs000008",
+      "name": "Fidelity_headerCoinBlank",
+      "url": "ui://invtest1fs000008",
+      "file": "fs000008.png",
+      "width": 16,
+      "height": 45,
+      "sha256": "46988688b6d659fb2cf6060545c459120b71515dd95889d2cbcb1e13a1e2e07e",
+      "sourceFile": "fidelity/skin/headerCoinBlank.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1280,
+        "y": 17,
+        "width": 16,
+        "height": 45
+      }
+    },
+    "panelFill": {
+      "id": "fs000009",
+      "name": "Fidelity_panelFill",
+      "url": "ui://invtest1fs000009",
+      "file": "fs000009.png",
+      "width": 8,
+      "height": 620,
+      "sha256": "8d8513fed22a8ecc44f1a533278ee66a8f0feacb2554381cae7039bdac13369a",
+      "sourceFile": "fidelity/skin/panelFill.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 420,
+        "y": 214,
+        "width": 8,
+        "height": 620
+      }
+    },
+    "headerBranding": {
+      "id": "fs000010",
+      "name": "Fidelity_headerBranding",
+      "url": "ui://invtest1fs000010",
+      "file": "fs000010.png",
+      "width": 420,
+      "height": 99,
+      "sha256": "47a09cda968eb1bbdb9e34ff7fb04ad76d75929590334de12793f89b619734c8",
+      "sourceFile": "fidelity/skin/headerBranding.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 26,
+        "width": 420,
+        "height": 99
+      }
+    },
+    "logo": {
+      "id": "fs000011",
+      "name": "Fidelity_logo",
+      "url": "ui://invtest1fs000011",
+      "file": "fs000011.png",
+      "width": 119,
+      "height": 99,
+      "sha256": "1bf50a41e045cf8cfb8741c615123262c2880caa5e6a35db5f48286694a7ee23",
+      "sourceFile": "fidelity/skin/logo.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 27,
+        "width": 119,
+        "height": 99
+      }
+    },
+    "coin": {
+      "id": "fs000012",
+      "name": "Fidelity_coin",
+      "url": "ui://invtest1fs000012",
+      "file": "fs000012.png",
+      "width": 45,
+      "height": 45,
+      "sha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387",
+      "sourceFile": "fidelity/skin/coin.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1113,
+        "y": 17,
+        "width": 45,
+        "height": 45
+      }
+    },
+    "close": {
+      "id": "fs000013",
+      "name": "Fidelity_close",
+      "url": "ui://invtest1fs000013",
+      "file": "fs000013.png",
+      "width": 39,
+      "height": 39,
+      "sha256": "9b0affedb97f67e7ef24b676fdbaa05ceae261e505c704cc67a20ac93203fa92",
+      "sourceFile": "fidelity/skin/close.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1372,
+        "y": 19,
+        "width": 39,
+        "height": 39
+      }
+    },
+    "compass": {
+      "id": "fs000014",
+      "name": "Fidelity_compass",
+      "url": "ui://invtest1fs000014",
+      "file": "fs000014.png",
+      "width": 44,
+      "height": 39,
+      "sha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2",
+      "sourceFile": "fidelity/skin/compass.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1162,
+        "y": 701,
+        "width": 44,
+        "height": 39
+      }
+    },
+    "sellCoins": {
+      "id": "fs000015",
+      "name": "Fidelity_sellCoins",
+      "url": "ui://invtest1fs000015",
+      "file": "fs000015.png",
+      "width": 43,
+      "height": 33,
+      "sha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875",
+      "sourceFile": "fidelity/skin/sellCoins.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1163,
+        "y": 779,
+        "width": 43,
+        "height": 33
+      }
+    },
+    "searchIcon": {
+      "id": "fs000016",
+      "name": "Fidelity_searchIcon",
+      "url": "ui://invtest1fs000016",
+      "file": "fs000016.png",
+      "width": 29,
+      "height": 29,
+      "sha256": "d469ed3b37bec5bc4cd2147418c805bd5c9c29cff76c965336b363e58d144486",
+      "sourceFile": "fidelity/skin/searchIcon.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 165,
+        "y": 165,
+        "width": 29,
+        "height": 29
+      }
+    },
+    "capacityIcon": {
+      "id": "fs000017",
+      "name": "Fidelity_capacityIcon",
+      "url": "ui://invtest1fs000017",
+      "file": "fs000017.png",
+      "width": 35,
+      "height": 36,
+      "sha256": "2085040ee2ba86014bccac608152c86a8fde5eb162d8e37d7e68854dca21ae59",
+      "sourceFile": "fidelity/skin/capacityIcon.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 155,
+        "y": 891,
+        "width": 35,
+        "height": 36
+      }
+    },
+    "menu": {
+      "id": "fs000018",
+      "name": "Fidelity_menu",
+      "url": "ui://invtest1fs000018",
+      "file": "fs000018.png",
+      "width": 34,
+      "height": 38,
+      "sha256": "e424c2eccbf8fcd719874cd5e793f5b0e4e019daa96b148360f47214d1abda79",
+      "sourceFile": "fidelity/skin/menu.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1404,
+        "y": 890,
+        "width": 34,
+        "height": 38
+      }
+    },
+    "sortArrow": {
+      "id": "fs000019",
+      "name": "Fidelity_sortArrow",
+      "url": "ui://invtest1fs000019",
+      "file": "fs000019.png",
+      "width": 22,
+      "height": 17,
+      "sha256": "1e86f7724e0e1a746422dcefa06ecc43aaa55dc8002a5ce9229b711990cbaedd",
+      "sourceFile": "fidelity/skin/sortArrow.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1325,
+        "y": 902,
+        "width": 22,
+        "height": 17
+      }
+    },
+    "detailSword": {
+      "id": "fs000020",
+      "name": "Fidelity_detailSword",
+      "url": "ui://invtest1fs000020",
+      "file": "fs000020.png",
+      "width": 194,
+      "height": 392,
+      "sha256": "b878203d7ec888402c952ce0303358c241b4cad1fb45c60cac13ac5eec1359c1",
+      "sourceFile": "fidelity/skin/detailSword.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1040,
+        "y": 150,
+        "width": 194,
+        "height": 392
+      }
+    },
+    "statAttack": {
+      "id": "fs000021",
+      "name": "Fidelity_statAttack",
+      "url": "ui://invtest1fs000021",
+      "file": "fs000021.png",
+      "width": 34,
+      "height": 33,
+      "sha256": "d13b103c0e2e0146baedfbb95a9d661c0524305a47f19f5ba647a8ae376e26e3",
+      "sourceFile": "fidelity/skin/statAttack.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1233,
+        "y": 337,
+        "width": 34,
+        "height": 33
+      }
+    },
+    "statCrit": {
+      "id": "fs000022",
+      "name": "Fidelity_statCrit",
+      "url": "ui://invtest1fs000022",
+      "file": "fs000022.png",
+      "width": 34,
+      "height": 33,
+      "sha256": "a1e28bb240f3e2084a15b6b9837a679437094d8a05ba38007c8d0dc6c7467134",
+      "sourceFile": "fidelity/skin/statCrit.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1233,
+        "y": 396,
+        "width": 34,
+        "height": 33
+      }
+    },
+    "statDurability": {
+      "id": "fs000023",
+      "name": "Fidelity_statDurability",
+      "url": "ui://invtest1fs000023",
+      "file": "fs000023.png",
+      "width": 34,
+      "height": 33,
+      "sha256": "7392df94362da8e01d61b56bf0f09e3c32ff087e1acea577baa29289cfa366be",
+      "sourceFile": "fidelity/skin/statDurability.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1233,
+        "y": 455,
+        "width": 34,
+        "height": 33
+      }
+    },
+    "detailDivider": {
+      "id": "fs000024",
+      "name": "Fidelity_detailDivider",
+      "url": "ui://invtest1fs000024",
+      "file": "fs000024.png",
+      "width": 188,
+      "height": 15,
+      "sha256": "3ceaf93af3370e10e3c74653499fc05130aa07b2da73eef8dca0c93ac8d14b01",
+      "sourceFile": "fidelity/skin/detailDivider.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1230,
+        "y": 291,
+        "width": 188,
+        "height": 15
+      }
+    },
+    "detailLowerDivider": {
+      "id": "fs000025",
+      "name": "Fidelity_detailLowerDivider",
+      "url": "ui://invtest1fs000025",
+      "file": "fs000025.png",
+      "width": 371,
+      "height": 13,
+      "sha256": "7a08d4309b1bb55fbe26a2e66ecba66cce5de93cae5b45f978c451c95a4916ff",
+      "sourceFile": "fidelity/skin/detailLowerDivider.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1047,
+        "y": 533,
+        "width": 371,
+        "height": 13
+      }
+    },
+    "frameLeft": {
+      "id": "fs000026",
+      "name": "Fidelity_frameLeft",
+      "url": "ui://invtest1fs000026",
+      "file": "fs000026.png",
+      "width": 879,
+      "height": 723,
+      "sha256": "964464357e163682a35c745b01b563564d943f5860f427d1f195876ba2226247",
+      "sourceFile": "fidelity/skin/frameLeft.png",
+      "scale9Grid": [
+        12,
+        12,
+        855,
+        699
+      ],
+      "insets": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 137,
+        "width": 879,
+        "height": 723
+      }
+    },
+    "frameRight": {
+      "id": "fs000027",
+      "name": "Fidelity_frameRight",
+      "url": "ui://invtest1fs000027",
+      "file": "fs000027.png",
+      "width": 433,
+      "height": 723,
+      "sha256": "341c899865bbb68077a5f7813ccc3474882cbb50127a70b5e273541872678a92",
+      "sourceFile": "fidelity/skin/frameRight.png",
+      "scale9Grid": [
+        12,
+        12,
+        409,
+        699
+      ],
+      "insets": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1017,
+        "y": 137,
+        "width": 433,
+        "height": 723
+      }
+    },
+    "detailBackground": {
+      "id": "fs000028",
+      "name": "Fidelity_detailBackground",
+      "url": "ui://invtest1fs000028",
+      "file": "fs000028.png",
+      "width": 433,
+      "height": 723,
+      "sha256": "4bf6896db517194866765574bb66ee71fd9e320a0f688e4ce7b16a3fec8e26c9",
+      "sourceFile": "fidelity/skin/detailBackground.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1017,
+        "y": 137,
+        "width": 433,
+        "height": 723
+      }
+    },
+    "frameFooter": {
+      "id": "fs000029",
+      "name": "Fidelity_frameFooter",
+      "url": "ui://invtest1fs000029",
+      "file": "fs000029.png",
+      "width": 1318,
+      "height": 74,
+      "sha256": "ca16943d90fd4e0125d71b2a540d1b566f0940acb897292658791595d18a72a5",
+      "sourceFile": "fidelity/skin/frameFooter.png",
+      "scale9Grid": [
+        9,
+        9,
+        1300,
+        56
+      ],
+      "insets": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 870,
+        "width": 1318,
+        "height": 74
+      }
+    },
+    "slotNormalFrame": {
+      "id": "fs000030",
+      "name": "Fidelity_slotNormalFrame",
+      "url": "ui://invtest1fs000030",
+      "file": "fs000030.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "32aff72ae057f351134a0ba13892a0b7abcfc95d4f4dfe1cb94329da809e685f",
+      "sourceFile": "fidelity/skin/slotNormalFrame.png",
+      "scale9Grid": [
+        8,
+        8,
+        112,
+        121
+      ],
+      "insets": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slotSelectedFrame": {
+      "id": "fs000031",
+      "name": "Fidelity_slotSelectedFrame",
+      "url": "ui://invtest1fs000031",
+      "file": "fs000031.png",
+      "width": 138,
+      "height": 147,
+      "sha256": "1bcf3721c8e70d7be7003e02573d3fe4612faac16c8e01173363b7dbe9230f3a",
+      "sourceFile": "fidelity/skin/slotSelectedFrame.png",
+      "scale9Grid": [
+        9,
+        9,
+        120,
+        129
+      ],
+      "insets": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 144,
+        "y": 217,
+        "width": 138,
+        "height": 147
+      }
+    },
+    "progressFrame": {
+      "id": "fs000032",
+      "name": "Fidelity_progressFrame",
+      "url": "ui://invtest1fs000032",
+      "file": "fs000032.png",
+      "width": 420,
+      "height": 24,
+      "sha256": "06913784ad01867fbfdbbcd38137d006aecb1f5badf2da6b7e626c8a92726deb",
+      "sourceFile": "fidelity/skin/progressFrame.png",
+      "scale9Grid": [
+        4,
+        4,
+        412,
+        16
+      ],
+      "insets": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 293,
+        "y": 895,
+        "width": 420,
+        "height": 24
+      }
+    },
+    "progressFill": {
+      "id": "fs000033",
+      "name": "Fidelity_progressFill",
+      "url": "ui://invtest1fs000033",
+      "file": "fs000033.png",
+      "width": 12,
+      "height": 10,
+      "sha256": "01ef0a6bdbb549336a0a160bd73783b145beda609753baea2e2fb0738806e6d7",
+      "sourceFile": "fidelity/skin/progressFill.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 310,
+        "y": 901,
+        "width": 12,
+        "height": 10
+      }
+    },
+    "primaryBg": {
+      "id": "fs000034",
+      "name": "Fidelity_primaryBg",
+      "url": "ui://invtest1fs000034",
+      "file": "fs000034.png",
+      "width": 370,
+      "height": 65,
+      "sha256": "d3d09c55a4d9da984d5092f2a08c6b935b52fd3472f744cdc63d40b3801f4b3c",
+      "sourceFile": "fidelity/skin/primaryBg.png",
+      "scale9Grid": [
+        14,
+        10,
+        342,
+        45
+      ],
+      "insets": [
+        10,
+        14,
+        10,
+        14
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1047,
+        "y": 685,
+        "width": 370,
+        "height": 65
+      }
+    },
+    "secondaryBg": {
+      "id": "fs000035",
+      "name": "Fidelity_secondaryBg",
+      "url": "ui://invtest1fs000035",
+      "file": "fs000035.png",
+      "width": 370,
+      "height": 65,
+      "sha256": "64929b4ff2b4e897edaf42956edfb0ef7d9f82cb271386a28e541cf4c047a40b",
+      "sourceFile": "fidelity/skin/secondaryBg.png",
+      "scale9Grid": [
+        14,
+        10,
+        342,
+        45
+      ],
+      "insets": [
+        10,
+        14,
+        10,
+        14
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1047,
+        "y": 763,
+        "width": 370,
+        "height": 65
+      }
+    },
+    "searchBg": {
+      "id": "fs000036",
+      "name": "Fidelity_searchBg",
+      "url": "ui://invtest1fs000036",
+      "file": "fs000036.png",
+      "width": 299,
+      "height": 46,
+      "sha256": "5d3b3cd4cdd1f5b0fb012e18c5c713a75866ddede628135d373c6427c3cc5fe3",
+      "sourceFile": "fidelity/skin/searchBg.png",
+      "scale9Grid": [
+        6,
+        6,
+        287,
+        34
+      ],
+      "insets": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 149,
+        "y": 155,
+        "width": 299,
+        "height": 46
+      }
+    },
+    "tabNormalBg": {
+      "id": "fs000037",
+      "name": "Fidelity_tabNormalBg",
+      "url": "ui://invtest1fs000037",
+      "file": "fs000037.png",
+      "width": 101,
+      "height": 45,
+      "sha256": "4fe501a3b522a79c487192886ae0d288267ba228bb3363cf891ec344eb50ad37",
+      "sourceFile": "fidelity/skin/tabNormalBg.png",
+      "scale9Grid": [
+        5,
+        5,
+        91,
+        35
+      ],
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 571,
+        "y": 156,
+        "width": 101,
+        "height": 45
+      }
+    },
+    "tabSelectedBg": {
+      "id": "fs000038",
+      "name": "Fidelity_tabSelectedBg",
+      "url": "ui://invtest1fs000038",
+      "file": "fs000038.png",
+      "width": 99,
+      "height": 45,
+      "sha256": "3dcd52ee5b14d81833fe8dce70adaf7cd098d147981d2a79d1e654146443ca6c",
+      "sourceFile": "fidelity/skin/tabSelectedBg.png",
+      "scale9Grid": [
+        5,
+        5,
+        89,
+        35
+      ],
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 466,
+        "y": 156,
+        "width": 99,
+        "height": 45
+      }
+    },
+    "sortBg": {
+      "id": "fs000039",
+      "name": "Fidelity_sortBg",
+      "url": "ui://invtest1fs000039",
+      "file": "fs000039.png",
+      "width": 216,
+      "height": 49,
+      "sha256": "0de0323d5b9b62c0fe7f124f8af872f957eca8fc02d86d2e31814abd082e0ddc",
+      "sourceFile": "fidelity/skin/sortBg.png",
+      "scale9Grid": [
+        5,
+        5,
+        206,
+        39
+      ],
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1141,
+        "y": 883,
+        "width": 216,
+        "height": 49
+      }
+    },
+    "slot00": {
+      "id": "fs000040",
+      "name": "Fidelity_slot00",
+      "url": "ui://invtest1fs000040",
+      "file": "fs000040.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32",
+      "sourceFile": "fidelity/skin/slot00.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 112,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot01": {
+      "id": "fs000041",
+      "name": "Fidelity_slot01",
+      "url": "ui://invtest1fs000041",
+      "file": "fs000041.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349",
+      "sourceFile": "fidelity/skin/slot01.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 112,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot02": {
+      "id": "fs000042",
+      "name": "Fidelity_slot02",
+      "url": "ui://invtest1fs000042",
+      "file": "fs000042.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b",
+      "sourceFile": "fidelity/skin/slot02.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 112,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot03": {
+      "id": "fs000043",
+      "name": "Fidelity_slot03",
+      "url": "ui://invtest1fs000043",
+      "file": "fs000043.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151",
+      "sourceFile": "fidelity/skin/slot03.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 112,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot04": {
+      "id": "fs000044",
+      "name": "Fidelity_slot04",
+      "url": "ui://invtest1fs000044",
+      "file": "fs000044.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98",
+      "sourceFile": "fidelity/skin/slot04.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 11,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot05": {
+      "id": "fs000045",
+      "name": "Fidelity_slot05",
+      "url": "ui://invtest1fs000045",
+      "file": "fs000045.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f",
+      "sourceFile": "fidelity/skin/slot05.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 110,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot06": {
+      "id": "fs000046",
+      "name": "Fidelity_slot06",
+      "url": "ui://invtest1fs000046",
+      "file": "fs000046.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842",
+      "sourceFile": "fidelity/skin/slot06.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 111,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot07": {
+      "id": "fs000047",
+      "name": "Fidelity_slot07",
+      "url": "ui://invtest1fs000047",
+      "file": "fs000047.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20",
+      "sourceFile": "fidelity/skin/slot07.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 111,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot08": {
+      "id": "fs000048",
+      "name": "Fidelity_slot08",
+      "url": "ui://invtest1fs000048",
+      "file": "fs000048.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9",
+      "sourceFile": "fidelity/skin/slot08.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot09": {
+      "id": "fs000049",
+      "name": "Fidelity_slot09",
+      "url": "ui://invtest1fs000049",
+      "file": "fs000049.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11",
+      "sourceFile": "fidelity/skin/slot09.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot10": {
+      "id": "fs000050",
+      "name": "Fidelity_slot10",
+      "url": "ui://invtest1fs000050",
+      "file": "fs000050.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8",
+      "sourceFile": "fidelity/skin/slot10.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot11": {
+      "id": "fs000051",
+      "name": "Fidelity_slot11",
+      "url": "ui://invtest1fs000051",
+      "file": "fs000051.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945",
+      "sourceFile": "fidelity/skin/slot11.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 109,
+        "y": 111,
+        "width": 12,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot12": {
+      "id": "fs000052",
+      "name": "Fidelity_slot12",
+      "url": "ui://invtest1fs000052",
+      "file": "fs000052.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5",
+      "sourceFile": "fidelity/skin/slot12.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot13": {
+      "id": "fs000053",
+      "name": "Fidelity_slot13",
+      "url": "ui://invtest1fs000053",
+      "file": "fs000053.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e",
+      "sourceFile": "fidelity/skin/slot13.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot14": {
+      "id": "fs000054",
+      "name": "Fidelity_slot14",
+      "url": "ui://invtest1fs000054",
+      "file": "fs000054.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d",
+      "sourceFile": "fidelity/skin/slot14.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot15": {
+      "id": "fs000055",
+      "name": "Fidelity_slot15",
+      "url": "ui://invtest1fs000055",
+      "file": "fs000055.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f",
+      "sourceFile": "fidelity/skin/slot15.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 94,
+        "y": 111,
+        "width": 22,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot16": {
+      "id": "fs000056",
+      "name": "Fidelity_slot16",
+      "url": "ui://invtest1fs000056",
+      "file": "fs000056.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534",
+      "sourceFile": "fidelity/skin/slot16.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot17": {
+      "id": "fs000057",
+      "name": "Fidelity_slot17",
+      "url": "ui://invtest1fs000057",
+      "file": "fs000057.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec",
+      "sourceFile": "fidelity/skin/slot17.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 108,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot18": {
+      "id": "fs000058",
+      "name": "Fidelity_slot18",
+      "url": "ui://invtest1fs000058",
+      "file": "fs000058.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd",
+      "sourceFile": "fidelity/skin/slot18.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot19": {
+      "id": "fs000059",
+      "name": "Fidelity_slot19",
+      "url": "ui://invtest1fs000059",
+      "file": "fs000059.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043",
+      "sourceFile": "fidelity/skin/slot19.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot20": {
+      "id": "fs000060",
+      "name": "Fidelity_slot20",
+      "url": "ui://invtest1fs000060",
+      "file": "fs000060.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e",
+      "sourceFile": "fidelity/skin/slot20.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot21": {
+      "id": "fs000061",
+      "name": "Fidelity_slot21",
+      "url": "ui://invtest1fs000061",
+      "file": "fs000061.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b",
+      "sourceFile": "fidelity/skin/slot21.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 102,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot22": {
+      "id": "fs000062",
+      "name": "Fidelity_slot22",
+      "url": "ui://invtest1fs000062",
+      "file": "fs000062.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8",
+      "sourceFile": "fidelity/skin/slot22.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 94,
+        "y": 111,
+        "width": 22,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "slot23": {
+      "id": "fs000063",
+      "name": "Fidelity_slot23",
+      "url": "ui://invtest1fs000063",
+      "file": "fs000063.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8",
+      "sourceFile": "fidelity/skin/slot23.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 109,
+        "y": 111,
+        "width": 12,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    "leftBackground": {
+      "id": "fs000064",
+      "name": "Fidelity_leftBackground",
+      "url": "ui://invtest1fs000064",
+      "file": "fs000064.png",
+      "width": 879,
+      "height": 723,
+      "sha256": "e216c21c2bf8a805ff481266bf882ef180fe0b070bbf976ed50fc23a25318e09",
+      "sourceFile": "fidelity/skin/leftBackground.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 137,
+        "width": 879,
+        "height": 723
+      }
+    },
+    "footerBackground": {
+      "id": "fs000065",
+      "name": "Fidelity_footerBackground",
+      "url": "ui://invtest1fs000065",
+      "file": "fs000065.png",
+      "width": 1318,
+      "height": 74,
+      "sha256": "09e21c423f274ce925b4d370e5371b02a47aac12220aa71c721e981a0bcc67b8",
+      "sourceFile": "fidelity/skin/footerBackground.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 870,
+        "width": 1318,
+        "height": 74
+      }
+    },
+    "compassAlpha": {
+      "id": "fs000066",
+      "name": "Fidelity_compassAlpha",
+      "url": "ui://invtest1fs000066",
+      "file": "fs000066.png",
+      "width": 978,
+      "height": 1054,
+      "sha256": "96ee372046abb8dca626b13a72eceba719c23f50114ef833f5d45e5f01c306a8",
+      "sourceFile": "fidelity/skin/compassAlpha.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1162,
+        "y": 701,
+        "width": 44,
+        "height": 39
+      }
+    },
+    "sellCoinsAlpha": {
+      "id": "fs000067",
+      "name": "Fidelity_sellCoinsAlpha",
+      "url": "ui://invtest1fs000067",
+      "file": "fs000067.png",
+      "width": 610,
+      "height": 517,
+      "sha256": "5b21946d4de33d73dc57f6b251c6799b37889392048f52cfb787539b14c1ff22",
+      "sourceFile": "fidelity/skin/sellCoinsAlpha.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1163,
+        "y": 779,
+        "width": 43,
+        "height": 33
+      }
+    },
+    "coinAlpha": {
+      "id": "fs000068",
+      "name": "Fidelity_coinAlpha",
+      "url": "ui://invtest1fs000068",
+      "file": "fs000068.png",
+      "width": 929,
+      "height": 932,
+      "sha256": "c7e4f1532b6ad30e5eca091ccee7d0bde6012483970e7ecd1a90b59c48d875ae",
+      "sourceFile": "fidelity/skin/coinAlpha.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1113,
+        "y": 17,
+        "width": 45,
+        "height": 45
+      }
+    }
+  },
+  "details": [
+    {
+      "id": "fd000000",
+      "name": "Fidelity_Detail_00",
+      "url": "ui://invtest1fd000000",
+      "file": "fd000000.png",
+      "width": 201,
+      "height": 249,
+      "sha256": "dbf1bdfaa26532227184fef0391ed457bdba02f045d634183cfb7dc6dfe5f31b",
+      "sourceFile": "fidelity/trimmed/detail-00.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 0
+    },
+    {
+      "id": "fd000001",
+      "name": "Fidelity_Detail_01",
+      "url": "ui://invtest1fd000001",
+      "file": "fd000001.png",
+      "width": 201,
+      "height": 233,
+      "sha256": "cb378ad809bdfaad294683307599e64b7ada8b1407784dbdf572ba052f9a3bca",
+      "sourceFile": "fidelity/trimmed/detail-01.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 1
+    },
+    {
+      "id": "fd000002",
+      "name": "Fidelity_Detail_02",
+      "url": "ui://invtest1fd000002",
+      "file": "fd000002.png",
+      "width": 213,
+      "height": 247,
+      "sha256": "f36d39c96beb7b1fe2b70a76de38d59206a94952ad7a302309bfeb1e30888e5c",
+      "sourceFile": "fidelity/trimmed/detail-02.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 2
+    },
+    {
+      "id": "fd000003",
+      "name": "Fidelity_Detail_03",
+      "url": "ui://invtest1fd000003",
+      "file": "fd000003.png",
+      "width": 198,
+      "height": 236,
+      "sha256": "80093295ce013cd5a5a02f8a479550e52bd8ec9b0d72eac56dd5de8bfc87ee72",
+      "sourceFile": "fidelity/trimmed/detail-03.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 3
+    },
+    {
+      "id": "fd000004",
+      "name": "Fidelity_Detail_04",
+      "url": "ui://invtest1fd000004",
+      "file": "fd000004.png",
+      "width": 198,
+      "height": 219,
+      "sha256": "84c0e6dfe20deb316cab0b0eb2f04784b1e56e1a85da259f88e1307d2e780a31",
+      "sourceFile": "fidelity/trimmed/detail-04.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 4
+    },
+    {
+      "id": "fd000005",
+      "name": "Fidelity_Detail_05",
+      "url": "ui://invtest1fd000005",
+      "file": "fd000005.png",
+      "width": 179,
+      "height": 222,
+      "sha256": "c648fe3a3f37e3598e7db22ad24039d58e0ec9bd5033eccb7cfc707be4d9e8c7",
+      "sourceFile": "fidelity/trimmed/detail-05.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 5
+    },
+    {
+      "id": "fd000006",
+      "name": "Fidelity_Detail_06",
+      "url": "ui://invtest1fd000006",
+      "file": "fd000006.png",
+      "width": 218,
+      "height": 218,
+      "sha256": "67d95d3ca301970438b12857247ae14c25190fd5e9dcf33f25d8380ef817bef7",
+      "sourceFile": "fidelity/trimmed/detail-06.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 6
+    },
+    {
+      "id": "fd000007",
+      "name": "Fidelity_Detail_07",
+      "url": "ui://invtest1fd000007",
+      "file": "fd000007.png",
+      "width": 178,
+      "height": 223,
+      "sha256": "ffe5ebcf86f1aea24b1940f5dd65b53636acf938e250e7dc7703ea599b9e7ea2",
+      "sourceFile": "fidelity/trimmed/detail-07.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 7
+    },
+    {
+      "id": "fd000008",
+      "name": "Fidelity_Detail_08",
+      "url": "ui://invtest1fd000008",
+      "file": "fd000008.png",
+      "width": 151,
+      "height": 161,
+      "sha256": "368fe305b5c9b758b0a710d8447639aac03e1855bf4b9fdd93886b8cd099d8d9",
+      "sourceFile": "fidelity/trimmed/detail-08.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 8
+    },
+    {
+      "id": "fd000009",
+      "name": "Fidelity_Detail_09",
+      "url": "ui://invtest1fd000009",
+      "file": "fd000009.png",
+      "width": 132,
+      "height": 226,
+      "sha256": "14eac7416c2e7c136ec6763bf79030248d87ad13ab9bf0d59084fe3c017d577c",
+      "sourceFile": "fidelity/trimmed/detail-09.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 9
+    },
+    {
+      "id": "fd000010",
+      "name": "Fidelity_Detail_10",
+      "url": "ui://invtest1fd000010",
+      "file": "fd000010.png",
+      "width": 141,
+      "height": 215,
+      "sha256": "03e7e6b9a9820d904f6a76ee26662a5ded7107b5baf48eb0e75170d3a003a57d",
+      "sourceFile": "fidelity/trimmed/detail-10.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 10
+    },
+    {
+      "id": "fd000011",
+      "name": "Fidelity_Detail_11",
+      "url": "ui://invtest1fd000011",
+      "file": "fd000011.png",
+      "width": 140,
+      "height": 215,
+      "sha256": "7f48d323f486c05f5ac4972ee3a3a1798b8999ca515cd9b32444a17277bd2868",
+      "sourceFile": "fidelity/trimmed/detail-11.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 11
+    },
+    {
+      "id": "fd000012",
+      "name": "Fidelity_Detail_12",
+      "url": "ui://invtest1fd000012",
+      "file": "fd000012.png",
+      "width": 138,
+      "height": 231,
+      "sha256": "57551bdc5310585185a174aa48e47e8b717be1676d12b1d5970d32af7d1af2b5",
+      "sourceFile": "fidelity/trimmed/detail-12.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 12
+    },
+    {
+      "id": "fd000013",
+      "name": "Fidelity_Detail_13",
+      "url": "ui://invtest1fd000013",
+      "file": "fd000013.png",
+      "width": 141,
+      "height": 213,
+      "sha256": "0d7c65d76b27dc22821b2287183ddeef5defce8d42fc1068d056a442c3a1c969",
+      "sourceFile": "fidelity/trimmed/detail-13.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 13
+    },
+    {
+      "id": "fd000014",
+      "name": "Fidelity_Detail_14",
+      "url": "ui://invtest1fd000014",
+      "file": "fd000014.png",
+      "width": 202,
+      "height": 216,
+      "sha256": "7105f61419532e39dccd7deedd909e7451e66a7125088245f1d6cf526849fc28",
+      "sourceFile": "fidelity/trimmed/detail-14.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 14
+    },
+    {
+      "id": "fd000015",
+      "name": "Fidelity_Detail_15",
+      "url": "ui://invtest1fd000015",
+      "file": "fd000015.png",
+      "width": 211,
+      "height": 217,
+      "sha256": "e8e6e132e7c85d5bfc23cccece10f1555b77eee1f8621d43a8dd6010446675a1",
+      "sourceFile": "fidelity/trimmed/detail-15.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 15
+    },
+    {
+      "id": "fd000016",
+      "name": "Fidelity_Detail_16",
+      "url": "ui://invtest1fd000016",
+      "file": "fd000016.png",
+      "width": 206,
+      "height": 213,
+      "sha256": "4669cf647d35873f34fbf1faec513b8f57a6e0c8aa0cf0e3f009d1b0d30bf880",
+      "sourceFile": "fidelity/trimmed/detail-16.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 16
+    },
+    {
+      "id": "fd000017",
+      "name": "Fidelity_Detail_17",
+      "url": "ui://invtest1fd000017",
+      "file": "fd000017.png",
+      "width": 209,
+      "height": 206,
+      "sha256": "1409b8860d35397fe33ab72610fed09d0161e3496e435c74cb5957adcfa4a5fa",
+      "sourceFile": "fidelity/trimmed/detail-17.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 17
+    },
+    {
+      "id": "fd000018",
+      "name": "Fidelity_Detail_18",
+      "url": "ui://invtest1fd000018",
+      "file": "fd000018.png",
+      "width": 176,
+      "height": 225,
+      "sha256": "fa8eacfdb3e367a5e72fc9dc50ae9a02b74a6f70905c11b0545bab4593ddbb80",
+      "sourceFile": "fidelity/trimmed/detail-18.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 18
+    },
+    {
+      "id": "fd000019",
+      "name": "Fidelity_Detail_19",
+      "url": "ui://invtest1fd000019",
+      "file": "fd000019.png",
+      "width": 225,
+      "height": 217,
+      "sha256": "753200a739c9ce3f7e2606af90f0d467e9734fa6f30d55518498c875ad8ae410",
+      "sourceFile": "fidelity/trimmed/detail-19.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 19
+    },
+    {
+      "id": "fd000020",
+      "name": "Fidelity_Detail_20",
+      "url": "ui://invtest1fd000020",
+      "file": "fd000020.png",
+      "width": 192,
+      "height": 218,
+      "sha256": "e0f8fd18b68cbc70bfb94e2ca398e4fcd0db80c099c9193ce8b5b08ec9417bf4",
+      "sourceFile": "fidelity/trimmed/detail-20.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 20
+    },
+    {
+      "id": "fd000021",
+      "name": "Fidelity_Detail_21",
+      "url": "ui://invtest1fd000021",
+      "file": "fd000021.png",
+      "width": 202,
+      "height": 204,
+      "sha256": "3560cf120d20c93e3a09debcc492fd2af18d7f6d82b1696bcdbbf7823753481e",
+      "sourceFile": "fidelity/trimmed/detail-21.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 21
+    },
+    {
+      "id": "fd000022",
+      "name": "Fidelity_Detail_22",
+      "url": "ui://invtest1fd000022",
+      "file": "fd000022.png",
+      "width": 194,
+      "height": 213,
+      "sha256": "b90141389490d68d8870afe0e5b9c9b258440f94c51d5042f90a670cf83ef890",
+      "sourceFile": "fidelity/trimmed/detail-22.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 22
+    },
+    {
+      "id": "fd000023",
+      "name": "Fidelity_Detail_23",
+      "url": "ui://invtest1fd000023",
+      "file": "fd000023.png",
+      "width": 142,
+      "height": 189,
+      "sha256": "a7a4f543c64208adc414316a486dacd488a95278ca7cd510f0828bf2ead2e759",
+      "sourceFile": "fidelity/trimmed/detail-23.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": null,
+      "index": 23
+    }
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "kind": "sword",
+      "id": "fs000040",
+      "name": "Fidelity_slot00",
+      "url": "ui://invtest1fs000040",
+      "file": "fs000040.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32",
+      "sourceFile": "fidelity/skin/slot00.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 112,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 1,
+      "kind": "axe",
+      "id": "fs000041",
+      "name": "Fidelity_slot01",
+      "url": "ui://invtest1fs000041",
+      "file": "fs000041.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349",
+      "sourceFile": "fidelity/skin/slot01.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 112,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 2,
+      "kind": "bow",
+      "id": "fs000042",
+      "name": "Fidelity_slot02",
+      "url": "ui://invtest1fs000042",
+      "file": "fs000042.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b",
+      "sourceFile": "fidelity/skin/slot02.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 112,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 3,
+      "kind": "staff",
+      "id": "fs000043",
+      "name": "Fidelity_slot03",
+      "url": "ui://invtest1fs000043",
+      "file": "fs000043.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151",
+      "sourceFile": "fidelity/skin/slot03.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 112,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 4,
+      "kind": "shield",
+      "id": "fs000044",
+      "name": "Fidelity_slot04",
+      "url": "ui://invtest1fs000044",
+      "file": "fs000044.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98",
+      "sourceFile": "fidelity/skin/slot04.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 11,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 5,
+      "kind": "helmet",
+      "id": "fs000045",
+      "name": "Fidelity_slot05",
+      "url": "ui://invtest1fs000045",
+      "file": "fs000045.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f",
+      "sourceFile": "fidelity/skin/slot05.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 110,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 6,
+      "kind": "armor",
+      "id": "fs000046",
+      "name": "Fidelity_slot06",
+      "url": "ui://invtest1fs000046",
+      "file": "fs000046.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842",
+      "sourceFile": "fidelity/skin/slot06.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 111,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 7,
+      "kind": "boots",
+      "id": "fs000047",
+      "name": "Fidelity_slot07",
+      "url": "ui://invtest1fs000047",
+      "file": "fs000047.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20",
+      "sourceFile": "fidelity/skin/slot07.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 111,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 8,
+      "kind": "ring",
+      "id": "fs000048",
+      "name": "Fidelity_slot08",
+      "url": "ui://invtest1fs000048",
+      "file": "fs000048.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9",
+      "sourceFile": "fidelity/skin/slot08.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 9,
+      "kind": "amulet",
+      "id": "fs000049",
+      "name": "Fidelity_slot09",
+      "url": "ui://invtest1fs000049",
+      "file": "fs000049.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11",
+      "sourceFile": "fidelity/skin/slot09.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 10,
+      "kind": "redPotion",
+      "id": "fs000050",
+      "name": "Fidelity_slot10",
+      "url": "ui://invtest1fs000050",
+      "file": "fs000050.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8",
+      "sourceFile": "fidelity/skin/slot10.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 8
+    },
+    {
+      "index": 11,
+      "kind": "bluePotion",
+      "id": "fs000051",
+      "name": "Fidelity_slot11",
+      "url": "ui://invtest1fs000051",
+      "file": "fs000051.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945",
+      "sourceFile": "fidelity/skin/slot11.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 109,
+        "y": 111,
+        "width": 12,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 5
+    },
+    {
+      "index": 12,
+      "kind": "staminaPotion",
+      "id": "fs000052",
+      "name": "Fidelity_slot12",
+      "url": "ui://invtest1fs000052",
+      "file": "fs000052.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5",
+      "sourceFile": "fidelity/skin/slot12.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 3
+    },
+    {
+      "index": 13,
+      "kind": "antidote",
+      "id": "fs000053",
+      "name": "Fidelity_slot13",
+      "url": "ui://invtest1fs000053",
+      "file": "fs000053.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e",
+      "sourceFile": "fidelity/skin/slot13.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 2
+    },
+    {
+      "index": 14,
+      "kind": "elixir",
+      "id": "fs000054",
+      "name": "Fidelity_slot14",
+      "url": "ui://invtest1fs000054",
+      "file": "fs000054.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d",
+      "sourceFile": "fidelity/skin/slot14.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 15,
+      "kind": "herb",
+      "id": "fs000055",
+      "name": "Fidelity_slot15",
+      "url": "ui://invtest1fs000055",
+      "file": "fs000055.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f",
+      "sourceFile": "fidelity/skin/slot15.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 94,
+        "y": 111,
+        "width": 22,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 12
+    },
+    {
+      "index": 16,
+      "kind": "mushroom",
+      "id": "fs000056",
+      "name": "Fidelity_slot16",
+      "url": "ui://invtest1fs000056",
+      "file": "fs000056.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534",
+      "sourceFile": "fidelity/skin/slot16.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 7
+    },
+    {
+      "index": 17,
+      "kind": "ore",
+      "id": "fs000057",
+      "name": "Fidelity_slot17",
+      "url": "ui://invtest1fs000057",
+      "file": "fs000057.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec",
+      "sourceFile": "fidelity/skin/slot17.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 108,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 9
+    },
+    {
+      "index": 18,
+      "kind": "crystal",
+      "id": "fs000058",
+      "name": "Fidelity_slot18",
+      "url": "ui://invtest1fs000058",
+      "file": "fs000058.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd",
+      "sourceFile": "fidelity/skin/slot18.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 4
+    },
+    {
+      "index": 19,
+      "kind": "leather",
+      "id": "fs000059",
+      "name": "Fidelity_slot19",
+      "url": "ui://invtest1fs000059",
+      "file": "fs000059.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043",
+      "sourceFile": "fidelity/skin/slot19.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 6
+    },
+    {
+      "index": 20,
+      "kind": "key",
+      "id": "fs000060",
+      "name": "Fidelity_slot20",
+      "url": "ui://invtest1fs000060",
+      "file": "fs000060.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e",
+      "sourceFile": "fidelity/skin/slot20.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 1
+    },
+    {
+      "index": 21,
+      "kind": "scroll",
+      "id": "fs000061",
+      "name": "Fidelity_slot21",
+      "url": "ui://invtest1fs000061",
+      "file": "fs000061.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b",
+      "sourceFile": "fidelity/skin/slot21.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 102,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 3
+    },
+    {
+      "index": 22,
+      "kind": "coinPouch",
+      "id": "fs000062",
+      "name": "Fidelity_slot22",
+      "url": "ui://invtest1fs000062",
+      "file": "fs000062.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8",
+      "sourceFile": "fidelity/skin/slot22.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 94,
+        "y": 111,
+        "width": 22,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 18
+    },
+    {
+      "index": 23,
+      "kind": "gem",
+      "id": "fs000063",
+      "name": "Fidelity_slot23",
+      "url": "ui://invtest1fs000063",
+      "file": "fs000063.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8",
+      "sourceFile": "fidelity/skin/slot23.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 109,
+        "y": 111,
+        "width": 12,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "referenceQuantity": 2
+    }
+  ],
+  "originalIcons": [
+    {
+      "index": 0,
+      "id": "icx00000",
+      "url": "ui://invtest1icx00000"
+    },
+    {
+      "index": 1,
+      "id": "icx00001",
+      "url": "ui://invtest1icx00001"
+    },
+    {
+      "index": 2,
+      "id": "icx00002",
+      "url": "ui://invtest1icx00002"
+    },
+    {
+      "index": 3,
+      "id": "icx00003",
+      "url": "ui://invtest1icx00003"
+    },
+    {
+      "index": 4,
+      "id": "icx00004",
+      "url": "ui://invtest1icx00004"
+    },
+    {
+      "index": 5,
+      "id": "icx00005",
+      "url": "ui://invtest1icx00005"
+    },
+    {
+      "index": 6,
+      "id": "icx00006",
+      "url": "ui://invtest1icx00006"
+    },
+    {
+      "index": 7,
+      "id": "icx00007",
+      "url": "ui://invtest1icx00007"
+    },
+    {
+      "index": 8,
+      "id": "icx00008",
+      "url": "ui://invtest1icx00008"
+    },
+    {
+      "index": 9,
+      "id": "icx00009",
+      "url": "ui://invtest1icx00009"
+    },
+    {
+      "index": 10,
+      "id": "icx00010",
+      "url": "ui://invtest1icx00010"
+    },
+    {
+      "index": 11,
+      "id": "icx00011",
+      "url": "ui://invtest1icx00011"
+    },
+    {
+      "index": 12,
+      "id": "icx00012",
+      "url": "ui://invtest1icx00012"
+    },
+    {
+      "index": 13,
+      "id": "icx00013",
+      "url": "ui://invtest1icx00013"
+    },
+    {
+      "index": 14,
+      "id": "icx00014",
+      "url": "ui://invtest1icx00014"
+    },
+    {
+      "index": 15,
+      "id": "icx00015",
+      "url": "ui://invtest1icx00015"
+    },
+    {
+      "index": 16,
+      "id": "icx00016",
+      "url": "ui://invtest1icx00016"
+    },
+    {
+      "index": 17,
+      "id": "icx00017",
+      "url": "ui://invtest1icx00017"
+    },
+    {
+      "index": 18,
+      "id": "icx00018",
+      "url": "ui://invtest1icx00018"
+    },
+    {
+      "index": 19,
+      "id": "icx00019",
+      "url": "ui://invtest1icx00019"
+    },
+    {
+      "index": 20,
+      "id": "icx00020",
+      "url": "ui://invtest1icx00020"
+    },
+    {
+      "index": 21,
+      "id": "icx00021",
+      "url": "ui://invtest1icx00021"
+    },
+    {
+      "index": 22,
+      "id": "icx00022",
+      "url": "ui://invtest1icx00022"
+    },
+    {
+      "index": 23,
+      "id": "icx00023",
+      "url": "ui://invtest1icx00023"
+    }
+  ],
+  "referenceSha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b",
+  "sharedBundleSha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e",
+  "buttonResources": {
+    "ComplexBtn": {
+      "id": "cxbtn001",
+      "url": "ui://invtest1cxbtn001",
+      "width": 370,
+      "height": 65,
+      "background": "primaryBg",
+      "icon": "compass",
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    "FidelitySecondaryBtn": {
+      "id": "fb000001",
+      "url": "ui://invtest1fb000001",
+      "width": 370,
+      "height": 65,
+      "background": "secondaryBg",
+      "icon": "sellCoins",
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    "FidelityTabBtn": {
+      "id": "fb000002",
+      "url": "ui://invtest1fb000002",
+      "width": 101,
+      "height": 45,
+      "background": "tabNormalBg",
+      "icon": null,
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    "FidelityCloseBtn": {
+      "id": "fb000003",
+      "url": "ui://invtest1fb000003",
+      "width": 39,
+      "height": 39,
+      "background": "close",
+      "icon": null,
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    "FidelitySortBtn": {
+      "id": "fb000004",
+      "url": "ui://invtest1fb000004",
+      "width": 216,
+      "height": 49,
+      "background": "sortBg",
+      "icon": null,
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    "FidelityMenuBtn": {
+      "id": "fb000005",
+      "url": "ui://invtest1fb000005",
+      "width": 34,
+      "height": 38,
+      "background": "menu",
+      "icon": null,
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    }
+  },
+  "skinEntries": [
+    {
+      "key": "environmentLeft",
+      "id": "fs000000",
+      "name": "Fidelity_environmentLeft",
+      "url": "ui://invtest1fs000000",
+      "file": "fs000000.png",
+      "width": 127,
+      "height": 992,
+      "sha256": "21eb3985edd50ea2c2ea16c02d79a054bd3b9f7049c509d88c260de8d06629ff",
+      "sourceFile": "fidelity/skin/environmentLeft.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 0,
+        "y": 0,
+        "width": 127,
+        "height": 992
+      }
+    },
+    {
+      "key": "environmentRight",
+      "id": "fs000001",
+      "name": "Fidelity_environmentRight",
+      "url": "ui://invtest1fs000001",
+      "file": "fs000001.png",
+      "width": 133,
+      "height": 992,
+      "sha256": "568742588acc51f57a58b4872857c70c810817180cf628c9679a81502e1495c9",
+      "sourceFile": "fidelity/skin/environmentRight.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1453,
+        "y": 0,
+        "width": 133,
+        "height": 992
+      }
+    },
+    {
+      "key": "environmentTop",
+      "id": "fs000002",
+      "name": "Fidelity_environmentTop",
+      "url": "ui://invtest1fs000002",
+      "file": "fs000002.png",
+      "width": 1586,
+      "height": 17,
+      "sha256": "6bd04d574045e54744acadde24140663bbd0e15110c18d2f0e17139a93631c8e",
+      "sourceFile": "fidelity/skin/environmentTop.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1586,
+        "height": 17
+      }
+    },
+    {
+      "key": "environmentBottom",
+      "id": "fs000003",
+      "name": "Fidelity_environmentBottom",
+      "url": "ui://invtest1fs000003",
+      "file": "fs000003.png",
+      "width": 1586,
+      "height": 16,
+      "sha256": "016c0662de98bd4e7b96d8110989ba70ddbe768cc18e55ac07415d30c2c87fa5",
+      "sourceFile": "fidelity/skin/environmentBottom.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 0,
+        "y": 976,
+        "width": 1586,
+        "height": 16
+      }
+    },
+    {
+      "key": "headerFill",
+      "id": "fs000004",
+      "name": "Fidelity_headerFill",
+      "url": "ui://invtest1fs000004",
+      "file": "fs000004.png",
+      "width": 530,
+      "height": 105,
+      "sha256": "34da0feedfb5f6bc909ac76ead93cf7627036e539731cadeb20f1c8807a542bb",
+      "sourceFile": "fidelity/skin/headerFill.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 560,
+        "y": 20,
+        "width": 530,
+        "height": 105
+      }
+    },
+    {
+      "key": "headerLeftMiddle",
+      "id": "fs000005",
+      "name": "Fidelity_headerLeftMiddle",
+      "url": "ui://invtest1fs000005",
+      "file": "fs000005.png",
+      "width": 986,
+      "height": 137,
+      "sha256": "f3244f3a07e09a1946003f62123ea8c098f3b303138a194443fcb2609fd46da9",
+      "sourceFile": "fidelity/skin/headerLeftMiddle.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 127,
+        "y": 0,
+        "width": 986,
+        "height": 137
+      }
+    },
+    {
+      "key": "headerRightLower",
+      "id": "fs000006",
+      "name": "Fidelity_headerRightLower",
+      "url": "ui://invtest1fs000006",
+      "file": "fs000006.png",
+      "width": 340,
+      "height": 75,
+      "sha256": "f17ad1fb9a6f39967e3eac2d7ed05fb26a015967aa546f3b159bd12d23972a84",
+      "sourceFile": "fidelity/skin/headerRightLower.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1113,
+        "y": 62,
+        "width": 340,
+        "height": 75
+      }
+    },
+    {
+      "key": "headerRightUpper",
+      "id": "fs000007",
+      "name": "Fidelity_headerRightUpper",
+      "url": "ui://invtest1fs000007",
+      "file": "fs000007.png",
+      "width": 157,
+      "height": 62,
+      "sha256": "fcd49c2af7df2f2242ea0bb43a17b858605015c01ea24cbb2d174da0f342b822",
+      "sourceFile": "fidelity/skin/headerRightUpper.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1296,
+        "y": 0,
+        "width": 157,
+        "height": 62
+      }
+    },
+    {
+      "key": "headerCoinBlank",
+      "id": "fs000008",
+      "name": "Fidelity_headerCoinBlank",
+      "url": "ui://invtest1fs000008",
+      "file": "fs000008.png",
+      "width": 16,
+      "height": 45,
+      "sha256": "46988688b6d659fb2cf6060545c459120b71515dd95889d2cbcb1e13a1e2e07e",
+      "sourceFile": "fidelity/skin/headerCoinBlank.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1280,
+        "y": 17,
+        "width": 16,
+        "height": 45
+      }
+    },
+    {
+      "key": "panelFill",
+      "id": "fs000009",
+      "name": "Fidelity_panelFill",
+      "url": "ui://invtest1fs000009",
+      "file": "fs000009.png",
+      "width": 8,
+      "height": 620,
+      "sha256": "8d8513fed22a8ecc44f1a533278ee66a8f0feacb2554381cae7039bdac13369a",
+      "sourceFile": "fidelity/skin/panelFill.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 420,
+        "y": 214,
+        "width": 8,
+        "height": 620
+      }
+    },
+    {
+      "key": "headerBranding",
+      "id": "fs000010",
+      "name": "Fidelity_headerBranding",
+      "url": "ui://invtest1fs000010",
+      "file": "fs000010.png",
+      "width": 420,
+      "height": 99,
+      "sha256": "47a09cda968eb1bbdb9e34ff7fb04ad76d75929590334de12793f89b619734c8",
+      "sourceFile": "fidelity/skin/headerBranding.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 26,
+        "width": 420,
+        "height": 99
+      }
+    },
+    {
+      "key": "logo",
+      "id": "fs000011",
+      "name": "Fidelity_logo",
+      "url": "ui://invtest1fs000011",
+      "file": "fs000011.png",
+      "width": 119,
+      "height": 99,
+      "sha256": "1bf50a41e045cf8cfb8741c615123262c2880caa5e6a35db5f48286694a7ee23",
+      "sourceFile": "fidelity/skin/logo.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 27,
+        "width": 119,
+        "height": 99
+      }
+    },
+    {
+      "key": "coin",
+      "id": "fs000012",
+      "name": "Fidelity_coin",
+      "url": "ui://invtest1fs000012",
+      "file": "fs000012.png",
+      "width": 45,
+      "height": 45,
+      "sha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387",
+      "sourceFile": "fidelity/skin/coin.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1113,
+        "y": 17,
+        "width": 45,
+        "height": 45
+      }
+    },
+    {
+      "key": "close",
+      "id": "fs000013",
+      "name": "Fidelity_close",
+      "url": "ui://invtest1fs000013",
+      "file": "fs000013.png",
+      "width": 39,
+      "height": 39,
+      "sha256": "9b0affedb97f67e7ef24b676fdbaa05ceae261e505c704cc67a20ac93203fa92",
+      "sourceFile": "fidelity/skin/close.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1372,
+        "y": 19,
+        "width": 39,
+        "height": 39
+      }
+    },
+    {
+      "key": "compass",
+      "id": "fs000014",
+      "name": "Fidelity_compass",
+      "url": "ui://invtest1fs000014",
+      "file": "fs000014.png",
+      "width": 44,
+      "height": 39,
+      "sha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2",
+      "sourceFile": "fidelity/skin/compass.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1162,
+        "y": 701,
+        "width": 44,
+        "height": 39
+      }
+    },
+    {
+      "key": "sellCoins",
+      "id": "fs000015",
+      "name": "Fidelity_sellCoins",
+      "url": "ui://invtest1fs000015",
+      "file": "fs000015.png",
+      "width": 43,
+      "height": 33,
+      "sha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875",
+      "sourceFile": "fidelity/skin/sellCoins.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1163,
+        "y": 779,
+        "width": 43,
+        "height": 33
+      }
+    },
+    {
+      "key": "searchIcon",
+      "id": "fs000016",
+      "name": "Fidelity_searchIcon",
+      "url": "ui://invtest1fs000016",
+      "file": "fs000016.png",
+      "width": 29,
+      "height": 29,
+      "sha256": "d469ed3b37bec5bc4cd2147418c805bd5c9c29cff76c965336b363e58d144486",
+      "sourceFile": "fidelity/skin/searchIcon.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 165,
+        "y": 165,
+        "width": 29,
+        "height": 29
+      }
+    },
+    {
+      "key": "capacityIcon",
+      "id": "fs000017",
+      "name": "Fidelity_capacityIcon",
+      "url": "ui://invtest1fs000017",
+      "file": "fs000017.png",
+      "width": 35,
+      "height": 36,
+      "sha256": "2085040ee2ba86014bccac608152c86a8fde5eb162d8e37d7e68854dca21ae59",
+      "sourceFile": "fidelity/skin/capacityIcon.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 155,
+        "y": 891,
+        "width": 35,
+        "height": 36
+      }
+    },
+    {
+      "key": "menu",
+      "id": "fs000018",
+      "name": "Fidelity_menu",
+      "url": "ui://invtest1fs000018",
+      "file": "fs000018.png",
+      "width": 34,
+      "height": 38,
+      "sha256": "e424c2eccbf8fcd719874cd5e793f5b0e4e019daa96b148360f47214d1abda79",
+      "sourceFile": "fidelity/skin/menu.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1404,
+        "y": 890,
+        "width": 34,
+        "height": 38
+      }
+    },
+    {
+      "key": "sortArrow",
+      "id": "fs000019",
+      "name": "Fidelity_sortArrow",
+      "url": "ui://invtest1fs000019",
+      "file": "fs000019.png",
+      "width": 22,
+      "height": 17,
+      "sha256": "1e86f7724e0e1a746422dcefa06ecc43aaa55dc8002a5ce9229b711990cbaedd",
+      "sourceFile": "fidelity/skin/sortArrow.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1325,
+        "y": 902,
+        "width": 22,
+        "height": 17
+      }
+    },
+    {
+      "key": "detailSword",
+      "id": "fs000020",
+      "name": "Fidelity_detailSword",
+      "url": "ui://invtest1fs000020",
+      "file": "fs000020.png",
+      "width": 194,
+      "height": 392,
+      "sha256": "b878203d7ec888402c952ce0303358c241b4cad1fb45c60cac13ac5eec1359c1",
+      "sourceFile": "fidelity/skin/detailSword.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1040,
+        "y": 150,
+        "width": 194,
+        "height": 392
+      }
+    },
+    {
+      "key": "statAttack",
+      "id": "fs000021",
+      "name": "Fidelity_statAttack",
+      "url": "ui://invtest1fs000021",
+      "file": "fs000021.png",
+      "width": 34,
+      "height": 33,
+      "sha256": "d13b103c0e2e0146baedfbb95a9d661c0524305a47f19f5ba647a8ae376e26e3",
+      "sourceFile": "fidelity/skin/statAttack.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1233,
+        "y": 337,
+        "width": 34,
+        "height": 33
+      }
+    },
+    {
+      "key": "statCrit",
+      "id": "fs000022",
+      "name": "Fidelity_statCrit",
+      "url": "ui://invtest1fs000022",
+      "file": "fs000022.png",
+      "width": 34,
+      "height": 33,
+      "sha256": "a1e28bb240f3e2084a15b6b9837a679437094d8a05ba38007c8d0dc6c7467134",
+      "sourceFile": "fidelity/skin/statCrit.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1233,
+        "y": 396,
+        "width": 34,
+        "height": 33
+      }
+    },
+    {
+      "key": "statDurability",
+      "id": "fs000023",
+      "name": "Fidelity_statDurability",
+      "url": "ui://invtest1fs000023",
+      "file": "fs000023.png",
+      "width": 34,
+      "height": 33,
+      "sha256": "7392df94362da8e01d61b56bf0f09e3c32ff087e1acea577baa29289cfa366be",
+      "sourceFile": "fidelity/skin/statDurability.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1233,
+        "y": 455,
+        "width": 34,
+        "height": 33
+      }
+    },
+    {
+      "key": "detailDivider",
+      "id": "fs000024",
+      "name": "Fidelity_detailDivider",
+      "url": "ui://invtest1fs000024",
+      "file": "fs000024.png",
+      "width": 188,
+      "height": 15,
+      "sha256": "3ceaf93af3370e10e3c74653499fc05130aa07b2da73eef8dca0c93ac8d14b01",
+      "sourceFile": "fidelity/skin/detailDivider.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1230,
+        "y": 291,
+        "width": 188,
+        "height": 15
+      }
+    },
+    {
+      "key": "detailLowerDivider",
+      "id": "fs000025",
+      "name": "Fidelity_detailLowerDivider",
+      "url": "ui://invtest1fs000025",
+      "file": "fs000025.png",
+      "width": 371,
+      "height": 13,
+      "sha256": "7a08d4309b1bb55fbe26a2e66ecba66cce5de93cae5b45f978c451c95a4916ff",
+      "sourceFile": "fidelity/skin/detailLowerDivider.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1047,
+        "y": 533,
+        "width": 371,
+        "height": 13
+      }
+    },
+    {
+      "key": "frameLeft",
+      "id": "fs000026",
+      "name": "Fidelity_frameLeft",
+      "url": "ui://invtest1fs000026",
+      "file": "fs000026.png",
+      "width": 879,
+      "height": 723,
+      "sha256": "964464357e163682a35c745b01b563564d943f5860f427d1f195876ba2226247",
+      "sourceFile": "fidelity/skin/frameLeft.png",
+      "scale9Grid": [
+        12,
+        12,
+        855,
+        699
+      ],
+      "insets": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 137,
+        "width": 879,
+        "height": 723
+      }
+    },
+    {
+      "key": "frameRight",
+      "id": "fs000027",
+      "name": "Fidelity_frameRight",
+      "url": "ui://invtest1fs000027",
+      "file": "fs000027.png",
+      "width": 433,
+      "height": 723,
+      "sha256": "341c899865bbb68077a5f7813ccc3474882cbb50127a70b5e273541872678a92",
+      "sourceFile": "fidelity/skin/frameRight.png",
+      "scale9Grid": [
+        12,
+        12,
+        409,
+        699
+      ],
+      "insets": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1017,
+        "y": 137,
+        "width": 433,
+        "height": 723
+      }
+    },
+    {
+      "key": "detailBackground",
+      "id": "fs000028",
+      "name": "Fidelity_detailBackground",
+      "url": "ui://invtest1fs000028",
+      "file": "fs000028.png",
+      "width": 433,
+      "height": 723,
+      "sha256": "4bf6896db517194866765574bb66ee71fd9e320a0f688e4ce7b16a3fec8e26c9",
+      "sourceFile": "fidelity/skin/detailBackground.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1017,
+        "y": 137,
+        "width": 433,
+        "height": 723
+      }
+    },
+    {
+      "key": "frameFooter",
+      "id": "fs000029",
+      "name": "Fidelity_frameFooter",
+      "url": "ui://invtest1fs000029",
+      "file": "fs000029.png",
+      "width": 1318,
+      "height": 74,
+      "sha256": "ca16943d90fd4e0125d71b2a540d1b566f0940acb897292658791595d18a72a5",
+      "sourceFile": "fidelity/skin/frameFooter.png",
+      "scale9Grid": [
+        9,
+        9,
+        1300,
+        56
+      ],
+      "insets": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 870,
+        "width": 1318,
+        "height": 74
+      }
+    },
+    {
+      "key": "slotNormalFrame",
+      "id": "fs000030",
+      "name": "Fidelity_slotNormalFrame",
+      "url": "ui://invtest1fs000030",
+      "file": "fs000030.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "32aff72ae057f351134a0ba13892a0b7abcfc95d4f4dfe1cb94329da809e685f",
+      "sourceFile": "fidelity/skin/slotNormalFrame.png",
+      "scale9Grid": [
+        8,
+        8,
+        112,
+        121
+      ],
+      "insets": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slotSelectedFrame",
+      "id": "fs000031",
+      "name": "Fidelity_slotSelectedFrame",
+      "url": "ui://invtest1fs000031",
+      "file": "fs000031.png",
+      "width": 138,
+      "height": 147,
+      "sha256": "1bcf3721c8e70d7be7003e02573d3fe4612faac16c8e01173363b7dbe9230f3a",
+      "sourceFile": "fidelity/skin/slotSelectedFrame.png",
+      "scale9Grid": [
+        9,
+        9,
+        120,
+        129
+      ],
+      "insets": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 144,
+        "y": 217,
+        "width": 138,
+        "height": 147
+      }
+    },
+    {
+      "key": "progressFrame",
+      "id": "fs000032",
+      "name": "Fidelity_progressFrame",
+      "url": "ui://invtest1fs000032",
+      "file": "fs000032.png",
+      "width": 420,
+      "height": 24,
+      "sha256": "06913784ad01867fbfdbbcd38137d006aecb1f5badf2da6b7e626c8a92726deb",
+      "sourceFile": "fidelity/skin/progressFrame.png",
+      "scale9Grid": [
+        4,
+        4,
+        412,
+        16
+      ],
+      "insets": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 293,
+        "y": 895,
+        "width": 420,
+        "height": 24
+      }
+    },
+    {
+      "key": "progressFill",
+      "id": "fs000033",
+      "name": "Fidelity_progressFill",
+      "url": "ui://invtest1fs000033",
+      "file": "fs000033.png",
+      "width": 12,
+      "height": 10,
+      "sha256": "01ef0a6bdbb549336a0a160bd73783b145beda609753baea2e2fb0738806e6d7",
+      "sourceFile": "fidelity/skin/progressFill.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 310,
+        "y": 901,
+        "width": 12,
+        "height": 10
+      }
+    },
+    {
+      "key": "primaryBg",
+      "id": "fs000034",
+      "name": "Fidelity_primaryBg",
+      "url": "ui://invtest1fs000034",
+      "file": "fs000034.png",
+      "width": 370,
+      "height": 65,
+      "sha256": "d3d09c55a4d9da984d5092f2a08c6b935b52fd3472f744cdc63d40b3801f4b3c",
+      "sourceFile": "fidelity/skin/primaryBg.png",
+      "scale9Grid": [
+        14,
+        10,
+        342,
+        45
+      ],
+      "insets": [
+        10,
+        14,
+        10,
+        14
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1047,
+        "y": 685,
+        "width": 370,
+        "height": 65
+      }
+    },
+    {
+      "key": "secondaryBg",
+      "id": "fs000035",
+      "name": "Fidelity_secondaryBg",
+      "url": "ui://invtest1fs000035",
+      "file": "fs000035.png",
+      "width": 370,
+      "height": 65,
+      "sha256": "64929b4ff2b4e897edaf42956edfb0ef7d9f82cb271386a28e541cf4c047a40b",
+      "sourceFile": "fidelity/skin/secondaryBg.png",
+      "scale9Grid": [
+        14,
+        10,
+        342,
+        45
+      ],
+      "insets": [
+        10,
+        14,
+        10,
+        14
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1047,
+        "y": 763,
+        "width": 370,
+        "height": 65
+      }
+    },
+    {
+      "key": "searchBg",
+      "id": "fs000036",
+      "name": "Fidelity_searchBg",
+      "url": "ui://invtest1fs000036",
+      "file": "fs000036.png",
+      "width": 299,
+      "height": 46,
+      "sha256": "5d3b3cd4cdd1f5b0fb012e18c5c713a75866ddede628135d373c6427c3cc5fe3",
+      "sourceFile": "fidelity/skin/searchBg.png",
+      "scale9Grid": [
+        6,
+        6,
+        287,
+        34
+      ],
+      "insets": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 149,
+        "y": 155,
+        "width": 299,
+        "height": 46
+      }
+    },
+    {
+      "key": "tabNormalBg",
+      "id": "fs000037",
+      "name": "Fidelity_tabNormalBg",
+      "url": "ui://invtest1fs000037",
+      "file": "fs000037.png",
+      "width": 101,
+      "height": 45,
+      "sha256": "4fe501a3b522a79c487192886ae0d288267ba228bb3363cf891ec344eb50ad37",
+      "sourceFile": "fidelity/skin/tabNormalBg.png",
+      "scale9Grid": [
+        5,
+        5,
+        91,
+        35
+      ],
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 571,
+        "y": 156,
+        "width": 101,
+        "height": 45
+      }
+    },
+    {
+      "key": "tabSelectedBg",
+      "id": "fs000038",
+      "name": "Fidelity_tabSelectedBg",
+      "url": "ui://invtest1fs000038",
+      "file": "fs000038.png",
+      "width": 99,
+      "height": 45,
+      "sha256": "3dcd52ee5b14d81833fe8dce70adaf7cd098d147981d2a79d1e654146443ca6c",
+      "sourceFile": "fidelity/skin/tabSelectedBg.png",
+      "scale9Grid": [
+        5,
+        5,
+        89,
+        35
+      ],
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 466,
+        "y": 156,
+        "width": 99,
+        "height": 45
+      }
+    },
+    {
+      "key": "sortBg",
+      "id": "fs000039",
+      "name": "Fidelity_sortBg",
+      "url": "ui://invtest1fs000039",
+      "file": "fs000039.png",
+      "width": 216,
+      "height": 49,
+      "sha256": "0de0323d5b9b62c0fe7f124f8af872f957eca8fc02d86d2e31814abd082e0ddc",
+      "sourceFile": "fidelity/skin/sortBg.png",
+      "scale9Grid": [
+        5,
+        5,
+        206,
+        39
+      ],
+      "insets": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1141,
+        "y": 883,
+        "width": 216,
+        "height": 49
+      }
+    },
+    {
+      "key": "slot00",
+      "id": "fs000040",
+      "name": "Fidelity_slot00",
+      "url": "ui://invtest1fs000040",
+      "file": "fs000040.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32",
+      "sourceFile": "fidelity/skin/slot00.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 112,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot01",
+      "id": "fs000041",
+      "name": "Fidelity_slot01",
+      "url": "ui://invtest1fs000041",
+      "file": "fs000041.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349",
+      "sourceFile": "fidelity/skin/slot01.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 112,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot02",
+      "id": "fs000042",
+      "name": "Fidelity_slot02",
+      "url": "ui://invtest1fs000042",
+      "file": "fs000042.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b",
+      "sourceFile": "fidelity/skin/slot02.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 112,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot03",
+      "id": "fs000043",
+      "name": "Fidelity_slot03",
+      "url": "ui://invtest1fs000043",
+      "file": "fs000043.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151",
+      "sourceFile": "fidelity/skin/slot03.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 112,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot04",
+      "id": "fs000044",
+      "name": "Fidelity_slot04",
+      "url": "ui://invtest1fs000044",
+      "file": "fs000044.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98",
+      "sourceFile": "fidelity/skin/slot04.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 11,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot05",
+      "id": "fs000045",
+      "name": "Fidelity_slot05",
+      "url": "ui://invtest1fs000045",
+      "file": "fs000045.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f",
+      "sourceFile": "fidelity/skin/slot05.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 110,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot06",
+      "id": "fs000046",
+      "name": "Fidelity_slot06",
+      "url": "ui://invtest1fs000046",
+      "file": "fs000046.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842",
+      "sourceFile": "fidelity/skin/slot06.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 111,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot07",
+      "id": "fs000047",
+      "name": "Fidelity_slot07",
+      "url": "ui://invtest1fs000047",
+      "file": "fs000047.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20",
+      "sourceFile": "fidelity/skin/slot07.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 105,
+        "y": 111,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot08",
+      "id": "fs000048",
+      "name": "Fidelity_slot08",
+      "url": "ui://invtest1fs000048",
+      "file": "fs000048.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9",
+      "sourceFile": "fidelity/skin/slot08.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot09",
+      "id": "fs000049",
+      "name": "Fidelity_slot09",
+      "url": "ui://invtest1fs000049",
+      "file": "fs000049.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11",
+      "sourceFile": "fidelity/skin/slot09.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 11,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot10",
+      "id": "fs000050",
+      "name": "Fidelity_slot10",
+      "url": "ui://invtest1fs000050",
+      "file": "fs000050.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8",
+      "sourceFile": "fidelity/skin/slot10.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot11",
+      "id": "fs000051",
+      "name": "Fidelity_slot11",
+      "url": "ui://invtest1fs000051",
+      "file": "fs000051.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945",
+      "sourceFile": "fidelity/skin/slot11.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 109,
+        "y": 111,
+        "width": 12,
+        "height": 18
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot12",
+      "id": "fs000052",
+      "name": "Fidelity_slot12",
+      "url": "ui://invtest1fs000052",
+      "file": "fs000052.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5",
+      "sourceFile": "fidelity/skin/slot12.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot13",
+      "id": "fs000053",
+      "name": "Fidelity_slot13",
+      "url": "ui://invtest1fs000053",
+      "file": "fs000053.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e",
+      "sourceFile": "fidelity/skin/slot13.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot14",
+      "id": "fs000054",
+      "name": "Fidelity_slot14",
+      "url": "ui://invtest1fs000054",
+      "file": "fs000054.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d",
+      "sourceFile": "fidelity/skin/slot14.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot15",
+      "id": "fs000055",
+      "name": "Fidelity_slot15",
+      "url": "ui://invtest1fs000055",
+      "file": "fs000055.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f",
+      "sourceFile": "fidelity/skin/slot15.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 94,
+        "y": 111,
+        "width": 22,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot16",
+      "id": "fs000056",
+      "name": "Fidelity_slot16",
+      "url": "ui://invtest1fs000056",
+      "file": "fs000056.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534",
+      "sourceFile": "fidelity/skin/slot16.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot17",
+      "id": "fs000057",
+      "name": "Fidelity_slot17",
+      "url": "ui://invtest1fs000057",
+      "file": "fs000057.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec",
+      "sourceFile": "fidelity/skin/slot17.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 108,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot18",
+      "id": "fs000058",
+      "name": "Fidelity_slot18",
+      "url": "ui://invtest1fs000058",
+      "file": "fs000058.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd",
+      "sourceFile": "fidelity/skin/slot18.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 149,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot19",
+      "id": "fs000059",
+      "name": "Fidelity_slot19",
+      "url": "ui://invtest1fs000059",
+      "file": "fs000059.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043",
+      "sourceFile": "fidelity/skin/slot19.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 103,
+        "y": 111,
+        "width": 14,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 289,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot20",
+      "id": "fs000060",
+      "name": "Fidelity_slot20",
+      "url": "ui://invtest1fs000060",
+      "file": "fs000060.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e",
+      "sourceFile": "fidelity/skin/slot20.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 104,
+        "y": 111,
+        "width": 10,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 430,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot21",
+      "id": "fs000061",
+      "name": "Fidelity_slot21",
+      "url": "ui://invtest1fs000061",
+      "file": "fs000061.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b",
+      "sourceFile": "fidelity/skin/slot21.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 102,
+        "y": 111,
+        "width": 13,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 570,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot22",
+      "id": "fs000062",
+      "name": "Fidelity_slot22",
+      "url": "ui://invtest1fs000062",
+      "file": "fs000062.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8",
+      "sourceFile": "fidelity/skin/slot22.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 94,
+        "y": 111,
+        "width": 22,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 711,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "slot23",
+      "id": "fs000063",
+      "name": "Fidelity_slot23",
+      "url": "ui://invtest1fs000063",
+      "file": "fs000063.png",
+      "width": 128,
+      "height": 137,
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8",
+      "sourceFile": "fidelity/skin/slot23.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": {
+        "x": 109,
+        "y": 111,
+        "width": 12,
+        "height": 19
+      },
+      "sourceRect": {
+        "x": 851,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      }
+    },
+    {
+      "key": "leftBackground",
+      "id": "fs000064",
+      "name": "Fidelity_leftBackground",
+      "url": "ui://invtest1fs000064",
+      "file": "fs000064.png",
+      "width": 879,
+      "height": 723,
+      "sha256": "e216c21c2bf8a805ff481266bf882ef180fe0b070bbf976ed50fc23a25318e09",
+      "sourceFile": "fidelity/skin/leftBackground.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 137,
+        "width": 879,
+        "height": 723
+      }
+    },
+    {
+      "key": "footerBackground",
+      "id": "fs000065",
+      "name": "Fidelity_footerBackground",
+      "url": "ui://invtest1fs000065",
+      "file": "fs000065.png",
+      "width": 1318,
+      "height": 74,
+      "sha256": "09e21c423f274ce925b4d370e5371b02a47aac12220aa71c721e981a0bcc67b8",
+      "sourceFile": "fidelity/skin/footerBackground.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 132,
+        "y": 870,
+        "width": 1318,
+        "height": 74
+      }
+    },
+    {
+      "key": "compassAlpha",
+      "id": "fs000066",
+      "name": "Fidelity_compassAlpha",
+      "url": "ui://invtest1fs000066",
+      "file": "fs000066.png",
+      "width": 978,
+      "height": 1054,
+      "sha256": "96ee372046abb8dca626b13a72eceba719c23f50114ef833f5d45e5f01c306a8",
+      "sourceFile": "fidelity/skin/compassAlpha.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1162,
+        "y": 701,
+        "width": 44,
+        "height": 39
+      }
+    },
+    {
+      "key": "sellCoinsAlpha",
+      "id": "fs000067",
+      "name": "Fidelity_sellCoinsAlpha",
+      "url": "ui://invtest1fs000067",
+      "file": "fs000067.png",
+      "width": 610,
+      "height": 517,
+      "sha256": "5b21946d4de33d73dc57f6b251c6799b37889392048f52cfb787539b14c1ff22",
+      "sourceFile": "fidelity/skin/sellCoinsAlpha.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1163,
+        "y": 779,
+        "width": 43,
+        "height": 33
+      }
+    },
+    {
+      "key": "coinAlpha",
+      "id": "fs000068",
+      "name": "Fidelity_coinAlpha",
+      "url": "ui://invtest1fs000068",
+      "file": "fs000068.png",
+      "width": 929,
+      "height": 932,
+      "sha256": "c7e4f1532b6ad30e5eca091ccee7d0bde6012483970e7ecd1a90b59c48d875ae",
+      "sourceFile": "fidelity/skin/coinAlpha.png",
+      "scale9Grid": null,
+      "insets": null,
+      "quantityRect": null,
+      "sourceRect": {
+        "x": 1113,
+        "y": 17,
+        "width": 45,
+        "height": 45
+      }
+    }
+  ],
+  "componentEntries": [
+    {
+      "name": "ComplexMain",
+      "id": "cxmain01",
+      "url": "ui://invtest1cxmain01"
+    },
+    {
+      "name": "ItemSlot",
+      "id": "cxslot01",
+      "url": "ui://invtest1cxslot01"
+    },
+    {
+      "name": "Detail",
+      "id": "cxdetl01",
+      "url": "ui://invtest1cxdetl01"
+    },
+    {
+      "name": "ComplexBtn",
+      "id": "cxbtn001",
+      "url": "ui://invtest1cxbtn001"
+    }
+  ],
+  "buttonEntries": [
+    {
+      "name": "ComplexBtn",
+      "id": "cxbtn001",
+      "url": "ui://invtest1cxbtn001",
+      "width": 370,
+      "height": 65,
+      "background": "primaryBg",
+      "icon": "compass",
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    {
+      "name": "FidelitySecondaryBtn",
+      "id": "fb000001",
+      "url": "ui://invtest1fb000001",
+      "width": 370,
+      "height": 65,
+      "background": "secondaryBg",
+      "icon": "sellCoins",
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    {
+      "name": "FidelityTabBtn",
+      "id": "fb000002",
+      "url": "ui://invtest1fb000002",
+      "width": 101,
+      "height": 45,
+      "background": "tabNormalBg",
+      "icon": null,
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    {
+      "name": "FidelityCloseBtn",
+      "id": "fb000003",
+      "url": "ui://invtest1fb000003",
+      "width": 39,
+      "height": 39,
+      "background": "close",
+      "icon": null,
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    {
+      "name": "FidelitySortBtn",
+      "id": "fb000004",
+      "url": "ui://invtest1fb000004",
+      "width": 216,
+      "height": 49,
+      "background": "sortBg",
+      "icon": null,
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    },
+    {
+      "name": "FidelityMenuBtn",
+      "id": "fb000005",
+      "url": "ui://invtest1fb000005",
+      "width": 34,
+      "height": 38,
+      "background": "menu",
+      "icon": null,
+      "children": {
+        "btnbg": "GLoader",
+        "icon": "GLoader",
+        "title": "GTextField"
+      }
+    }
+  ]
+}

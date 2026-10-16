@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "scope": "Public repository snapshot: isolated headless Chrome DOM smoke only, not Unity or physical IME",
+  "node": "v24.18.0",
+  "checks": [
+    {
+      "name": "public snapshot loads 24 real slots",
+      "passed": true
+    },
+    {
+      "name": "initial wallet and selection match fixture",
+      "passed": true
+    },
+    {
+      "name": "794 window uses four-column adaptive layout",
+      "passed": true
+    },
+    {
+      "name": "real primary button equips through shared business",
+      "passed": true
+    },
+    {
+      "name": "real primary button unequips through shared business",
+      "passed": true
+    },
+    {
+      "name": "390 window uses two-column native-scale adaptive layout",
+      "passed": true
+    },
+    {
+      "name": "actual input updates shared Chinese search",
+      "passed": true
+    },
+    {
+      "name": "local resource requests succeed without page errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "externalRequests": []
+}
