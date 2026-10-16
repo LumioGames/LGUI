@@ -1,0 +1,20 @@
+{
+  "fixedUndoPassed": true,
+  "restoredText": "旅者背包 · Agent 已编辑",
+  "fixedInverseKeys": [
+    "textProperties"
+  ],
+  "legacyInverseKeys": [
+    "text",
+    "textProperties"
+  ],
+  "legacyIssues": [
+    {
+      "code": "invalid_display_node_payload",
+      "path": "operations[0].props",
+      "message": "textProperties cannot be combined with individual text property overrides.",
+      "operationKind": "setDisplayNodeProps",
+      "nodeKind": "text"
+    }
+  ]
+}

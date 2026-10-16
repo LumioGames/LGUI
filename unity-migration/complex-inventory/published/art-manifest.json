@@ -1,0 +1,446 @@
+{
+  "schemaVersion": 1,
+  "sourceAtlas": {
+    "path": "[LGUI_ROOT]\\unity-migration\\complex-inventory\\art\\items-atlas.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "14b30d48908669363919196c95401ed800c00c9b78bbc10537d69594a822e2f2"
+  },
+  "columns": 6,
+  "rows": 4,
+  "cell": 256,
+  "images": [
+    {
+      "index": 0,
+      "kind": "sword",
+      "name": "霜纹长剑",
+      "resourceId": "icx00000",
+      "url": "ui://invtest1icx00000",
+      "file": "icx00000.png",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "3646c46af7f77bf8b404bb4365424b7592cfb787c3714845653df924e1dafa9c",
+      "rgbaSha256": "3ee0251b62ae87e4877fecf1397a77fa6336e3c8865f475281d95dfabdb5c636"
+    },
+    {
+      "index": 1,
+      "kind": "axe",
+      "name": "赤岩战斧",
+      "resourceId": "icx00001",
+      "url": "ui://invtest1icx00001",
+      "file": "icx00001.png",
+      "rect": {
+        "left": 256,
+        "top": 0,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "e67f627d14020268059423596ccbe06cfdd1634a30f31c0ff0dc7395dfd4b7d5",
+      "rgbaSha256": "377afdd732215bfaa58c0cfac37b0478f211e365946151373093664c6b676caa"
+    },
+    {
+      "index": 2,
+      "kind": "bow",
+      "name": "林语长弓",
+      "resourceId": "icx00002",
+      "url": "ui://invtest1icx00002",
+      "file": "icx00002.png",
+      "rect": {
+        "left": 512,
+        "top": 0,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "2f8e89ded30cb074c92593684ff349d327896d21fd6e1281cd5600fb6d95534f",
+      "rgbaSha256": "83290550669485166cb1bfcfc36493a29e933a295fe41ef8516b71e621ca6a86"
+    },
+    {
+      "index": 3,
+      "kind": "staff",
+      "name": "星辉法杖",
+      "resourceId": "icx00003",
+      "url": "ui://invtest1icx00003",
+      "file": "icx00003.png",
+      "rect": {
+        "left": 768,
+        "top": 0,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "d18c65b6a90e6f312cb1f3ffb96fc7bc152e5fdbc00a0f3d679e0a3ee9959e03",
+      "rgbaSha256": "1d62989c4be8585d1eaa1c5f87bef4741d9fe4dafa894d1095a25b81299bcec4"
+    },
+    {
+      "index": 4,
+      "kind": "shield",
+      "name": "雄狮圆盾",
+      "resourceId": "icx00004",
+      "url": "ui://invtest1icx00004",
+      "file": "icx00004.png",
+      "rect": {
+        "left": 1024,
+        "top": 0,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "5cdaff5a4b2be05553f219417ac9aaa864285ecae104a8540efa5dfdc0ca6a9c",
+      "rgbaSha256": "321a52f94838837282c31f900932fc33eaca2f6de29a3adbeacc9bbc3464d081"
+    },
+    {
+      "index": 5,
+      "kind": "helmet",
+      "name": "守望者头盔",
+      "resourceId": "icx00005",
+      "url": "ui://invtest1icx00005",
+      "file": "icx00005.png",
+      "rect": {
+        "left": 1280,
+        "top": 0,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "2f092ebca043171d2e7a413d6101544e1cd2e0294d35c739948cbddb19063ae7",
+      "rgbaSha256": "8793349ae9fe3b88d18df73e2facfd1e077b5649b9ffb6218e2c655cf36eb023"
+    },
+    {
+      "index": 6,
+      "kind": "armor",
+      "name": "曙光胸甲",
+      "resourceId": "icx00006",
+      "url": "ui://invtest1icx00006",
+      "file": "icx00006.png",
+      "rect": {
+        "left": 0,
+        "top": 256,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "11c609ba7f939929fac3336df8e610d7cc6aa2ec96b2d9357524dcf2dc9a816d",
+      "rgbaSha256": "f809e4ebb772b4ea94ff84f5202d5305cfe483d235bb5e21ad298449548d38dc"
+    },
+    {
+      "index": 7,
+      "kind": "boots",
+      "name": "疾风短靴",
+      "resourceId": "icx00007",
+      "url": "ui://invtest1icx00007",
+      "file": "icx00007.png",
+      "rect": {
+        "left": 256,
+        "top": 256,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "5b2eba6c2e2572e66fc4b1b310105a99c969d22ec9540ed1daab5c340c8b5963",
+      "rgbaSha256": "a0b1f892eae8be3d7602146c9388992bf8d482eccea2ab7bd11e1082a8806c31"
+    },
+    {
+      "index": 8,
+      "kind": "ring",
+      "name": "红玉指环",
+      "resourceId": "icx00008",
+      "url": "ui://invtest1icx00008",
+      "file": "icx00008.png",
+      "rect": {
+        "left": 512,
+        "top": 256,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "520c18185dfeecbfb3d139ed3048ae959b477da01b10affdc9b5a95b6ce69ba5",
+      "rgbaSha256": "b3a0a702d28a0685c272e33d38e644583a7918d526809aafc0da072707f0510b"
+    },
+    {
+      "index": 9,
+      "kind": "amulet",
+      "name": "碧玉护符",
+      "resourceId": "icx00009",
+      "url": "ui://invtest1icx00009",
+      "file": "icx00009.png",
+      "rect": {
+        "left": 768,
+        "top": 256,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "adeac4894cca70a66540b6e62720a91d8aa45c49895153edc2f9d37a61306d94",
+      "rgbaSha256": "94f970255da7e0f151106fb96aa2d01637da83be4f9b991e83b9c26491bbe981"
+    },
+    {
+      "index": 10,
+      "kind": "redPotion",
+      "name": "治疗药水",
+      "resourceId": "icx00010",
+      "url": "ui://invtest1icx00010",
+      "file": "icx00010.png",
+      "rect": {
+        "left": 1024,
+        "top": 256,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "a4aae9e25b67403d1b9efbb70dc81778b66cd910676e8313a0a1b30e205cb02c",
+      "rgbaSha256": "6b1232ccab7f358cfdaf900356d6afc8b0ceebc18d4c387019e7694820d2570d"
+    },
+    {
+      "index": 11,
+      "kind": "bluePotion",
+      "name": "法力药水",
+      "resourceId": "icx00011",
+      "url": "ui://invtest1icx00011",
+      "file": "icx00011.png",
+      "rect": {
+        "left": 1280,
+        "top": 256,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "c8fa854ca859b4ee541fabe90ab25c3411f27aa344460c573c7a87bf1573ab72",
+      "rgbaSha256": "d644973dda8288b50ab870868342aff1386a6b58670ba7ed40d50901a3305dbd"
+    },
+    {
+      "index": 12,
+      "kind": "staminaPotion",
+      "name": "耐力药水",
+      "resourceId": "icx00012",
+      "url": "ui://invtest1icx00012",
+      "file": "icx00012.png",
+      "rect": {
+        "left": 0,
+        "top": 512,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "9bae52824055d357ea3ffa7b1a765911ce2031873eedd191f33b0121d6a6efbf",
+      "rgbaSha256": "12efceddbdcfa03a385ca5f786aba2d8f5d219f6e7366534578daba5f4754a2b"
+    },
+    {
+      "index": 13,
+      "kind": "antidote",
+      "name": "解毒剂",
+      "resourceId": "icx00013",
+      "url": "ui://invtest1icx00013",
+      "file": "icx00013.png",
+      "rect": {
+        "left": 256,
+        "top": 512,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "3f8395101397b3d1a966bec77563b72a059f09b9ce9e6eb1d5ead40cd5d18760",
+      "rgbaSha256": "c2c51a3b66983f40e29b5ebbd1b4f23d5f7a4555a1b79797cc13134ccb06d687"
+    },
+    {
+      "index": 14,
+      "kind": "elixir",
+      "name": "星露灵药",
+      "resourceId": "icx00014",
+      "url": "ui://invtest1icx00014",
+      "file": "icx00014.png",
+      "rect": {
+        "left": 512,
+        "top": 512,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "6bcb70141b2deaa7ed85858dc12ebc037898cdb1f8172b905fbe7e70a8c8aaa0",
+      "rgbaSha256": "03e1baec8ea6e1b37c3629ee5870573a12d9cd19f8a0a81873f20bf49dc2406a"
+    },
+    {
+      "index": 15,
+      "kind": "herb",
+      "name": "晨露草",
+      "resourceId": "icx00015",
+      "url": "ui://invtest1icx00015",
+      "file": "icx00015.png",
+      "rect": {
+        "left": 768,
+        "top": 512,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "4b42490e534335a7bfd5f8a824fd68f28722f229284e7058ea6fdc97382c075d",
+      "rgbaSha256": "60655c66700292223d8eaa529073e2286c0cfbf9556abbb73cff9d1078e729a9"
+    },
+    {
+      "index": 16,
+      "kind": "mushroom",
+      "name": "萤光蘑菇",
+      "resourceId": "icx00016",
+      "url": "ui://invtest1icx00016",
+      "file": "icx00016.png",
+      "rect": {
+        "left": 1024,
+        "top": 512,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "7ad97f5e6cb0eb5be8e98dee27677a78ad4fadd4841673d19c4863c63b99871a",
+      "rgbaSha256": "3f3da217664d2c384ec33bcf994a9a9b14955277475f9e1db42a72ccaa03ebc0"
+    },
+    {
+      "index": 17,
+      "kind": "ore",
+      "name": "赤铁矿",
+      "resourceId": "icx00017",
+      "url": "ui://invtest1icx00017",
+      "file": "icx00017.png",
+      "rect": {
+        "left": 1280,
+        "top": 512,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "1cf6a67d3d5d92a83926f29dfd1691f887a58f0526f0da9615d09cee43cbbda3",
+      "rgbaSha256": "77657be128f48a42558cf700ac2f9bd1c4d850bec587efc64b47e59c414395d0"
+    },
+    {
+      "index": 18,
+      "kind": "crystal",
+      "name": "霜蓝水晶",
+      "resourceId": "icx00018",
+      "url": "ui://invtest1icx00018",
+      "file": "icx00018.png",
+      "rect": {
+        "left": 0,
+        "top": 768,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "356efb922c4407deb1a9130c5bde61be06750db62575a11b2bfb8058e51d1634",
+      "rgbaSha256": "6a8dd329365d33d34165a895581fbfc4abc2dad449a45e5c186fd72eac0867bc"
+    },
+    {
+      "index": 19,
+      "kind": "leather",
+      "name": "柔韧皮革",
+      "resourceId": "icx00019",
+      "url": "ui://invtest1icx00019",
+      "file": "icx00019.png",
+      "rect": {
+        "left": 256,
+        "top": 768,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "04ffb8573b8f3586d046a6cfd8184c7aacceecf6fef591df0b6826cf98641472",
+      "rgbaSha256": "63fe2cf51bb456ee77afa9d92d5391bec37e341b3d92f3bf902ace56aae9b276"
+    },
+    {
+      "index": 20,
+      "kind": "key",
+      "name": "古城钥匙",
+      "resourceId": "icx00020",
+      "url": "ui://invtest1icx00020",
+      "file": "icx00020.png",
+      "rect": {
+        "left": 512,
+        "top": 768,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "f19cbac24fd4e538597f72101a9433daf0afc01796cf8d94a7a889c91b790de8",
+      "rgbaSha256": "c45931aa7b2c3e72a080bb4d827fa248c31e79620b2d357b6d3fbda0de6cc65e"
+    },
+    {
+      "index": 21,
+      "kind": "scroll",
+      "name": "失落地图卷轴",
+      "resourceId": "icx00021",
+      "url": "ui://invtest1icx00021",
+      "file": "icx00021.png",
+      "rect": {
+        "left": 768,
+        "top": 768,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "234b6edfa98c75869d06e961593a15de96108c5098346ebf6d0d47b3e6f5e80f",
+      "rgbaSha256": "8bd5e9464ca2c41c8cd547bfd084521f092470c9ebe1b8dff930f0640ac5bf5b"
+    },
+    {
+      "index": 22,
+      "kind": "coinPouch",
+      "name": "旅行补给袋",
+      "resourceId": "icx00022",
+      "url": "ui://invtest1icx00022",
+      "file": "icx00022.png",
+      "rect": {
+        "left": 1024,
+        "top": 768,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "409fe8530ded2e576f526d53bb8375fa0cafa8fe9fad3c95aa5ae6b60db25972",
+      "rgbaSha256": "bce2e138c9ce87160dca97216a1364c7e5e7a5bfe6a4beec7e4bf2011752cc00"
+    },
+    {
+      "index": 23,
+      "kind": "gem",
+      "name": "暮色宝石",
+      "resourceId": "icx00023",
+      "url": "ui://invtest1icx00023",
+      "file": "icx00023.png",
+      "rect": {
+        "left": 1280,
+        "top": 768,
+        "width": 256,
+        "height": 256
+      },
+      "width": 256,
+      "height": 256,
+      "sha256": "12add61ff4d8084312ddc3bfc49d50b19b6f4d1f9de3e79e48bd0f288915e15f",
+      "rgbaSha256": "81946698384d4d9c730e51ba730f9b0306b2137d8b41efba7c2b31fbe2191b7f"
+    }
+  ]
+}

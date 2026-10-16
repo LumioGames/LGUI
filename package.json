@@ -1,0 +1,1 @@
+{"name":"fairygui-route-evidence","private":true,"version":"0.0.1","type":"module","devDependencies":{"playwright":"1.64.1"},"scripts":{"build":"node scripts/build.mjs","test":"node --test prototype/model.test.ts","serve":"node scripts/serve.mjs","browser":"node scripts/browser-acceptance.mjs"}}

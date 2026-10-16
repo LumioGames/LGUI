@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="480,300">
+  <displayList>
+    <graph id="rewardbg" name="rewardbg" xy="0,0" size="480,300" touchable="false" type="rect" lineSize="0" fillColor="#18334c"/>
+    <text id="title" name="title" xy="24,24" size="432,40" touchable="false" text="奖励已领取" fontSize="28" color="#dce9ff" autoSize="none"/>
+    <text id="body" name="body" xy="24,84" size="432,116" touchable="false" text="你的物品已放入背包。&#xA;这是一段用于验证换行和长文本显示的说明。" fontSize="20" color="#dce9ff" autoSize="none"/>
+    <component id="confirm" name="confirm" src="button01" xy="174,232" size="132,40">
+      <Button title="确认"/>
+    </component>
+  </displayList>
+</component>

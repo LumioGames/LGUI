@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "completedAt": "2026-10-16T10:55:52.750Z",
+  "sourceReport": "published/fidelity/publish-report.json",
+  "sourceReportSha256": "311b29d8ca75c11ffe03b79a03605b6fcf8ecc889a0e82740b259b0ef0bab5df",
+  "packageId": "invtest1",
+  "sharedBundleSha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e",
+  "sharedLayoutSha256": "ac1090b293125478680778e4760507917cd176ab419a629993e89de2ace0ccf1",
+  "atlasPages": 4,
+  "copies": [
+    {
+      "source": "published/fidelity/unity/Inventory_atlas0.png",
+      "destination": "InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas0.png",
+      "bytes": 5275131,
+      "sha256": "224a7124ad8c880d995fcca3029d800c33f884b329d11a3843006deea57f2cd6"
+    },
+    {
+      "source": "published/fidelity/unity/Inventory_atlas1.png",
+      "destination": "InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas1.png",
+      "bytes": 1710123,
+      "sha256": "da53d41d851dd0042d78a4bb421cdfea11c3ac6fb1c250a23a84df2d1fdcd2e8"
+    },
+    {
+      "source": "published/fidelity/unity/Inventory_atlas2.png",
+      "destination": "InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas2.png",
+      "bytes": 2751410,
+      "sha256": "fc2041bd019304e121ae43c719ac7f15162eae22ba9a25c76c4f9b2931957138"
+    },
+    {
+      "source": "published/fidelity/unity/Inventory_atlas3.png",
+      "destination": "InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas3.png",
+      "bytes": 3070851,
+      "sha256": "77c42c8947905d39bb753dd7fcaab53612d623e3871d2e01c6ce838487136596"
+    },
+    {
+      "source": "published/fidelity/unity/Inventory_fui.bytes",
+      "destination": "InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_fui.bytes",
+      "bytes": 24463,
+      "sha256": "ffbf11d73f31bb278f1b900f3a96c32ac86bc390567e952596709951770a799f"
+    },
+    {
+      "source": "dist/ComplexInventoryApp.txt",
+      "destination": "InventoryUnity/Assets/Resources/FidelityInventoryApp.txt",
+      "bytes": 26852,
+      "sha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e"
+    },
+    {
+      "source": "fidelity/layout-shared.js",
+      "destination": "InventoryUnity/Assets/Resources/FidelityInventoryLayout.txt",
+      "bytes": 17584,
+      "sha256": "ac1090b293125478680778e4760507917cd176ab419a629993e89de2ace0ccf1"
+    },
+    {
+      "source": "fidelity/reference-fixture.json",
+      "destination": "InventoryUnity/Assets/Resources/FidelityReferenceFixture.json",
+      "bytes": 1632,
+      "sha256": "f81aa57ae00704c863b9d4a5270c17bccd069ba142070343f5f709c62a448fd1"
+    },
+    {
+      "source": "published/fidelity-resource-map.json",
+      "destination": "InventoryUnity/Assets/Resources/FidelityResourceMap.json",
+      "bytes": 112010,
+      "sha256": "f5b04aa504f8da3651735d085c6a0e0f4b30ae83efe6986813cd9ea592279fa1"
+    },
+    {
+      "source": "published/fidelity-structure.json",
+      "destination": "InventoryUnity/Assets/Resources/FidelityStructure.json",
+      "bytes": 81240,
+      "sha256": "f1f363f0894c07a81f58843928218db3fa4f39ab15d83f5e82d71da859afae17"
+    },
+    {
+      "source": "fidelity/skin-manifest.json",
+      "destination": "InventoryUnity/Assets/Resources/FidelitySkinManifest.json",
+      "bytes": 84724,
+      "sha256": "130ed6d44c72303fad991bfd9006cfc278a2903317ca9ff0ea635a58ba208ca8"
+    },
+    {
+      "source": "fidelity/layout-reference.json",
+      "destination": "InventoryUnity/Assets/Resources/FidelityLayoutReference.json",
+      "bytes": 12994,
+      "sha256": "4a585caf7d36385e846a5202f5541dace9a5a91692e3d735f4fb3ca946359514"
+    }
+  ],
+  "scope": "Current formal Inventory fidelity publish copied byte-for-byte into isolated Fidelity Resources. Older Complex/Baseline resources and sources retained."
+}

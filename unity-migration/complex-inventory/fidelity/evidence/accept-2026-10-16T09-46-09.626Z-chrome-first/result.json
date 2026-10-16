@@ -1,0 +1,3792 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-10-16T09:46:09.628Z",
+  "url": "http://127.0.0.1:4182/fidelity/",
+  "mode": "real-dom-input",
+  "channel": "chrome",
+  "status": "failed",
+  "expectations": {
+    "identity": {
+      "attribute": "data-fidelity-page",
+      "value": "reference-v1"
+    },
+    "canonical": {
+      "width": 1586,
+      "height": 992,
+      "deviceScaleFactor": 1,
+      "columns": 6,
+      "rows": 4,
+      "stacks": 24
+    },
+    "quantities": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      8,
+      5,
+      3,
+      2,
+      1,
+      12,
+      7,
+      9,
+      4,
+      6,
+      1,
+      3,
+      18,
+      2
+    ],
+    "initial": {
+      "coins": 12480,
+      "capacity": 30,
+      "selectedId": "sword-1",
+      "category": "all",
+      "query": "",
+      "sort": "default",
+      "swordStats": {
+        "attack": 48,
+        "crit": 6,
+        "durability": 100
+      }
+    },
+    "ui": {
+      "primary": "primary",
+      "sell": "sell",
+      "confirm": "confirm",
+      "cancel": "cancel",
+      "search": "search",
+      "sort": "sort",
+      "menu": "menu",
+      "save": "menu_save",
+      "load": "menu_load",
+      "reward": "menu_reward"
+    },
+    "scope": "Playwright DOM input on an isolated local browser; not OS input, Computer Use, a mobile-device test or physical IME.",
+    "visualPolicy": "No pixel similarity threshold. Canonical screenshot, 1280 uniform geometry and narrow fit are separate from root reference overlays and regional human review."
+  },
+  "checks": [
+    {
+      "name": "fidelity identity rejects absent and old pages",
+      "passed": true,
+      "evidence": {
+        "url": "http://127.0.0.1:4182/fidelity/",
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "htmlSha256": "1a24e9ea8d698c9b44603a4ecbe0519a775b56d72bec2fb5d8acd56953eeed40",
+        "identity": true
+      }
+    },
+    {
+      "name": "actual FairyGUI DOM stage without canvas or iframe",
+      "passed": true
+    },
+    {
+      "name": "this version truthfully uses 24 fixed native cells",
+      "passed": true
+    },
+    {
+      "name": "local FairyGUI runtime is loaded",
+      "passed": true
+    },
+    {
+      "name": "initial fixture is real shared state with 24 stacks",
+      "passed": true
+    },
+    {
+      "name": "initial order IDs and quantities match schema-1 fixture",
+      "passed": true
+    },
+    {
+      "name": "initial selection filters and three sword stats are real",
+      "passed": true
+    },
+    {
+      "name": "coins are a real changing text field",
+      "passed": true
+    },
+    {
+      "name": "stat_attack has the shared initial value",
+      "passed": true
+    },
+    {
+      "name": "stat_crit has the shared initial value",
+      "passed": true
+    },
+    {
+      "name": "stat_durability has the shared initial value",
+      "passed": true
+    },
+    {
+      "name": "all 24 native cells form six columns and four rows",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "sword-1",
+          "rect": {
+            "x": 149,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "axe-1",
+          "rect": {
+            "x": 289,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "bow-1",
+          "rect": {
+            "x": 430,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "staff-1",
+          "rect": {
+            "x": 570,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "shield-1",
+          "rect": {
+            "x": 711,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "helmet-1",
+          "rect": {
+            "x": 851,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "armor-1",
+          "rect": {
+            "x": 149,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "boots-1",
+          "rect": {
+            "x": 289,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "ring-1",
+          "rect": {
+            "x": 430,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "amulet-1",
+          "rect": {
+            "x": 570,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "redPotion-1",
+          "rect": {
+            "x": 711,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "bluePotion-1",
+          "rect": {
+            "x": 851,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "staminaPotion-1",
+          "rect": {
+            "x": 149,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "antidote-1",
+          "rect": {
+            "x": 289,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "elixir-1",
+          "rect": {
+            "x": 430,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "herb-1",
+          "rect": {
+            "x": 570,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "mushroom-1",
+          "rect": {
+            "x": 711,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "ore-1",
+          "rect": {
+            "x": 851,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "crystal-1",
+          "rect": {
+            "x": 149,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "leather-1",
+          "rect": {
+            "x": 289,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "key-1",
+          "rect": {
+            "x": 430,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "scroll-1",
+          "rect": {
+            "x": 570,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "coinPouch-1",
+          "rect": {
+            "x": 711,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "gem-1",
+          "rect": {
+            "x": 851,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        }
+      ]
+    },
+    {
+      "name": "all canonical cells lie inside the 1586x992 viewport",
+      "passed": true
+    },
+    {
+      "name": "sword-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "axe-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "bow-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "staff-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "shield-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "helmet-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "armor-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "boots-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "ring-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "amulet-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "redPotion-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "8"
+      ]
+    },
+    {
+      "name": "bluePotion-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "5"
+      ]
+    },
+    {
+      "name": "staminaPotion-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "3"
+      ]
+    },
+    {
+      "name": "antidote-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "2"
+      ]
+    },
+    {
+      "name": "elixir-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "herb-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "12"
+      ]
+    },
+    {
+      "name": "mushroom-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "7"
+      ]
+    },
+    {
+      "name": "ore-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "9"
+      ]
+    },
+    {
+      "name": "crystal-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "4"
+      ]
+    },
+    {
+      "name": "leather-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "6"
+      ]
+    },
+    {
+      "name": "key-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "1"
+      ]
+    },
+    {
+      "name": "scroll-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "3"
+      ]
+    },
+    {
+      "name": "coinPouch-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "18"
+      ]
+    },
+    {
+      "name": "gem-1: true quantity including one, no cell name label",
+      "passed": true,
+      "evidence": [
+        "2"
+      ]
+    },
+    {
+      "name": "menu_save stays outside the initial main panel",
+      "passed": true
+    },
+    {
+      "name": "menu_load stays outside the initial main panel",
+      "passed": true
+    },
+    {
+      "name": "menu_reward stays outside the initial main panel",
+      "passed": true
+    },
+    {
+      "name": "page never requests or displays the full reference image",
+      "passed": true
+    },
+    {
+      "name": "more than 20 decomposed image assets are rendered and requested",
+      "passed": true,
+      "evidence": {
+        "renderedUrls": 60,
+        "requestedImages": 63
+      }
+    },
+    {
+      "name": "actual primary control equips selected sword",
+      "passed": true
+    },
+    {
+      "name": "actual primary control unequips stable sword",
+      "passed": true
+    },
+    {
+      "name": "actual use changes shared quantity and visible text",
+      "passed": true
+    },
+    {
+      "name": "sell opens a real confirmation without committing",
+      "passed": true
+    },
+    {
+      "name": "cancel sale preserves all business state",
+      "passed": true
+    },
+    {
+      "name": "real confirmation sells one and changes actual coin text",
+      "passed": true
+    },
+    {
+      "name": "menu save/load restore actual shared state",
+      "passed": true
+    },
+    {
+      "name": "save uses real local storage",
+      "passed": true
+    },
+    {
+      "name": "real Chinese input filters shared data",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:4182/fidelity/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/app.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/fidelity.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/vendor/fairygui.module.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin-manifest.json",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/layout-reference.json",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/reference-fixture.json",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/environmentLeft.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/environmentRight.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/environmentTop.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/environmentBottom.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerFill.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerLeftMiddle.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerRightLower.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerRightUpper.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerCoinBlank.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/panelFill.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerBranding.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/logo.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/coin.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/close.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/sellCoins.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/compass.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/searchIcon.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/capacityIcon.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/menu.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/sortArrow.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/detailSword.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/statAttack.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/statCrit.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/statDurability.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/detailDivider.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/detailLowerDivider.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/frameLeft.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/frameRight.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/frameFooter.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slotNormalFrame.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slotSelectedFrame.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/progressFrame.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/progressFill.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/primaryBg.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/secondaryBg.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/searchBg.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/tabNormalBg.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/tabSelectedBg.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/sortBg.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot00.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot01.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot02.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot03.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot04.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot05.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot06.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot07.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot08.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot09.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot10.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot11.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot12.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot13.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot14.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot15.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot16.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot17.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot18.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot19.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot20.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot21.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot22.png",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot23.png",
+      "status": 200,
+      "type": "image"
+    }
+  ],
+  "requestFailures": [],
+  "blockedExternal": [],
+  "screenshots": [
+    {
+      "name": "initial-canonical-1586x992",
+      "path": "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\accept-2026-10-16T09-46-09.626Z-chrome-first\\initial-canonical-1586x992.png",
+      "viewport": {
+        "width": 1586,
+        "height": 992
+      }
+    },
+    {
+      "name": "failure-current-page",
+      "path": "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\accept-2026-10-16T09-46-09.626Z-chrome-first\\failure-current-page.png"
+    }
+  ],
+  "viewports": [],
+  "limitations": [
+    "Playwright DOM input on an isolated local browser; not OS input, Computer Use, a mobile-device test or physical IME.",
+    "No pixel similarity threshold. Canonical screenshot, 1280 uniform geometry and narrow fit are separate from root reference overlays and regional human review."
+  ],
+  "partialReasons": [],
+  "pageProbe": {
+    "url": "http://127.0.0.1:4182/fidelity/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "htmlSha256": "1a24e9ea8d698c9b44603a4ecbe0519a775b56d72bec2fb5d8acd56953eeed40",
+    "identity": true
+  },
+  "sourceFiles": [
+    {
+      "file": "accept-fidelity.mjs",
+      "bytes": 20357,
+      "sha256": "cedb84c5d30701ed47e889005164f2e64179a76e9ff133fa995746d57a3f5570"
+    },
+    {
+      "file": "fidelity.js",
+      "bytes": 21736,
+      "sha256": "18668bbea991760023bb4f191cde6ff00f5fcc800a6b3bee18ed9a48e2517d33"
+    },
+    {
+      "file": "app.js",
+      "bytes": 26852,
+      "sha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e"
+    },
+    {
+      "file": "reference-fixture.json",
+      "bytes": 1632,
+      "sha256": "f81aa57ae00704c863b9d4a5270c17bccd069ba142070343f5f709c62a448fd1"
+    },
+    {
+      "file": "skin-manifest.json",
+      "bytes": 43877,
+      "sha256": "424919f6d6dfb9ec22bb5d255d94e7cbb04f6257741153644e49774f7121bda7"
+    },
+    {
+      "file": "layout-reference.json",
+      "bytes": 12994,
+      "sha256": "4a585caf7d36385e846a5202f5541dace9a5a91692e3d735f4fb3ca946359514"
+    },
+    {
+      "file": "vendor/fairygui.module.js",
+      "bytes": 643626,
+      "sha256": "b8edcee657aac0dc1eb37bc970a6e2881d879eedda6a8176ae165e15a6938752"
+    }
+  ],
+  "browserVersion": "155.0.8059.84",
+  "headless": true,
+  "reference": {
+    "file": "art/reference.png",
+    "sha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b",
+    "width": 1586,
+    "height": 992
+  },
+  "initialSnapshot": {
+    "ready": true,
+    "response": {
+      "ok": true,
+      "op": "open",
+      "result": null,
+      "error": null,
+      "errorCode": null,
+      "view": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "capacity": 30,
+        "usedSlots": 24,
+        "coins": 12480,
+        "items": [
+          {
+            "kind": "sword",
+            "name": "霜纹长剑",
+            "type": "equipment",
+            "rarity": "rare",
+            "slot": "weapon",
+            "price": 80,
+            "stats": {
+              "attack": 48,
+              "crit": 6,
+              "durability": 100
+            },
+            "description": "剑身流转着如霜的纹路，\n仿佛封存了北境的寒风。\n它曾陪伴无数旅者穿越黑暗，迎向黎明。",
+            "iconIndex": 0,
+            "id": "sword-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +48 · 暴击 +6% · 耐久 100"
+          },
+          {
+            "kind": "axe",
+            "name": "赤岩战斧",
+            "type": "equipment",
+            "rarity": "epic",
+            "slot": "weapon",
+            "price": 130,
+            "stats": {
+              "attack": 26
+            },
+            "description": "以赤岩矿锻造的沉重战斧，斧刃上仍留着山火般的余温。",
+            "iconIndex": 1,
+            "id": "axe-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +26"
+          },
+          {
+            "kind": "bow",
+            "name": "林语长弓",
+            "type": "equipment",
+            "rarity": "uncommon",
+            "slot": "weapon",
+            "price": 65,
+            "stats": {
+              "attack": 14
+            },
+            "description": "轻巧的林地长弓，弓弦仿佛仍留着清晨的露水。",
+            "iconIndex": 2,
+            "id": "bow-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +14"
+          },
+          {
+            "kind": "staff",
+            "name": "星辉法杖",
+            "type": "equipment",
+            "rarity": "legendary",
+            "slot": "weapon",
+            "price": 220,
+            "stats": {
+              "attack": 12,
+              "mana": 40
+            },
+            "description": "湛蓝宝石中封存着一缕星光，寂静时能听见它的低吟。",
+            "iconIndex": 3,
+            "id": "staff-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +12 · 法力 +40"
+          },
+          {
+            "kind": "shield",
+            "name": "雄狮圆盾",
+            "type": "equipment",
+            "rarity": "uncommon",
+            "slot": "offhand",
+            "price": 55,
+            "stats": {
+              "defense": 12
+            },
+            "description": "钢铁盾面镌着雄狮纹章，边缘的磨痕诉说着守卫的誓言。",
+            "iconIndex": 4,
+            "id": "shield-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "防御 +12"
+          },
+          {
+            "kind": "helmet",
+            "name": "守望者头盔",
+            "type": "equipment",
+            "rarity": "rare",
+            "slot": "head",
+            "price": 70,
+            "stats": {
+              "defense": 8,
+              "health": 10
+            },
+            "description": "古老守望者留下的头盔，银亮面甲后藏着不屈的意志。",
+            "iconIndex": 5,
+            "id": "helmet-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "防御 +8 · 生命 +10"
+          },
+          {
+            "kind": "armor",
+            "name": "曙光胸甲",
+            "type": "equipment",
+            "rarity": "epic",
+            "slot": "body",
+            "price": 160,
+            "stats": {
+              "defense": 22,
+              "health": 30
+            },
+            "description": "晨曦映照下泛出金色光泽的胸甲，铭刻着远征者的祝福。",
+            "iconIndex": 6,
+            "id": "armor-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "防御 +22 · 生命 +30"
+          },
+          {
+            "kind": "boots",
+            "name": "疾风短靴",
+            "type": "equipment",
+            "rarity": "rare",
+            "slot": "feet",
+            "price": 75,
+            "stats": {
+              "defense": 5,
+              "stamina": 15
+            },
+            "description": "柔软皮革缝制的短靴，适合在山径和荒野间长途跋涉。",
+            "iconIndex": 7,
+            "id": "boots-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "防御 +5 · 耐力 +15"
+          },
+          {
+            "kind": "ring",
+            "name": "红玉指环",
+            "type": "equipment",
+            "rarity": "epic",
+            "slot": "ring",
+            "price": 105,
+            "stats": {
+              "attack": 5,
+              "mana": 15
+            },
+            "description": "温润红玉嵌在细致的金环之中，像一颗沉睡的火种。",
+            "iconIndex": 8,
+            "id": "ring-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +5 · 法力 +15"
+          },
+          {
+            "kind": "amulet",
+            "name": "碧玉护符",
+            "type": "equipment",
+            "rarity": "legendary",
+            "slot": "neck",
+            "price": 190,
+            "stats": {
+              "health": 35,
+              "defense": 5
+            },
+            "description": "碧蓝宝石映着水波般的光泽，传说能守护远行之人。",
+            "iconIndex": 9,
+            "id": "amulet-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "生命 +35 · 防御 +5"
+          },
+          {
+            "kind": "redPotion",
+            "name": "治疗药水",
+            "type": "consumable",
+            "rarity": "common",
+            "price": 12,
+            "stats": {
+              "health": 30
+            },
+            "description": "红色药液散发着微甜的草木香气，是旅途中的常备补给。",
+            "iconIndex": 10,
+            "id": "redPotion-1",
+            "quantity": 8,
+            "equipped": false,
+            "displayStats": "生命 +30"
+          },
+          {
+            "kind": "bluePotion",
+            "name": "法力药水",
+            "type": "consumable",
+            "rarity": "common",
+            "price": 14,
+            "stats": {
+              "mana": 25
+            },
+            "description": "清澈的蓝色药液映出点点星辉，法师们总会随身携带。",
+            "iconIndex": 11,
+            "id": "bluePotion-1",
+            "quantity": 5,
+            "equipped": false,
+            "displayStats": "法力 +25"
+          },
+          {
+            "kind": "staminaPotion",
+            "name": "耐力药水",
+            "type": "consumable",
+            "rarity": "uncommon",
+            "price": 18,
+            "stats": {
+              "stamina": 30
+            },
+            "description": "翠绿药液中翻涌着细小气泡，闻起来像雨后的柑橘林。",
+            "iconIndex": 12,
+            "id": "staminaPotion-1",
+            "quantity": 3,
+            "equipped": false,
+            "displayStats": "耐力 +30"
+          },
+          {
+            "kind": "antidote",
+            "name": "解毒剂",
+            "type": "consumable",
+            "rarity": "uncommon",
+            "price": 16,
+            "stats": {},
+            "description": "深紫色的急救药剂，瓶口系着药师留下的细绳。",
+            "iconIndex": 13,
+            "id": "antidote-1",
+            "quantity": 2,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "elixir",
+            "name": "星露灵药",
+            "type": "consumable",
+            "rarity": "legendary",
+            "price": 95,
+            "stats": {
+              "health": 80,
+              "mana": 60
+            },
+            "description": "灵露凝成金色微光，只需一滴便能照亮整只玻璃瓶。",
+            "iconIndex": 14,
+            "id": "elixir-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "生命 +80 · 法力 +60"
+          },
+          {
+            "kind": "herb",
+            "name": "晨露草",
+            "type": "material",
+            "rarity": "common",
+            "price": 3,
+            "stats": {},
+            "description": "沾着晨露的鲜嫩药草，叶间还藏着一朵白色小花。",
+            "iconIndex": 15,
+            "id": "herb-1",
+            "quantity": 12,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "mushroom",
+            "name": "萤光蘑菇",
+            "type": "material",
+            "rarity": "uncommon",
+            "price": 5,
+            "stats": {},
+            "description": "红伞上缀着浅色斑点，常生长在潮湿而幽静的林地。",
+            "iconIndex": 16,
+            "id": "mushroom-1",
+            "quantity": 7,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "ore",
+            "name": "赤铁矿",
+            "type": "material",
+            "rarity": "common",
+            "price": 8,
+            "stats": {},
+            "description": "沉甸甸的深灰矿石，是铁匠炉边最受欢迎的原料。",
+            "iconIndex": 17,
+            "id": "ore-1",
+            "quantity": 9,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "crystal",
+            "name": "霜蓝水晶",
+            "type": "material",
+            "rarity": "rare",
+            "price": 22,
+            "stats": {},
+            "description": "晶簇透出冰蓝光芒，在掌心留下微微的凉意。",
+            "iconIndex": 18,
+            "id": "crystal-1",
+            "quantity": 4,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "leather",
+            "name": "柔韧皮革",
+            "type": "material",
+            "rarity": "common",
+            "price": 6,
+            "stats": {},
+            "description": "卷得整齐的柔韧皮革，能用来修补装备和旅者的行囊。",
+            "iconIndex": 19,
+            "id": "leather-1",
+            "quantity": 6,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "key",
+            "name": "古城钥匙",
+            "type": "quest",
+            "rarity": "epic",
+            "price": 100,
+            "stats": {},
+            "description": "精巧的黄铜钥匙，通往古城深处一扇被遗忘的大门。",
+            "iconIndex": 20,
+            "id": "key-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "scroll",
+            "name": "失落地图卷轴",
+            "type": "quest",
+            "rarity": "rare",
+            "price": 45,
+            "stats": {},
+            "description": "带着火漆印记的羊皮卷，上面记录着失落遗迹的方位。",
+            "iconIndex": 21,
+            "id": "scroll-1",
+            "quantity": 3,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "coinPouch",
+            "name": "旅行补给袋",
+            "type": "consumable",
+            "rarity": "uncommon",
+            "price": 25,
+            "stats": {},
+            "description": "绣着罗盘纹章的皮袋，袋口隐约闪着金币的光。",
+            "iconIndex": 22,
+            "id": "coinPouch-1",
+            "quantity": 18,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "gem",
+            "name": "暮色宝石",
+            "type": "material",
+            "rarity": "legendary",
+            "price": 60,
+            "stats": {},
+            "description": "切面中流转着暮紫色光芒，深受远方商人的喜爱。",
+            "iconIndex": 23,
+            "id": "gem-1",
+            "quantity": 2,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          }
+        ],
+        "visible": [
+          {
+            "kind": "sword",
+            "name": "霜纹长剑",
+            "type": "equipment",
+            "rarity": "rare",
+            "slot": "weapon",
+            "price": 80,
+            "stats": {
+              "attack": 48,
+              "crit": 6,
+              "durability": 100
+            },
+            "description": "剑身流转着如霜的纹路，\n仿佛封存了北境的寒风。\n它曾陪伴无数旅者穿越黑暗，迎向黎明。",
+            "iconIndex": 0,
+            "id": "sword-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +48 · 暴击 +6% · 耐久 100"
+          },
+          {
+            "kind": "axe",
+            "name": "赤岩战斧",
+            "type": "equipment",
+            "rarity": "epic",
+            "slot": "weapon",
+            "price": 130,
+            "stats": {
+              "attack": 26
+            },
+            "description": "以赤岩矿锻造的沉重战斧，斧刃上仍留着山火般的余温。",
+            "iconIndex": 1,
+            "id": "axe-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +26"
+          },
+          {
+            "kind": "bow",
+            "name": "林语长弓",
+            "type": "equipment",
+            "rarity": "uncommon",
+            "slot": "weapon",
+            "price": 65,
+            "stats": {
+              "attack": 14
+            },
+            "description": "轻巧的林地长弓，弓弦仿佛仍留着清晨的露水。",
+            "iconIndex": 2,
+            "id": "bow-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +14"
+          },
+          {
+            "kind": "staff",
+            "name": "星辉法杖",
+            "type": "equipment",
+            "rarity": "legendary",
+            "slot": "weapon",
+            "price": 220,
+            "stats": {
+              "attack": 12,
+              "mana": 40
+            },
+            "description": "湛蓝宝石中封存着一缕星光，寂静时能听见它的低吟。",
+            "iconIndex": 3,
+            "id": "staff-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +12 · 法力 +40"
+          },
+          {
+            "kind": "shield",
+            "name": "雄狮圆盾",
+            "type": "equipment",
+            "rarity": "uncommon",
+            "slot": "offhand",
+            "price": 55,
+            "stats": {
+              "defense": 12
+            },
+            "description": "钢铁盾面镌着雄狮纹章，边缘的磨痕诉说着守卫的誓言。",
+            "iconIndex": 4,
+            "id": "shield-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "防御 +12"
+          },
+          {
+            "kind": "helmet",
+            "name": "守望者头盔",
+            "type": "equipment",
+            "rarity": "rare",
+            "slot": "head",
+            "price": 70,
+            "stats": {
+              "defense": 8,
+              "health": 10
+            },
+            "description": "古老守望者留下的头盔，银亮面甲后藏着不屈的意志。",
+            "iconIndex": 5,
+            "id": "helmet-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "防御 +8 · 生命 +10"
+          },
+          {
+            "kind": "armor",
+            "name": "曙光胸甲",
+            "type": "equipment",
+            "rarity": "epic",
+            "slot": "body",
+            "price": 160,
+            "stats": {
+              "defense": 22,
+              "health": 30
+            },
+            "description": "晨曦映照下泛出金色光泽的胸甲，铭刻着远征者的祝福。",
+            "iconIndex": 6,
+            "id": "armor-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "防御 +22 · 生命 +30"
+          },
+          {
+            "kind": "boots",
+            "name": "疾风短靴",
+            "type": "equipment",
+            "rarity": "rare",
+            "slot": "feet",
+            "price": 75,
+            "stats": {
+              "defense": 5,
+              "stamina": 15
+            },
+            "description": "柔软皮革缝制的短靴，适合在山径和荒野间长途跋涉。",
+            "iconIndex": 7,
+            "id": "boots-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "防御 +5 · 耐力 +15"
+          },
+          {
+            "kind": "ring",
+            "name": "红玉指环",
+            "type": "equipment",
+            "rarity": "epic",
+            "slot": "ring",
+            "price": 105,
+            "stats": {
+              "attack": 5,
+              "mana": 15
+            },
+            "description": "温润红玉嵌在细致的金环之中，像一颗沉睡的火种。",
+            "iconIndex": 8,
+            "id": "ring-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "攻击 +5 · 法力 +15"
+          },
+          {
+            "kind": "amulet",
+            "name": "碧玉护符",
+            "type": "equipment",
+            "rarity": "legendary",
+            "slot": "neck",
+            "price": 190,
+            "stats": {
+              "health": 35,
+              "defense": 5
+            },
+            "description": "碧蓝宝石映着水波般的光泽，传说能守护远行之人。",
+            "iconIndex": 9,
+            "id": "amulet-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "生命 +35 · 防御 +5"
+          },
+          {
+            "kind": "redPotion",
+            "name": "治疗药水",
+            "type": "consumable",
+            "rarity": "common",
+            "price": 12,
+            "stats": {
+              "health": 30
+            },
+            "description": "红色药液散发着微甜的草木香气，是旅途中的常备补给。",
+            "iconIndex": 10,
+            "id": "redPotion-1",
+            "quantity": 8,
+            "equipped": false,
+            "displayStats": "生命 +30"
+          },
+          {
+            "kind": "bluePotion",
+            "name": "法力药水",
+            "type": "consumable",
+            "rarity": "common",
+            "price": 14,
+            "stats": {
+              "mana": 25
+            },
+            "description": "清澈的蓝色药液映出点点星辉，法师们总会随身携带。",
+            "iconIndex": 11,
+            "id": "bluePotion-1",
+            "quantity": 5,
+            "equipped": false,
+            "displayStats": "法力 +25"
+          },
+          {
+            "kind": "staminaPotion",
+            "name": "耐力药水",
+            "type": "consumable",
+            "rarity": "uncommon",
+            "price": 18,
+            "stats": {
+              "stamina": 30
+            },
+            "description": "翠绿药液中翻涌着细小气泡，闻起来像雨后的柑橘林。",
+            "iconIndex": 12,
+            "id": "staminaPotion-1",
+            "quantity": 3,
+            "equipped": false,
+            "displayStats": "耐力 +30"
+          },
+          {
+            "kind": "antidote",
+            "name": "解毒剂",
+            "type": "consumable",
+            "rarity": "uncommon",
+            "price": 16,
+            "stats": {},
+            "description": "深紫色的急救药剂，瓶口系着药师留下的细绳。",
+            "iconIndex": 13,
+            "id": "antidote-1",
+            "quantity": 2,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "elixir",
+            "name": "星露灵药",
+            "type": "consumable",
+            "rarity": "legendary",
+            "price": 95,
+            "stats": {
+              "health": 80,
+              "mana": 60
+            },
+            "description": "灵露凝成金色微光，只需一滴便能照亮整只玻璃瓶。",
+            "iconIndex": 14,
+            "id": "elixir-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "生命 +80 · 法力 +60"
+          },
+          {
+            "kind": "herb",
+            "name": "晨露草",
+            "type": "material",
+            "rarity": "common",
+            "price": 3,
+            "stats": {},
+            "description": "沾着晨露的鲜嫩药草，叶间还藏着一朵白色小花。",
+            "iconIndex": 15,
+            "id": "herb-1",
+            "quantity": 12,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "mushroom",
+            "name": "萤光蘑菇",
+            "type": "material",
+            "rarity": "uncommon",
+            "price": 5,
+            "stats": {},
+            "description": "红伞上缀着浅色斑点，常生长在潮湿而幽静的林地。",
+            "iconIndex": 16,
+            "id": "mushroom-1",
+            "quantity": 7,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "ore",
+            "name": "赤铁矿",
+            "type": "material",
+            "rarity": "common",
+            "price": 8,
+            "stats": {},
+            "description": "沉甸甸的深灰矿石，是铁匠炉边最受欢迎的原料。",
+            "iconIndex": 17,
+            "id": "ore-1",
+            "quantity": 9,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "crystal",
+            "name": "霜蓝水晶",
+            "type": "material",
+            "rarity": "rare",
+            "price": 22,
+            "stats": {},
+            "description": "晶簇透出冰蓝光芒，在掌心留下微微的凉意。",
+            "iconIndex": 18,
+            "id": "crystal-1",
+            "quantity": 4,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "leather",
+            "name": "柔韧皮革",
+            "type": "material",
+            "rarity": "common",
+            "price": 6,
+            "stats": {},
+            "description": "卷得整齐的柔韧皮革，能用来修补装备和旅者的行囊。",
+            "iconIndex": 19,
+            "id": "leather-1",
+            "quantity": 6,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "key",
+            "name": "古城钥匙",
+            "type": "quest",
+            "rarity": "epic",
+            "price": 100,
+            "stats": {},
+            "description": "精巧的黄铜钥匙，通往古城深处一扇被遗忘的大门。",
+            "iconIndex": 20,
+            "id": "key-1",
+            "quantity": 1,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "scroll",
+            "name": "失落地图卷轴",
+            "type": "quest",
+            "rarity": "rare",
+            "price": 45,
+            "stats": {},
+            "description": "带着火漆印记的羊皮卷，上面记录着失落遗迹的方位。",
+            "iconIndex": 21,
+            "id": "scroll-1",
+            "quantity": 3,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "coinPouch",
+            "name": "旅行补给袋",
+            "type": "consumable",
+            "rarity": "uncommon",
+            "price": 25,
+            "stats": {},
+            "description": "绣着罗盘纹章的皮袋，袋口隐约闪着金币的光。",
+            "iconIndex": 22,
+            "id": "coinPouch-1",
+            "quantity": 18,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          },
+          {
+            "kind": "gem",
+            "name": "暮色宝石",
+            "type": "material",
+            "rarity": "legendary",
+            "price": 60,
+            "stats": {},
+            "description": "切面中流转着暮紫色光芒，深受远方商人的喜爱。",
+            "iconIndex": 23,
+            "id": "gem-1",
+            "quantity": 2,
+            "equipped": false,
+            "displayStats": "无属性加成"
+          }
+        ],
+        "equipment": {
+          "weapon": null,
+          "offhand": null,
+          "head": null,
+          "body": null,
+          "feet": null,
+          "ring": null,
+          "neck": null
+        },
+        "equipmentStats": {},
+        "selectedId": "sword-1",
+        "selected": {
+          "kind": "sword",
+          "name": "霜纹长剑",
+          "type": "equipment",
+          "rarity": "rare",
+          "slot": "weapon",
+          "price": 80,
+          "stats": {
+            "attack": 48,
+            "crit": 6,
+            "durability": 100
+          },
+          "description": "剑身流转着如霜的纹路，\n仿佛封存了北境的寒风。\n它曾陪伴无数旅者穿越黑暗，迎向黎明。",
+          "iconIndex": 0,
+          "id": "sword-1",
+          "quantity": 1,
+          "equipped": false,
+          "displayStats": "攻击 +48 · 暴击 +6% · 耐久 100"
+        },
+        "query": "",
+        "category": "all",
+        "sort": "default",
+        "rewards": {
+          "items": [
+            {
+              "id": "item-0",
+              "name": "治疗药水 1",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-1",
+              "name": "旅行宝石 2",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-2",
+              "name": "远行卷轴 3",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-3",
+              "name": "治疗药水 4",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-4",
+              "name": "旅行宝石 5",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-5",
+              "name": "远行卷轴 6",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-6",
+              "name": "治疗药水 7",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-7",
+              "name": "旅行宝石 8",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-8",
+              "name": "远行卷轴 9",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-9",
+              "name": "治疗药水 10",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-10",
+              "name": "旅行宝石 11",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-11",
+              "name": "远行卷轴 12",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-12",
+              "name": "治疗药水 13",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-13",
+              "name": "旅行宝石 14",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-14",
+              "name": "远行卷轴 15",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-15",
+              "name": "治疗药水 16",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-16",
+              "name": "旅行宝石 17",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-17",
+              "name": "远行卷轴 18",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-18",
+              "name": "治疗药水 19",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-19",
+              "name": "旅行宝石 20",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-20",
+              "name": "远行卷轴 21",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-21",
+              "name": "治疗药水 22",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-22",
+              "name": "旅行宝石 23",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-23",
+              "name": "远行卷轴 24",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-24",
+              "name": "治疗药水 25",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-25",
+              "name": "旅行宝石 26",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-26",
+              "name": "远行卷轴 27",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-27",
+              "name": "治疗药水 28",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-28",
+              "name": "旅行宝石 29",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-29",
+              "name": "远行卷轴 30",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            }
+          ],
+          "visible": [
+            {
+              "id": "item-0",
+              "name": "治疗药水 1",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-1",
+              "name": "旅行宝石 2",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-2",
+              "name": "远行卷轴 3",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-3",
+              "name": "治疗药水 4",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-4",
+              "name": "旅行宝石 5",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-5",
+              "name": "远行卷轴 6",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-6",
+              "name": "治疗药水 7",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-7",
+              "name": "旅行宝石 8",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-8",
+              "name": "远行卷轴 9",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-9",
+              "name": "治疗药水 10",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-10",
+              "name": "旅行宝石 11",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-11",
+              "name": "远行卷轴 12",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-12",
+              "name": "治疗药水 13",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-13",
+              "name": "旅行宝石 14",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-14",
+              "name": "远行卷轴 15",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-15",
+              "name": "治疗药水 16",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-16",
+              "name": "旅行宝石 17",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-17",
+              "name": "远行卷轴 18",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-18",
+              "name": "治疗药水 19",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-19",
+              "name": "旅行宝石 20",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-20",
+              "name": "远行卷轴 21",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-21",
+              "name": "治疗药水 22",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-22",
+              "name": "旅行宝石 23",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-23",
+              "name": "远行卷轴 24",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-24",
+              "name": "治疗药水 25",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-25",
+              "name": "旅行宝石 26",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-26",
+              "name": "远行卷轴 27",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-27",
+              "name": "治疗药水 28",
+              "state": "locked",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-28",
+              "name": "旅行宝石 29",
+              "state": "ready",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            },
+            {
+              "id": "item-29",
+              "name": "远行卷轴 30",
+              "state": "claimed",
+              "description": "旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。"
+            }
+          ],
+          "coins": 0,
+          "query": ""
+        }
+      },
+      "session": {
+        "open": true,
+        "listenerCount": 1,
+        "notifications": 0,
+        "opens": 1,
+        "closes": 0,
+        "closedCallbacks": 0,
+        "listenerErrors": 0
+      }
+    },
+    "rawTsResponse": "{\"ok\":true,\"op\":\"open\",\"result\":null,\"error\":null,\"errorCode\":null,\"view\":{\"schemaVersion\":1,\"revision\":1,\"capacity\":30,\"usedSlots\":24,\"coins\":12480,\"items\":[{\"kind\":\"sword\",\"name\":\"霜纹长剑\",\"type\":\"equipment\",\"rarity\":\"rare\",\"slot\":\"weapon\",\"price\":80,\"stats\":{\"attack\":48,\"crit\":6,\"durability\":100},\"description\":\"剑身流转着如霜的纹路，\\n仿佛封存了北境的寒风。\\n它曾陪伴无数旅者穿越黑暗，迎向黎明。\",\"iconIndex\":0,\"id\":\"sword-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +48 · 暴击 +6% · 耐久 100\"},{\"kind\":\"axe\",\"name\":\"赤岩战斧\",\"type\":\"equipment\",\"rarity\":\"epic\",\"slot\":\"weapon\",\"price\":130,\"stats\":{\"attack\":26},\"description\":\"以赤岩矿锻造的沉重战斧，斧刃上仍留着山火般的余温。\",\"iconIndex\":1,\"id\":\"axe-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +26\"},{\"kind\":\"bow\",\"name\":\"林语长弓\",\"type\":\"equipment\",\"rarity\":\"uncommon\",\"slot\":\"weapon\",\"price\":65,\"stats\":{\"attack\":14},\"description\":\"轻巧的林地长弓，弓弦仿佛仍留着清晨的露水。\",\"iconIndex\":2,\"id\":\"bow-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +14\"},{\"kind\":\"staff\",\"name\":\"星辉法杖\",\"type\":\"equipment\",\"rarity\":\"legendary\",\"slot\":\"weapon\",\"price\":220,\"stats\":{\"attack\":12,\"mana\":40},\"description\":\"湛蓝宝石中封存着一缕星光，寂静时能听见它的低吟。\",\"iconIndex\":3,\"id\":\"staff-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +12 · 法力 +40\"},{\"kind\":\"shield\",\"name\":\"雄狮圆盾\",\"type\":\"equipment\",\"rarity\":\"uncommon\",\"slot\":\"offhand\",\"price\":55,\"stats\":{\"defense\":12},\"description\":\"钢铁盾面镌着雄狮纹章，边缘的磨痕诉说着守卫的誓言。\",\"iconIndex\":4,\"id\":\"shield-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"防御 +12\"},{\"kind\":\"helmet\",\"name\":\"守望者头盔\",\"type\":\"equipment\",\"rarity\":\"rare\",\"slot\":\"head\",\"price\":70,\"stats\":{\"defense\":8,\"health\":10},\"description\":\"古老守望者留下的头盔，银亮面甲后藏着不屈的意志。\",\"iconIndex\":5,\"id\":\"helmet-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"防御 +8 · 生命 +10\"},{\"kind\":\"armor\",\"name\":\"曙光胸甲\",\"type\":\"equipment\",\"rarity\":\"epic\",\"slot\":\"body\",\"price\":160,\"stats\":{\"defense\":22,\"health\":30},\"description\":\"晨曦映照下泛出金色光泽的胸甲，铭刻着远征者的祝福。\",\"iconIndex\":6,\"id\":\"armor-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"防御 +22 · 生命 +30\"},{\"kind\":\"boots\",\"name\":\"疾风短靴\",\"type\":\"equipment\",\"rarity\":\"rare\",\"slot\":\"feet\",\"price\":75,\"stats\":{\"defense\":5,\"stamina\":15},\"description\":\"柔软皮革缝制的短靴，适合在山径和荒野间长途跋涉。\",\"iconIndex\":7,\"id\":\"boots-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"防御 +5 · 耐力 +15\"},{\"kind\":\"ring\",\"name\":\"红玉指环\",\"type\":\"equipment\",\"rarity\":\"epic\",\"slot\":\"ring\",\"price\":105,\"stats\":{\"attack\":5,\"mana\":15},\"description\":\"温润红玉嵌在细致的金环之中，像一颗沉睡的火种。\",\"iconIndex\":8,\"id\":\"ring-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +5 · 法力 +15\"},{\"kind\":\"amulet\",\"name\":\"碧玉护符\",\"type\":\"equipment\",\"rarity\":\"legendary\",\"slot\":\"neck\",\"price\":190,\"stats\":{\"health\":35,\"defense\":5},\"description\":\"碧蓝宝石映着水波般的光泽，传说能守护远行之人。\",\"iconIndex\":9,\"id\":\"amulet-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"生命 +35 · 防御 +5\"},{\"kind\":\"redPotion\",\"name\":\"治疗药水\",\"type\":\"consumable\",\"rarity\":\"common\",\"price\":12,\"stats\":{\"health\":30},\"description\":\"红色药液散发着微甜的草木香气，是旅途中的常备补给。\",\"iconIndex\":10,\"id\":\"redPotion-1\",\"quantity\":8,\"equipped\":false,\"displayStats\":\"生命 +30\"},{\"kind\":\"bluePotion\",\"name\":\"法力药水\",\"type\":\"consumable\",\"rarity\":\"common\",\"price\":14,\"stats\":{\"mana\":25},\"description\":\"清澈的蓝色药液映出点点星辉，法师们总会随身携带。\",\"iconIndex\":11,\"id\":\"bluePotion-1\",\"quantity\":5,\"equipped\":false,\"displayStats\":\"法力 +25\"},{\"kind\":\"staminaPotion\",\"name\":\"耐力药水\",\"type\":\"consumable\",\"rarity\":\"uncommon\",\"price\":18,\"stats\":{\"stamina\":30},\"description\":\"翠绿药液中翻涌着细小气泡，闻起来像雨后的柑橘林。\",\"iconIndex\":12,\"id\":\"staminaPotion-1\",\"quantity\":3,\"equipped\":false,\"displayStats\":\"耐力 +30\"},{\"kind\":\"antidote\",\"name\":\"解毒剂\",\"type\":\"consumable\",\"rarity\":\"uncommon\",\"price\":16,\"stats\":{},\"description\":\"深紫色的急救药剂，瓶口系着药师留下的细绳。\",\"iconIndex\":13,\"id\":\"antidote-1\",\"quantity\":2,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"elixir\",\"name\":\"星露灵药\",\"type\":\"consumable\",\"rarity\":\"legendary\",\"price\":95,\"stats\":{\"health\":80,\"mana\":60},\"description\":\"灵露凝成金色微光，只需一滴便能照亮整只玻璃瓶。\",\"iconIndex\":14,\"id\":\"elixir-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"生命 +80 · 法力 +60\"},{\"kind\":\"herb\",\"name\":\"晨露草\",\"type\":\"material\",\"rarity\":\"common\",\"price\":3,\"stats\":{},\"description\":\"沾着晨露的鲜嫩药草，叶间还藏着一朵白色小花。\",\"iconIndex\":15,\"id\":\"herb-1\",\"quantity\":12,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"mushroom\",\"name\":\"萤光蘑菇\",\"type\":\"material\",\"rarity\":\"uncommon\",\"price\":5,\"stats\":{},\"description\":\"红伞上缀着浅色斑点，常生长在潮湿而幽静的林地。\",\"iconIndex\":16,\"id\":\"mushroom-1\",\"quantity\":7,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"ore\",\"name\":\"赤铁矿\",\"type\":\"material\",\"rarity\":\"common\",\"price\":8,\"stats\":{},\"description\":\"沉甸甸的深灰矿石，是铁匠炉边最受欢迎的原料。\",\"iconIndex\":17,\"id\":\"ore-1\",\"quantity\":9,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"crystal\",\"name\":\"霜蓝水晶\",\"type\":\"material\",\"rarity\":\"rare\",\"price\":22,\"stats\":{},\"description\":\"晶簇透出冰蓝光芒，在掌心留下微微的凉意。\",\"iconIndex\":18,\"id\":\"crystal-1\",\"quantity\":4,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"leather\",\"name\":\"柔韧皮革\",\"type\":\"material\",\"rarity\":\"common\",\"price\":6,\"stats\":{},\"description\":\"卷得整齐的柔韧皮革，能用来修补装备和旅者的行囊。\",\"iconIndex\":19,\"id\":\"leather-1\",\"quantity\":6,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"key\",\"name\":\"古城钥匙\",\"type\":\"quest\",\"rarity\":\"epic\",\"price\":100,\"stats\":{},\"description\":\"精巧的黄铜钥匙，通往古城深处一扇被遗忘的大门。\",\"iconIndex\":20,\"id\":\"key-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"scroll\",\"name\":\"失落地图卷轴\",\"type\":\"quest\",\"rarity\":\"rare\",\"price\":45,\"stats\":{},\"description\":\"带着火漆印记的羊皮卷，上面记录着失落遗迹的方位。\",\"iconIndex\":21,\"id\":\"scroll-1\",\"quantity\":3,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"coinPouch\",\"name\":\"旅行补给袋\",\"type\":\"consumable\",\"rarity\":\"uncommon\",\"price\":25,\"stats\":{},\"description\":\"绣着罗盘纹章的皮袋，袋口隐约闪着金币的光。\",\"iconIndex\":22,\"id\":\"coinPouch-1\",\"quantity\":18,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"gem\",\"name\":\"暮色宝石\",\"type\":\"material\",\"rarity\":\"legendary\",\"price\":60,\"stats\":{},\"description\":\"切面中流转着暮紫色光芒，深受远方商人的喜爱。\",\"iconIndex\":23,\"id\":\"gem-1\",\"quantity\":2,\"equipped\":false,\"displayStats\":\"无属性加成\"}],\"visible\":[{\"kind\":\"sword\",\"name\":\"霜纹长剑\",\"type\":\"equipment\",\"rarity\":\"rare\",\"slot\":\"weapon\",\"price\":80,\"stats\":{\"attack\":48,\"crit\":6,\"durability\":100},\"description\":\"剑身流转着如霜的纹路，\\n仿佛封存了北境的寒风。\\n它曾陪伴无数旅者穿越黑暗，迎向黎明。\",\"iconIndex\":0,\"id\":\"sword-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +48 · 暴击 +6% · 耐久 100\"},{\"kind\":\"axe\",\"name\":\"赤岩战斧\",\"type\":\"equipment\",\"rarity\":\"epic\",\"slot\":\"weapon\",\"price\":130,\"stats\":{\"attack\":26},\"description\":\"以赤岩矿锻造的沉重战斧，斧刃上仍留着山火般的余温。\",\"iconIndex\":1,\"id\":\"axe-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +26\"},{\"kind\":\"bow\",\"name\":\"林语长弓\",\"type\":\"equipment\",\"rarity\":\"uncommon\",\"slot\":\"weapon\",\"price\":65,\"stats\":{\"attack\":14},\"description\":\"轻巧的林地长弓，弓弦仿佛仍留着清晨的露水。\",\"iconIndex\":2,\"id\":\"bow-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +14\"},{\"kind\":\"staff\",\"name\":\"星辉法杖\",\"type\":\"equipment\",\"rarity\":\"legendary\",\"slot\":\"weapon\",\"price\":220,\"stats\":{\"attack\":12,\"mana\":40},\"description\":\"湛蓝宝石中封存着一缕星光，寂静时能听见它的低吟。\",\"iconIndex\":3,\"id\":\"staff-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +12 · 法力 +40\"},{\"kind\":\"shield\",\"name\":\"雄狮圆盾\",\"type\":\"equipment\",\"rarity\":\"uncommon\",\"slot\":\"offhand\",\"price\":55,\"stats\":{\"defense\":12},\"description\":\"钢铁盾面镌着雄狮纹章，边缘的磨痕诉说着守卫的誓言。\",\"iconIndex\":4,\"id\":\"shield-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"防御 +12\"},{\"kind\":\"helmet\",\"name\":\"守望者头盔\",\"type\":\"equipment\",\"rarity\":\"rare\",\"slot\":\"head\",\"price\":70,\"stats\":{\"defense\":8,\"health\":10},\"description\":\"古老守望者留下的头盔，银亮面甲后藏着不屈的意志。\",\"iconIndex\":5,\"id\":\"helmet-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"防御 +8 · 生命 +10\"},{\"kind\":\"armor\",\"name\":\"曙光胸甲\",\"type\":\"equipment\",\"rarity\":\"epic\",\"slot\":\"body\",\"price\":160,\"stats\":{\"defense\":22,\"health\":30},\"description\":\"晨曦映照下泛出金色光泽的胸甲，铭刻着远征者的祝福。\",\"iconIndex\":6,\"id\":\"armor-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"防御 +22 · 生命 +30\"},{\"kind\":\"boots\",\"name\":\"疾风短靴\",\"type\":\"equipment\",\"rarity\":\"rare\",\"slot\":\"feet\",\"price\":75,\"stats\":{\"defense\":5,\"stamina\":15},\"description\":\"柔软皮革缝制的短靴，适合在山径和荒野间长途跋涉。\",\"iconIndex\":7,\"id\":\"boots-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"防御 +5 · 耐力 +15\"},{\"kind\":\"ring\",\"name\":\"红玉指环\",\"type\":\"equipment\",\"rarity\":\"epic\",\"slot\":\"ring\",\"price\":105,\"stats\":{\"attack\":5,\"mana\":15},\"description\":\"温润红玉嵌在细致的金环之中，像一颗沉睡的火种。\",\"iconIndex\":8,\"id\":\"ring-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +5 · 法力 +15\"},{\"kind\":\"amulet\",\"name\":\"碧玉护符\",\"type\":\"equipment\",\"rarity\":\"legendary\",\"slot\":\"neck\",\"price\":190,\"stats\":{\"health\":35,\"defense\":5},\"description\":\"碧蓝宝石映着水波般的光泽，传说能守护远行之人。\",\"iconIndex\":9,\"id\":\"amulet-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"生命 +35 · 防御 +5\"},{\"kind\":\"redPotion\",\"name\":\"治疗药水\",\"type\":\"consumable\",\"rarity\":\"common\",\"price\":12,\"stats\":{\"health\":30},\"description\":\"红色药液散发着微甜的草木香气，是旅途中的常备补给。\",\"iconIndex\":10,\"id\":\"redPotion-1\",\"quantity\":8,\"equipped\":false,\"displayStats\":\"生命 +30\"},{\"kind\":\"bluePotion\",\"name\":\"法力药水\",\"type\":\"consumable\",\"rarity\":\"common\",\"price\":14,\"stats\":{\"mana\":25},\"description\":\"清澈的蓝色药液映出点点星辉，法师们总会随身携带。\",\"iconIndex\":11,\"id\":\"bluePotion-1\",\"quantity\":5,\"equipped\":false,\"displayStats\":\"法力 +25\"},{\"kind\":\"staminaPotion\",\"name\":\"耐力药水\",\"type\":\"consumable\",\"rarity\":\"uncommon\",\"price\":18,\"stats\":{\"stamina\":30},\"description\":\"翠绿药液中翻涌着细小气泡，闻起来像雨后的柑橘林。\",\"iconIndex\":12,\"id\":\"staminaPotion-1\",\"quantity\":3,\"equipped\":false,\"displayStats\":\"耐力 +30\"},{\"kind\":\"antidote\",\"name\":\"解毒剂\",\"type\":\"consumable\",\"rarity\":\"uncommon\",\"price\":16,\"stats\":{},\"description\":\"深紫色的急救药剂，瓶口系着药师留下的细绳。\",\"iconIndex\":13,\"id\":\"antidote-1\",\"quantity\":2,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"elixir\",\"name\":\"星露灵药\",\"type\":\"consumable\",\"rarity\":\"legendary\",\"price\":95,\"stats\":{\"health\":80,\"mana\":60},\"description\":\"灵露凝成金色微光，只需一滴便能照亮整只玻璃瓶。\",\"iconIndex\":14,\"id\":\"elixir-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"生命 +80 · 法力 +60\"},{\"kind\":\"herb\",\"name\":\"晨露草\",\"type\":\"material\",\"rarity\":\"common\",\"price\":3,\"stats\":{},\"description\":\"沾着晨露的鲜嫩药草，叶间还藏着一朵白色小花。\",\"iconIndex\":15,\"id\":\"herb-1\",\"quantity\":12,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"mushroom\",\"name\":\"萤光蘑菇\",\"type\":\"material\",\"rarity\":\"uncommon\",\"price\":5,\"stats\":{},\"description\":\"红伞上缀着浅色斑点，常生长在潮湿而幽静的林地。\",\"iconIndex\":16,\"id\":\"mushroom-1\",\"quantity\":7,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"ore\",\"name\":\"赤铁矿\",\"type\":\"material\",\"rarity\":\"common\",\"price\":8,\"stats\":{},\"description\":\"沉甸甸的深灰矿石，是铁匠炉边最受欢迎的原料。\",\"iconIndex\":17,\"id\":\"ore-1\",\"quantity\":9,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"crystal\",\"name\":\"霜蓝水晶\",\"type\":\"material\",\"rarity\":\"rare\",\"price\":22,\"stats\":{},\"description\":\"晶簇透出冰蓝光芒，在掌心留下微微的凉意。\",\"iconIndex\":18,\"id\":\"crystal-1\",\"quantity\":4,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"leather\",\"name\":\"柔韧皮革\",\"type\":\"material\",\"rarity\":\"common\",\"price\":6,\"stats\":{},\"description\":\"卷得整齐的柔韧皮革，能用来修补装备和旅者的行囊。\",\"iconIndex\":19,\"id\":\"leather-1\",\"quantity\":6,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"key\",\"name\":\"古城钥匙\",\"type\":\"quest\",\"rarity\":\"epic\",\"price\":100,\"stats\":{},\"description\":\"精巧的黄铜钥匙，通往古城深处一扇被遗忘的大门。\",\"iconIndex\":20,\"id\":\"key-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"scroll\",\"name\":\"失落地图卷轴\",\"type\":\"quest\",\"rarity\":\"rare\",\"price\":45,\"stats\":{},\"description\":\"带着火漆印记的羊皮卷，上面记录着失落遗迹的方位。\",\"iconIndex\":21,\"id\":\"scroll-1\",\"quantity\":3,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"coinPouch\",\"name\":\"旅行补给袋\",\"type\":\"consumable\",\"rarity\":\"uncommon\",\"price\":25,\"stats\":{},\"description\":\"绣着罗盘纹章的皮袋，袋口隐约闪着金币的光。\",\"iconIndex\":22,\"id\":\"coinPouch-1\",\"quantity\":18,\"equipped\":false,\"displayStats\":\"无属性加成\"},{\"kind\":\"gem\",\"name\":\"暮色宝石\",\"type\":\"material\",\"rarity\":\"legendary\",\"price\":60,\"stats\":{},\"description\":\"切面中流转着暮紫色光芒，深受远方商人的喜爱。\",\"iconIndex\":23,\"id\":\"gem-1\",\"quantity\":2,\"equipped\":false,\"displayStats\":\"无属性加成\"}],\"equipment\":{\"weapon\":null,\"offhand\":null,\"head\":null,\"body\":null,\"feet\":null,\"ring\":null,\"neck\":null},\"equipmentStats\":{},\"selectedId\":\"sword-1\",\"selected\":{\"kind\":\"sword\",\"name\":\"霜纹长剑\",\"type\":\"equipment\",\"rarity\":\"rare\",\"slot\":\"weapon\",\"price\":80,\"stats\":{\"attack\":48,\"crit\":6,\"durability\":100},\"description\":\"剑身流转着如霜的纹路，\\n仿佛封存了北境的寒风。\\n它曾陪伴无数旅者穿越黑暗，迎向黎明。\",\"iconIndex\":0,\"id\":\"sword-1\",\"quantity\":1,\"equipped\":false,\"displayStats\":\"攻击 +48 · 暴击 +6% · 耐久 100\"},\"query\":\"\",\"category\":\"all\",\"sort\":\"default\",\"rewards\":{\"items\":[{\"id\":\"item-0\",\"name\":\"治疗药水 1\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-1\",\"name\":\"旅行宝石 2\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-2\",\"name\":\"远行卷轴 3\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-3\",\"name\":\"治疗药水 4\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-4\",\"name\":\"旅行宝石 5\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-5\",\"name\":\"远行卷轴 6\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-6\",\"name\":\"治疗药水 7\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-7\",\"name\":\"旅行宝石 8\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-8\",\"name\":\"远行卷轴 9\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-9\",\"name\":\"治疗药水 10\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-10\",\"name\":\"旅行宝石 11\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-11\",\"name\":\"远行卷轴 12\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-12\",\"name\":\"治疗药水 13\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-13\",\"name\":\"旅行宝石 14\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-14\",\"name\":\"远行卷轴 15\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-15\",\"name\":\"治疗药水 16\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-16\",\"name\":\"旅行宝石 17\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-17\",\"name\":\"远行卷轴 18\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-18\",\"name\":\"治疗药水 19\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-19\",\"name\":\"旅行宝石 20\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-20\",\"name\":\"远行卷轴 21\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-21\",\"name\":\"治疗药水 22\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-22\",\"name\":\"旅行宝石 23\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-23\",\"name\":\"远行卷轴 24\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-24\",\"name\":\"治疗药水 25\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-25\",\"name\":\"旅行宝石 26\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-26\",\"name\":\"远行卷轴 27\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-27\",\"name\":\"治疗药水 28\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-28\",\"name\":\"旅行宝石 29\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-29\",\"name\":\"远行卷轴 30\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"}],\"visible\":[{\"id\":\"item-0\",\"name\":\"治疗药水 1\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-1\",\"name\":\"旅行宝石 2\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-2\",\"name\":\"远行卷轴 3\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-3\",\"name\":\"治疗药水 4\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-4\",\"name\":\"旅行宝石 5\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-5\",\"name\":\"远行卷轴 6\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-6\",\"name\":\"治疗药水 7\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-7\",\"name\":\"旅行宝石 8\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-8\",\"name\":\"远行卷轴 9\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-9\",\"name\":\"治疗药水 10\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-10\",\"name\":\"旅行宝石 11\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-11\",\"name\":\"远行卷轴 12\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-12\",\"name\":\"治疗药水 13\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-13\",\"name\":\"旅行宝石 14\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-14\",\"name\":\"远行卷轴 15\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-15\",\"name\":\"治疗药水 16\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-16\",\"name\":\"旅行宝石 17\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-17\",\"name\":\"远行卷轴 18\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-18\",\"name\":\"治疗药水 19\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-19\",\"name\":\"旅行宝石 20\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-20\",\"name\":\"远行卷轴 21\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-21\",\"name\":\"治疗药水 22\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-22\",\"name\":\"旅行宝石 23\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-23\",\"name\":\"远行卷轴 24\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-24\",\"name\":\"治疗药水 25\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-25\",\"name\":\"旅行宝石 26\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-26\",\"name\":\"远行卷轴 27\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-27\",\"name\":\"治疗药水 28\",\"state\":\"locked\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-28\",\"name\":\"旅行宝石 29\",\"state\":\"ready\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"},{\"id\":\"item-29\",\"name\":\"远行卷轴 30\",\"state\":\"claimed\",\"description\":\"旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。\"}],\"coins\":0,\"query\":\"\"}},\"session\":{\"open\":true,\"listenerCount\":1,\"notifications\":0,\"opens\":1,\"closes\":0,\"closedCallbacks\":0,\"listenerErrors\":0}}",
+    "ui": {
+      "open": true,
+      "popup": false,
+      "menu": false,
+      "screenWidth": 1586,
+      "screenHeight": 992,
+      "physicalRows": 24,
+      "virtualItems": 24,
+      "virtualList": false,
+      "scrollY": 0,
+      "title": "旅者背包",
+      "fidelity": {
+        "canonical": {
+          "width": 1586,
+          "height": 992
+        },
+        "scale": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "referenceSha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b"
+      },
+      "controls": [
+        {
+          "name": "title",
+          "rect": {
+            "x": 132,
+            "y": 26,
+            "width": 420,
+            "height": 99
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "coins",
+          "rect": {
+            "x": 1164,
+            "y": 23,
+            "width": 132,
+            "height": 38
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "close",
+          "rect": {
+            "x": 1372,
+            "y": 19,
+            "width": 39,
+            "height": 39
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "search",
+          "rect": {
+            "x": 207,
+            "y": 165,
+            "width": 219,
+            "height": 30
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "tab_all",
+          "rect": {
+            "x": 466,
+            "y": 156,
+            "width": 99,
+            "height": 45
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "tab_equipment",
+          "rect": {
+            "x": 571,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "tab_consumable",
+          "rect": {
+            "x": 678,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "tab_material",
+          "rect": {
+            "x": 784,
+            "y": 156,
+            "width": 101,
+            "height": 45
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "tab_quest",
+          "rect": {
+            "x": 890,
+            "y": 156,
+            "width": 96,
+            "height": 45
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "list",
+          "rect": {
+            "x": 149,
+            "y": 222,
+            "width": 832,
+            "height": 597
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "detailIcon",
+          "rect": {
+            "x": 1040,
+            "y": 150,
+            "width": 194,
+            "height": 392
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "detailTitle",
+          "rect": {
+            "x": 1258,
+            "y": 190,
+            "width": 166,
+            "height": 42
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "rarity",
+          "rect": {
+            "x": 1259,
+            "y": 238,
+            "width": 165,
+            "height": 30
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "stat-label-attack",
+          "rect": {
+            "x": 1274,
+            "y": 340,
+            "width": 80,
+            "height": 33
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "stat_attack",
+          "rect": {
+            "x": 1344,
+            "y": 339,
+            "width": 75,
+            "height": 35
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "stat-label-crit",
+          "rect": {
+            "x": 1274,
+            "y": 399,
+            "width": 80,
+            "height": 33
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "stat_crit",
+          "rect": {
+            "x": 1344,
+            "y": 398,
+            "width": 75,
+            "height": 35
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "stat-label-durability",
+          "rect": {
+            "x": 1274,
+            "y": 458,
+            "width": 80,
+            "height": 33
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "stat_durability",
+          "rect": {
+            "x": 1344,
+            "y": 457,
+            "width": 75,
+            "height": 35
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "description",
+          "rect": {
+            "x": 1047,
+            "y": 564,
+            "width": 374,
+            "height": 85
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "primary",
+          "rect": {
+            "x": 1047,
+            "y": 685,
+            "width": 370,
+            "height": 65
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "sell",
+          "rect": {
+            "x": 1047,
+            "y": 763,
+            "width": 370,
+            "height": 65
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "summary",
+          "rect": {
+            "x": 201,
+            "y": 894,
+            "width": 92,
+            "height": 35
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "capacity-fill",
+          "rect": {
+            "x": 299,
+            "y": 901,
+            "width": 328,
+            "height": 14
+          },
+          "enabled": false,
+          "visible": true
+        },
+        {
+          "name": "sort",
+          "rect": {
+            "x": 1141,
+            "y": 883,
+            "width": 216,
+            "height": 49
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "menu",
+          "rect": {
+            "x": 1404,
+            "y": 890,
+            "width": 34,
+            "height": 38
+          },
+          "enabled": true,
+          "visible": true
+        },
+        {
+          "name": "footer",
+          "rect": {
+            "x": 560,
+            "y": 949,
+            "width": 520,
+            "height": 25
+          },
+          "enabled": false,
+          "visible": true
+        }
+      ],
+      "controlRects": {
+        "title": {
+          "x": 132,
+          "y": 26,
+          "width": 420,
+          "height": 99
+        },
+        "coins": {
+          "x": 1164,
+          "y": 23,
+          "width": 132,
+          "height": 38
+        },
+        "close": {
+          "x": 1372,
+          "y": 19,
+          "width": 39,
+          "height": 39
+        },
+        "search": {
+          "x": 207,
+          "y": 165,
+          "width": 219,
+          "height": 30
+        },
+        "tab_all": {
+          "x": 466,
+          "y": 156,
+          "width": 99,
+          "height": 45
+        },
+        "tab_equipment": {
+          "x": 571,
+          "y": 156,
+          "width": 101,
+          "height": 45
+        },
+        "tab_consumable": {
+          "x": 678,
+          "y": 156,
+          "width": 101,
+          "height": 45
+        },
+        "tab_material": {
+          "x": 784,
+          "y": 156,
+          "width": 101,
+          "height": 45
+        },
+        "tab_quest": {
+          "x": 890,
+          "y": 156,
+          "width": 96,
+          "height": 45
+        },
+        "list": {
+          "x": 149,
+          "y": 222,
+          "width": 832,
+          "height": 597
+        },
+        "detailIcon": {
+          "x": 1040,
+          "y": 150,
+          "width": 194,
+          "height": 392
+        },
+        "detailTitle": {
+          "x": 1258,
+          "y": 190,
+          "width": 166,
+          "height": 42
+        },
+        "rarity": {
+          "x": 1259,
+          "y": 238,
+          "width": 165,
+          "height": 30
+        },
+        "stat-label-attack": {
+          "x": 1274,
+          "y": 340,
+          "width": 80,
+          "height": 33
+        },
+        "stat_attack": {
+          "x": 1344,
+          "y": 339,
+          "width": 75,
+          "height": 35
+        },
+        "stat-label-crit": {
+          "x": 1274,
+          "y": 399,
+          "width": 80,
+          "height": 33
+        },
+        "stat_crit": {
+          "x": 1344,
+          "y": 398,
+          "width": 75,
+          "height": 35
+        },
+        "stat-label-durability": {
+          "x": 1274,
+          "y": 458,
+          "width": 80,
+          "height": 33
+        },
+        "stat_durability": {
+          "x": 1344,
+          "y": 457,
+          "width": 75,
+          "height": 35
+        },
+        "description": {
+          "x": 1047,
+          "y": 564,
+          "width": 374,
+          "height": 85
+        },
+        "primary": {
+          "x": 1047,
+          "y": 685,
+          "width": 370,
+          "height": 65
+        },
+        "sell": {
+          "x": 1047,
+          "y": 763,
+          "width": 370,
+          "height": 65
+        },
+        "summary": {
+          "x": 201,
+          "y": 894,
+          "width": 92,
+          "height": 35
+        },
+        "capacity-fill": {
+          "x": 299,
+          "y": 901,
+          "width": 328,
+          "height": 14
+        },
+        "sort": {
+          "x": 1141,
+          "y": 883,
+          "width": 216,
+          "height": 49
+        },
+        "menu": {
+          "x": 1404,
+          "y": 890,
+          "width": 34,
+          "height": 38
+        },
+        "footer": {
+          "x": 560,
+          "y": 949,
+          "width": 520,
+          "height": 25
+        }
+      },
+      "rows": [
+        {
+          "id": "sword-1",
+          "rect": {
+            "x": 149,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "axe-1",
+          "rect": {
+            "x": 289,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "bow-1",
+          "rect": {
+            "x": 430,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "staff-1",
+          "rect": {
+            "x": 570,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "shield-1",
+          "rect": {
+            "x": 711,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "helmet-1",
+          "rect": {
+            "x": 851,
+            "y": 222,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "armor-1",
+          "rect": {
+            "x": 149,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "boots-1",
+          "rect": {
+            "x": 289,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "ring-1",
+          "rect": {
+            "x": 430,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "amulet-1",
+          "rect": {
+            "x": 570,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "redPotion-1",
+          "rect": {
+            "x": 711,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "bluePotion-1",
+          "rect": {
+            "x": 851,
+            "y": 376,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "staminaPotion-1",
+          "rect": {
+            "x": 149,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "antidote-1",
+          "rect": {
+            "x": 289,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "elixir-1",
+          "rect": {
+            "x": 430,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "herb-1",
+          "rect": {
+            "x": 570,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "mushroom-1",
+          "rect": {
+            "x": 711,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "ore-1",
+          "rect": {
+            "x": 851,
+            "y": 529,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "crystal-1",
+          "rect": {
+            "x": 149,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "leather-1",
+          "rect": {
+            "x": 289,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "key-1",
+          "rect": {
+            "x": 430,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "scroll-1",
+          "rect": {
+            "x": 570,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "coinPouch-1",
+          "rect": {
+            "x": 711,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        },
+        {
+          "id": "gem-1",
+          "rect": {
+            "x": 851,
+            "y": 682,
+            "width": 128,
+            "height": 137
+          }
+        }
+      ],
+      "notice": ""
+    },
+    "metrics": {
+      "opened": 1,
+      "closed": 0,
+      "renders": 1,
+      "storageSaves": 0,
+      "storageLoads": 0,
+      "compositionEvents": [],
+      "rowObjectsCreated": 24
+    },
+    "errors": []
+  },
+  "initialImages": [
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/environmentLeft.png",
+      "bytes": 205263,
+      "width": 127,
+      "height": 992,
+      "sha256": "21eb3985edd50ea2c2ea16c02d79a054bd3b9f7049c509d88c260de8d06629ff",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/environmentRight.png",
+      "bytes": 264403,
+      "width": 133,
+      "height": 992,
+      "sha256": "568742588acc51f57a58b4872857c70c810817180cf628c9679a81502e1495c9",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/environmentTop.png",
+      "bytes": 29169,
+      "width": 1586,
+      "height": 17,
+      "sha256": "6bd04d574045e54744acadde24140663bbd0e15110c18d2f0e17139a93631c8e",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/environmentBottom.png",
+      "bytes": 27640,
+      "width": 1586,
+      "height": 16,
+      "sha256": "016c0662de98bd4e7b96d8110989ba70ddbe768cc18e55ac07415d30c2c87fa5",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerFill.png",
+      "bytes": 48784,
+      "width": 530,
+      "height": 105,
+      "sha256": "34da0feedfb5f6bc909ac76ead93cf7627036e539731cadeb20f1c8807a542bb",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerLeftMiddle.png",
+      "bytes": 167326,
+      "width": 986,
+      "height": 137,
+      "sha256": "f3244f3a07e09a1946003f62123ea8c098f3b303138a194443fcb2609fd46da9",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerRightLower.png",
+      "bytes": 30917,
+      "width": 340,
+      "height": 75,
+      "sha256": "f17ad1fb9a6f39967e3eac2d7ed05fb26a015967aa546f3b159bd12d23972a84",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerRightUpper.png",
+      "bytes": 11655,
+      "width": 157,
+      "height": 62,
+      "sha256": "fcd49c2af7df2f2242ea0bb43a17b858605015c01ea24cbb2d174da0f342b822",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerCoinBlank.png",
+      "bytes": 1063,
+      "width": 16,
+      "height": 45,
+      "sha256": "46988688b6d659fb2cf6060545c459120b71515dd95889d2cbcb1e13a1e2e07e",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/panelFill.png",
+      "bytes": 5679,
+      "width": 8,
+      "height": 620,
+      "sha256": "8d8513fed22a8ecc44f1a533278ee66a8f0feacb2554381cae7039bdac13369a",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/headerBranding.png",
+      "bytes": 76288,
+      "width": 420,
+      "height": 99,
+      "sha256": "47a09cda968eb1bbdb9e34ff7fb04ad76d75929590334de12793f89b619734c8",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/logo.png",
+      "bytes": 20292,
+      "width": 119,
+      "height": 99,
+      "sha256": "1bf50a41e045cf8cfb8741c615123262c2880caa5e6a35db5f48286694a7ee23",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/coin.png",
+      "bytes": 6209,
+      "width": 45,
+      "height": 45,
+      "sha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/close.png",
+      "bytes": 3350,
+      "width": 39,
+      "height": 39,
+      "sha256": "9b0affedb97f67e7ef24b676fdbaa05ceae261e505c704cc67a20ac93203fa92",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/sellCoins.png",
+      "bytes": 3690,
+      "width": 43,
+      "height": 33,
+      "sha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/compass.png",
+      "bytes": 5404,
+      "width": 44,
+      "height": 39,
+      "sha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/searchIcon.png",
+      "bytes": 1998,
+      "width": 29,
+      "height": 29,
+      "sha256": "d469ed3b37bec5bc4cd2147418c805bd5c9c29cff76c965336b363e58d144486",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/capacityIcon.png",
+      "bytes": 3208,
+      "width": 35,
+      "height": 36,
+      "sha256": "2085040ee2ba86014bccac608152c86a8fde5eb162d8e37d7e68854dca21ae59",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/menu.png",
+      "bytes": 2637,
+      "width": 34,
+      "height": 38,
+      "sha256": "e424c2eccbf8fcd719874cd5e793f5b0e4e019daa96b148360f47214d1abda79",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/sortArrow.png",
+      "bytes": 916,
+      "width": 22,
+      "height": 17,
+      "sha256": "1e86f7724e0e1a746422dcefa06ecc43aaa55dc8002a5ce9229b711990cbaedd",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/detailSword.png",
+      "bytes": 167622,
+      "width": 194,
+      "height": 392,
+      "sha256": "b878203d7ec888402c952ce0303358c241b4cad1fb45c60cac13ac5eec1359c1",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/statAttack.png",
+      "bytes": 2956,
+      "width": 34,
+      "height": 33,
+      "sha256": "d13b103c0e2e0146baedfbb95a9d661c0524305a47f19f5ba647a8ae376e26e3",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/statCrit.png",
+      "bytes": 2837,
+      "width": 34,
+      "height": 33,
+      "sha256": "a1e28bb240f3e2084a15b6b9837a679437094d8a05ba38007c8d0dc6c7467134",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/statDurability.png",
+      "bytes": 2898,
+      "width": 34,
+      "height": 33,
+      "sha256": "7392df94362da8e01d61b56bf0f09e3c32ff087e1acea577baa29289cfa366be",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/detailLowerDivider.png",
+      "bytes": 7456,
+      "width": 371,
+      "height": 13,
+      "sha256": "7a08d4309b1bb55fbe26a2e66ecba66cce5de93cae5b45f978c451c95a4916ff",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/detailDivider.png",
+      "bytes": 4873,
+      "width": 188,
+      "height": 15,
+      "sha256": "3ceaf93af3370e10e3c74653499fc05130aa07b2da73eef8dca0c93ac8d14b01",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/frameLeft.png",
+      "bytes": 67276,
+      "width": 879,
+      "height": 723,
+      "sha256": "964464357e163682a35c745b01b563564d943f5860f427d1f195876ba2226247",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/frameFooter.png",
+      "bytes": 26085,
+      "width": 1318,
+      "height": 74,
+      "sha256": "ca16943d90fd4e0125d71b2a540d1b566f0940acb897292658791595d18a72a5",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/frameRight.png",
+      "bytes": 60386,
+      "width": 433,
+      "height": 723,
+      "sha256": "341c899865bbb68077a5f7813ccc3474882cbb50127a70b5e273541872678a92",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slotNormalFrame.png",
+      "bytes": 9994,
+      "width": 128,
+      "height": 137,
+      "sha256": "32aff72ae057f351134a0ba13892a0b7abcfc95d4f4dfe1cb94329da809e685f",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slotSelectedFrame.png",
+      "bytes": 13760,
+      "width": 138,
+      "height": 147,
+      "sha256": "1bcf3721c8e70d7be7003e02573d3fe4612faac16c8e01173363b7dbe9230f3a",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/progressFill.png",
+      "bytes": 381,
+      "width": 12,
+      "height": 10,
+      "sha256": "01ef0a6bdbb549336a0a160bd73783b145beda609753baea2e2fb0738806e6d7",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/progressFrame.png",
+      "bytes": 6072,
+      "width": 420,
+      "height": 24,
+      "sha256": "06913784ad01867fbfdbbcd38137d006aecb1f5badf2da6b7e626c8a92726deb",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/primaryBg.png",
+      "bytes": 46483,
+      "width": 370,
+      "height": 65,
+      "sha256": "d3d09c55a4d9da984d5092f2a08c6b935b52fd3472f744cdc63d40b3801f4b3c",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/searchBg.png",
+      "bytes": 6593,
+      "width": 299,
+      "height": 46,
+      "sha256": "5d3b3cd4cdd1f5b0fb012e18c5c713a75866ddede628135d373c6427c3cc5fe3",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/secondaryBg.png",
+      "bytes": 23893,
+      "width": 370,
+      "height": 65,
+      "sha256": "64929b4ff2b4e897edaf42956edfb0ef7d9f82cb271386a28e541cf4c047a40b",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/tabNormalBg.png",
+      "bytes": 2716,
+      "width": 101,
+      "height": 45,
+      "sha256": "4fe501a3b522a79c487192886ae0d288267ba228bb3363cf891ec344eb50ad37",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/sortBg.png",
+      "bytes": 4386,
+      "width": 216,
+      "height": 49,
+      "sha256": "0de0323d5b9b62c0fe7f124f8af872f957eca8fc02d86d2e31814abd082e0ddc",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot00.png",
+      "bytes": 40214,
+      "width": 128,
+      "height": 137,
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot01.png",
+      "bytes": 41439,
+      "width": 128,
+      "height": 137,
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/tabSelectedBg.png",
+      "bytes": 5579,
+      "width": 99,
+      "height": 45,
+      "sha256": "3dcd52ee5b14d81833fe8dce70adaf7cd098d147981d2a79d1e654146443ca6c",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot02.png",
+      "bytes": 35846,
+      "width": 128,
+      "height": 137,
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot03.png",
+      "bytes": 37423,
+      "width": 128,
+      "height": 137,
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot04.png",
+      "bytes": 44186,
+      "width": 128,
+      "height": 137,
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot05.png",
+      "bytes": 41475,
+      "width": 128,
+      "height": 137,
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot06.png",
+      "bytes": 43203,
+      "width": 128,
+      "height": 137,
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot07.png",
+      "bytes": 39399,
+      "width": 128,
+      "height": 137,
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot08.png",
+      "bytes": 38308,
+      "width": 128,
+      "height": 137,
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot09.png",
+      "bytes": 36194,
+      "width": 128,
+      "height": 137,
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot10.png",
+      "bytes": 41153,
+      "width": 128,
+      "height": 137,
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot11.png",
+      "bytes": 41855,
+      "width": 128,
+      "height": 137,
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot12.png",
+      "bytes": 40477,
+      "width": 128,
+      "height": 137,
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot13.png",
+      "bytes": 41614,
+      "width": 128,
+      "height": 137,
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot14.png",
+      "bytes": 40442,
+      "width": 128,
+      "height": 137,
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot16.png",
+      "bytes": 43683,
+      "width": 128,
+      "height": 137,
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot15.png",
+      "bytes": 41373,
+      "width": 128,
+      "height": 137,
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot17.png",
+      "bytes": 41851,
+      "width": 128,
+      "height": 137,
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot18.png",
+      "bytes": 44024,
+      "width": 128,
+      "height": 137,
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot20.png",
+      "bytes": 36495,
+      "width": 128,
+      "height": 137,
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot19.png",
+      "bytes": 41861,
+      "width": 128,
+      "height": 137,
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot21.png",
+      "bytes": 41617,
+      "width": 128,
+      "height": 137,
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot22.png",
+      "bytes": 40758,
+      "width": 128,
+      "height": 137,
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8",
+      "matchesReferencePixels": false
+    },
+    {
+      "url": "http://127.0.0.1:4182/fidelity/skin/slot23.png",
+      "bytes": 40157,
+      "width": 128,
+      "height": 137,
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8",
+      "matchesReferencePixels": false
+    }
+  ],
+  "initialCells": [
+    {
+      "id": "sword-1",
+      "rect": {
+        "x": 149,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "axe-1",
+      "rect": {
+        "x": 289,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "bow-1",
+      "rect": {
+        "x": 430,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "staff-1",
+      "rect": {
+        "x": 570,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "shield-1",
+      "rect": {
+        "x": 711,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "helmet-1",
+      "rect": {
+        "x": 851,
+        "y": 222,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "armor-1",
+      "rect": {
+        "x": 149,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "boots-1",
+      "rect": {
+        "x": 289,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "ring-1",
+      "rect": {
+        "x": 430,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "amulet-1",
+      "rect": {
+        "x": 570,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "redPotion-1",
+      "rect": {
+        "x": 711,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "8"
+      ]
+    },
+    {
+      "id": "bluePotion-1",
+      "rect": {
+        "x": 851,
+        "y": 376,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "5"
+      ]
+    },
+    {
+      "id": "staminaPotion-1",
+      "rect": {
+        "x": 149,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "3"
+      ]
+    },
+    {
+      "id": "antidote-1",
+      "rect": {
+        "x": 289,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "2"
+      ]
+    },
+    {
+      "id": "elixir-1",
+      "rect": {
+        "x": 430,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "herb-1",
+      "rect": {
+        "x": 570,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "12"
+      ]
+    },
+    {
+      "id": "mushroom-1",
+      "rect": {
+        "x": 711,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "7"
+      ]
+    },
+    {
+      "id": "ore-1",
+      "rect": {
+        "x": 851,
+        "y": 529,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "9"
+      ]
+    },
+    {
+      "id": "crystal-1",
+      "rect": {
+        "x": 149,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "4"
+      ]
+    },
+    {
+      "id": "leather-1",
+      "rect": {
+        "x": 289,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "6"
+      ]
+    },
+    {
+      "id": "key-1",
+      "rect": {
+        "x": 430,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "1"
+      ]
+    },
+    {
+      "id": "scroll-1",
+      "rect": {
+        "x": 570,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "3"
+      ]
+    },
+    {
+      "id": "coinPouch-1",
+      "rect": {
+        "x": 711,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "18"
+      ]
+    },
+    {
+      "id": "gem-1",
+      "rect": {
+        "x": 851,
+        "y": 682,
+        "width": 128,
+        "height": 137
+      },
+      "texts": [
+        "2"
+      ]
+    }
+  ],
+  "initialDomImageUrls": [
+    "http://127.0.0.1:4182/fidelity/skin/environmentLeft.png",
+    "http://127.0.0.1:4182/fidelity/skin/environmentRight.png",
+    "http://127.0.0.1:4182/fidelity/skin/environmentTop.png",
+    "http://127.0.0.1:4182/fidelity/skin/environmentBottom.png",
+    "http://127.0.0.1:4182/fidelity/skin/headerLeftMiddle.png",
+    "http://127.0.0.1:4182/fidelity/skin/headerRightLower.png",
+    "http://127.0.0.1:4182/fidelity/skin/headerRightUpper.png",
+    "http://127.0.0.1:4182/fidelity/skin/headerCoinBlank.png",
+    "http://127.0.0.1:4182/fidelity/skin/panelFill.png",
+    "http://127.0.0.1:4182/fidelity/skin/frameLeft.png",
+    "http://127.0.0.1:4182/fidelity/skin/frameRight.png",
+    "http://127.0.0.1:4182/fidelity/skin/frameFooter.png",
+    "http://127.0.0.1:4182/fidelity/skin/headerBranding.png",
+    "http://127.0.0.1:4182/fidelity/skin/coin.png",
+    "http://127.0.0.1:4182/fidelity/skin/close.png",
+    "http://127.0.0.1:4182/fidelity/skin/searchBg.png",
+    "http://127.0.0.1:4182/fidelity/skin/tabSelectedBg.png",
+    "http://127.0.0.1:4182/fidelity/skin/tabNormalBg.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot00.png",
+    "http://127.0.0.1:4182/fidelity/skin/slotSelectedFrame.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot01.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot02.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot03.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot04.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot05.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot06.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot07.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot08.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot09.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot10.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot11.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot12.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot13.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot14.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot15.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot16.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot17.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot18.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot19.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot20.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot21.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot22.png",
+    "http://127.0.0.1:4182/fidelity/skin/slot23.png",
+    "http://127.0.0.1:4182/fidelity/skin/detailSword.png",
+    "http://127.0.0.1:4182/fidelity/skin/primaryBg.png",
+    "http://127.0.0.1:4182/fidelity/skin/secondaryBg.png",
+    "http://127.0.0.1:4182/fidelity/skin/compass.png",
+    "http://127.0.0.1:4182/fidelity/skin/sellCoins.png",
+    "http://127.0.0.1:4182/fidelity/skin/statAttack.png",
+    "http://127.0.0.1:4182/fidelity/skin/statCrit.png",
+    "http://127.0.0.1:4182/fidelity/skin/statDurability.png",
+    "http://127.0.0.1:4182/fidelity/skin/searchIcon.png",
+    "http://127.0.0.1:4182/fidelity/skin/detailDivider.png",
+    "http://127.0.0.1:4182/fidelity/skin/detailLowerDivider.png",
+    "http://127.0.0.1:4182/fidelity/skin/capacityIcon.png",
+    "http://127.0.0.1:4182/fidelity/skin/progressFrame.png",
+    "http://127.0.0.1:4182/fidelity/skin/progressFill.png",
+    "http://127.0.0.1:4182/fidelity/skin/sortBg.png",
+    "http://127.0.0.1:4182/fidelity/skin/sortArrow.png",
+    "http://127.0.0.1:4182/fidelity/skin/menu.png"
+  ],
+  "storage": [
+    {
+      "key": "lumio-reference-inventory-schema-1",
+      "bytes": 1433
+    }
+  ],
+  "failure": {
+    "code": "acceptance_assertion",
+    "message": "Error: page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at actualRect (http://127.0.0.1:4182/fidelity/fidelity.js:12:50)\n    at http://127.0.0.1:4182/fidelity/fidelity.js:162:59\n    at Array.map (<anonymous>)\n    at Object.snapshot (http://127.0.0.1:4182/fidelity/fidelity.js:162:26)\n    at eval (eval at evaluate (:370:30), <anonymous>:1:32)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+    "stack": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at actualRect (http://127.0.0.1:4182/fidelity/fidelity.js:12:50)\n    at http://127.0.0.1:4182/fidelity/fidelity.js:162:59\n    at Array.map (<anonymous>)\n    at Object.snapshot (http://127.0.0.1:4182/fidelity/fidelity.js:162:26)\n    at eval (eval at evaluate (:370:30), <anonymous>:1:32)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at read ([LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\accept-fidelity.mjs:81:23)\n    at business ([LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\accept-fidelity.mjs:82:45)\n    at waitFor ([LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\accept-fidelity.mjs:87:112)\n    at runAcceptance ([LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\accept-fidelity.mjs:144:134)\n    at async file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/accept-fidelity.mjs:187:103"
+  },
+  "failureReadError": "Error: page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at actualRect (http://127.0.0.1:4182/fidelity/fidelity.js:12:50)\n    at http://127.0.0.1:4182/fidelity/fidelity.js:162:59\n    at Array.map (<anonymous>)\n    at Object.snapshot (http://127.0.0.1:4182/fidelity/fidelity.js:162:26)\n    at eval (eval at evaluate (:370:30), <anonymous>:1:33)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+  "completedAt": "2026-10-16T09:46:13.092Z"
+}

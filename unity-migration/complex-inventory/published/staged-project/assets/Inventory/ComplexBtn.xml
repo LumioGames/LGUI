@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="132,40" extention="Button">
+  <displayList>
+    <graph id="btnbg" name="btnbg" type="rect" lineColor="#b1915c" fillColor="#392f24" corner="3,3,3,3" xy="0,0" size="132,40" alpha="0.97" touchable="false">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="title" name="title" text="操作" font="Arial" fontSize="18" color="#e9ddc4" align="center" autoSize="none" xy="0,6" size="132,28" touchable="false">
+      <relation target="" sidePair="width-width,middle-middle"/>
+    </text>
+  </displayList>
+  <Button/>
+</component>

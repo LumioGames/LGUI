@@ -1,0 +1,31 @@
+✔ reference fixture loads through the real shared schema with 24 ordered stacks and exact quantities (7.3654ms)
+✔ reference sword stats and Chinese display derive from the same shared catalog values (0.553ms)
+✔ reference equip/use/save/load preserve real quantities, equipment stats and the original reward state (4.2987ms)
+✔ visual startup load precedes open and retains one shared subscription across reopen (1.9988ms)
+✔ default bag has 24 atlas kinds, 26 stable stacks and a 30-slot capacity (2.13ms)
+✔ search/category/sort compose deterministically and selection uses stable identity (2.3437ms)
+✔ using a consumable removes one unit and equipment use is rejected atomically (2.0762ms)
+✔ last consumed unit frees a slot and clears selection (2.326ms)
+✔ equipping replaces only its slot, returns the original item and aggregates stats (3.0598ms)
+✔ unequip into a full bag fails without dropping the equipped object (2.9557ms)
+✔ selling selected quantities credits exact price and rejects quest objects (1.7259ms)
+✔ invalid sale quantities and missing/worn targets never mutate business state (3.2615ms)
+✔ original reward eligibility, progress and one-time coins remain composed (3.0279ms)
+✔ save/load roundtrips equipment, quantity, wallet, filtering and original reward replay (3.9348ms)
+✔ invalid schema and impossible reward replay fail atomically (9.4253ms)
+✔ one callback per mutation, idempotent subscriptions and released callbacks stay absent (0.2391ms)
+✔ 250 facade open/close cycles preserve state and never grow listeners (427.0932ms)
+✔ malformed/unknown protocol and invalid filters leave model and session unchanged (5.5143ms)
+✔ snapshots are detached from internal inventory and stats (0.5664ms)
+✔ the original reward source hash stays unchanged (0.7253ms)
+✔ C# display contract has string/null errors, fixed slots and preformatted stats (0.8662ms)
+✔ repeated loading does not duplicate reward payouts or equipment objects (9.1778ms)
+✔ a stale repeated disposer cannot cancel a later subscription for the same callback (0.1437ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 624.1355

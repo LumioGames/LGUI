@@ -1,0 +1,41 @@
+[
+  {
+    "PackageVersion": "3.9.10",
+    "Dirty": "",
+    "Directory": "[LGUI_ROOT]\\repos\\onejs-lumio",
+    "Submodules": "-f1139494d18a2053630c5ed3384a42bb70db3c53 Auxiliary~/quickjs-unity/quickjs\n-482291286b9960c255ff8765d18a618cc87d89a2 Auxiliary~/quickjs-unity/quickjs-ng",
+    "Branch": "main",
+    "PackageName": "com.singtaa.onejs",
+    "Commit": "538026e34ad843c285120ceea7af4cc9f9af7abf",
+    "Origin": "https://github.com/LumioGames/Lumio-OneJS.git",
+    "LicenseDeclaration": "MIT",
+    "Tree": "44486450386e45fb20556448f9cdcb05a07920b0",
+    "Checked": "2026-10-15 America/Los_Angeles"
+  },
+  {
+    "PackageVersion": "3.9.10",
+    "Dirty": "",
+    "Directory": "[LGUI_ROOT]\\repos\\onejs-upstream",
+    "Submodules": "-f1139494d18a2053630c5ed3384a42bb70db3c53 Auxiliary~/quickjs-unity/quickjs\n-482291286b9960c255ff8765d18a618cc87d89a2 Auxiliary~/quickjs-unity/quickjs-ng",
+    "Branch": "main",
+    "PackageName": "com.singtaa.onejs",
+    "Commit": "538026e34ad843c285120ceea7af4cc9f9af7abf",
+    "Origin": "https://github.com/Singtaa/OneJS.git",
+    "LicenseDeclaration": "MIT",
+    "Tree": "44486450386e45fb20556448f9cdcb05a07920b0",
+    "Checked": "2026-10-15 America/Los_Angeles"
+  },
+  {
+    "PackageVersion": "0.4.1",
+    "Dirty": "",
+    "Directory": "[LGUI_ROOT]\\repos\\onejs-react",
+    "Submodules": "",
+    "Branch": "main",
+    "PackageName": "onejs-react",
+    "Commit": "498ee4b433d43dd10d01dc1ca70dc49aeaeb1ccf",
+    "Origin": "https://github.com/Singtaa/onejs-react.git",
+    "LicenseDeclaration": "MIT",
+    "Tree": "fbec4c99e6d049ea1068a2636cec0badb44f6b31",
+    "Checked": "2026-10-15 America/Los_Angeles"
+  }
+]

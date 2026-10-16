@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="invtest1">
+  <resources>
+    <component id="button01" name="Btn.xml" path="/" exported="true"/>
+    <component id="itemrow1" name="ItemRow.xml" path="/" exported="true"/>
+    <component id="main0001" name="Main.xml" path="/" exported="true"/>
+    <component id="reward01" name="Reward.xml" path="/" exported="true"/>
+    <image id="icon0001" name="icon.png" path="/" exported="true" width="32" height="32"/>
+    <image id="icx00000" name="icx00000.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00001" name="icx00001.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00002" name="icx00002.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00003" name="icx00003.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00004" name="icx00004.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00005" name="icx00005.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00006" name="icx00006.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00007" name="icx00007.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00008" name="icx00008.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00009" name="icx00009.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00010" name="icx00010.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00011" name="icx00011.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00012" name="icx00012.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00013" name="icx00013.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00014" name="icx00014.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00015" name="icx00015.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00016" name="icx00016.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00017" name="icx00017.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00018" name="icx00018.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00019" name="icx00019.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00020" name="icx00020.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00021" name="icx00021.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00022" name="icx00022.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00023" name="icx00023.png" path="/" exported="true" width="256" height="256"/>
+    <image id="cxback01" name="cxback01.png" path="/" exported="true" width="1586" height="992"/>
+    <component id="cxbtn001" name="ComplexBtn.xml" path="/" exported="true"/>
+    <component id="cxslot01" name="ItemSlot.xml" path="/" exported="true"/>
+    <component id="cxdetl01" name="Detail.xml" path="/" exported="true"/>
+    <component id="cxmain01" name="ComplexMain.xml" path="/" exported="true"/>
+  </resources>
+  <publish name="Inventory">
+  </publish>
+</packageDescription>

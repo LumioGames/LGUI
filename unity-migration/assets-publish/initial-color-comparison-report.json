@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "status": "failed",
+  "scriptPath": "[LGUI_ROOT]\\unity-migration\\scripts\\publish-unity-assets.mjs",
+  "scriptSha256": "8f02ec8353079c5c262280f9021040fd02320d282e3bfd4479d48722ec1c73ec",
+  "sourceProject": "[LGUI_ROOT]\\闭环验证\\roundtrip-final\\project\\Inventory.fairy",
+  "output": "[LGUI_ROOT]\\unity-migration\\assets-publish\\unity",
+  "codeGeneration": false,
+  "plugins": [],
+  "checks": [
+    {
+      "name": "final-source-matches-browser-export-zip",
+      "passed": true,
+      "fileCount": 10
+    }
+  ],
+  "packageVersions": {
+    "core": "0.7.0",
+    "functions": "0.7.0"
+  },
+  "sourceArchive": {
+    "path": "[LGUI_ROOT]\\闭环验证\\evidence\\2026-10-16T07-57-12-927Z-chrome\\Inventory-browser-export.zip",
+    "sha256": "183e93d11990ef2a1adeb8a7329911db525463f55a3eac640c812c2245d0e702"
+  },
+  "sourceManifestSha256": "93bcd420a1d079dfd8a72e6aae27d2d67c52dc9407311804123f2b8abc9625f3",
+  "sourceFairySha256": "25c87f86ef704e473bcf963fef88fa5b7f96e4b01018454c14e64fc3823e1839",
+  "validation": {
+    "status": "valid",
+    "complete": true,
+    "diagnostics": []
+  },
+  "sourceTitle": {
+    "kind": "text",
+    "id": "title",
+    "name": "title",
+    "position": {
+      "x": 46,
+      "y": 29
+    },
+    "size": {
+      "width": 640,
+      "height": 42
+    },
+    "locked": false,
+    "aspect": false,
+    "minSize": {
+      "width": 0,
+      "height": 0
+    },
+    "maxSize": {
+      "width": 0,
+      "height": 0
+    },
+    "pivot": {
+      "x": 0,
+      "y": 0
+    },
+    "pivotAsAnchor": false,
+    "scale": {
+      "x": 1,
+      "y": 1
+    },
+    "skew": {
+      "x": 0,
+      "y": 0
+    },
+    "visible": true,
+    "touchable": false,
+    "grayed": false,
+    "alpha": 1,
+    "rotation": 0,
+    "tooltips": "",
+    "blendMode": "normal",
+    "filter": "",
+    "filterData": "",
+    "customData": "",
+    "relations": [],
+    "gears": [],
+    "group": "",
+    "text": "旅者背包 · 网页保存闭环",
+    "font": "",
+    "fontSize": 30,
+    "color": "#8df0c4",
+    "align": 0,
+    "vAlign": 0,
+    "leading": 3,
+    "letterSpacing": 0,
+    "autoSize": 0,
+    "singleLine": false,
+    "autoClearText": false,
+    "outlineSoftness": 0,
+    "underlaySoftness": 0,
+    "ubbEnabled": false,
+    "underline": false,
+    "italic": false,
+    "bold": false,
+    "strikethrough": false,
+    "strokeColor": null,
+    "strokeSize": 1,
+    "shadowColor": null,
+    "shadowOffset": {
+      "x": 0,
+      "y": 0
+    },
+    "demoText": "",
+    "templateVarsEnabled": false,
+    "faceDilate": 0
+  },
+  "sourceConfiguration": {
+    "projectType": 4,
+    "settings": {
+      "publish": {
+        "binaryFormat": true,
+        "compressDesc": false,
+        "fileExtension": "fui"
+      },
+      "common": {},
+      "adaptation": {}
+    },
+    "packagePublish": {
+      "name": "Inventory",
+      "path": "",
+      "branchPath": "",
+      "packageCount": 0,
+      "genCode": false,
+      "codePath": "",
+      "useGlobalAtlasSettings": true,
+      "maxAtlasSize": 2048,
+      "sizeOption": "pot",
+      "forceSquare": false,
+      "allowRotation": false,
+      "paging": true,
+      "extractAlpha": false,
+      "maxAtlasIndex": 10,
+      "atlases": [],
+      "excludedResourceIds": []
+    }
+  },
+  "effectivePublishConfiguration": {
+    "projectType": 0,
+    "fileExtension": "bytes",
+    "compressed": false,
+    "codeGeneration": false,
+    "plugins": [],
+    "assetsPath": "[LGUI_ROOT]\\闭环验证\\roundtrip-final\\project\\assets"
+  },
+  "published": {
+    "files": [
+      {
+        "path": "[LGUI_ROOT]\\unity-migration\\assets-publish\\unity\\Inventory_atlas0.png",
+        "size": 147
+      },
+      {
+        "path": "[LGUI_ROOT]\\unity-migration\\assets-publish\\unity\\Inventory_fui.bytes",
+        "size": 3454
+      }
+    ]
+  },
+  "outputFiles": [
+    {
+      "path": "Inventory_atlas0.png",
+      "size": 147,
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "Inventory_fui.bytes",
+      "size": 3454,
+      "sha256": "e247e43a4317a91b401622a41aca74627654cbd231a5fdf98e949e51cc6b6014"
+    }
+  ],
+  "binaryHeader": {
+    "magic": "FGUI",
+    "version": 7,
+    "compressed": false
+  },
+  "error": {
+    "name": "AssertionError",
+    "message": "Unity binary must preserve the selected runtime semantics.\n+ actual - expected\n... Skipped lines\n\n  [\n    {\n      id: 'invtest1',\n      name: 'Inventory',\n      resources: [\n...\n              alpha: 1,\n+             fillColor: '#FF2868A6',\n-             fillColor: '#2868a6',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'btnbg',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'btnbg',\n              position: {\n                x: 0,\n                y: 0\n...\n              autoSize: 0,\n+             color: '#FFFFFF',\n-             color: '#ffffff',\n              font: '',\n              fontSize: 18,\n              gears: [],\n              grayed: false,\n              id: 'title',\n...\n              alpha: 1,\n+             fillColor: '#FF14283E',\n-             fillColor: '#14283e',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'rowbg',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'rowbg',\n              position: {\n                x: 0,\n                y: 0\n...\n              autoSize: 0,\n+             color: '#DCE9FF',\n-             color: '#dce9ff',\n              font: '',\n              fontSize: 20,\n              gears: [],\n              grayed: false,\n              id: 'label',\n...\n              autoSize: 0,\n+             color: '#A6B7CA',\n-             color: '#a6b7ca',\n              font: '',\n              fontSize: 15,\n              gears: [\n                {\n                  controllerName: 'state',\n...\n              alpha: 1,\n+             fillColor: '#FF0B1626',\n-             fillColor: '#0b1626',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'background',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'background',\n              position: {\n                x: 0,\n                y: 0\n...\n              autoSize: 0,\n+             color: '#8DF0C4',\n-             color: '#8df0c4',\n              font: '',\n              fontSize: 30,\n              gears: [],\n              grayed: false,\n              id: 'title',\n...\n              alpha: 1,\n+             fillColor: '#FF1A304A',\n-             fillColor: '#1a304a',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'searchbg',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'searchbg',\n              position: {\n                x: 28,\n                y: 83\n...\n              autoSize: 0,\n+             color: '#FFFFFF',\n-             color: '#ffffff',\n              font: '',\n              fontSize: 20,\n              gears: [],\n              grayed: false,\n              id: 'search',\n...\n              autoSize: 0,\n+             color: '#98B8D8',\n-             color: '#98b8d8',\n              font: '',\n              fontSize: 18,\n              gears: [],\n              grayed: false,\n              id: 'summary',\n...\n              alpha: 1,\n+             fillColor: '#FF18334C',\n-             fillColor: '#18334c',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'rewardbg',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'rewardbg',\n              position: {\n                x: 0,\n                y: 0\n...\n              autoSize: 0,\n+             color: '#DCE9FF',\n-             color: '#dce9ff',\n              font: '',\n              fontSize: 28,\n              gears: [],\n              grayed: false,\n              id: 'title',\n...\n              autoSize: 0,\n+             color: '#DCE9FF',\n-             color: '#dce9ff',\n              font: '',\n              fontSize: 20,\n              gears: [],\n              grayed: false,\n              id: 'body',\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Unity binary must preserve the selected runtime semantics.\n+ actual - expected\n... Skipped lines\n\n  [\n    {\n      id: 'invtest1',\n      name: 'Inventory',\n      resources: [\n...\n              alpha: 1,\n+             fillColor: '#FF2868A6',\n-             fillColor: '#2868a6',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'btnbg',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'btnbg',\n              position: {\n                x: 0,\n                y: 0\n...\n              autoSize: 0,\n+             color: '#FFFFFF',\n-             color: '#ffffff',\n              font: '',\n              fontSize: 18,\n              gears: [],\n              grayed: false,\n              id: 'title',\n...\n              alpha: 1,\n+             fillColor: '#FF14283E',\n-             fillColor: '#14283e',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'rowbg',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'rowbg',\n              position: {\n                x: 0,\n                y: 0\n...\n              autoSize: 0,\n+             color: '#DCE9FF',\n-             color: '#dce9ff',\n              font: '',\n              fontSize: 20,\n              gears: [],\n              grayed: false,\n              id: 'label',\n...\n              autoSize: 0,\n+             color: '#A6B7CA',\n-             color: '#a6b7ca',\n              font: '',\n              fontSize: 15,\n              gears: [\n                {\n                  controllerName: 'state',\n...\n              alpha: 1,\n+             fillColor: '#FF0B1626',\n-             fillColor: '#0b1626',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'background',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'background',\n              position: {\n                x: 0,\n                y: 0\n...\n              autoSize: 0,\n+             color: '#8DF0C4',\n-             color: '#8df0c4',\n              font: '',\n              fontSize: 30,\n              gears: [],\n              grayed: false,\n              id: 'title',\n...\n              alpha: 1,\n+             fillColor: '#FF1A304A',\n-             fillColor: '#1a304a',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'searchbg',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'searchbg',\n              position: {\n                x: 28,\n                y: 83\n...\n              autoSize: 0,\n+             color: '#FFFFFF',\n-             color: '#ffffff',\n              font: '',\n              fontSize: 20,\n              gears: [],\n              grayed: false,\n              id: 'search',\n...\n              autoSize: 0,\n+             color: '#98B8D8',\n-             color: '#98b8d8',\n              font: '',\n              fontSize: 18,\n              gears: [],\n              grayed: false,\n              id: 'summary',\n...\n              alpha: 1,\n+             fillColor: '#FF18334C',\n-             fillColor: '#18334c',\n              gears: [],\n              graphType: 1,\n              grayed: false,\n              id: 'rewardbg',\n              kind: 'graph',\n+             lineColor: '#FF000000',\n-             lineColor: '#000000',\n              lineSize: 0,\n              name: 'rewardbg',\n              position: {\n                x: 0,\n                y: 0\n...\n              autoSize: 0,\n+             color: '#DCE9FF',\n-             color: '#dce9ff',\n              font: '',\n              fontSize: 28,\n              gears: [],\n              grayed: false,\n              id: 'title',\n...\n              autoSize: 0,\n+             color: '#DCE9FF',\n-             color: '#dce9ff',\n              font: '',\n              fontSize: 20,\n              gears: [],\n              grayed: false,\n              id: 'body',\n\n    at file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/scripts/publish-unity-assets.mjs:129:10"
+  },
+  "sourceUnchanged": {
+    "passed": true,
+    "changedPaths": [],
+    "archiveSha256After": "183e93d11990ef2a1adeb8a7329911db525463f55a3eac640c812c2245d0e702",
+    "allTargetAndUnrelatedSourceFilesCompared": true
+  }
+}

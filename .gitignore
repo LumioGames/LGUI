@@ -25,6 +25,7 @@
 /unity-migration/downloads/
 /downloads/
 /installers/
+/交付/文档检查/
 **/*BackUpThisFolder_ButDontShipItWithYourGame*/
 
 # Local bridge credentials and browser state.

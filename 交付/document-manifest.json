@@ -1,0 +1,565 @@
+{
+  "schemaVersion": 1,
+  "title": "FairyGUI 跨端 UI：方案、踩坑与最佳实践",
+  "document": "FairyGUI-跨端UI方案与最佳实践.html",
+  "documentSha256": "8483b656bfcb18242a054937cf85801b4d9f63bcd955636dfc73de26105b2e27",
+  "bytes": 6213079,
+  "date": "2026-10-16",
+  "timezone": "America/Los_Angeles",
+  "createdAtUtc": "2026-10-16T11:32:33.046Z",
+  "selfContained": true,
+  "externalDependencies": [],
+  "chapters": 11,
+  "images": [
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/narrow-layout-2026-10-16T10-28-39.024Z/390-ring.png",
+      "bytes": 256472,
+      "sha256": "7de2d48d2f8381e8207b1a1cfe0b77d2611b57626d3c0bd7362e555f870d9d81"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/button-skins-2026-10-16T10-18-55.338Z/794.png",
+      "bytes": 526388,
+      "sha256": "d5e9c9fa3d42c92aefbffeab60176d3b1f0a2a77a4520ab0754f8db2b4953a0f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-player-release-first-1103/player-486x727-ring.png",
+      "bytes": 348821,
+      "sha256": "a8723825711339562af810c3ecc5fbd7e28f6e35304997dff2704927a9a41d0e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-player-release-first-1103/player-1280x800-sword.png",
+      "bytes": 1331890,
+      "sha256": "f97ee30c3abf7e18ae1b17a784d3a6611831bef0c68783ad1371d8fe370e2713"
+    },
+    {
+      "path": "unity-migration/complex-inventory/art/reference.png",
+      "bytes": 2121788,
+      "sha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b"
+    }
+  ],
+  "localReferences": [
+    {
+      "path": "闭环验证/报告.md",
+      "label": "closed-loop-report",
+      "type": "file",
+      "bytes": 9039
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/publish-report.json",
+      "label": "fidelity-publish",
+      "type": "file",
+      "bytes": 24238
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/document-runtime-facts.json",
+      "label": "完整运行核对",
+      "type": "file",
+      "bytes": 10490
+    },
+    {
+      "path": "unity-migration/complex-inventory/shared/model.ts",
+      "label": "ComplexInventory",
+      "type": "file",
+      "bytes": 14401
+    },
+    {
+      "path": "prototype/shared/model.ts",
+      "label": "奖励模型",
+      "type": "file",
+      "bytes": 1859
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/layout-shared.js",
+      "label": "fidelity-layout",
+      "type": "file",
+      "bytes": 17584
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/Inventory.fairy",
+      "label": "FairyGUI 源工程",
+      "type": "file",
+      "bytes": 118
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/fidelity.ts",
+      "label": "网页适配",
+      "type": "file",
+      "bytes": 32325
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/FidelityInventoryHost.cs",
+      "label": "已构建，尚无补丁后运行报告",
+      "type": "file",
+      "bytes": 42019
+    },
+    {
+      "path": "unity-migration/complex-inventory/shared/API.md",
+      "label": "共享业务 API",
+      "type": "file",
+      "bytes": 6629
+    },
+    {
+      "path": "unity-migration/assets-publish/迁移复用边界.md",
+      "label": "baseline-migration-boundary",
+      "type": "file",
+      "bytes": 10377
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/setup-unity.json",
+      "label": "资源同步与哈希",
+      "type": "file",
+      "bytes": 3817
+    },
+    {
+      "path": "evidence/environment.json",
+      "label": "最初环境",
+      "type": "file",
+      "bytes": 1534
+    },
+    {
+      "path": "evidence/repository-versions.json",
+      "label": "仓库版本",
+      "type": "file",
+      "bytes": 3178
+    },
+    {
+      "path": "unity-migration/evidence/installed-environment.json",
+      "label": "installed-env",
+      "type": "file",
+      "bytes": 579
+    },
+    {
+      "path": "unity-migration/evidence/puerts-install.json",
+      "label": "puerts-install",
+      "type": "file",
+      "bytes": 10233
+    },
+    {
+      "path": "evidence/onejs-audit/versions.json",
+      "label": "onejs-versions",
+      "type": "file",
+      "bytes": 1690
+    },
+    {
+      "path": "闭环验证/text-fix/报告.md",
+      "label": "text-fix-report",
+      "type": "file",
+      "bytes": 4501
+    },
+    {
+      "path": "闭环验证/text-fix/red-results.json",
+      "label": "text-red",
+      "type": "file",
+      "bytes": 11127
+    },
+    {
+      "path": "闭环验证/text-fix/green-results.json",
+      "label": "text-green",
+      "type": "file",
+      "bytes": 8715
+    },
+    {
+      "path": "闭环验证/evidence/2026-10-16T07-57-12-927Z-chrome/report.json",
+      "label": "editor-chrome",
+      "type": "file",
+      "bytes": 33460
+    },
+    {
+      "path": "闭环验证/evidence/2026-10-16T07-59-58-225Z-edge/report.json",
+      "label": "editor-edge",
+      "type": "file",
+      "bytes": 33032
+    },
+    {
+      "path": "闭环验证/evidence/2026-10-16T07-59-58-237Z-chrome-persistent/report.json",
+      "label": "editor-persistent",
+      "type": "file",
+      "bytes": 42365
+    },
+    {
+      "path": "闭环验证/evidence/dom-roundtrip.json",
+      "label": "roundtrip-dom",
+      "type": "file",
+      "bytes": 3906
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin-manifest.json",
+      "label": "fidelity-skin",
+      "type": "file",
+      "bytes": 84724
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/detail-icons.json",
+      "label": "fidelity-details",
+      "type": "file",
+      "bytes": 25020
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-sync-report.json",
+      "label": "fidelity-source-sync",
+      "type": "file",
+      "bytes": 8527
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/source-audit.json",
+      "label": "fidelity-source-audit",
+      "type": "file",
+      "bytes": 28677
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-resource-map.json",
+      "label": "fidelity-map",
+      "type": "file",
+      "bytes": 112010
+    },
+    {
+      "path": "evidence/toolchain-summary.json",
+      "label": "toolchain-summary",
+      "type": "file",
+      "bytes": 2540
+    },
+    {
+      "path": "research/toolchain/结论与证据.md",
+      "label": "toolchain-report",
+      "type": "file",
+      "bytes": 11169
+    },
+    {
+      "path": "unity-migration/evidence/compatibility/README.txt",
+      "label": "il2cpp-compat",
+      "type": "file",
+      "bytes": 2651
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/layout-reference.json",
+      "label": "layout-reference.json",
+      "type": "file",
+      "bytes": 12994
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-fidelity.mjs",
+      "label": "accept-fidelity.mjs",
+      "type": "file",
+      "bytes": 20357
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/narrow-layout-2026-10-16T10-25-07.196Z/result.json",
+      "label": "result.json",
+      "type": "file",
+      "bytes": 1365
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/narrow-2026-10-16T10-40-57.558Z-chrome-changed-overlay/result.json",
+      "label": "Chrome",
+      "type": "file",
+      "bytes": 980851
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/button-skin.test.mjs",
+      "label": "button-skin.test.mjs",
+      "type": "file",
+      "bytes": 7089
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/adaptive-controls-2026-10-16T10-20-28.108Z-chrome-control-art-rounded-pixels/result.json",
+      "label": "Chrome",
+      "type": "file",
+      "bytes": 615395
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/adaptive-controls-2026-10-16T10-20-28.113Z-edge-control-art-final/result.json",
+      "label": "Edge",
+      "type": "file",
+      "bytes": 615217
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-08.png",
+      "label": "detail-08.png",
+      "type": "file",
+      "bytes": 71522
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/narrow-layout-2026-10-16T10-34-24.402Z/result.json",
+      "label": "result.json",
+      "type": "file",
+      "bytes": 29542
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/narrow-layout-2026-10-16T10-36-19.181Z/result.json",
+      "label": "result.json",
+      "type": "file",
+      "bytes": 77448
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/narrow-2026-10-16T10-40-57.577Z-edge-changed-overlay/result.json",
+      "label": "Edge",
+      "type": "file",
+      "bytes": 980825
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/accept-2026-10-16T09-46-09.626Z-chrome-first/result.json",
+      "label": "result.json",
+      "type": "file",
+      "bytes": 143633
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-editor-first-1051/screenshot-9fe8ca08-c74d-48e3-aace-872b2a1041ba.png",
+      "label": "screenshot-9fe8ca08-c74d-48e3-aace-872b2a1041ba.png",
+      "type": "file",
+      "bytes": 411424
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-editor-second-1056/screenshot-3f3493af-094a-4e0a-9814-7342267b3bad.png",
+      "label": "screenshot-3f3493af-094a-4e0a-9814-7342267b3bad.png",
+      "type": "file",
+      "bytes": 321244
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/layout-shared.test.mjs",
+      "label": "layout-shared.test.mjs",
+      "type": "file",
+      "bytes": 1283
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-editor-first-1051/fidelity-acceptance-editor-1792147946059.json",
+      "label": "fidelity-acceptance-editor-1792147946059.json",
+      "type": "file",
+      "bytes": 594606
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-editor-second-1056/fidelity-acceptance-editor-1792148327128.json",
+      "label": "fidelity-editor-interim",
+      "type": "file",
+      "bytes": 1062927
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-player-release-first-1103/fidelity-acceptance-player-1792148739020.json",
+      "label": "fidelity-player-interim",
+      "type": "file",
+      "bytes": 3151433
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-player-release-first-1103/screenshot-32dbdfd6-d907-4e6c-a1f1-667fc1bb9e93.png",
+      "label": "screenshot-32dbdfd6-d907-4e6c-a1f1-667fc1bb9e93.png",
+      "type": "file",
+      "bytes": 1331894
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-build-release-final-1108/player-build.json",
+      "label": "fidelity-release-build",
+      "type": "file",
+      "bytes": 200
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/adaptive-controls-2026-10-16T10-40-19.878Z-shared-layout-review/result.json",
+      "label": "fidelity-adaptive",
+      "type": "file",
+      "bytes": 615783
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/narrow-layout-2026-10-16T10-40-20.122Z/result.json",
+      "label": "fidelity-narrow",
+      "type": "file",
+      "bytes": 79282
+    },
+    {
+      "path": "unity-migration/evidence/player-baseline-summary.json",
+      "label": "baseline-player-summary",
+      "type": "file",
+      "bytes": 6683
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/index.html",
+      "label": "当前网页入口 /fidelity/",
+      "type": "file",
+      "bytes": 785
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/FidelityMigrationBuild.cs",
+      "label": "Unity 构建入口",
+      "type": "file",
+      "bytes": 6604
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/build-app.mjs",
+      "label": "build-app.mjs",
+      "type": "file",
+      "bytes": 2080
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/sync-fidelity-project.mjs",
+      "label": "sync-fidelity-project.mjs",
+      "type": "file",
+      "bytes": 17810
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/publish-fidelity-project.mjs",
+      "label": "publish-fidelity-project.mjs",
+      "type": "file",
+      "bytes": 5225
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-adaptive-controls.mjs",
+      "label": "accept-adaptive-controls.mjs",
+      "type": "file",
+      "bytes": 35115
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-narrow-layout.mjs",
+      "label": "accept-narrow-layout.mjs",
+      "type": "file",
+      "bytes": 23164
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/setup-fidelity-unity.mjs",
+      "label": "setup-fidelity-unity.mjs",
+      "type": "file",
+      "bytes": 4626
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/run-fidelity.ps1",
+      "label": "run-fidelity.ps1",
+      "type": "file",
+      "bytes": 4081
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-unity-fidelity.mjs",
+      "label": "accept-unity-fidelity.mjs",
+      "type": "file",
+      "bytes": 16151
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/package-fidelity.ps1",
+      "label": "package-fidelity.ps1",
+      "type": "file",
+      "bytes": 4634
+    },
+    {
+      "path": "research/onejs/报告.md",
+      "label": "onejs-report",
+      "type": "file",
+      "bytes": 21134
+    },
+    {
+      "path": "research/unity/报告.md",
+      "label": "unity-research",
+      "type": "file",
+      "bytes": 18488
+    },
+    {
+      "path": "unity-migration/complex-inventory/dist/ComplexInventoryApp.txt",
+      "label": "26,852 字节",
+      "type": "file",
+      "bytes": 26852
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/document-architecture-notes.json",
+      "label": "架构核对",
+      "type": "file",
+      "bytes": 17755
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/document-foundation-notes.json",
+      "label": "历史阶段与版本核对",
+      "type": "file",
+      "bytes": 42241
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-build-release-final-1108/result-20261016-110750.json",
+      "label": "最终构建进程结果",
+      "type": "file",
+      "bytes": 1148
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/unity-build-release-final-1108/build-20261016-110750.log",
+      "label": "最终构建日志",
+      "type": "file",
+      "bytes": 48108
+    },
+    {
+      "path": "报告.md",
+      "label": "initial-report",
+      "type": "file",
+      "bytes": 25813
+    },
+    {
+      "path": "闭环验证/README.md",
+      "label": "closed-loop-readme",
+      "type": "file",
+      "bytes": 6275
+    },
+    {
+      "path": "闭环验证/evidence/agent-session-green.log",
+      "label": "session-tests",
+      "type": "file",
+      "bytes": 205
+    },
+    {
+      "path": "闭环验证/evidence/relay-green.log",
+      "label": "relay-tests",
+      "type": "file",
+      "bytes": 288
+    },
+    {
+      "path": "闭环验证/evidence/2026-10-16T07-57-12-927Z-chrome/Inventory-browser-export.zip",
+      "label": "browser-export",
+      "type": "file",
+      "bytes": 6134
+    },
+    {
+      "path": "闭环验证/roundtrip-final/publish-report.json",
+      "label": "roundtrip-publish",
+      "type": "file",
+      "bytes": 2201
+    },
+    {
+      "path": "unity-migration/assets-publish/publish-report.json",
+      "label": "baseline-publish",
+      "type": "file",
+      "bytes": 5424
+    },
+    {
+      "path": "unity-migration/evidence/ts-build.json",
+      "label": "baseline-ts-build",
+      "type": "file",
+      "bytes": 1970
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/README.md",
+      "label": "fidelity-readme",
+      "type": "file",
+      "bytes": 2340
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/Unity回写断点.md",
+      "label": "fidelity-unity-plan",
+      "type": "file",
+      "bytes": 2812
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/功能验收-2026-10-16.md",
+      "label": "fidelity-functional",
+      "type": "file",
+      "bytes": 5103
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/evidence/layout-extraction-review-pixels.json",
+      "label": "fidelity-pixel-regression",
+      "type": "file",
+      "bytes": 2416
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-structure.json",
+      "label": "fidelity-structure",
+      "type": "file",
+      "bytes": 81240
+    },
+    {
+      "path": "unity-migration/complex-inventory/dist/build.json",
+      "label": "fidelity-business",
+      "type": "file",
+      "bytes": 984
+    }
+  ],
+  "scope": "Documentation only. No Unity/game build, runtime or packaging executed during document preparation."
+}

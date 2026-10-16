@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "checkedAtUtc": "2026-10-16T11:11:43Z",
+  "purpose": "为总结 HTML 核对已有运行与交付证据；本轮仅只读检查并写此事实文件，没有续跑测试、构建、Editor 或 Player，也没有恢复 goal。",
+  "pathBase": "验证/unity-migration/complex-inventory/fidelity/evidence",
+  "userAcceptance": {
+    "status": "user_acceptance_pass",
+    "basis": "协调者 /root 最新任务明确转述：用户已验收通过，当前请求整理 HTML 方案、踩坑与最佳实践。",
+    "distinction": "这是用户验收状态，不自动等于最终 Unity 版本的 automated_pass，也不证明 ZIP 已生成。"
+  },
+  "statusMatrix": {
+    "userAcceptance": "user_acceptance_pass",
+    "finalReleaseCompilation": "automated_pass",
+    "latestCompletedEditorRun": "partial",
+    "latestCompletedPlayerBusinessChecks": "automated_pass",
+    "latestCompletedPlayerOverall": "failed_native_description_bounds",
+    "runtimeVerificationAfterFinalDescriptionPatch": "untested",
+    "distributionZip": "not_generated"
+  },
+  "sourceIdentity": {
+    "unity": "6000.6.6f1",
+    "businessBundle": {
+      "sha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e",
+      "bytes": 26852,
+      "asset": "../../../InventoryUnity/Assets/Resources/FidelityInventoryApp.txt",
+      "observedInLatestEditorAndPlayer": true
+    },
+    "sharedLayout": {
+      "sha256": "ac1090b293125478680778e4760507917cd176ab419a629993e89de2ace0ccf1",
+      "bytes": 17584,
+      "asset": "../../../InventoryUnity/Assets/Resources/FidelityInventoryLayout.txt",
+      "observedInLatestEditorAndPlayer": true
+    },
+    "hostOfLatestCompletedRuntimeChecks": {
+      "sha256": "387e3953df09be04dd261ca69d157b106c08ec8e05188b3bf9cb92ec124d7a81",
+      "bytes": 40780
+    },
+    "finalHostAfterDescriptionPatch": {
+      "file": "../../../InventoryUnity/Assets/Migration/FidelityInventoryHost.cs",
+      "sha256": "4cbc437a76a59733d8289da144f47a9f2a7ae3afa218e2289e3853adbd814c1d",
+      "bytes": 42019,
+      "runtimeReverificationFound": false
+    }
+  },
+  "finalReleaseBuild": {
+    "status": "Succeeded",
+    "exitCode": 0,
+    "startedUtc": "2026-10-16T11:07:51.0722003Z",
+    "endedUtc": "2026-10-16T11:08:29.4921859Z",
+    "processId": 36876,
+    "processStillRunningAtInspection": false,
+    "target": "StandaloneWindows64",
+    "scriptingBackend": "IL2CPP",
+    "developmentBuild": false,
+    "buildOptions": "None",
+    "totalBytes": 400106359,
+    "totalSeconds": 28.8574504,
+    "errors": 0,
+    "warnings": 7,
+    "report": "unity-build-release-final-1108/player-build.json",
+    "processResult": "unity-build-release-final-1108/result-20261016-110750.json",
+    "log": "unity-build-release-final-1108/build-20261016-110750.log",
+    "outputDirectory": "../../../build/fidelity-windows-il2cpp",
+    "executable": {
+      "file": "FidelityInventory.exe",
+      "sha256": "5ae16e18272be99348db2a4e6450bba3210710f8279357ab2f1f0b33ce520dd1"
+    },
+    "gameAssembly": {
+      "file": "GameAssembly.dll",
+      "sha256": "d3086b3318fe3e9d556411fc7966f28f6ed12a0eb24d53be412bc43f8d3fe6d9"
+    },
+    "limitation": "中断前启动的构建自行正常完成，证明编译与链接成功；没有该最终构建的实际运行验收报告。"
+  },
+  "latestCompletedEditor": {
+    "report": "unity-editor-second-1056/fidelity-acceptance-editor-1792148327128.json",
+    "startedAt": "2026-10-16T10:58:39.884Z",
+    "completedAt": "2026-10-16T10:58:47.128Z",
+    "status": "partial",
+    "businessStatus": "passed",
+    "assertionsPassed": 28,
+    "assertionsTotal": 28,
+    "closeReopenCycles": 20,
+    "actualScreen": { "width": 390, "height": 844 },
+    "requestedScreen": { "width": 794, "height": 727 },
+    "requestMatched": false,
+    "partialReason": "Screen.SetResolution 未改变 Editor GameView，不能称为 Editor 794×727 验收通过。",
+    "nativeText": { "coins": "12,480", "attack": "+48", "crit": "+6%", "durability": "100" },
+    "shutdown": { "ready": false, "runtimeDisposals": 1, "listenerCount": 0, "errors": [] },
+    "saveRestoration": "本次首次创建的存档通过共享 fixture load 与 save-file 恢复到初始 24 格、12480 金币。",
+    "screenshot": "unity-editor-second-1056/initial-actual-editor.png",
+    "scope": "这是最终 description 高度补丁前的 Host；最终 focused Editor 脚本已编写但未运行。"
+  },
+  "latestCompletedPlayer": {
+    "report": "unity-player-release-first-1103/fidelity-acceptance-player-1792148739020.json",
+    "startedAt": "2026-10-16T11:05:24.216Z",
+    "completedAt": "2026-10-16T11:05:39.020Z",
+    "status": "failed",
+    "businessStatus": "passed",
+    "visualStatus": "failed-native-text-bounds",
+    "assertionsPassed": 46,
+    "assertionsTotal": 46,
+    "closeReopenCycles": 20,
+    "coverage": [
+      "真实 FairyGUI onClick.Call / slot 事件进入同一业务：装备、卸下、使用、出售确认与取消",
+      "原生菜单触发真实文件保存与恢复，完整业务状态读回",
+      "中文搜索、排序、原奖励规则推进与领取",
+      "同一 V8 环境、关闭重开状态保留、每 Update 一次 Tick、正常销毁一次",
+      "四种实际 Player Screen 尺寸、PNG 尺寸一致、24 个真实组件 bounds 在窗口内"
+    ],
+    "inputMethod": "正式文件命令在 Unity 主线程调用真实 FairyGUI 事件；不是 OS 鼠标键盘输入或实际 hit-test 验收。",
+    "resolutions": [
+      { "requested": [1280, 800], "actual": [1280, 800], "matched": true, "mode": "canonical", "columns": 6, "scale": 0.8064516186714172 },
+      { "requested": [794, 727], "actual": [794, 727], "matched": true, "mode": "adaptive", "columns": 4, "scale": 1 },
+      { "requested": [486, 727], "actual": [486, 727], "matched": true, "mode": "adaptive", "columns": 3, "scale": 1 },
+      { "requested": [390, 844], "actual": [390, 844], "matched": true, "mode": "adaptive", "columns": 2, "scale": 1 }
+    ],
+    "screenshots": [
+      "unity-player-release-first-1103/player-1280x800-sword.png",
+      "unity-player-release-first-1103/player-794x727-sword.png",
+      "unity-player-release-first-1103/player-794x727-ring.png",
+      "unity-player-release-first-1103/player-794x727-quest.png",
+      "unity-player-release-first-1103/player-486x727-sword.png",
+      "unity-player-release-first-1103/player-486x727-ring.png",
+      "unity-player-release-first-1103/player-486x727-quest.png",
+      "unity-player-release-first-1103/player-390x844-sword.png",
+      "unity-player-release-first-1103/player-390x844-ring.png",
+      "unity-player-release-first-1103/player-390x844-quest.png"
+    ],
+    "shutdown": { "ready": false, "runtimeDisposals": 1, "listenerCount": 0, "errors": [] },
+    "saveRestoration": {
+      "status": "restored-preexisting-bytes",
+      "sha256": "d591e2691f1a8f2893756760cd4d0303fe30f4747c3de9298ce8479acca1ebf3"
+    },
+    "earlierExternalStateChange": {
+      "report": "unity-player-release-first-1103/fidelity-acceptance-player-1792148701166.json",
+      "observation": "首次宽屏截图后选中项变为 axe-1，导致初始化断言停止；来源未确定。随后正式 shared load 重置 fixture 再运行完整验收。",
+      "productBugEstablished": false
+    }
+  },
+  "descriptionIssueAndPatch": {
+    "prePatchActualFailure": {
+      "viewport": [1280, 800],
+      "text": "剑身流转着如霜的纹路，\n仿佛封存了北境的寒风。\n它曾陪伴无数旅者穿越黑暗，迎向黎明。",
+      "fontSize": 19,
+      "localTextHeight": 94,
+      "localFieldHeight": 90,
+      "actualProjectedTextHeight": 75.80645215511322,
+      "actualFieldHeight": 72.58065795898438,
+      "effect": "协调者与测试者在实际 PNG 中确认 canonical 第三句未显示；不是业务文本缺失。",
+      "adaptiveDescriptionsAndItemNotesFitInLatestReport": true
+    },
+    "patch": {
+      "source": "../../../InventoryUnity/Assets/Migration/FidelityInventoryHost.cs",
+      "sourceSha256": "4cbc437a76a59733d8289da144f47a9f2a7ae3afa218e2289e3853adbd814c1d",
+      "behavior": "仅 canonical 在 Render 赋值后按 ceil(native textHeight)+4 增加说明框高度，并受 primary.y-description.y-12 上限限制；共享布局、全文、字号不变。",
+      "expectedExample": { "baseline": 90, "textHeight": 94, "neededHeight": 98, "cap": 110 },
+      "snapshotObservationsAdded": ["localHeight", "localWidth", "textNeededHeight", "textFitCap", "textFits"],
+      "compiled": true,
+      "runtimeRetested": false,
+      "conclusion": "已修源码且最终 Release 编译通过；中断后未运行最终 Player 或 focused Editor，不能写成说明裁字已实测修复通过。"
+    }
+  },
+  "distribution": {
+    "packagingScriptExists": true,
+    "script": "../../scripts/package-fidelity.ps1",
+    "distributionDirectoryExists": false,
+    "zipFound": false,
+    "packageManifestFound": false,
+    "searchScope": "验证/unity-migration 全目录含 ignored 文件的 *.zip 枚举，以及脚本指定的验证/unity-migration/distribution 目录。",
+    "conclusion": "存在可执行构建产物，但 ZIP/正式分发目录尚未实际生成；有打包脚本不等于已打包。"
+  },
+  "processSnapshot": {
+    "inspectedAtUtc": "2026-10-16T11:11:43Z",
+    "activeOwnedUnityEditorPlayerOrCompiler": [],
+    "knownOwnedProcessesEnded": [41132, 45076, 30124, 36876],
+    "otherUnityNamedProcess": { "pid": 21996, "role": "此前已存在的 UnityHub resources/unity.exe；不是本任务 Editor/Player/编译器" },
+    "actionsTaken": "只读查询进程；没有启动、停止或继续任何测试进程。"
+  },
+  "unexecutedPreparation": {
+    "focusedFinalEditorScript": "../accept-unity-fidelity-focused.mjs",
+    "focusedFinalEditorReportFound": false,
+    "updatedPlayerScriptIncludes390ModalChecks": true,
+    "updated390ModalChecksExecuted": false,
+    "note": "最终编写的新检查不得计入旧报告的 46 项通过数。"
+  },
+  "doNotClaim": [
+    "最终 Host 的 Editor/Player 已 automated_pass",
+    "最终 description 补丁已通过实际原生复验",
+    "Editor 实际以 794×727 运行",
+    "ZIP 已生成或未仪器化分发包已启动验收",
+    "本次文件命令事件验收等同于 OS 输入或真实命中测试",
+    "业务断言通过等同于参考图逐像素视觉通过",
+    "更早 baseline/Complex 的 200 次循环或虚拟列表结果自动覆盖当前 Fidelity 固定 24 格版本"
+  ]
+}

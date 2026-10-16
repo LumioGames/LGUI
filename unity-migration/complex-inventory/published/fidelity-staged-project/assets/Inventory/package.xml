@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="invtest1">
+  <resources>
+    <component id="button01" name="Btn.xml" path="/" exported="true"/>
+    <component id="itemrow1" name="ItemRow.xml" path="/" exported="true"/>
+    <component id="main0001" name="Main.xml" path="/" exported="true"/>
+    <component id="reward01" name="Reward.xml" path="/" exported="true"/>
+    <image id="icon0001" name="icon.png" path="/" exported="true" width="32" height="32"/>
+    <image id="icx00000" name="icx00000.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00001" name="icx00001.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00002" name="icx00002.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00003" name="icx00003.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00004" name="icx00004.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00005" name="icx00005.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00006" name="icx00006.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00007" name="icx00007.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00008" name="icx00008.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00009" name="icx00009.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00010" name="icx00010.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00011" name="icx00011.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00012" name="icx00012.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00013" name="icx00013.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00014" name="icx00014.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00015" name="icx00015.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00016" name="icx00016.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00017" name="icx00017.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00018" name="icx00018.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00019" name="icx00019.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00020" name="icx00020.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00021" name="icx00021.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00022" name="icx00022.png" path="/" exported="true" width="256" height="256"/>
+    <image id="icx00023" name="icx00023.png" path="/" exported="true" width="256" height="256"/>
+    <image id="cxback01" name="cxback01.png" path="/" exported="true" width="1586" height="992"/>
+    <component id="cxbtn001" name="ComplexBtn.xml" path="/" exported="true"/>
+    <component id="cxslot01" name="ItemSlot.xml" path="/" exported="true"/>
+    <component id="cxdetl01" name="Detail.xml" path="/" exported="true"/>
+    <component id="cxmain01" name="ComplexMain.xml" path="/" exported="true"/>
+    <image id="fs000000" name="fs000000.png" path="/" exported="true" width="127" height="992"/>
+    <image id="fs000001" name="fs000001.png" path="/" exported="true" width="133" height="992"/>
+    <image id="fs000002" name="fs000002.png" path="/" exported="true" width="1586" height="17"/>
+    <image id="fs000003" name="fs000003.png" path="/" exported="true" width="1586" height="16"/>
+    <image id="fs000004" name="fs000004.png" path="/" exported="true" width="530" height="105"/>
+    <image id="fs000005" name="fs000005.png" path="/" exported="true" width="986" height="137"/>
+    <image id="fs000006" name="fs000006.png" path="/" exported="true" width="340" height="75"/>
+    <image id="fs000007" name="fs000007.png" path="/" exported="true" width="157" height="62"/>
+    <image id="fs000008" name="fs000008.png" path="/" exported="true" width="16" height="45"/>
+    <image id="fs000009" name="fs000009.png" path="/" exported="true" width="8" height="620"/>
+    <image id="fs000010" name="fs000010.png" path="/" exported="true" width="420" height="99"/>
+    <image id="fs000011" name="fs000011.png" path="/" exported="true" width="119" height="99"/>
+    <image id="fs000012" name="fs000012.png" path="/" exported="true" width="45" height="45"/>
+    <image id="fs000013" name="fs000013.png" path="/" exported="true" width="39" height="39"/>
+    <image id="fs000014" name="fs000014.png" path="/" exported="true" width="44" height="39"/>
+    <image id="fs000015" name="fs000015.png" path="/" exported="true" width="43" height="33"/>
+    <image id="fs000016" name="fs000016.png" path="/" exported="true" width="29" height="29"/>
+    <image id="fs000017" name="fs000017.png" path="/" exported="true" width="35" height="36"/>
+    <image id="fs000018" name="fs000018.png" path="/" exported="true" width="34" height="38"/>
+    <image id="fs000019" name="fs000019.png" path="/" exported="true" width="22" height="17"/>
+    <image id="fs000020" name="fs000020.png" path="/" exported="true" width="194" height="392"/>
+    <image id="fs000021" name="fs000021.png" path="/" exported="true" width="34" height="33"/>
+    <image id="fs000022" name="fs000022.png" path="/" exported="true" width="34" height="33"/>
+    <image id="fs000023" name="fs000023.png" path="/" exported="true" width="34" height="33"/>
+    <image id="fs000024" name="fs000024.png" path="/" exported="true" width="188" height="15"/>
+    <image id="fs000025" name="fs000025.png" path="/" exported="true" width="371" height="13"/>
+    <image id="fs000026" name="fs000026.png" path="/" exported="true" scale="9grid" scale9grid="12,12,855,699" width="879" height="723"/>
+    <image id="fs000027" name="fs000027.png" path="/" exported="true" scale="9grid" scale9grid="12,12,409,699" width="433" height="723"/>
+    <image id="fs000028" name="fs000028.png" path="/" exported="true" width="433" height="723"/>
+    <image id="fs000029" name="fs000029.png" path="/" exported="true" scale="9grid" scale9grid="9,9,1300,56" width="1318" height="74"/>
+    <image id="fs000030" name="fs000030.png" path="/" exported="true" scale="9grid" scale9grid="8,8,112,121" width="128" height="137"/>
+    <image id="fs000031" name="fs000031.png" path="/" exported="true" scale="9grid" scale9grid="9,9,120,129" width="138" height="147"/>
+    <image id="fs000032" name="fs000032.png" path="/" exported="true" scale="9grid" scale9grid="4,4,412,16" width="420" height="24"/>
+    <image id="fs000033" name="fs000033.png" path="/" exported="true" width="12" height="10"/>
+    <image id="fs000034" name="fs000034.png" path="/" exported="true" scale="9grid" scale9grid="14,10,342,45" width="370" height="65"/>
+    <image id="fs000035" name="fs000035.png" path="/" exported="true" scale="9grid" scale9grid="14,10,342,45" width="370" height="65"/>
+    <image id="fs000036" name="fs000036.png" path="/" exported="true" scale="9grid" scale9grid="6,6,287,34" width="299" height="46"/>
+    <image id="fs000037" name="fs000037.png" path="/" exported="true" scale="9grid" scale9grid="5,5,91,35" width="101" height="45"/>
+    <image id="fs000038" name="fs000038.png" path="/" exported="true" scale="9grid" scale9grid="5,5,89,35" width="99" height="45"/>
+    <image id="fs000039" name="fs000039.png" path="/" exported="true" scale="9grid" scale9grid="5,5,206,39" width="216" height="49"/>
+    <image id="fs000040" name="fs000040.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000041" name="fs000041.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000042" name="fs000042.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000043" name="fs000043.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000044" name="fs000044.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000045" name="fs000045.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000046" name="fs000046.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000047" name="fs000047.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000048" name="fs000048.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000049" name="fs000049.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000050" name="fs000050.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000051" name="fs000051.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000052" name="fs000052.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000053" name="fs000053.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000054" name="fs000054.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000055" name="fs000055.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000056" name="fs000056.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000057" name="fs000057.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000058" name="fs000058.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000059" name="fs000059.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000060" name="fs000060.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000061" name="fs000061.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000062" name="fs000062.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000063" name="fs000063.png" path="/" exported="true" width="128" height="137"/>
+    <image id="fs000064" name="fs000064.png" path="/" exported="true" width="879" height="723"/>
+    <image id="fs000065" name="fs000065.png" path="/" exported="true" width="1318" height="74"/>
+    <image id="fs000066" name="fs000066.png" path="/" exported="true" width="978" height="1054"/>
+    <image id="fs000067" name="fs000067.png" path="/" exported="true" width="610" height="517"/>
+    <image id="fs000068" name="fs000068.png" path="/" exported="true" width="929" height="932"/>
+    <image id="fd000000" name="fd000000.png" path="/" exported="true" width="201" height="249"/>
+    <image id="fd000001" name="fd000001.png" path="/" exported="true" width="201" height="233"/>
+    <image id="fd000002" name="fd000002.png" path="/" exported="true" width="213" height="247"/>
+    <image id="fd000003" name="fd000003.png" path="/" exported="true" width="198" height="236"/>
+    <image id="fd000004" name="fd000004.png" path="/" exported="true" width="198" height="219"/>
+    <image id="fd000005" name="fd000005.png" path="/" exported="true" width="179" height="222"/>
+    <image id="fd000006" name="fd000006.png" path="/" exported="true" width="218" height="218"/>
+    <image id="fd000007" name="fd000007.png" path="/" exported="true" width="178" height="223"/>
+    <image id="fd000008" name="fd000008.png" path="/" exported="true" width="151" height="161"/>
+    <image id="fd000009" name="fd000009.png" path="/" exported="true" width="132" height="226"/>
+    <image id="fd000010" name="fd000010.png" path="/" exported="true" width="141" height="215"/>
+    <image id="fd000011" name="fd000011.png" path="/" exported="true" width="140" height="215"/>
+    <image id="fd000012" name="fd000012.png" path="/" exported="true" width="138" height="231"/>
+    <image id="fd000013" name="fd000013.png" path="/" exported="true" width="141" height="213"/>
+    <image id="fd000014" name="fd000014.png" path="/" exported="true" width="202" height="216"/>
+    <image id="fd000015" name="fd000015.png" path="/" exported="true" width="211" height="217"/>
+    <image id="fd000016" name="fd000016.png" path="/" exported="true" width="206" height="213"/>
+    <image id="fd000017" name="fd000017.png" path="/" exported="true" width="209" height="206"/>
+    <image id="fd000018" name="fd000018.png" path="/" exported="true" width="176" height="225"/>
+    <image id="fd000019" name="fd000019.png" path="/" exported="true" width="225" height="217"/>
+    <image id="fd000020" name="fd000020.png" path="/" exported="true" width="192" height="218"/>
+    <image id="fd000021" name="fd000021.png" path="/" exported="true" width="202" height="204"/>
+    <image id="fd000022" name="fd000022.png" path="/" exported="true" width="194" height="213"/>
+    <image id="fd000023" name="fd000023.png" path="/" exported="true" width="142" height="189"/>
+    <component id="fb000001" name="FidelitySecondaryBtn.xml" path="/" exported="true"/>
+    <component id="fb000002" name="FidelityTabBtn.xml" path="/" exported="true"/>
+    <component id="fb000003" name="FidelityCloseBtn.xml" path="/" exported="true"/>
+    <component id="fb000004" name="FidelitySortBtn.xml" path="/" exported="true"/>
+    <component id="fb000005" name="FidelityMenuBtn.xml" path="/" exported="true"/>
+  </resources>
+  <publish name="Inventory">
+  </publish>
+</packageDescription>

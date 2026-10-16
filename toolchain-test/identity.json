@@ -1,0 +1,11 @@
+{
+  "projectPath": "[LGUI_ROOT]\\toolchain-test\\project\\Inventory.fairy",
+  "ids": {
+    "package": "invtest1",
+    "Main": "main0001",
+    "ItemRow": "itemrow1",
+    "Reward": "reward01",
+    "Btn": "button01",
+    "icon": "icon0001"
+  }
+}

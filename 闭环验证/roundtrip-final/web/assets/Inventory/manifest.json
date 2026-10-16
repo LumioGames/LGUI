@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "adapter": "legacy-fairygui-dom-loose-images",
+  "source": "browser-shared-session exported ZIP",
+  "packages": {
+    "invtest1": {
+      "name": "Inventory",
+      "images": {
+        "icon0001": "icon0001.png"
+      }
+    }
+  }
+}

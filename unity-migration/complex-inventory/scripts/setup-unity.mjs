@@ -1,0 +1,27 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const migration=path.dirname(root),project=path.join(migration,'InventoryUnity');
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+const published=JSON.parse(await fs.readFile(path.join(root,'published/publish-report.json'),'utf8'));
+if(published.status!=='passed')throw Error('Complex source publish report must pass before copying runtime resources.');
+const built=JSON.parse(await fs.readFile(path.join(root,'dist/build.json'),'utf8'));
+const bundle=await fs.readFile(path.join(root,'dist/ComplexInventoryApp.txt'));
+if(hash(bundle)!==built.bundleSha256||!built.modelUnchanged)throw Error('Shared bundle hash/model evidence mismatch.');
+const layout=JSON.parse(await fs.readFile(path.join(root,'published/layout.json'),'utf8'));
+if(layout.package.id!=='invtest1'||layout.resources.ComplexMain!=='cxmain01'||layout.resources.ItemSlot!=='cxslot01')throw Error('Resource contract changed.');
+const source=path.join(root,'published/unity');
+const files=(await fs.readdir(source)).filter(name=>name==='Inventory_fui.bytes'||/^Inventory_atlas\d+\.png$/.test(name)).sort();
+if(!files.includes('Inventory_fui.bytes')||!files.some(name=>/^Inventory_atlas\d+\.png$/.test(name)))throw Error('Published bytes and all Unity atlas pages are required.');
+const destination=path.join(project,'Assets/Resources/ComplexInventoryUI');
+await fs.mkdir(destination,{recursive:true});await fs.mkdir(path.join(root,'evidence'),{recursive:true});
+const copies=[];
+async function copy(from,to){const bytes=await fs.readFile(from);await fs.writeFile(to,bytes);const actual=await fs.readFile(to);if(hash(actual)!==hash(bytes))throw Error('Copied bytes differ: '+to);copies.push({source:path.relative(root,from),destination:path.relative(migration,to),bytes:bytes.length,sha256:hash(bytes)});}
+for(const name of files)await copy(path.join(source,name),path.join(destination,name));
+await copy(path.join(root,'dist/ComplexInventoryApp.txt'),path.join(project,'Assets/Resources/ComplexInventoryApp.txt'));
+await copy(path.join(root,'scripts/layout.js'),path.join(project,'Assets/Resources/ComplexInventoryLayout.txt'));
+const report={schemaVersion:1,status:'passed',completedAt:new Date().toISOString(),sourceReport:'published/publish-report.json',sourceReportSha256:hash(await fs.readFile(path.join(root,'published/publish-report.json'))),packageId:layout.package.id,atlasPages:files.filter(n=>n.endsWith('.png')).length,copies,scope:'Only complex Resources outputs; existing baseline Host/Pump/Build, resources, Packages and ProjectSettings are not rewritten.'};
+await fs.writeFile(path.join(root,'evidence/setup-unity.json'),JSON.stringify(report,null,2));
+console.log(JSON.stringify({status:report.status,atlasPages:report.atlasPages,copies:copies.length}));

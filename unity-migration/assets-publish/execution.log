@@ -1,0 +1,31 @@
+atlas: Direct output for single image package "Inventory".
+atlas: Packed 1 images into 1 atlas(es) for package "Inventory".
+publish: Written Inventory_fui.bytes
+publish: Published 1 package(s) to [LGUI_ROOT]\unity-migration\assets-publish\.unity.publish-0c80addb-03ac-43e3-a775-3b2b8521016b
+{
+  "status": "passed",
+  "sourceProject": "[LGUI_ROOT]\\闭环验证\\roundtrip-final\\project\\Inventory.fairy",
+  "sourceArchive": {
+    "path": "[LGUI_ROOT]\\闭环验证\\evidence\\2026-10-16T07-57-12-927Z-chrome\\Inventory-browser-export.zip",
+    "sha256": "183e93d11990ef2a1adeb8a7329911db525463f55a3eac640c812c2245d0e702"
+  },
+  "output": "[LGUI_ROOT]\\unity-migration\\assets-publish\\unity",
+  "files": [
+    {
+      "path": "Inventory_atlas0.png",
+      "size": 147,
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "Inventory_fui.bytes",
+      "size": 3454,
+      "sha256": "e247e43a4317a91b401622a41aca74627654cbd231a5fdf98e949e51cc6b6014"
+    }
+  ],
+  "sourceUnchanged": {
+    "passed": true,
+    "changedPaths": [],
+    "archiveSha256After": "183e93d11990ef2a1adeb8a7329911db525463f55a3eac640c812c2245d0e702",
+    "allTargetAndUnrelatedSourceFilesCompared": true
+  }
+}

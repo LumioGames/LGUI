@@ -1,0 +1,99 @@
+✖ reference fixture loads through the real shared schema with 24 ordered stacks and exact quantities (2.5926ms)
+✖ reference sword stats and Chinese display derive from the same shared catalog values (1.2801ms)
+✖ reference equip/use/save/load preserve real quantities, equipment stats and the original reward state (0.2873ms)
+✖ visual startup load precedes open and retains one shared subscription across reopen (0.2175ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115.4627
+
+✖ failing tests:
+
+test at 验证\unity-migration\complex-inventory\fidelity\reference-fixture.test.mjs:22:1
+✖ reference fixture loads through the real shared schema with 24 ordered stacks and exact quantities (2.5926ms)
+  AssertionError [ERR_ASSERTION]: The reference schema-1 save fixture must exist
+      at fixture (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:12:10)
+      at loadFixture (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:16:53)
+      at TestContext.<anonymous> (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:25:11)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at 验证\unity-migration\complex-inventory\fidelity\reference-fixture.test.mjs:38:1
+✖ reference sword stats and Chinese display derive from the same shared catalog values (1.2801ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   attack: 18
+  -   attack: 48,
+  -   crit: 6,
+  -   durability: 100
+    }
+  
+      at TestContext.<anonymous> (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:40:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { attack: 18 },
+    expected: { attack: 48, crit: 6, durability: 100 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at 验证\unity-migration\complex-inventory\fidelity\reference-fixture.test.mjs:45:1
+✖ reference equip/use/save/load preserve real quantities, equipment stats and the original reward state (0.2873ms)
+  AssertionError [ERR_ASSERTION]: The reference schema-1 save fixture must exist
+      at fixture (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:12:10)
+      at loadFixture (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:16:53)
+      at TestContext.<anonymous> (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:46:41)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at 验证\unity-migration\complex-inventory\fidelity\reference-fixture.test.mjs:63:1
+✖ visual startup load precedes open and retains one shared subscription across reopen (0.2175ms)
+  AssertionError [ERR_ASSERTION]: The reference schema-1 save fixture must exist
+      at fixture (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:12:10)
+      at loadFixture (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:16:53)
+      at TestContext.<anonymous> (file:///[LOCAL_WORKSPACE]/%E9%AA%8C%E8%AF%81/unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs:64:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

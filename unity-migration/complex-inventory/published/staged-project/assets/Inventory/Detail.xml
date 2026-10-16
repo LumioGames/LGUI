@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="360,548">
+  <displayList>
+    <graph id="detailbg" name="detailbg" type="rect" lineColor="#957848" fillColor="#081725" xy="0,0" size="360,548" alpha="0.94" touchable="false"/>
+    <loader id="detailIcon" name="detailIcon" url="ui://invtest1icx00000" align="center" vAlign="middle" fill="scale" xy="78,14" size="204,204" touchable="false"/>
+    <text id="detailTitle" name="detailTitle" text="苍纹长剑" font="Arial" fontSize="25" color="#f0dfb9" autoSize="none" xy="24,222" size="312,34" touchable="false"/>
+    <text id="rarity" name="rarity" text="稀有 · 武器" font="Arial" fontSize="17" color="#83c7e5" autoSize="none" xy="24,262" size="312,24" touchable="false"/>
+    <text id="stats" name="stats" text="攻击 +18&#xA;装备槽：weapon" font="Arial" fontSize="18" color="#ded8c7" autoSize="none" xy="24,298" size="312,68" touchable="false"/>
+    <text id="description" name="description" text="锻有苍蓝纹路的旅行长剑。&#xA;同槽旧装备自动放回背包。" font="Arial" fontSize="16" color="#b7bdbd" autoSize="none" xy="24,376" size="312,72" touchable="false"/>
+    <component id="primary" name="primary" src="cxbtn001" xy="24,462" size="312,40">
+      <Button title="装备"/>
+    </component>
+    <component id="sell" name="sell" src="cxbtn001" xy="24,508" size="312,32">
+      <Button title="出售"/>
+    </component>
+  </displayList>
+</component>

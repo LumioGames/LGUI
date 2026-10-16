@@ -1,0 +1,32 @@
+{
+  "status": "failed",
+  "checks": [
+    {
+      "name": "486 viewport uses native adaptive scale",
+      "passed": false,
+      "actual": {
+        "mode": "canonical",
+        "canonical": {
+          "width": 1586,
+          "height": 992
+        },
+        "scale": 0.3064312736443884,
+        "offsetX": 2.842170943040401e-14,
+        "offsetY": 211.51008827238337,
+        "mainRect": {
+          "x": 0,
+          "y": 211.5,
+          "width": 485.9999694824219,
+          "height": 303.9798583984375
+        },
+        "referenceSha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b"
+      }
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\narrow-layout-2026-10-16T10-25-07.196Z\\486-sword.png",
+    "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\narrow-layout-2026-10-16T10-25-07.196Z\\failure.png"
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: 486 viewport uses native adaptive scale {\"mode\":\"canonical\",\"canonical\":{\"width\":1586,\"height\":992},\"scale\":0.3064312736443884,\"offsetX\":2.842170943040401e-14,\"offsetY\":211.51008827238337,\"mainRect\":{\"x\":0,\"y\":211.5,\"width\":485.9999694824219,\"height\":303.9798583984375},\"referenceSha256\":\"b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b\"}"
+}

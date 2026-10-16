@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-10-16T08:27:10.976Z",
+  "command": "node scripts/build-ts.mjs",
+  "node": "v24.18.0",
+  "bundler": {
+    "name": "vite",
+    "version": "8.1.5",
+    "origin": "[LGUI_ROOT]\\repos\\editor-online\\node_modules\\vite",
+    "installedForThisTask": false
+  },
+  "format": "iife",
+  "target": "es2020",
+  "minified": false,
+  "entry": "[LGUI_ROOT]\\unity-migration\\ts\\index.ts",
+  "output": "[LGUI_ROOT]\\unity-migration\\ts\\dist\\inventory-app.js.txt",
+  "bytes": 5865,
+  "sha256": "b8a02238b1be501469fb8cc19f5299c32193a5d233a54a7ecdab6abddf4e15c1",
+  "sourceMap": "[LGUI_ROOT]\\unity-migration\\ts\\dist\\inventory-app.js.txt.map",
+  "inputs": [
+    "\u0000@oxc-project+runtime@0.139.0/helpers/esm/typeof.js",
+    "\u0000@oxc-project+runtime@0.139.0/helpers/esm/toPrimitive.js",
+    "\u0000@oxc-project+runtime@0.139.0/helpers/esm/toPropertyKey.js",
+    "\u0000@oxc-project+runtime@0.139.0/helpers/esm/defineProperty.js",
+    "[LGUI_ROOT]/prototype/shared/model.ts",
+    "[LGUI_ROOT]/unity-migration/ts/inventory-app.ts",
+    "[LGUI_ROOT]/unity-migration/ts/index.ts"
+  ],
+  "sharedModel": {
+    "path": "[LGUI_ROOT]\\prototype\\shared\\model.ts",
+    "sha256": "e3162e7d648a61dd5817918a8e2a753b4899f97fde0a15c124ca2c9a28742cf6",
+    "unchangedDuringBuild": true,
+    "importedDirectly": true
+  },
+  "sourceHashes": [
+    {
+      "path": "[LGUI_ROOT]\\unity-migration\\ts\\index.ts",
+      "sha256": "45e7b5119502949ca8d6865dd08598543b8d4c343b27f1c2f44d7f3045897b33"
+    },
+    {
+      "path": "[LGUI_ROOT]\\unity-migration\\ts\\inventory-app.ts",
+      "sha256": "5ce97fdad9db0f214b0f62ef62b2ee9b68773f612e9ba5c3aff47765f389c481"
+    },
+    {
+      "path": "[LGUI_ROOT]\\prototype\\shared\\model.ts",
+      "sha256": "e3162e7d648a61dd5817918a8e2a753b4899f97fde0a15c124ca2c9a28742cf6"
+    }
+  ],
+  "runtimePlatformGlobalsRequired": [],
+  "scope": "Build provenance only; actual PuerTS Editor/IL2CPP verification belongs to the Unity test project"
+}

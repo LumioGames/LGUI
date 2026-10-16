@@ -1,0 +1,3296 @@
+{
+  "status": "failed",
+  "checks": [
+    {
+      "name": "486 viewport uses native adaptive scale",
+      "passed": true,
+      "actual": {
+        "mode": "adaptive",
+        "variant": "narrow",
+        "columns": 3,
+        "canonical": {
+          "width": 1586,
+          "height": 992
+        },
+        "scale": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "mainRect": {
+          "x": 0,
+          "y": 0,
+          "width": 486,
+          "height": 727
+        },
+        "referenceSha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b"
+      }
+    },
+    {
+      "name": "486 main fills current viewport",
+      "passed": true,
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 486,
+        "height": 727
+      }
+    },
+    {
+      "name": "486 all24 actual tiles fit",
+      "passed": true,
+      "actual": [
+        {
+          "id": "sword-1",
+          "rect": {
+            "x": 24,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "axe-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "bow-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "staff-1",
+          "rect": {
+            "x": 24,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "shield-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "helmet-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "armor-1",
+          "rect": {
+            "x": 24,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "boots-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "ring-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "amulet-1",
+          "rect": {
+            "x": 24,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "redPotion-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "bluePotion-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "staminaPotion-1",
+          "rect": {
+            "x": 24,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "antidote-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "elixir-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "herb-1",
+          "rect": {
+            "x": 24,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "mushroom-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "ore-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "crystal-1",
+          "rect": {
+            "x": 24,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "leather-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "key-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "scroll-1",
+          "rect": {
+            "x": 24,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "coinPouch-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "gem-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        }
+      ]
+    },
+    {
+      "name": "486 actual grid chooses largest proportional cells",
+      "passed": true,
+      "actual": [
+        {
+          "id": "sword-1",
+          "rect": {
+            "x": 24,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "axe-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "bow-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "staff-1",
+          "rect": {
+            "x": 24,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "shield-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "helmet-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "armor-1",
+          "rect": {
+            "x": 24,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "boots-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "ring-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "amulet-1",
+          "rect": {
+            "x": 24,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "redPotion-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "bluePotion-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "staminaPotion-1",
+          "rect": {
+            "x": 24,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "antidote-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "elixir-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "herb-1",
+          "rect": {
+            "x": 24,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "mushroom-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "ore-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "crystal-1",
+          "rect": {
+            "x": 24,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "leather-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "key-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "scroll-1",
+          "rect": {
+            "x": 24,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "coinPouch-1",
+          "rect": {
+            "x": 76.65625,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        },
+        {
+          "id": "gem-1",
+          "rect": {
+            "x": 129.328125,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875
+          }
+        }
+      ]
+    },
+    {
+      "name": "486 detailTitle is readable without clipped text",
+      "passed": true,
+      "actual": {
+        "text": "霜纹长剑",
+        "font": 16,
+        "box": {
+          "x": 328,
+          "y": 186,
+          "width": 134,
+          "height": 48,
+          "top": 186,
+          "right": 462,
+          "bottom": 234,
+          "left": 328
+        },
+        "ink": {
+          "x": 328,
+          "y": 196,
+          "width": 134,
+          "height": 28,
+          "top": 196,
+          "right": 462,
+          "bottom": 224,
+          "left": 328
+        }
+      }
+    },
+    {
+      "name": "486 rarity is readable without clipped text",
+      "passed": true,
+      "actual": {
+        "text": "稀有武器",
+        "font": 16,
+        "box": {
+          "x": 328,
+          "y": 240,
+          "width": 134,
+          "height": 64,
+          "top": 240,
+          "right": 462,
+          "bottom": 304,
+          "left": 328
+        },
+        "ink": {
+          "x": 328,
+          "y": 250,
+          "width": 134,
+          "height": 44,
+          "top": 250,
+          "right": 462,
+          "bottom": 294,
+          "left": 328
+        }
+      }
+    },
+    {
+      "name": "486 description is readable without clipped text",
+      "passed": true,
+      "actual": {
+        "text": "剑身流转着如霜的纹路，仿佛封存了北境的寒风。它曾陪伴无数旅者穿越黑暗，迎向黎明。",
+        "font": 16,
+        "box": {
+          "x": 214,
+          "y": 424.265625,
+          "width": 244,
+          "height": 109.1875,
+          "top": 424.265625,
+          "right": 458,
+          "bottom": 533.453125,
+          "left": 214
+        },
+        "ink": {
+          "x": 214,
+          "y": 424.265625,
+          "width": 244,
+          "height": 100,
+          "top": 424.265625,
+          "right": 458,
+          "bottom": 524.265625,
+          "left": 214
+        }
+      }
+    },
+    {
+      "name": "486 description stays above actions",
+      "passed": true,
+      "actual": {
+        "desc": {
+          "text": "剑身流转着如霜的纹路，仿佛封存了北境的寒风。它曾陪伴无数旅者穿越黑暗，迎向黎明。",
+          "font": 16,
+          "box": {
+            "x": 214,
+            "y": 424.265625,
+            "width": 244,
+            "height": 109.1875,
+            "top": 424.265625,
+            "right": 458,
+            "bottom": 533.453125,
+            "left": 214
+          },
+          "ink": {
+            "x": 214,
+            "y": 424.265625,
+            "width": 244,
+            "height": 100,
+            "top": 424.265625,
+            "right": 458,
+            "bottom": 524.265625,
+            "left": 214
+          }
+        },
+        "primary": {
+          "x": 210,
+          "y": 545.453125,
+          "width": 252,
+          "height": 44.265625
+        }
+      }
+    },
+    {
+      "name": "486 all quantities use native16px and remain in tiles",
+      "passed": true,
+      "actual": [
+        {
+          "font": 16,
+          "rect": {
+            "x": 27,
+            "y": 209.796875,
+            "width": 38.65625,
+            "height": 22,
+            "top": 209.796875,
+            "right": 65.65625,
+            "bottom": 231.796875,
+            "left": 27
+          },
+          "row": {
+            "x": 24,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 184,
+            "right": 68.65625,
+            "bottom": 231.796875,
+            "left": 24
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 79.65625,
+            "y": 209.796875,
+            "width": 38.65625,
+            "height": 22,
+            "top": 209.796875,
+            "right": 118.3125,
+            "bottom": 231.796875,
+            "left": 79.65625
+          },
+          "row": {
+            "x": 76.65625,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 184,
+            "right": 121.3125,
+            "bottom": 231.796875,
+            "left": 76.65625
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 132.328125,
+            "y": 209.796875,
+            "width": 38.65625,
+            "height": 22,
+            "top": 209.796875,
+            "right": 170.984375,
+            "bottom": 231.796875,
+            "left": 132.328125
+          },
+          "row": {
+            "x": 129.328125,
+            "y": 184,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 184,
+            "right": 173.984375,
+            "bottom": 231.796875,
+            "left": 129.328125
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 27,
+            "y": 265.59375,
+            "width": 38.65625,
+            "height": 22,
+            "top": 265.59375,
+            "right": 65.65625,
+            "bottom": 287.59375,
+            "left": 27
+          },
+          "row": {
+            "x": 24,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 239.796875,
+            "right": 68.65625,
+            "bottom": 287.59375,
+            "left": 24
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 79.65625,
+            "y": 265.59375,
+            "width": 38.65625,
+            "height": 22,
+            "top": 265.59375,
+            "right": 118.3125,
+            "bottom": 287.59375,
+            "left": 79.65625
+          },
+          "row": {
+            "x": 76.65625,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 239.796875,
+            "right": 121.3125,
+            "bottom": 287.59375,
+            "left": 76.65625
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 132.328125,
+            "y": 265.59375,
+            "width": 38.65625,
+            "height": 22,
+            "top": 265.59375,
+            "right": 170.984375,
+            "bottom": 287.59375,
+            "left": 132.328125
+          },
+          "row": {
+            "x": 129.328125,
+            "y": 239.796875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 239.796875,
+            "right": 173.984375,
+            "bottom": 287.59375,
+            "left": 129.328125
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 27,
+            "y": 321.40625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 321.40625,
+            "right": 65.65625,
+            "bottom": 343.40625,
+            "left": 27
+          },
+          "row": {
+            "x": 24,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 295.609375,
+            "right": 68.65625,
+            "bottom": 343.40625,
+            "left": 24
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 79.65625,
+            "y": 321.40625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 321.40625,
+            "right": 118.3125,
+            "bottom": 343.40625,
+            "left": 79.65625
+          },
+          "row": {
+            "x": 76.65625,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 295.609375,
+            "right": 121.3125,
+            "bottom": 343.40625,
+            "left": 76.65625
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 132.328125,
+            "y": 321.40625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 321.40625,
+            "right": 170.984375,
+            "bottom": 343.40625,
+            "left": 132.328125
+          },
+          "row": {
+            "x": 129.328125,
+            "y": 295.609375,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 295.609375,
+            "right": 173.984375,
+            "bottom": 343.40625,
+            "left": 129.328125
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 27,
+            "y": 377.21875,
+            "width": 38.65625,
+            "height": 22,
+            "top": 377.21875,
+            "right": 65.65625,
+            "bottom": 399.21875,
+            "left": 27
+          },
+          "row": {
+            "x": 24,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 351.421875,
+            "right": 68.65625,
+            "bottom": 399.21875,
+            "left": 24
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 79.65625,
+            "y": 377.21875,
+            "width": 38.65625,
+            "height": 22,
+            "top": 377.21875,
+            "right": 118.3125,
+            "bottom": 399.21875,
+            "left": 79.65625
+          },
+          "row": {
+            "x": 76.65625,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 351.421875,
+            "right": 121.3125,
+            "bottom": 399.21875,
+            "left": 76.65625
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 132.328125,
+            "y": 377.21875,
+            "width": 38.65625,
+            "height": 22,
+            "top": 377.21875,
+            "right": 170.984375,
+            "bottom": 399.21875,
+            "left": 132.328125
+          },
+          "row": {
+            "x": 129.328125,
+            "y": 351.421875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 351.421875,
+            "right": 173.984375,
+            "bottom": 399.21875,
+            "left": 129.328125
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 27,
+            "y": 433.015625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 433.015625,
+            "right": 65.65625,
+            "bottom": 455.015625,
+            "left": 27
+          },
+          "row": {
+            "x": 24,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 407.21875,
+            "right": 68.65625,
+            "bottom": 455.015625,
+            "left": 24
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 79.65625,
+            "y": 433.015625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 433.015625,
+            "right": 118.3125,
+            "bottom": 455.015625,
+            "left": 79.65625
+          },
+          "row": {
+            "x": 76.65625,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 407.21875,
+            "right": 121.3125,
+            "bottom": 455.015625,
+            "left": 76.65625
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 132.328125,
+            "y": 433.015625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 433.015625,
+            "right": 170.984375,
+            "bottom": 455.015625,
+            "left": 132.328125
+          },
+          "row": {
+            "x": 129.328125,
+            "y": 407.21875,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 407.21875,
+            "right": 173.984375,
+            "bottom": 455.015625,
+            "left": 129.328125
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 27,
+            "y": 488.828125,
+            "width": 38.65625,
+            "height": 22,
+            "top": 488.828125,
+            "right": 65.65625,
+            "bottom": 510.828125,
+            "left": 27
+          },
+          "row": {
+            "x": 24,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 463.03125,
+            "right": 68.65625,
+            "bottom": 510.828125,
+            "left": 24
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 79.65625,
+            "y": 488.828125,
+            "width": 38.65625,
+            "height": 22,
+            "top": 488.828125,
+            "right": 118.3125,
+            "bottom": 510.828125,
+            "left": 79.65625
+          },
+          "row": {
+            "x": 76.65625,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 463.03125,
+            "right": 121.3125,
+            "bottom": 510.828125,
+            "left": 76.65625
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 132.328125,
+            "y": 488.828125,
+            "width": 38.65625,
+            "height": 22,
+            "top": 488.828125,
+            "right": 170.984375,
+            "bottom": 510.828125,
+            "left": 132.328125
+          },
+          "row": {
+            "x": 129.328125,
+            "y": 463.03125,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 463.03125,
+            "right": 173.984375,
+            "bottom": 510.828125,
+            "left": 129.328125
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 27,
+            "y": 544.640625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 544.640625,
+            "right": 65.65625,
+            "bottom": 566.640625,
+            "left": 27
+          },
+          "row": {
+            "x": 24,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 518.84375,
+            "right": 68.65625,
+            "bottom": 566.640625,
+            "left": 24
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 79.65625,
+            "y": 544.640625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 544.640625,
+            "right": 118.3125,
+            "bottom": 566.640625,
+            "left": 79.65625
+          },
+          "row": {
+            "x": 76.65625,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 518.84375,
+            "right": 121.3125,
+            "bottom": 566.640625,
+            "left": 76.65625
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 132.328125,
+            "y": 544.640625,
+            "width": 38.65625,
+            "height": 22,
+            "top": 544.640625,
+            "right": 170.984375,
+            "bottom": 566.640625,
+            "left": 132.328125
+          },
+          "row": {
+            "x": 129.328125,
+            "y": 518.84375,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 518.84375,
+            "right": 173.984375,
+            "bottom": 566.640625,
+            "left": 129.328125
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 27,
+            "y": 600.4375,
+            "width": 38.65625,
+            "height": 22,
+            "top": 600.4375,
+            "right": 65.65625,
+            "bottom": 622.4375,
+            "left": 27
+          },
+          "row": {
+            "x": 24,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 574.640625,
+            "right": 68.65625,
+            "bottom": 622.4375,
+            "left": 24
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 79.65625,
+            "y": 600.4375,
+            "width": 38.65625,
+            "height": 22,
+            "top": 600.4375,
+            "right": 118.3125,
+            "bottom": 622.4375,
+            "left": 79.65625
+          },
+          "row": {
+            "x": 76.65625,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 574.640625,
+            "right": 121.3125,
+            "bottom": 622.4375,
+            "left": 76.65625
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 132.328125,
+            "y": 600.4375,
+            "width": 38.65625,
+            "height": 22,
+            "top": 600.4375,
+            "right": 170.984375,
+            "bottom": 622.4375,
+            "left": 132.328125
+          },
+          "row": {
+            "x": 129.328125,
+            "y": 574.640625,
+            "width": 44.65625,
+            "height": 47.796875,
+            "top": 574.640625,
+            "right": 173.984375,
+            "bottom": 622.4375,
+            "left": 129.328125
+          }
+        }
+      ]
+    },
+    {
+      "name": "486 six-character title is complete",
+      "passed": true,
+      "actual": {
+        "text": "失落地图卷轴",
+        "font": 16,
+        "box": {
+          "x": 328,
+          "y": 186,
+          "width": 134,
+          "height": 48,
+          "top": 186,
+          "right": 462,
+          "bottom": 234,
+          "left": 328
+        },
+        "ink": {
+          "x": 328,
+          "y": 196,
+          "width": 134,
+          "height": 28,
+          "top": 196,
+          "right": 462,
+          "bottom": 224,
+          "left": 328
+        }
+      }
+    },
+    {
+      "name": "486 four-character bold action has no actual clipping",
+      "passed": true,
+      "actual": {
+        "ink": {
+          "x": 315.03125,
+          "y": 557.453125,
+          "width": 78.953125,
+          "height": 20,
+          "top": 557.453125,
+          "right": 393.984375,
+          "bottom": 577.453125,
+          "left": 315.03125
+        },
+        "clip": {
+          "x": 313.015625,
+          "y": 553.453125,
+          "width": 83,
+          "height": 28.375,
+          "top": 553.453125,
+          "right": 396.015625,
+          "bottom": 581.828125,
+          "left": 313.015625
+        }
+      }
+    },
+    {
+      "name": "486 confirmation buttons are in viewport",
+      "passed": true,
+      "actual": {
+        "title": {
+          "x": 12,
+          "y": 8,
+          "width": 260,
+          "height": 61
+        },
+        "coins": {
+          "x": 337,
+          "y": 16,
+          "width": 104,
+          "height": 32
+        },
+        "close": {
+          "x": 448,
+          "y": 17,
+          "width": 26,
+          "height": 26
+        },
+        "search": {
+          "x": 50,
+          "y": 87,
+          "width": 416,
+          "height": 28
+        },
+        "tab_all": {
+          "x": 12,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "tab_equipment": {
+          "x": 105.59375,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "tab_consumable": {
+          "x": 199.1875,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "tab_material": {
+          "x": 292.796875,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "tab_quest": {
+          "x": 386.390625,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "list": {
+          "x": 24,
+          "y": 184,
+          "width": 150,
+          "height": 464
+        },
+        "detailIcon": {
+          "x": 210,
+          "y": 188,
+          "width": 110,
+          "height": 222.265625
+        },
+        "detailTitle": {
+          "x": 328,
+          "y": 186,
+          "width": 134,
+          "height": 48
+        },
+        "rarity": {
+          "x": 328,
+          "y": 240,
+          "width": 134,
+          "height": 64
+        },
+        "stats-background-mask": {
+          "x": 325,
+          "y": 306,
+          "width": 140,
+          "height": 104
+        },
+        "stat-label-attack": {
+          "x": 348,
+          "y": 310,
+          "width": 36,
+          "height": 28
+        },
+        "stat_attack": {
+          "x": 384,
+          "y": 310,
+          "width": 78,
+          "height": 28
+        },
+        "stat-label-crit": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat_crit": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat-label-durability": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat_durability": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "itemNote": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "description": {
+          "x": 214,
+          "y": 424.265625,
+          "width": 244,
+          "height": 109.1875
+        },
+        "primary": {
+          "x": 210,
+          "y": 545.453125,
+          "width": 252,
+          "height": 44.265625
+        },
+        "sell": {
+          "x": 210,
+          "y": 601.71875,
+          "width": 252,
+          "height": 44.265625
+        },
+        "summary": {
+          "x": 54,
+          "y": 677,
+          "width": 86,
+          "height": 26
+        },
+        "capacity-fill": {
+          "x": 30,
+          "y": 707,
+          "width": 88,
+          "height": 2
+        },
+        "sort": {
+          "x": 270,
+          "y": 678,
+          "width": 164,
+          "height": 35
+        },
+        "menu": {
+          "x": 440,
+          "y": 679,
+          "width": 30,
+          "height": 32
+        },
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "confirm": {
+          "x": 32,
+          "y": 486.5,
+          "width": 205,
+          "height": 48
+        },
+        "cancel": {
+          "x": 249,
+          "y": 486.5,
+          "width": 205,
+          "height": 48
+        }
+      }
+    },
+    {
+      "name": "486 all reward popup buttons are in viewport",
+      "passed": true,
+      "actual": {
+        "title": {
+          "x": 12,
+          "y": 8,
+          "width": 260,
+          "height": 61
+        },
+        "coins": {
+          "x": 337,
+          "y": 16,
+          "width": 104,
+          "height": 32
+        },
+        "close": {
+          "x": 448,
+          "y": 17,
+          "width": 26,
+          "height": 26
+        },
+        "search": {
+          "x": 50,
+          "y": 87,
+          "width": 416,
+          "height": 28
+        },
+        "tab_all": {
+          "x": 12,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "tab_equipment": {
+          "x": 105.59375,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "tab_consumable": {
+          "x": 199.1875,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "tab_material": {
+          "x": 292.796875,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "tab_quest": {
+          "x": 386.390625,
+          "y": 124,
+          "width": 87.59375,
+          "height": 34
+        },
+        "list": {
+          "x": 24,
+          "y": 184,
+          "width": 150,
+          "height": 464
+        },
+        "detailIcon": {
+          "x": 210,
+          "y": 188,
+          "width": 110,
+          "height": 222.265625
+        },
+        "detailTitle": {
+          "x": 328,
+          "y": 186,
+          "width": 134,
+          "height": 48
+        },
+        "rarity": {
+          "x": 328,
+          "y": 240,
+          "width": 134,
+          "height": 64
+        },
+        "stats-background-mask": {
+          "x": 325,
+          "y": 306,
+          "width": 140,
+          "height": 104
+        },
+        "stat-label-attack": {
+          "x": 348,
+          "y": 310,
+          "width": 36,
+          "height": 28
+        },
+        "stat_attack": {
+          "x": 384,
+          "y": 310,
+          "width": 78,
+          "height": 28
+        },
+        "stat-label-crit": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat_crit": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat-label-durability": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat_durability": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "itemNote": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "description": {
+          "x": 214,
+          "y": 424.265625,
+          "width": 244,
+          "height": 109.1875
+        },
+        "primary": {
+          "x": 210,
+          "y": 545.453125,
+          "width": 252,
+          "height": 44.265625
+        },
+        "sell": {
+          "x": 210,
+          "y": 601.71875,
+          "width": 252,
+          "height": 44.265625
+        },
+        "summary": {
+          "x": 54,
+          "y": 677,
+          "width": 86,
+          "height": 26
+        },
+        "capacity-fill": {
+          "x": 30,
+          "y": 707,
+          "width": 88,
+          "height": 2
+        },
+        "sort": {
+          "x": 270,
+          "y": 678,
+          "width": 164,
+          "height": 35
+        },
+        "menu": {
+          "x": 440,
+          "y": 679,
+          "width": 30,
+          "height": 32
+        },
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "confirm": {
+          "x": 32,
+          "y": 486.5,
+          "width": 205,
+          "height": 48
+        },
+        "cancel": {
+          "x": 249,
+          "y": 486.5,
+          "width": 205,
+          "height": 48
+        },
+        "reward-progress": {
+          "x": 32,
+          "y": 416.5,
+          "width": 205,
+          "height": 42
+        },
+        "reward-claim": {
+          "x": 249,
+          "y": 416.5,
+          "width": 205,
+          "height": 42
+        }
+      }
+    },
+    {
+      "name": "486 reward feedback text stays above reward actions",
+      "passed": true,
+      "actual": {
+        "rewardBody": {
+          "text": "治疗药水 1 已领取，获得 10 金币。旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。共30项：未达成 0 · 可领取 19 · 已领取 11每项奖励仅可领取一次，获得10金币。",
+          "font": 16,
+          "box": {
+            "x": 32,
+            "y": 244.5,
+            "width": 422,
+            "height": 154,
+            "top": 244.5,
+            "right": 454,
+            "bottom": 398.5,
+            "left": 32
+          },
+          "ink": {
+            "x": 32,
+            "y": 244.5,
+            "width": 422,
+            "height": 148,
+            "top": 244.5,
+            "right": 454,
+            "bottom": 392.5,
+            "left": 32
+          }
+        },
+        "action": {
+          "x": 32,
+          "y": 416.5,
+          "width": 205,
+          "height": 42
+        }
+      }
+    },
+    {
+      "name": "390 viewport uses native adaptive scale",
+      "passed": true,
+      "actual": {
+        "mode": "adaptive",
+        "variant": "narrow",
+        "columns": 2,
+        "canonical": {
+          "width": 1586,
+          "height": 992
+        },
+        "scale": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "mainRect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "referenceSha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b"
+      }
+    },
+    {
+      "name": "390 main fills current viewport",
+      "passed": true,
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "390 all24 actual tiles fit",
+      "passed": true,
+      "actual": [
+        {
+          "id": "sword-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 184,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "axe-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 184,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "bow-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 233.078125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "staff-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 233.078125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "shield-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 282.15625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "helmet-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 282.15625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "armor-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 331.25,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "boots-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 331.25,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "ring-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 380.328125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "amulet-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 380.328125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "redPotion-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 429.40625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "bluePotion-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 429.40625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "staminaPotion-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 478.5,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "antidote-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 478.5,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "elixir-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 527.578125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "herb-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 527.578125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "mushroom-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 576.65625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "ore-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 576.65625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "crystal-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 625.75,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "leather-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 625.75,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "key-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 674.828125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "scroll-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 674.828125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "coinPouch-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 723.90625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "gem-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 723.90625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        }
+      ]
+    },
+    {
+      "name": "390 actual grid chooses largest proportional cells",
+      "passed": true,
+      "actual": [
+        {
+          "id": "sword-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 184,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "axe-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 184,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "bow-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 233.078125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "staff-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 233.078125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "shield-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 282.15625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "helmet-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 282.15625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "armor-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 331.25,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "boots-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 331.25,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "ring-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 380.328125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "amulet-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 380.328125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "redPotion-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 429.40625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "bluePotion-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 429.40625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "staminaPotion-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 478.5,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "antidote-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 478.5,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "elixir-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 527.578125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "herb-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 527.578125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "mushroom-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 576.65625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "ore-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 576.65625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "crystal-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 625.75,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "leather-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 625.75,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "key-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 674.828125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "scroll-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 674.828125,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "coinPouch-1",
+          "rect": {
+            "x": 39.609375,
+            "y": 723.90625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        },
+        {
+          "id": "gem-1",
+          "rect": {
+            "x": 85.984375,
+            "y": 723.90625,
+            "width": 38.375,
+            "height": 41.078125
+          }
+        }
+      ]
+    },
+    {
+      "name": "390 detailTitle is readable without clipped text",
+      "passed": true,
+      "actual": {
+        "text": "霜纹长剑",
+        "font": 16,
+        "box": {
+          "x": 269.59375,
+          "y": 186,
+          "width": 96.390625,
+          "height": 48,
+          "top": 186,
+          "right": 365.984375,
+          "bottom": 234,
+          "left": 269.59375
+        },
+        "ink": {
+          "x": 269.59375,
+          "y": 197,
+          "width": 96.390625,
+          "height": 26,
+          "top": 197,
+          "right": 365.984375,
+          "bottom": 223,
+          "left": 269.59375
+        }
+      }
+    },
+    {
+      "name": "390 rarity is readable without clipped text",
+      "passed": true,
+      "actual": {
+        "text": "稀有武器",
+        "font": 16,
+        "box": {
+          "x": 269.59375,
+          "y": 240,
+          "width": 96.390625,
+          "height": 64,
+          "top": 240,
+          "right": 365.984375,
+          "bottom": 304,
+          "left": 269.59375
+        },
+        "ink": {
+          "x": 269.59375,
+          "y": 250,
+          "width": 96.390625,
+          "height": 44,
+          "top": 250,
+          "right": 365.984375,
+          "bottom": 294,
+          "left": 269.59375
+        }
+      }
+    },
+    {
+      "name": "390 description is readable without clipped text",
+      "passed": true,
+      "actual": {
+        "text": "剑身流转着如霜的纹路，仿佛封存了北境的寒风。它曾陪伴无数旅者穿越黑暗，迎向黎明。",
+        "font": 16,
+        "box": {
+          "x": 180,
+          "y": 416,
+          "width": 182,
+          "height": 160,
+          "top": 416,
+          "right": 362,
+          "bottom": 576,
+          "left": 180
+        },
+        "ink": {
+          "x": 180,
+          "y": 416,
+          "width": 182,
+          "height": 100,
+          "top": 416,
+          "right": 362,
+          "bottom": 516,
+          "left": 180
+        }
+      }
+    },
+    {
+      "name": "390 description stays above actions",
+      "passed": true,
+      "actual": {
+        "desc": {
+          "text": "剑身流转着如霜的纹路，仿佛封存了北境的寒风。它曾陪伴无数旅者穿越黑暗，迎向黎明。",
+          "font": 16,
+          "box": {
+            "x": 180,
+            "y": 416,
+            "width": 182,
+            "height": 160,
+            "top": 416,
+            "right": 362,
+            "bottom": 576,
+            "left": 180
+          },
+          "ink": {
+            "x": 180,
+            "y": 416,
+            "width": 182,
+            "height": 100,
+            "top": 416,
+            "right": 362,
+            "bottom": 516,
+            "left": 180
+          }
+        },
+        "primary": {
+          "x": 176,
+          "y": 684.234375,
+          "width": 190,
+          "height": 33.375
+        }
+      }
+    },
+    {
+      "name": "390 all quantities use native16px and remain in tiles",
+      "passed": true,
+      "actual": [
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 203.078125,
+            "width": 32.375,
+            "height": 22,
+            "top": 203.078125,
+            "right": 74.984375,
+            "bottom": 225.078125,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 184,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 184,
+            "right": 77.984375,
+            "bottom": 225.078125,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 203.078125,
+            "width": 32.375,
+            "height": 22,
+            "top": 203.078125,
+            "right": 121.359375,
+            "bottom": 225.078125,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 184,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 184,
+            "right": 124.359375,
+            "bottom": 225.078125,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 252.15625,
+            "width": 32.375,
+            "height": 22,
+            "top": 252.15625,
+            "right": 74.984375,
+            "bottom": 274.15625,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 233.078125,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 233.078125,
+            "right": 77.984375,
+            "bottom": 274.15625,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 252.15625,
+            "width": 32.375,
+            "height": 22,
+            "top": 252.15625,
+            "right": 121.359375,
+            "bottom": 274.15625,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 233.078125,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 233.078125,
+            "right": 124.359375,
+            "bottom": 274.15625,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 301.234375,
+            "width": 32.375,
+            "height": 22,
+            "top": 301.234375,
+            "right": 74.984375,
+            "bottom": 323.234375,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 282.15625,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 282.15625,
+            "right": 77.984375,
+            "bottom": 323.234375,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 301.234375,
+            "width": 32.375,
+            "height": 22,
+            "top": 301.234375,
+            "right": 121.359375,
+            "bottom": 323.234375,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 282.15625,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 282.15625,
+            "right": 124.359375,
+            "bottom": 323.234375,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 350.328125,
+            "width": 32.375,
+            "height": 22,
+            "top": 350.328125,
+            "right": 74.984375,
+            "bottom": 372.328125,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 331.25,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 331.25,
+            "right": 77.984375,
+            "bottom": 372.328125,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 350.328125,
+            "width": 32.375,
+            "height": 22,
+            "top": 350.328125,
+            "right": 121.359375,
+            "bottom": 372.328125,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 331.25,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 331.25,
+            "right": 124.359375,
+            "bottom": 372.328125,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 399.40625,
+            "width": 32.375,
+            "height": 22,
+            "top": 399.40625,
+            "right": 74.984375,
+            "bottom": 421.40625,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 380.328125,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 380.328125,
+            "right": 77.984375,
+            "bottom": 421.40625,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 399.40625,
+            "width": 32.375,
+            "height": 22,
+            "top": 399.40625,
+            "right": 121.359375,
+            "bottom": 421.40625,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 380.328125,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 380.328125,
+            "right": 124.359375,
+            "bottom": 421.40625,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 448.484375,
+            "width": 32.375,
+            "height": 22,
+            "top": 448.484375,
+            "right": 74.984375,
+            "bottom": 470.484375,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 429.40625,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 429.40625,
+            "right": 77.984375,
+            "bottom": 470.484375,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 448.484375,
+            "width": 32.375,
+            "height": 22,
+            "top": 448.484375,
+            "right": 121.359375,
+            "bottom": 470.484375,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 429.40625,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 429.40625,
+            "right": 124.359375,
+            "bottom": 470.484375,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 497.578125,
+            "width": 32.375,
+            "height": 22,
+            "top": 497.578125,
+            "right": 74.984375,
+            "bottom": 519.578125,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 478.5,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 478.5,
+            "right": 77.984375,
+            "bottom": 519.578125,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 497.578125,
+            "width": 32.375,
+            "height": 22,
+            "top": 497.578125,
+            "right": 121.359375,
+            "bottom": 519.578125,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 478.5,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 478.5,
+            "right": 124.359375,
+            "bottom": 519.578125,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 546.65625,
+            "width": 32.375,
+            "height": 22,
+            "top": 546.65625,
+            "right": 74.984375,
+            "bottom": 568.65625,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 527.578125,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 527.578125,
+            "right": 77.984375,
+            "bottom": 568.65625,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 546.65625,
+            "width": 32.375,
+            "height": 22,
+            "top": 546.65625,
+            "right": 121.359375,
+            "bottom": 568.65625,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 527.578125,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 527.578125,
+            "right": 124.359375,
+            "bottom": 568.65625,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 595.734375,
+            "width": 32.375,
+            "height": 22,
+            "top": 595.734375,
+            "right": 74.984375,
+            "bottom": 617.734375,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 576.65625,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 576.65625,
+            "right": 77.984375,
+            "bottom": 617.734375,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 595.734375,
+            "width": 32.375,
+            "height": 22,
+            "top": 595.734375,
+            "right": 121.359375,
+            "bottom": 617.734375,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 576.65625,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 576.65625,
+            "right": 124.359375,
+            "bottom": 617.734375,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 644.828125,
+            "width": 32.375,
+            "height": 22,
+            "top": 644.828125,
+            "right": 74.984375,
+            "bottom": 666.828125,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 625.75,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 625.75,
+            "right": 77.984375,
+            "bottom": 666.828125,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 644.828125,
+            "width": 32.375,
+            "height": 22,
+            "top": 644.828125,
+            "right": 121.359375,
+            "bottom": 666.828125,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 625.75,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 625.75,
+            "right": 124.359375,
+            "bottom": 666.828125,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 693.90625,
+            "width": 32.375,
+            "height": 22,
+            "top": 693.90625,
+            "right": 74.984375,
+            "bottom": 715.90625,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 674.828125,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 674.828125,
+            "right": 77.984375,
+            "bottom": 715.90625,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 693.90625,
+            "width": 32.375,
+            "height": 22,
+            "top": 693.90625,
+            "right": 121.359375,
+            "bottom": 715.90625,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 674.828125,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 674.828125,
+            "right": 124.359375,
+            "bottom": 715.90625,
+            "left": 85.984375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 42.609375,
+            "y": 742.984375,
+            "width": 32.375,
+            "height": 22,
+            "top": 742.984375,
+            "right": 74.984375,
+            "bottom": 764.984375,
+            "left": 42.609375
+          },
+          "row": {
+            "x": 39.609375,
+            "y": 723.90625,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 723.90625,
+            "right": 77.984375,
+            "bottom": 764.984375,
+            "left": 39.609375
+          }
+        },
+        {
+          "font": 16,
+          "rect": {
+            "x": 88.984375,
+            "y": 742.984375,
+            "width": 32.375,
+            "height": 22,
+            "top": 742.984375,
+            "right": 121.359375,
+            "bottom": 764.984375,
+            "left": 88.984375
+          },
+          "row": {
+            "x": 85.984375,
+            "y": 723.90625,
+            "width": 38.375,
+            "height": 41.078125,
+            "top": 723.90625,
+            "right": 124.359375,
+            "bottom": 764.984375,
+            "left": 85.984375
+          }
+        }
+      ]
+    },
+    {
+      "name": "390 six-character title is complete",
+      "passed": true,
+      "actual": {
+        "text": "失落地图卷轴",
+        "font": 16,
+        "box": {
+          "x": 269.59375,
+          "y": 186,
+          "width": 96.390625,
+          "height": 48,
+          "top": 186,
+          "right": 365.984375,
+          "bottom": 234,
+          "left": 269.59375
+        },
+        "ink": {
+          "x": 269.59375,
+          "y": 186,
+          "width": 96.390625,
+          "height": 48,
+          "top": 186,
+          "right": 365.984375,
+          "bottom": 234,
+          "left": 269.59375
+        }
+      }
+    },
+    {
+      "name": "390 four-character bold action has no actual clipping",
+      "passed": true,
+      "actual": {
+        "ink": {
+          "x": 252.421875,
+          "y": 692.234375,
+          "width": 68,
+          "height": 16,
+          "top": 692.234375,
+          "right": 320.421875,
+          "bottom": 708.234375,
+          "left": 252.421875
+        },
+        "clip": {
+          "x": 250.421875,
+          "y": 688.234375,
+          "width": 72,
+          "height": 25,
+          "top": 688.234375,
+          "right": 322.421875,
+          "bottom": 713.234375,
+          "left": 250.421875
+        }
+      }
+    },
+    {
+      "name": "390 confirmation buttons are in viewport",
+      "passed": true,
+      "actual": {
+        "title": {
+          "x": 12,
+          "y": 8,
+          "width": 180,
+          "height": 61
+        },
+        "coins": {
+          "x": 241,
+          "y": 16,
+          "width": 104,
+          "height": 32
+        },
+        "close": {
+          "x": 352,
+          "y": 17,
+          "width": 26,
+          "height": 26
+        },
+        "search": {
+          "x": 50,
+          "y": 87,
+          "width": 320,
+          "height": 28
+        },
+        "tab_all": {
+          "x": 12,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "tab_equipment": {
+          "x": 86.390625,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "tab_consumable": {
+          "x": 160.796875,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "tab_material": {
+          "x": 235.1875,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "tab_quest": {
+          "x": 309.59375,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "list": {
+          "x": 39.609375,
+          "y": 184,
+          "width": 84.765625,
+          "height": 581
+        },
+        "detailIcon": {
+          "x": 176,
+          "y": 188,
+          "width": 85.59375,
+          "height": 172.953125
+        },
+        "detailTitle": {
+          "x": 269.59375,
+          "y": 186,
+          "width": 96.390625,
+          "height": 48
+        },
+        "rarity": {
+          "x": 269.59375,
+          "y": 240,
+          "width": 96.390625,
+          "height": 64
+        },
+        "stats-background-mask": {
+          "x": 266.59375,
+          "y": 306,
+          "width": 102.390625,
+          "height": 104
+        },
+        "stat-label-attack": {
+          "x": 289.59375,
+          "y": 310,
+          "width": 36,
+          "height": 28
+        },
+        "stat_attack": {
+          "x": 325.59375,
+          "y": 310,
+          "width": 40.390625,
+          "height": 28
+        },
+        "stat-label-crit": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat_crit": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat-label-durability": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat_durability": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "itemNote": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "description": {
+          "x": 180,
+          "y": 416,
+          "width": 182,
+          "height": 160
+        },
+        "primary": {
+          "x": 176,
+          "y": 684.234375,
+          "width": 190,
+          "height": 33.375
+        },
+        "sell": {
+          "x": 176,
+          "y": 729.609375,
+          "width": 190,
+          "height": 33.375
+        },
+        "summary": {
+          "x": 54,
+          "y": 794,
+          "width": 86,
+          "height": 26
+        },
+        "capacity-fill": {
+          "x": 30,
+          "y": 824,
+          "width": 88,
+          "height": 2
+        },
+        "sort": {
+          "x": 174,
+          "y": 795,
+          "width": 164,
+          "height": 35
+        },
+        "menu": {
+          "x": 344,
+          "y": 796,
+          "width": 30,
+          "height": 32
+        },
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "confirm": {
+          "x": 32,
+          "y": 545,
+          "width": 157,
+          "height": 48
+        },
+        "cancel": {
+          "x": 201,
+          "y": 545,
+          "width": 157,
+          "height": 48
+        }
+      }
+    },
+    {
+      "name": "390 all reward popup buttons are in viewport",
+      "passed": true,
+      "actual": {
+        "title": {
+          "x": 12,
+          "y": 8,
+          "width": 180,
+          "height": 61
+        },
+        "coins": {
+          "x": 241,
+          "y": 16,
+          "width": 104,
+          "height": 32
+        },
+        "close": {
+          "x": 352,
+          "y": 17,
+          "width": 26,
+          "height": 26
+        },
+        "search": {
+          "x": 50,
+          "y": 87,
+          "width": 320,
+          "height": 28
+        },
+        "tab_all": {
+          "x": 12,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "tab_equipment": {
+          "x": 86.390625,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "tab_consumable": {
+          "x": 160.796875,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "tab_material": {
+          "x": 235.1875,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "tab_quest": {
+          "x": 309.59375,
+          "y": 124,
+          "width": 68.390625,
+          "height": 34
+        },
+        "list": {
+          "x": 39.609375,
+          "y": 184,
+          "width": 84.765625,
+          "height": 581
+        },
+        "detailIcon": {
+          "x": 176,
+          "y": 188,
+          "width": 85.59375,
+          "height": 172.953125
+        },
+        "detailTitle": {
+          "x": 269.59375,
+          "y": 186,
+          "width": 96.390625,
+          "height": 48
+        },
+        "rarity": {
+          "x": 269.59375,
+          "y": 240,
+          "width": 96.390625,
+          "height": 64
+        },
+        "stats-background-mask": {
+          "x": 266.59375,
+          "y": 306,
+          "width": 102.390625,
+          "height": 104
+        },
+        "stat-label-attack": {
+          "x": 289.59375,
+          "y": 310,
+          "width": 36,
+          "height": 28
+        },
+        "stat_attack": {
+          "x": 325.59375,
+          "y": 310,
+          "width": 40.390625,
+          "height": 28
+        },
+        "stat-label-crit": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat_crit": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat-label-durability": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "stat_durability": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "itemNote": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "description": {
+          "x": 180,
+          "y": 416,
+          "width": 182,
+          "height": 160
+        },
+        "primary": {
+          "x": 176,
+          "y": 684.234375,
+          "width": 190,
+          "height": 33.375
+        },
+        "sell": {
+          "x": 176,
+          "y": 729.609375,
+          "width": 190,
+          "height": 33.375
+        },
+        "summary": {
+          "x": 54,
+          "y": 794,
+          "width": 86,
+          "height": 26
+        },
+        "capacity-fill": {
+          "x": 30,
+          "y": 824,
+          "width": 88,
+          "height": 2
+        },
+        "sort": {
+          "x": 174,
+          "y": 795,
+          "width": 164,
+          "height": 35
+        },
+        "menu": {
+          "x": 344,
+          "y": 796,
+          "width": 30,
+          "height": 32
+        },
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "confirm": {
+          "x": 32,
+          "y": 545,
+          "width": 157,
+          "height": 48
+        },
+        "cancel": {
+          "x": 201,
+          "y": 545,
+          "width": 157,
+          "height": 48
+        },
+        "reward-progress": {
+          "x": 32,
+          "y": 475,
+          "width": 157,
+          "height": 42
+        },
+        "reward-claim": {
+          "x": 201,
+          "y": 475,
+          "width": 157,
+          "height": 42
+        }
+      }
+    },
+    {
+      "name": "390 reward feedback text stays above reward actions",
+      "passed": false,
+      "actual": {
+        "rewardBody": {
+          "text": "旅行宝石 2 已领取，获得 10 金币。旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。共30项：未达成 0 · 可领取 18 · 已领取 12每项奖励仅可领取一次，获得10金币。",
+          "font": 16,
+          "box": {
+            "x": 32,
+            "y": 303,
+            "width": 326,
+            "height": 154,
+            "top": 303,
+            "right": 358,
+            "bottom": 457,
+            "left": 32
+          },
+          "ink": {
+            "x": 32,
+            "y": 303,
+            "width": 326,
+            "height": 196,
+            "top": 303,
+            "right": 358,
+            "bottom": 499,
+            "left": 32
+          }
+        },
+        "action": {
+          "x": 32,
+          "y": 475,
+          "width": 157,
+          "height": 42
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\narrow-layout-2026-10-16T10-36-19.181Z\\486-sword.png",
+    "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\narrow-layout-2026-10-16T10-36-19.181Z\\486-ring.png",
+    "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\narrow-layout-2026-10-16T10-36-19.181Z\\390-sword.png",
+    "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\narrow-layout-2026-10-16T10-36-19.181Z\\390-ring.png",
+    "[LGUI_ROOT]\\unity-migration\\complex-inventory\\fidelity\\evidence\\narrow-layout-2026-10-16T10-36-19.181Z\\failure.png"
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: 390 reward feedback text stays above reward actions {\"rewardBody\":{\"text\":\"旅行宝石 2 已领取，获得 10 金币。旅途中收集的奖励。长文本用于验证自动换行与窄屏布局；达成目标后可以领取一次，关闭再打开背包仍保留领取结果。共30项：未达成 0 · 可领取 18 · 已领取 12每项奖励仅可领取一次，获得10金币。\",\"font\":16,\"box\":{\"x\":32,\"y\":303,\"width\":326,\"height\":154,\"top\":303,\"right\":358,\"bottom\":457,\"left\":32},\"ink\":{\"x\":32,\"y\":303,\"width\":326,\"height\":196,\"top\":303,\"right\":358,\"bottom\":499,\"left\":32}},\"action\":{\"x\":32,\"y\":475,\"width\":157,\"height\":42}}"
+}
