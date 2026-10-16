@@ -35,6 +35,10 @@ Claude manifest 校验通过，并提示仓库 CLAUDE.md 不是插件自动上�
 
 最终本地包重新安装后，两端诊断实际读出 16 个固定依赖版本匹配和自定义端口 4284/5300。Claude 的总结曾把空 Unity 环境覆盖值误述为“未安装”，但本机 Unity 实际存在；已明确 doctor 字段与技能说明：空覆盖值不是安装/许可检测。宿主生成的总结不能替代原始诊断数据。
 
+团队 UI skill 去重后重新打包、解压验证、两端重新安装，仍发现 5 个技能。两端实际调用 lgui-author 并读取组件分册：都正确说明“新组件结构创建不属于当前事务 API”“propertyId=2 不被固定编辑器命令接受”“不能绕过在线会话改磁盘”，并列出缺少的工程/参考输入；没有写文件或启动服务。此用例验证安装后的技能阅读与边界理解，不宣称执行了新 UI 的结构修改。
+
+远程 Linux CI 在提交 `323ad62` 上通过，运行包/链接/schema、44 条核心测试、归档解压与独立初始化；[运行记录](https://github.com/LumioGames/LGUI/actions/runs/38902171610)。CLI 登录、浏览器和 Unity 的本机验证不由该 CI 替代。
+
 ## 本轮原生结果
 
 Unity **6000.6.6f1**、PuerTS Core/V8 **3.0.3**、已记录的四处 unbox 兼容补丁。实际执行资源准备、Prepare、GeneratePuerTS 和 Windows x64 IL2CPP Release 构建，退出码均为 0。共享 bundle SHA256 `0f8ecf3fe279bd836a2bb968a8da9434116f7dac867987fd78e4e1a748b14f04`，布局 SHA256 `ac1090b293125478680778e4760507917cd176ab419a629993e89de2ace0ccf1`。资源同步改为验证本次 build/publish 摘要及共享源身份，避免继续绑定旧工作目录产生的 bundle 字节。

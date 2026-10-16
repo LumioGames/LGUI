@@ -4659,6 +4659,22 @@
     {
       "file": "claude-negative.json",
       "sha256": "1d5e116af89c93f77dd463bfa0a87f0e58316c67178a6efcee7289000de54587"
+    },
+    {
+      "file": "codex-final.jsonl",
+      "sha256": "b6dd867f49278ac7e10f374a8d8bec174dea537805fd4aeca40e8c2ac787760a"
+    },
+    {
+      "file": "claude-final.json",
+      "sha256": "e6636eba7e918fb3925094c718e5b0815de311aaa16f6dd900e6d126560d5b47"
+    },
+    {
+      "file": "codex-ui-skill.jsonl",
+      "sha256": "289f5a52a80b5aa256b040a9d7661a163c3907435813d06e0ad46d3eb20344a7"
+    },
+    {
+      "file": "claude-ui-skill.json",
+      "sha256": "a14e93041f1b3cd0370d61bc7470c6adfda2a2d2bfbe2b8332d39013c46956fb"
     }
   ],
   "images": [
@@ -4697,5 +4713,11 @@
     "Raw logs and browser profiles kept outside repository; summaries intentionally omit personal paths/tokens/session IDs.",
     "No new human acceptance claimed; model reviewed selected screenshots separately.",
     "Host negative and missing-input cases plus direct and controlled indirect invocation are covered, not a broad statistical routing eval."
-  ]
+  ],
+  "uiSkill": {
+    "archiveSha256": "e0ac8457ea7214d34a74f3297b570d5cff7096a87e06cb383a94b4504d25a858",
+    "license": "MIT, confirmed by contributor",
+    "skillsAfterMerge": 5,
+    "clientBoundaryChecks": "Codex and Claude read installed author/component references, correctly reject arbitrary structural transaction and propertyId 2, ask for missing inputs; read-only"
+  }
 }
