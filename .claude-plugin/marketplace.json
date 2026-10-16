@@ -1,0 +1,15 @@
+{
+  "name": "lumio-lgui",
+  "owner": {
+    "name": "LumioGames",
+    "url": "https://github.com/LumioGames"
+  },
+  "plugins": [
+    {
+      "name": "lgui",
+      "source": "./",
+      "version": "0.1.0",
+      "description": "Agent-authored, browser-first FairyGUI UI workflows with shared TypeScript and Unity/PuerTS migration."
+    }
+  ]
+}

@@ -11,7 +11,7 @@ const hash=value=>createHash('sha256').update(value).digest('hex');
 const normalize=view=>({...view,revision:0});
 const inside=(r,box)=>r&&r.width>0&&r.height>0&&r.x>=box.x-.02&&r.y>=box.y-.02&&r.right<=box.x+box.width+.02&&r.bottom<=box.y+box.height+.02;
 const intersects=(a,b)=>Math.min(a.right,b.right)-Math.max(a.x,b.x)>.5&&Math.min(a.bottom,b.bottom)-Math.max(a.y,b.y)>.5;
-const origin='http://127.0.0.1:4182',url=origin+'/fidelity/';
+const origin=`http://127.0.0.1:${process.env.LGUI_WEB_PORT||4182}`,url=origin+'/fidelity/';
 
 export async function runNarrow(argv=process.argv.slice(2)){
  const flag=(name,fallback)=>{const i=argv.indexOf(name);return i<0?fallback:argv[i+1];};

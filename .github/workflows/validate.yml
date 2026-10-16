@@ -1,0 +1,28 @@
+name: Validate plugin
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.18.0'
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: node tools/generate.mjs --check
+      - run: node tools/validate.mjs
+      - run: node --test tests/*.test.mjs scripts/bootstrap.test.mjs prototype/model.test.ts unity-migration/complex-inventory/shared/complex-inventory.test.mjs unity-migration/complex-inventory/scripts/layout.test.mjs unity-migration/complex-inventory/fidelity/layout-shared.test.mjs unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs
+      - run: node tools/pack.mjs
+      - run: node tools/validate.mjs artifacts/lgui-0.1.0
+      - run: node tools/package-smoke.mjs artifacts/lgui-0.1.0.tar.gz
+      - name: Initialize from package in separate workspace
+        run: |
+          node artifacts/lgui-0.1.0/tools/lgui.mjs init --workspace "$RUNNER_TEMP/lgui-workspace"
+          cd "$RUNNER_TEMP"
+          node "$GITHUB_WORKSPACE/artifacts/lgui-0.1.0/tools/lgui.mjs" bootstrap --workspace "$RUNNER_TEMP/lgui-workspace" --dry-run

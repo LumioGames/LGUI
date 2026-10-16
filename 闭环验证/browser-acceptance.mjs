@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { createHash, randomUUID } from 'node:crypto';
@@ -287,7 +288,9 @@ async function persistentAcceptance() {
   assertLoopback(url);
   const runId = `${new Date().toISOString().replace(/[:.]/g, '-')}-${browserName}-persistent`;
   const evidence = path.join(here, 'evidence', runId);
-  const profile = path.join(evidence, 'isolated-browser-profile');
+  // Chromium's IndexedDB backing-store paths can exceed Windows limits under
+  // a deeply nested workspace. Keep this isolated profile in a short temp path.
+  const profile = await fs.mkdtemp(path.join(os.tmpdir(), 'lgui-profile-'));
   await fs.mkdir(evidence, { recursive: true });
   const save = async (name, data) => fs.writeFile(path.join(evidence, name), JSON.stringify(data, null, 2));
   const report = { runId, browser: browserName, url, profile, status: 'running', checks: [], errors: [], requests: [], blockedExternal: [], phases: [], limitation: 'Dedicated test profile, separate from all user browser profiles. Tests process restart persistence, not Unity or mobile.' };

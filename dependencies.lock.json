@@ -90,10 +90,13 @@
   "npm": [
     {
       "directory": ".",
-      "packageJsonSha256": "c499504a4358bec1603d6fd4041dcd36e59833454008c2c07585c8cffa87abe4",
-      "packageLockSha256": "5373d3eb78c8cae78ea49a969965e3d9ac3f6a4d401feeba0966b8394ea28487",
+      "packageJsonSha256": "9fae1ea2ae67cc55c62fc7b2b3c978a281fd8576e7501ff8e42bf00d2e696b9b",
+      "packageLockSha256": "0aa3c617cf63f162de29f33bf666006756d2eb364ff862442e6cd44e7b5f86ac",
       "required": {
-        "playwright": "1.64.1"
+        "playwright": "1.64.1",
+        "ajv": "8.20.0",
+        "yaml": "2.9.1",
+        "tar": "7.5.22"
       }
     },
     {

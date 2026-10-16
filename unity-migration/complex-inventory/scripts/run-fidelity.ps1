@@ -2,14 +2,21 @@ param(
     [ValidateSet('prepare','generate','build','editor','editor-auto','player')][string]$Action='prepare',
     [string]$EvidenceName='',
     [ValidateRange(320,7680)][int]$Width=1280,
-    [ValidateRange(320,4320)][int]$Height=800
+    [ValidateRange(320,4320)][int]$Height=800,
+    [string]$UnityEditor=$env:UNITY_EDITOR,
+    [switch]$ShowWindow
 )
 $ErrorActionPreference='Stop'
 $complexRoot=Split-Path -Path $PSScriptRoot -Parent
 $migrationRoot=Split-Path -Path $complexRoot -Parent
 $projectPath=Join-Path $migrationRoot 'InventoryUnity'
 $fidelityRoot=Join-Path $complexRoot 'fidelity'
-$editorExe=Join-Path $env:LOCALAPPDATA 'Programs\Unity\6000.6.6f1\Editor\Unity.exe'
+$editorExe=$UnityEditor
+if([string]::IsNullOrWhiteSpace($editorExe)){
+    $candidates=@((Join-Path $env:ProgramFiles 'Unity\Hub\Editor\6000.6.6f1\Editor\Unity.exe'),(Join-Path $env:LOCALAPPDATA 'Programs\Unity\6000.6.6f1\Editor\Unity.exe'))
+    $editorExe=$candidates | Where-Object {Test-Path -LiteralPath $_ -PathType Leaf} | Select-Object -First 1
+}
+if($Action -ne 'player' -and [string]::IsNullOrWhiteSpace($editorExe)){throw 'Set UNITY_EDITOR or pass -UnityEditor with the Unity 6000.6.6f1 executable path.'}
 $stamp=[DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss')
 if([string]::IsNullOrWhiteSpace($EvidenceName)){$EvidenceName=$Action+'-'+$stamp}
 if($EvidenceName -notmatch '^[a-zA-Z0-9_-]+$'){throw 'EvidenceName must be a simple directory name.'}
@@ -39,8 +46,8 @@ if($Action -eq 'player'){
 }
 if(!(Test-Path -LiteralPath $executable -PathType Leaf)){throw ('Missing executable: '+$executable)}
 $record=[ordered]@{Action=$Action;Executable=$executable;Arguments=$arguments;EvidencePath=$evidencePath;LogFile=$logFile;StartedUtc=[DateTime]::UtcNow.ToString('o');Purpose='Isolated native FairyGUI/PuerTS verification; explicit file instrumentation, no OS input'}
-if($Action -eq 'editor' -or $Action -eq 'editor-auto' -or $Action -eq 'player'){$process=Start-Process -FilePath $executable -ArgumentList $arguments -WindowStyle Normal -PassThru}
-else{$process=Start-Process -FilePath $executable -ArgumentList $arguments -WindowStyle Hidden -PassThru}
+$windowStyle=if($ShowWindow){'Normal'}else{'Hidden'}
+$process=Start-Process -FilePath $executable -ArgumentList $arguments -WindowStyle $windowStyle -PassThru
 $record.ProcessId=$process.Id
 $record | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $evidencePath ('launch-'+$stamp+'.json')) -Encoding utf8
 if($Action -ne 'editor' -and $Action -ne 'editor-auto' -and $Action -ne 'player'){

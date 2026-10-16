@@ -1,0 +1,3510 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1.0",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "8040a15ada7fb7dad8b6d15d5a245bf52dcee2de64eaa4870b6f48ee88f9e074"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "sha256": "37c1f75b03f14dd29b289495a0822fce4c945bada748ce78fa093a22ad91b622"
+    },
+    {
+      "path": "dependencies.lock.json",
+      "sha256": "fa7da97eaf7c141fa4a9ebd444534b3a0a2d020285e71e546b05e1b0f562907e"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0aa3c617cf63f162de29f33bf666006756d2eb364ff862442e6cd44e7b5f86ac"
+    },
+    {
+      "path": "package.json",
+      "sha256": "9fae1ea2ae67cc55c62fc7b2b3c978a281fd8576e7501ff8e42bf00d2e696b9b"
+    },
+    {
+      "path": "patches/bootstrap-verification.json",
+      "sha256": "563c7375b9bce993ed34f9c33c7e0360e89754681803e2567de730ee80b689ff"
+    },
+    {
+      "path": "patches/editor-online-45f0bef-agent-session.patch",
+      "sha256": "085f77d390f1dfc3ee2b820a072ff7296c916413ad614415fcca5ecf0313ae4b"
+    },
+    {
+      "path": "patches/licenses/FairyGUI-Editor-Online-LICENSE.txt",
+      "sha256": "27b967232002b981f81c2011a0e2bbf9cd7f7de7d6bd4863e0f3b51845382fec"
+    },
+    {
+      "path": "patches/licenses/FairyGUI-dom-LICENSE.txt",
+      "sha256": "2420bf6f4ca9ecde38d78c9c035f0400fb876029982038598ddb63b7bf568161"
+    },
+    {
+      "path": "patches/licenses/FairyGUI-unity-LICENSE.txt",
+      "sha256": "6c03d6c230b35e08502d9f4d1a084b8c4d858ff20e0b6ed34f527104907d85e6"
+    },
+    {
+      "path": "patches/licenses/OpenFairyGUI-LICENSE.txt",
+      "sha256": "83af3155c1f4ac3b1fd5446be68b7dfa83d60535038bc0568873e76c08250a84"
+    },
+    {
+      "path": "patches/licenses/PuerTS-Core-3.0.3-LICENSE.txt",
+      "sha256": "ca54331da944453e714d3e69a056290bde7572550b7d7e099ac7fb7d2ad28e01"
+    },
+    {
+      "path": "patches/licenses/PuerTS-V8-3.0.3-LICENSE.txt",
+      "sha256": "ca54331da944453e714d3e69a056290bde7572550b7d7e099ac7fb7d2ad28e01"
+    },
+    {
+      "path": "patches/puerts-3.0.3-unity-6.6-unbox.patch",
+      "sha256": "40b8793ed9fc3ae65842edc4a68a9f0fb205a15b47f6ca7272992dc9349955ce"
+    },
+    {
+      "path": "prototype/dom.ts",
+      "sha256": "4878ad841b5479e3e085596d9ca7b947bb7a49a3d9cc4c08313490761107eafd"
+    },
+    {
+      "path": "prototype/model.test.ts",
+      "sha256": "3d99e06ffeec334287b25a65552637d28cbd1a5d1e3f2c8540c2704251957c79"
+    },
+    {
+      "path": "prototype/package.json",
+      "sha256": "0c3d04b8a43546c0e7aca1bf96a71cf8e8fa38513eac2c2a22c923e396b850f8"
+    },
+    {
+      "path": "prototype/shared/model.ts",
+      "sha256": "e3162e7d648a61dd5817918a8e2a753b4899f97fde0a15c124ca2c9a28742cf6"
+    },
+    {
+      "path": "prototype/web/assets/Inventory/Inventory_atlas0.png",
+      "sha256": "b8af14122bc3b25d82c50366002850513bd09842eed8a8d1d04ad18aa7dc2251"
+    },
+    {
+      "path": "prototype/web/assets/Inventory/icon0001.png",
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "prototype/web/assets/Inventory/manifest.json",
+      "sha256": "c8f9af03affe82f5657a7a75cdd849c607ea9be513f028fcd7d2bf9365a5364f"
+    },
+    {
+      "path": "prototype/web/assets/Inventory/package.xml",
+      "sha256": "f5ae4a3fb80eb070dd4f3b9115ca2671273bb190aaf1d655267d6a3340ea3293"
+    },
+    {
+      "path": "prototype/web/dom.js",
+      "sha256": "7457e3671907434098b393860397590df8e75de11d5603268628086744151949"
+    },
+    {
+      "path": "prototype/web/index.html",
+      "sha256": "255c6f1ee4bf15fe894e8a580829a4bbb69b17934d6137a188ca771d1616669e"
+    },
+    {
+      "path": "prototype/web/shared/model.js",
+      "sha256": "38f91fc6be757a113d7330f368e243110fcf7deddb7083837beaa26bcb77f77c"
+    },
+    {
+      "path": "prototype/web/vendor/FairyGUI-LICENSE.txt",
+      "sha256": "2420bf6f4ca9ecde38d78c9c035f0400fb876029982038598ddb63b7bf568161"
+    },
+    {
+      "path": "prototype/web/vendor/fairygui.module.js",
+      "sha256": "b8edcee657aac0dc1eb37bc970a6e2881d879eedda6a8176ae165e15a6938752"
+    },
+    {
+      "path": "scripts/bootstrap.mjs",
+      "sha256": "38e91f1a23c44a760fc7c651e3502841456c14bc15fd0e3cdcdfacc773f0d5cf"
+    },
+    {
+      "path": "scripts/bootstrap.test.mjs",
+      "sha256": "5bcd05a5fdf611faf8ec46ce22eded106ecbb0c41039a12dc63f7611c2b823ce"
+    },
+    {
+      "path": "scripts/browser-acceptance.mjs",
+      "sha256": "2472eda0382e0b6c9d91237cc8dce64b26539b2d8f29545f390a373200777784"
+    },
+    {
+      "path": "scripts/build.mjs",
+      "sha256": "875c1f3373bab7c6b5da0ad574f2722b60022a300f4fb029a0824ff8a66d26ff"
+    },
+    {
+      "path": "scripts/serve.mjs",
+      "sha256": "49fb76a9d7f85d62d78152fb4514672ab40a30d7c929a6fdb36ae9945562de89"
+    },
+    {
+      "path": "toolchain-test/Inventory.zip",
+      "sha256": "d8fbf3cfb387cd4827a1eca9594411c5ac8eb2e38ed850ffcaa35b6953339b9e"
+    },
+    {
+      "path": "toolchain-test/package-lock.json",
+      "sha256": "3e3f39e36794ba24cd71547c621ff299db0226a43bd7a898e2f13558bdb27286"
+    },
+    {
+      "path": "toolchain-test/package.json",
+      "sha256": "c7d223a561389ce3d3c5fbd05a7d784bc77713dbd6d22fc3b1d7a538ed6cf9d2"
+    },
+    {
+      "path": "toolchain-test/project/Inventory.fairy",
+      "sha256": "25c87f86ef704e473bcf963fef88fa5b7f96e4b01018454c14e64fc3823e1839"
+    },
+    {
+      "path": "toolchain-test/project/assets/Inventory/Btn.xml",
+      "sha256": "58a7259d43ad1f7a2f478fc65acf5853d72385edd0544fc0d6e30b22d7036e97"
+    },
+    {
+      "path": "toolchain-test/project/assets/Inventory/ItemRow.xml",
+      "sha256": "dc1ed261c992499d57e19f48db81728144233cbf745ec1a622987cf386f01467"
+    },
+    {
+      "path": "toolchain-test/project/assets/Inventory/Main.xml",
+      "sha256": "f8767be19d0ee31d5ec8896c43ae58a387172036aa132e84f67758bbc50c9013"
+    },
+    {
+      "path": "toolchain-test/project/assets/Inventory/Reward.xml",
+      "sha256": "93896ac08670a191ee997458b5adae2d44f594f1d81970e8e82995ca3b5858e8"
+    },
+    {
+      "path": "toolchain-test/project/assets/Inventory/icon.png",
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "toolchain-test/project/assets/Inventory/package.xml",
+      "sha256": "156b00055ce9f98a531ebfab10f43a335805e042aab2155149d23df1c9824791"
+    },
+    {
+      "path": "toolchain-test/project/settings/Adaptation.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "toolchain-test/project/settings/Common.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "toolchain-test/project/settings/Publish.json",
+      "sha256": "38ae21b145d54820ce70c6a104c2800041d9d44e87906ad091ec754865dd83cd"
+    },
+    {
+      "path": "tools/agent.mjs",
+      "sha256": "deef4191f5c5fe5d2ba40e43f0e3ddfe6f255d73e2cc9ec0871e0a544b1eeecb"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/ComplexInventoryValidation.unity",
+      "sha256": "084ec05a32df0a1e5d7d093701d1477fe52847ea574ecc7a95e8a46efed9e5c6"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/ComplexInventoryValidation.unity.meta",
+      "sha256": "288cf5564f4d208edbf9ae34709c187e1f6566261a99a1e8175ee1be8e374f6a"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor.meta",
+      "sha256": "d96ccf6eb290563f34a2f3cf3981eb3ef0ce8b674b40c1871aaf183bfe43a9b0"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/ComplexEditorVerification.cs",
+      "sha256": "4909311dd82fe97d3dc5bbe54d5af4a81ebebd9bf6653037c2721b36d906a57a"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/ComplexEditorVerification.cs.meta",
+      "sha256": "3934e01b759be346f98466ddb0458ba04c9936324a475a0212e6049a2d897a7c"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/ComplexMigrationBuild.cs",
+      "sha256": "bc87e087646cf211cea372292dda49abe0e16862cae0986c159f001028f80eb3"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/ComplexMigrationBuild.cs.meta",
+      "sha256": "97f32b185abe452dff34c5f820da46ab18e91e2c58e2300755a8192f6fcd5c36"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/FidelityEditorVerification.cs",
+      "sha256": "14d15bd26b310047e3e7920b8019839f0d90b69cef908de356bc8e88eb934196"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/FidelityEditorVerification.cs.meta",
+      "sha256": "09b294318ea220de72a8cfb2b1e612bcf19edd9f667fcf956edde9b8d389942e"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/FidelityMigrationBuild.cs",
+      "sha256": "f1a2edf049c7c0c62639f4f76796701213f485ec43d9ea1958cb755e754b125e"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/FidelityMigrationBuild.cs.meta",
+      "sha256": "cbe5fb106874f76bbf793ed982c97edcf0c99e9e6b5ee05566d568f1bc07caf0"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/MigrationBuild.cs",
+      "sha256": "0f7fc7bd5172d9fd2f843f0722f288f7f9d2846b92b3e858deee9eff0ea5658e"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Editor/MigrationBuild.cs.meta",
+      "sha256": "fe594d6ee5fc45944af05db2f16b0cb6e2a503680a8addd0818cdfc25c864568"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/FairyGUI.meta",
+      "sha256": "967785ddc525c293770090943621ce24c21b87e1b1d86cd4381aa92b10f2a360"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/FidelityInventoryValidation.unity",
+      "sha256": "18be865215ffd528bc492d6cf0d0120a956b2edc81ebc7a9cc7560728eda410b"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/FidelityInventoryValidation.unity.meta",
+      "sha256": "61893b744fde6013411ad2442c94b652fd6a6886bc3c1d8e9f89fb940b41a7f8"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Gen.meta",
+      "sha256": "591d41c668ec5051d07bcf25cddbeb3871cd04a4fd0d72d2d94addbc7dfee23d"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/InventoryValidation.unity",
+      "sha256": "7ed3fe3e9cfff9353d149beb733430028b0d6ca7b340979681b45129907de616"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/InventoryValidation.unity.meta",
+      "sha256": "a1b08b577e89937f46878fadeb320c2a468921f2fed328e24200fe7bee7cf9f7"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration.meta",
+      "sha256": "41e074eb4b5f00d333fcd4cce7dad1034b50057269049e6eac0ddcc559280164"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/ComplexInventoryHost.cs",
+      "sha256": "33b965d5e32bb0f5b7d6387d717fe49136a62889a864377d9cf79e2a743b4f50"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/ComplexInventoryHost.cs.meta",
+      "sha256": "d47b818f22a894c4d03ffb9c911da4ae6c375615da72e61a80b678e4eaee7dc5"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/ComplexVerificationPump.cs",
+      "sha256": "c49f78e83d726dff9c9af9c3dbe0bd5d776beeca6a8eca71883ad1df01787cb4"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/ComplexVerificationPump.cs.meta",
+      "sha256": "cd9eb19679aa24d3c5f7b9bd94812e908ded1960f4568fcabb4d46e981d80614"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/FidelityInventoryHost.cs",
+      "sha256": "4cbc437a76a59733d8289da144f47a9f2a7ae3afa218e2289e3853adbd814c1d"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/FidelityInventoryHost.cs.meta",
+      "sha256": "dc0df1be4acb5d46c5dd26096df7a90b5ab648302bc50803cd0be33ab3b7bc79"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/FidelityVerificationPump.cs",
+      "sha256": "2f76d4c4010b808b97335eeb933a3a4bd97dcca8c8fd253a01401242c5c3c873"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/FidelityVerificationPump.cs.meta",
+      "sha256": "1f30d3ce42d8a89e052b9297b0c0fe61f6ca2533c65b604babee8b102845b4a0"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/InventoryHost.cs",
+      "sha256": "048365fe782d3d18481d09e58c0f942352671210e64bf5cde60e56faee1e7fcf"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/InventoryHost.cs.meta",
+      "sha256": "727d5754d9c3cd3c02b3df3b4d2c44cf1f94f7cb53d013cce339280f9b126cf4"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/VerificationPump.cs",
+      "sha256": "4bdd20dfbca49d4736f9f5746455109bc5dc50ca65667b28edd9887101de8b29"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Migration/VerificationPump.cs.meta",
+      "sha256": "3ca2bfce9ca9a2a4034a4a741e329d3fae3b7dd4ecfc56dde8e68d8926deefd2"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources.meta",
+      "sha256": "e8c8b3a9b22b3a372ab404a540e4370c57b0ccfe813fe89a287b7a39841e439b"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryApp.txt",
+      "sha256": "3875d59f13ec5517ed711c92d075a3bc7681386d698b20a456d9b2339283af2b"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryApp.txt.meta",
+      "sha256": "2452283de73d937add77aa4d47f361cd757575a5154c0eef69ad8d1e82c0180f"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryLayout.txt",
+      "sha256": "98be3c0641f2c460a6de8084980eedac795c39309ec6c0f6a15faa34f7d174d7"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryLayout.txt.meta",
+      "sha256": "4bcd7c861b9d94c688dacdfcc1bd2c17f415ff56339da10db74a898fd425e5ab"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryUI.meta",
+      "sha256": "558fdda947e7a9c469de5d24c0ff7d6c7e839e0d0c69166b77d8f72445c7a52e"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryUI/Inventory_atlas0.png",
+      "sha256": "a94b062213c3477ede98bcfd3b746db44d8216f8e767f4b431739d712ac31f9e"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryUI/Inventory_atlas0.png.meta",
+      "sha256": "4837723a7a742d6412b6cfb8e8356cb9f9e1ec6cbc49cb7af14be1a0358554b5"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryUI/Inventory_fui.bytes",
+      "sha256": "0892a885f8ead9e1062e5e366abdb51a583dd250c5a880d33bd05755a1891186"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/ComplexInventoryUI/Inventory_fui.bytes.meta",
+      "sha256": "cb28148f0b8a88ee836d989e7e3e64a61ab5980b72aae16a9937709054d9aa29"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryApp.txt",
+      "sha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryApp.txt.meta",
+      "sha256": "a04920e1cf917a2bb574ebb83384a57ae4d22316575a1d291988a86f25e1ecf9"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryLayout.txt",
+      "sha256": "ac1090b293125478680778e4760507917cd176ab419a629993e89de2ace0ccf1"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryLayout.txt.meta",
+      "sha256": "07bd25303350f636fac709f3d8443828c7cad67d08e73007d30518fd487bd009"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI.meta",
+      "sha256": "0e4ce26a9594a8a84519b1dcdb7913cb88541a3842afd6c07fa2acb8a4d1b8fd"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas0.png",
+      "sha256": "224a7124ad8c880d995fcca3029d800c33f884b329d11a3843006deea57f2cd6"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas0.png.meta",
+      "sha256": "fd8c58aabff12e54d71fdb644df33408e54eead83fe5e59e73ac8ba18a5dc9d6"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas1.png",
+      "sha256": "da53d41d851dd0042d78a4bb421cdfea11c3ac6fb1c250a23a84df2d1fdcd2e8"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas1.png.meta",
+      "sha256": "609c32d450cbe4f92ebd4b4a579f2a1c88e160cc5ffdebbe67cbc9c58bf3323c"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas2.png",
+      "sha256": "fc2041bd019304e121ae43c719ac7f15162eae22ba9a25c76c4f9b2931957138"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas2.png.meta",
+      "sha256": "076b8829f5741cc644c128d55675840f3b5d2af1b6987d02f323797bc74391ef"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas3.png",
+      "sha256": "77c42c8947905d39bb753dd7fcaab53612d623e3871d2e01c6ce838487136596"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_atlas3.png.meta",
+      "sha256": "bae6c12eefa84d0e5c372e0f3324f427fe1f7630223a8ec8b5b72239e972d026"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_fui.bytes",
+      "sha256": "ffbf11d73f31bb278f1b900f3a96c32ac86bc390567e952596709951770a799f"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityInventoryUI/Inventory_fui.bytes.meta",
+      "sha256": "e2e05c3065ce5b54aa109d69db7e367b4b02af21c0199c9ae52308fce58512d7"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityLayoutReference.json",
+      "sha256": "4a585caf7d36385e846a5202f5541dace9a5a91692e3d735f4fb3ca946359514"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityLayoutReference.json.meta",
+      "sha256": "47ce0b52e7cf08e8154ebbde18dfa72c7a8656acf827bbd37517a7dcc3585934"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityReferenceFixture.json",
+      "sha256": "f81aa57ae00704c863b9d4a5270c17bccd069ba142070343f5f709c62a448fd1"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityReferenceFixture.json.meta",
+      "sha256": "8da91ca42a0d703ee6fd2b9ebe2a11b56f312b65b071eb74af8231af9c46762f"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityResourceMap.json",
+      "sha256": "f5b04aa504f8da3651735d085c6a0e0f4b30ae83efe6986813cd9ea592279fa1"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityResourceMap.json.meta",
+      "sha256": "13ef51fa7ce318767a732319af41562ec5ad177da350b7e5c754d83a59a3e0b1"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelitySkinManifest.json",
+      "sha256": "130ed6d44c72303fad991bfd9006cfc278a2903317ca9ff0ea635a58ba208ca8"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelitySkinManifest.json.meta",
+      "sha256": "4a052f258abcdf8c866b410233a5ff45a6571a42dd1bc63a7882db72759fde6b"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityStructure.json",
+      "sha256": "f1f363f0894c07a81f58843928218db3fa4f39ab15d83f5e82d71da859afae17"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/FidelityStructure.json.meta",
+      "sha256": "2762bdeb1d96aa0bd80ff2a0950a8a540f5ade7d67ff4c5eeb60f1a440d249d6"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/InventoryApp.txt",
+      "sha256": "b8a02238b1be501469fb8cc19f5299c32193a5d233a54a7ecdab6abddf4e15c1"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/InventoryApp.txt.meta",
+      "sha256": "f54a50ebde2115220ce2fb5b91d9e17b7954874440d6aafaa5ee2221d7a04c6e"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/InventoryUI.meta",
+      "sha256": "6c4e196d3b202b4f087e704a70de816301eb9ea5799ad7ad9c9d1ab3b1f4e386"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/InventoryUI/Inventory_atlas0.png",
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/InventoryUI/Inventory_atlas0.png.meta",
+      "sha256": "1aa5fa87458183d2c589a075a6a62b57e6328b1266f6b6382adf5ca9477ee80c"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/InventoryUI/Inventory_fui.bytes",
+      "sha256": "e247e43a4317a91b401622a41aca74627654cbd231a5fdf98e949e51cc6b6014"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/InventoryUI/Inventory_fui.bytes.meta",
+      "sha256": "0fe7141cb46d4b41ed219f25ad8529582919e45f31c1faa3ca3dd25c642480c3"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders.meta",
+      "sha256": "a3ce133bd94daceff15e01010a2e2f255f58626ed06e4b8e5ad8dd7768f8e46d"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/AddOn.meta",
+      "sha256": "62829563ab7a03a5a4d008f61c17270d025b3a935b0a3fdbe312670da6801f46"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/AddOn/FairyGUI-BlurFilter.shader",
+      "sha256": "f91caae9019f49e33a136676ea934e65ad20319f4e4cdbd551138e4e12f68954"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/AddOn/FairyGUI-BlurFilter.shader.meta",
+      "sha256": "b4b2ff1fcfcebe43f841c4b34675330ecb13bbef8ad1b55d162597070be7dbd2"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/FairyGUI-BMFont.shader",
+      "sha256": "729d9da2a0b82d49c15873114877fa1076bcf3a93e26cc2cf7245672f062a7c8"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/FairyGUI-BMFont.shader.meta",
+      "sha256": "4e29df11f9f17865bed317788c0c7d649843b455a829227a6af8dca07697b9b2"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/FairyGUI-Image.shader",
+      "sha256": "63003e6794d7c6836211d0b2240ebaf199cb3d84e9de6ebd618a9e3d7502d66b"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/FairyGUI-Image.shader.meta",
+      "sha256": "eb83253d1301dd57248ee40e5d1a1626bc3670e1bb5f0340260fd0bb4aba8e00"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/FairyGUI-Text.shader",
+      "sha256": "579ae07b6ba7480b112ceb9d29fa41a8171436be0779d5c57a6e728fe7c4a61f"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Assets/Resources/Shaders/FairyGUI-Text.shader.meta",
+      "sha256": "1d06cccde9db88d1487f0e03435a5fa4f3cb52b4d87fad2f5da77719c6f5721c"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Packages/manifest.json",
+      "sha256": "57907aaa9da1a4ca4b4fa4de3e724884799d9a6a6cdef93b6cd028d390732420"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/Packages/packages-lock.json",
+      "sha256": "630020f6f408c9df2fef34e2e4f50992abe95269add3fd935fe6c02065f6f316"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/AudioManager.asset",
+      "sha256": "9543c41dbfc7d3951217c4dd9481ed026eb8e529b85ecf4463969a0fea747729"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/ClusterInputManager.asset",
+      "sha256": "40e65dd214bf254955d2c8829ca8ce2130fd3510485560ce012e9a1ddd93e623"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/DynamicsManager.asset",
+      "sha256": "785919ec02924b9125bd572087d9e3ceb1844b1cceb3ff6144c1c1f56cd79047"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/EditorBuildSettings.asset",
+      "sha256": "ad0fe37f1e1b7d723931a2df7e1990d1d93a75499ba98d37e7161e1dee39403c"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/EditorSettings.asset",
+      "sha256": "4b842c80c4e630b6cb5416b817aba84b97014072e1ab555b08742344687ccdf5"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/GraphicsSettings.asset",
+      "sha256": "87bac5a6c9c3246744f81dd6b6df6db039b519976a9b0e552760754ee8ac3816"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/InputManager.asset",
+      "sha256": "d0f454ddb880912abcae92e3e12957a7446786ba89e24937e019ff3bbc0d4300"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/MemorySettings.asset",
+      "sha256": "25fb3fdd1ce94347ccdcf23d5d5e446055ca81d8b3756a7df85d614645a71ac4"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/MultiplayerManager.asset",
+      "sha256": "aba89fd1a1ddad182727ad82727e536d27372e90328a8196da2a4560398983dd"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/NavMeshAreas.asset",
+      "sha256": "7ebbf8f53b8033104e1878b95ca07a28d0954092d81c220f14196a42f651e658"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/PackageManagerSettings.asset",
+      "sha256": "8fdc4eb921ba96c1aa2f6216d7e855da78b3f8e68cd3b5b7fef5780f9eb2c749"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/Physics2DSettings.asset",
+      "sha256": "7280037ac908e26d4519825446c92c80a8520308016b171522760b535aadcbc0"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/PhysicsCoreProjectSettings2D.asset",
+      "sha256": "bedc5339a832c60dc3f11b84abc4f4384dbfa20b0cd9ad6c444b907e751fc35e"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/PresetManager.asset",
+      "sha256": "29c125923fe6e29f90190d4fce1c82d660e7051546e2c9d02908d18c9cf2436c"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/ProjectAuditorSettings.asset",
+      "sha256": "9e68444b9bda981e2927a98df9edf69ea88362f0c6b7f3c81b39b9d515d2a416"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/ProjectSettings.asset",
+      "sha256": "bb029b2d986b7631d18f220ec7c3aaf05da3e39bcde1f213168ecb15e7636368"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/ProjectVersion.txt",
+      "sha256": "9207210a75d6f7e920816752a3a9228f1366df762e660fb6c1f8f56ee3af8661"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/QualitySettings.asset",
+      "sha256": "f1f893b1be47ad2442f58338dd7c860dc1986bb317e2f5bb31084454ffabbf4c"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/SceneTemplateSettings.json",
+      "sha256": "bb9098b3bfcde78d93e264b96f7b77b5430e64e8c57a7aad7f5a5d9c3945e16a"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/TagManager.asset",
+      "sha256": "996628fdc904025b83606bbfbda4fe08c0bbe916475146110e77cdc2f22c2013"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/TimeManager.asset",
+      "sha256": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/UnityConnectSettings.asset",
+      "sha256": "bfd9b4ad7ba0f6044f0957cd427df1d8e49dcf9453fdfc35dac74c64bbffa8f3"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/VFXManager.asset",
+      "sha256": "d2937fe93ff49c2ce60f888056b70ebc0a1df7dd5e22dab3fa41678c2a3f3858"
+    },
+    {
+      "path": "unity-migration/InventoryUnity/ProjectSettings/VersionControlSettings.asset",
+      "sha256": "e199cdfa6a8f2bf33cfd47e549198f13e3eb2a5099e908fdb4e0f14d939ccc6b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/art/backdrop.png",
+      "sha256": "29d817ee381518852ef2394e78eba02adefdcbe8ebf7376e5751bb8feb0988cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/art/items-atlas.png",
+      "sha256": "14b30d48908669363919196c95401ed800c00c9b78bbc10537d69594a822e2f2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/art/prompts.json",
+      "sha256": "d401c09573b92df34d3f6100f7820043276bda81b7ba3071a180d496d37044b6"
+    },
+    {
+      "path": "unity-migration/complex-inventory/art/reference.png",
+      "sha256": "b93b3baa9ff13476edfff4c5c83206867540160a7b70d49009c37b4a8e653d7b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/dist/ComplexInventoryApp.txt",
+      "sha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-adaptive-controls.mjs",
+      "sha256": "b71d809153777955f4e98dc661b390a7371cde0978fc5a1b268b95ecdc3f0b52"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-fidelity.mjs",
+      "sha256": "438a022e0e576e9ef630d1197a766762c15fb416ca122e03b6e123cc09d5b57c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-narrow-layout.mjs",
+      "sha256": "512ee39696de009148e1e835d08a38c6597ce0f8e092f04e595ee9717093fdcb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-unity-fidelity-focused.mjs",
+      "sha256": "69da27ca664ea370a8bcb6aab511335c6f8baa2ba115f263f2a5db7dcaf89446"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/accept-unity-fidelity.mjs",
+      "sha256": "e84fe0f5ea834c6b2804b70912e66d224b64f83a5d7d3b4d947498d01321b342"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-00.png",
+      "sha256": "0184d567b963066b1db6974dbf225bf023a1dfad893b525c29b9db64a2d3a626"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-01.png",
+      "sha256": "b1cb6d9fe5bc1cb74a96dfbe0b7e0ef1f930929b0d014a02e0fbe6793d860245"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-02.png",
+      "sha256": "3166e5b6dbd19cb3ab1cb69fe22fb7bdd5483b37d5208fe41c92ed40676cc7de"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-03.png",
+      "sha256": "55f7f25700948ccfd2b711589fe7ec2a390a982b490382938fe297f3f6b89ff3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-04.png",
+      "sha256": "c9fcf0f94aedc1b2a5ed08a3863b2feb68bb2072128cd288c9ff5c481a0c8a69"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-05.png",
+      "sha256": "651793040b35c6a1caf4bd82742a93af576714f1c881262dc685d68bd4749856"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-06.png",
+      "sha256": "80f8013b25205c622d4915953afb6a02f4023ec05bf85f412a0e1f7a255e3a62"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-07.png",
+      "sha256": "f8145a9fcb5005aa1fa1b27a43d0dd9491bada872a71439445c1f301e95af7d4"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-08.png",
+      "sha256": "86f95c3597f4c4a50c6f5982af12efee741da70591140779ade75917cddece97"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-09.png",
+      "sha256": "9416031565240a35184f99d6eaba3b742fd73c2c50eec877f8110a2b44ed320b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-10.png",
+      "sha256": "face26c382089a376bb134c93771a34b7a98339d02dcb9fa0a5681a88b79b410"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-11.png",
+      "sha256": "111a4551378c8dbb395ad32940eda468e9db67177ca3081d967e63791ecccc1f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-12.png",
+      "sha256": "e9c83dd82d5f67b742151999714d06c9eb5a6c2e5b86363309c941e21a96764b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-13.png",
+      "sha256": "a062e7ee7252784a11b2dc4ff318c7f637ca9be8676a5bd283f3582c597b1159"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-14.png",
+      "sha256": "0bfc7cdb95d2281982d3ca29a1c1f7f33cc41ffc99ed43c1347153e30d313998"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-15.png",
+      "sha256": "3e15c0a6babba19a20b55996ad245b60931579f7c8180ae94d2075c2309b8659"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-16.png",
+      "sha256": "60fce4611e81c5b7f50c563e9fa16191cacca03e0597f646900c870894cd7086"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-17.png",
+      "sha256": "06eee01c82d9bb22ebfdd72d69d9e6b8b99c9ff200b99bf377cf3708ff35b8ea"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-18.png",
+      "sha256": "d78de39b7b5237226ad40942c8808768fdb8dc701542bccf1ed93cacb6a73038"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-19.png",
+      "sha256": "b8dd5a4faa10d47e0cb02e5283418d98b228eebdced255fecc88972d58137f21"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-20.png",
+      "sha256": "a9759ce0ed51618373a2b0fd7ae421c2d9688d8e631573698fe941f754ec3481"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-21.png",
+      "sha256": "cab2b039188fa54a5fd69ea0cebb5e61d7672d5f51f8c7fce2108c25b2d42cdd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-22.png",
+      "sha256": "d4392c8204db080e7a27436d2b12c210d258d629683e3aa31cb716a550e49fb2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/detail-23.png",
+      "sha256": "0bb945fae86eef091e2786ce17a509655d87fd5124aaef3123669f27366abbcb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/items-details-v2.png",
+      "sha256": "6f66d7c29ef9cdd3543ede13bacd7ffc122424b1b64c93b3fae7436065a04fd4"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/alpha/prompt.json",
+      "sha256": "8c10a375d6482fc4d2769ebe5a89b8cbac1df59b0e93ea9521c46a5e4d492694"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/app.js",
+      "sha256": "eb28802c0f99b659c5f53988667c8a43a2a809178e9b1b485bc846fdd672081e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/build-fidelity.mjs",
+      "sha256": "e2299f6db4d86e949c55ed063b80c9b6be7eaf78259e94401843baa4d8ada163"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/button-skin.test.mjs",
+      "sha256": "2245e87b314d63643acc480a4b4a5d8137617ada64f446beee10cf52c7e71eb7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/capture-adaptive.mjs",
+      "sha256": "65bf15295a2c5de3325cda98db4e2da82aa0425dca9954501bc525b1d7c3a876"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/capture-compare.mjs",
+      "sha256": "01fd63498b069ea46728f09ca0d3beee79da5d9c25407f3c17ac1621c8041c53"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/capture-window.mjs",
+      "sha256": "245244c9b44ea09300c63d10d454f6b6c536b55c05958dd4bf2cf5e531f77048"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/compare.html",
+      "sha256": "05523c8704d8e80bb14179b037e21605b8c678b4a8d5ab9d0c4e0ee4414c4627"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/detail-icons.json",
+      "sha256": "fc51d3535abd1a73bdab8eb76d25ff35ca952a9a34c771361e6c80a4a20fd967"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/fidelity.js",
+      "sha256": "84ac7d919a6795ad8fad25febff7ac9af2f62741581fdd5a80ba729a8dc92eba"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/fidelity.ts",
+      "sha256": "84ac7d919a6795ad8fad25febff7ac9af2f62741581fdd5a80ba729a8dc92eba"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/index.html",
+      "sha256": "cc7d6f7ab97f2813537304c3d45459a5aa3e2661ffd7088f665679b3df9a40d3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/layout-reference.json",
+      "sha256": "4a585caf7d36385e846a5202f5541dace9a5a91692e3d735f4fb3ca946359514"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/layout-shared.js",
+      "sha256": "ac1090b293125478680778e4760507917cd176ab419a629993e89de2ace0ccf1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/layout-shared.test.mjs",
+      "sha256": "c7f12df6e6f9df7d29dd4ba26f9bed6de8ec651fe5faf2116fa4122d95bfdcba"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/narrow-layout.test.mjs",
+      "sha256": "85e9dc356a0b6624add23279061bf83dec1fb50d05c03b504df5dc7b2bcdd6ef"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/prepare-detail-icons.mjs",
+      "sha256": "7b996d8cabc4b4d76c340e353017836002b475d3afbd3f476f618fb33147c6c8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/prepare-skin.mjs",
+      "sha256": "4c7ff807bdf938c22364b99579ca9ee07686c23879e140ad1059c5b9903ab25c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/reference-fixture-manifest.json",
+      "sha256": "6a43dc37ad3bf68786d892853c0eb891aaf39f48f709d7e53c213c2ad05185ae"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/reference-fixture.json",
+      "sha256": "f81aa57ae00704c863b9d4a5270c17bccd069ba142070343f5f709c62a448fd1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/reference-fixture.test.mjs",
+      "sha256": "033f1723a601cb9f7889018ff9c41ec0ac12a7504d8b4acb6db3e72f670392ce"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin-manifest.json",
+      "sha256": "130ed6d44c72303fad991bfd9006cfc278a2903317ca9ff0ea635a58ba208ca8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/capacityIcon.png",
+      "sha256": "2085040ee2ba86014bccac608152c86a8fde5eb162d8e37d7e68854dca21ae59"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/close.png",
+      "sha256": "9b0affedb97f67e7ef24b676fdbaa05ceae261e505c704cc67a20ac93203fa92"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/coin.png",
+      "sha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/coinAlpha.png",
+      "sha256": "c7e4f1532b6ad30e5eca091ccee7d0bde6012483970e7ecd1a90b59c48d875ae"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/compass.png",
+      "sha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/compassAlpha.png",
+      "sha256": "96ee372046abb8dca626b13a72eceba719c23f50114ef833f5d45e5f01c306a8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/detailBackground.png",
+      "sha256": "4bf6896db517194866765574bb66ee71fd9e320a0f688e4ce7b16a3fec8e26c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/detailDivider.png",
+      "sha256": "3ceaf93af3370e10e3c74653499fc05130aa07b2da73eef8dca0c93ac8d14b01"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/detailLowerDivider.png",
+      "sha256": "7a08d4309b1bb55fbe26a2e66ecba66cce5de93cae5b45f978c451c95a4916ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/detailSword.png",
+      "sha256": "b878203d7ec888402c952ce0303358c241b4cad1fb45c60cac13ac5eec1359c1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/environmentBottom.png",
+      "sha256": "016c0662de98bd4e7b96d8110989ba70ddbe768cc18e55ac07415d30c2c87fa5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/environmentLeft.png",
+      "sha256": "21eb3985edd50ea2c2ea16c02d79a054bd3b9f7049c509d88c260de8d06629ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/environmentRight.png",
+      "sha256": "568742588acc51f57a58b4872857c70c810817180cf628c9679a81502e1495c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/environmentTop.png",
+      "sha256": "6bd04d574045e54744acadde24140663bbd0e15110c18d2f0e17139a93631c8e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/footerBackground.png",
+      "sha256": "09e21c423f274ce925b4d370e5371b02a47aac12220aa71c721e981a0bcc67b8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/frameFooter.png",
+      "sha256": "ca16943d90fd4e0125d71b2a540d1b566f0940acb897292658791595d18a72a5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/frameLeft.png",
+      "sha256": "964464357e163682a35c745b01b563564d943f5860f427d1f195876ba2226247"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/frameRight.png",
+      "sha256": "341c899865bbb68077a5f7813ccc3474882cbb50127a70b5e273541872678a92"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/headerBranding.png",
+      "sha256": "47a09cda968eb1bbdb9e34ff7fb04ad76d75929590334de12793f89b619734c8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/headerCoinBlank.png",
+      "sha256": "46988688b6d659fb2cf6060545c459120b71515dd95889d2cbcb1e13a1e2e07e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/headerFill.png",
+      "sha256": "34da0feedfb5f6bc909ac76ead93cf7627036e539731cadeb20f1c8807a542bb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/headerLeftMiddle.png",
+      "sha256": "f3244f3a07e09a1946003f62123ea8c098f3b303138a194443fcb2609fd46da9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/headerRightLower.png",
+      "sha256": "f17ad1fb9a6f39967e3eac2d7ed05fb26a015967aa546f3b159bd12d23972a84"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/headerRightUpper.png",
+      "sha256": "fcd49c2af7df2f2242ea0bb43a17b858605015c01ea24cbb2d174da0f342b822"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/leftBackground.png",
+      "sha256": "e216c21c2bf8a805ff481266bf882ef180fe0b070bbf976ed50fc23a25318e09"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/logo.png",
+      "sha256": "1bf50a41e045cf8cfb8741c615123262c2880caa5e6a35db5f48286694a7ee23"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/menu.png",
+      "sha256": "e424c2eccbf8fcd719874cd5e793f5b0e4e019daa96b148360f47214d1abda79"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/panelFill.png",
+      "sha256": "8d8513fed22a8ecc44f1a533278ee66a8f0feacb2554381cae7039bdac13369a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/primaryBg.png",
+      "sha256": "d3d09c55a4d9da984d5092f2a08c6b935b52fd3472f744cdc63d40b3801f4b3c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/progressFill.png",
+      "sha256": "01ef0a6bdbb549336a0a160bd73783b145beda609753baea2e2fb0738806e6d7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/progressFrame.png",
+      "sha256": "06913784ad01867fbfdbbcd38137d006aecb1f5badf2da6b7e626c8a92726deb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/provenance/coinAlpha.generated.png",
+      "sha256": "db91af48255b8595273b9a44cd047de4affa04c61d16af6945ffea9df2b36a1f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/provenance/compassAlpha.generated.png",
+      "sha256": "cd5a455c52deb5c594b96364e250baf94f7a43bd011c9c93ccca7830ebb1d257"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/provenance/sellCoinsAlpha.generated.png",
+      "sha256": "15f5ceff95437f8c846de3002db54e8ef65e0b90636f31e42275fb27fdff3166"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/searchBg.png",
+      "sha256": "5d3b3cd4cdd1f5b0fb012e18c5c713a75866ddede628135d373c6427c3cc5fe3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/searchIcon.png",
+      "sha256": "d469ed3b37bec5bc4cd2147418c805bd5c9c29cff76c965336b363e58d144486"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/secondaryBg.png",
+      "sha256": "64929b4ff2b4e897edaf42956edfb0ef7d9f82cb271386a28e541cf4c047a40b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/sellCoins.png",
+      "sha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/sellCoinsAlpha.png",
+      "sha256": "5b21946d4de33d73dc57f6b251c6799b37889392048f52cfb787539b14c1ff22"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot00.png",
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot01.png",
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot02.png",
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot03.png",
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot04.png",
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot05.png",
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot06.png",
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot07.png",
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot08.png",
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot09.png",
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot10.png",
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot11.png",
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot12.png",
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot13.png",
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot14.png",
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot15.png",
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot16.png",
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot17.png",
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot18.png",
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot19.png",
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot20.png",
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot21.png",
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot22.png",
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slot23.png",
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slotNormalFrame.png",
+      "sha256": "32aff72ae057f351134a0ba13892a0b7abcfc95d4f4dfe1cb94329da809e685f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/slotSelectedFrame.png",
+      "sha256": "1bcf3721c8e70d7be7003e02573d3fe4612faac16c8e01173363b7dbe9230f3a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/sortArrow.png",
+      "sha256": "1e86f7724e0e1a746422dcefa06ecc43aaa55dc8002a5ce9229b711990cbaedd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/sortBg.png",
+      "sha256": "0de0323d5b9b62c0fe7f124f8af872f957eca8fc02d86d2e31814abd082e0ddc"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/statAttack.png",
+      "sha256": "d13b103c0e2e0146baedfbb95a9d661c0524305a47f19f5ba647a8ae376e26e3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/statCrit.png",
+      "sha256": "a1e28bb240f3e2084a15b6b9837a679437094d8a05ba38007c8d0dc6c7467134"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/statDurability.png",
+      "sha256": "7392df94362da8e01d61b56bf0f09e3c32ff087e1acea577baa29289cfa366be"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/tabNormalBg.png",
+      "sha256": "4fe501a3b522a79c487192886ae0d288267ba228bb3363cf891ec344eb50ad37"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/skin/tabSelectedBg.png",
+      "sha256": "3dcd52ee5b14d81833fe8dce70adaf7cd098d147981d2a79d1e654146443ca6c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-00.png",
+      "sha256": "dbf1bdfaa26532227184fef0391ed457bdba02f045d634183cfb7dc6dfe5f31b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-01.png",
+      "sha256": "cb378ad809bdfaad294683307599e64b7ada8b1407784dbdf572ba052f9a3bca"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-02.png",
+      "sha256": "f36d39c96beb7b1fe2b70a76de38d59206a94952ad7a302309bfeb1e30888e5c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-03.png",
+      "sha256": "80093295ce013cd5a5a02f8a479550e52bd8ec9b0d72eac56dd5de8bfc87ee72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-04.png",
+      "sha256": "84c0e6dfe20deb316cab0b0eb2f04784b1e56e1a85da259f88e1307d2e780a31"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-05.png",
+      "sha256": "c648fe3a3f37e3598e7db22ad24039d58e0ec9bd5033eccb7cfc707be4d9e8c7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-06.png",
+      "sha256": "67d95d3ca301970438b12857247ae14c25190fd5e9dcf33f25d8380ef817bef7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-07.png",
+      "sha256": "ffe5ebcf86f1aea24b1940f5dd65b53636acf938e250e7dc7703ea599b9e7ea2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-08.png",
+      "sha256": "368fe305b5c9b758b0a710d8447639aac03e1855bf4b9fdd93886b8cd099d8d9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-09.png",
+      "sha256": "14eac7416c2e7c136ec6763bf79030248d87ad13ab9bf0d59084fe3c017d577c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-10.png",
+      "sha256": "03e7e6b9a9820d904f6a76ee26662a5ded7107b5baf48eb0e75170d3a003a57d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-11.png",
+      "sha256": "7f48d323f486c05f5ac4972ee3a3a1798b8999ca515cd9b32444a17277bd2868"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-12.png",
+      "sha256": "57551bdc5310585185a174aa48e47e8b717be1676d12b1d5970d32af7d1af2b5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-13.png",
+      "sha256": "0d7c65d76b27dc22821b2287183ddeef5defce8d42fc1068d056a442c3a1c969"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-14.png",
+      "sha256": "7105f61419532e39dccd7deedd909e7451e66a7125088245f1d6cf526849fc28"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-15.png",
+      "sha256": "e8e6e132e7c85d5bfc23cccece10f1555b77eee1f8621d43a8dd6010446675a1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-16.png",
+      "sha256": "4669cf647d35873f34fbf1faec513b8f57a6e0c8aa0cf0e3f009d1b0d30bf880"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-17.png",
+      "sha256": "1409b8860d35397fe33ab72610fed09d0161e3496e435c74cb5957adcfa4a5fa"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-18.png",
+      "sha256": "fa8eacfdb3e367a5e72fc9dc50ae9a02b74a6f70905c11b0545bab4593ddbb80"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-19.png",
+      "sha256": "753200a739c9ce3f7e2606af90f0d467e9734fa6f30d55518498c875ad8ae410"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-20.png",
+      "sha256": "e0f8fd18b68cbc70bfb94e2ca398e4fcd0db80c099c9193ce8b5b08ec9417bf4"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-21.png",
+      "sha256": "3560cf120d20c93e3a09debcc492fd2af18d7f6d82b1696bcdbbf7823753481e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-22.png",
+      "sha256": "b90141389490d68d8870afe0e5b9c9b258440f94c51d5042f90a670cf83ef890"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/trimmed/detail-23.png",
+      "sha256": "a7a4f543c64208adc414316a486dacd488a95278ca7cd510f0828bf2ead2e759"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/vendor/FairyGUI-LICENSE.txt",
+      "sha256": "2420bf6f4ca9ecde38d78c9c035f0400fb876029982038598ddb63b7bf568161"
+    },
+    {
+      "path": "unity-migration/complex-inventory/fidelity/vendor/fairygui.module.js",
+      "sha256": "b8edcee657aac0dc1eb37bc970a6e2881d879eedda6a8176ae165e15a6938752"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/Inventory.fairy",
+      "sha256": "25c87f86ef704e473bcf963fef88fa5b7f96e4b01018454c14e64fc3823e1839"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/Btn.xml",
+      "sha256": "3467670d6b4aa7336d13eec8fdad1a9d1cfe2b05e112f1ca6ee7dd5878a1d154"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/ComplexBtn.xml",
+      "sha256": "0658f3167e386eda2df711ca8791c162771979952e225f042acac56e322043e1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/ComplexMain.xml",
+      "sha256": "0fea2d998f1f777e182d2cc31942869eef59e3e9aba6baa5f047f68f99fa6957"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/Detail.xml",
+      "sha256": "2d8455af46e9cc14a8a76d03a9bee14b8e0f2cd72c4eb7684147d1ca0c680529"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/FidelityCloseBtn.xml",
+      "sha256": "6d7ca83501e429c73d8b566c1762f9347ebcf8677fed623e04d4989bcf3082d9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/FidelityMenuBtn.xml",
+      "sha256": "19b2b25be12d00d056c184dd724cd3b839ec3a4af6d971c24df104a735aeb7ae"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/FidelitySecondaryBtn.xml",
+      "sha256": "72f8194bf00caec5e913deaa9e05b2e30372140b94d71daa4bab18d98e6cbb9a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/FidelitySortBtn.xml",
+      "sha256": "d7c5b9aa876fee7e45ebdfd658f6196b0aa98fee3cbeff341142c48efbcb34fa"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/FidelityTabBtn.xml",
+      "sha256": "93a41e69f8dcec547ba8d45b2fdc0e56a7cc3d2561bec19532c92c46a4ad8302"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/ItemRow.xml",
+      "sha256": "6957e5ab77a1486790514f25ec42399503ef76f4268411fa88795f0ce6f311c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/ItemSlot.xml",
+      "sha256": "6444f6385e5108c3484d1a82e992519bbcc1c080078d356860af5678d601bd30"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/Main.xml",
+      "sha256": "3cb7e430b2c604dd8b10445ad902e7f6e3e8cc52058788568428056d5cfb1b17"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/Reward.xml",
+      "sha256": "74ddb6c7da56d62124709c6dadf67661048bf260a28ca9dae6aa1f5b519090c4"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/cxback01.png",
+      "sha256": "29d817ee381518852ef2394e78eba02adefdcbe8ebf7376e5751bb8feb0988cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000000.png",
+      "sha256": "dbf1bdfaa26532227184fef0391ed457bdba02f045d634183cfb7dc6dfe5f31b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000001.png",
+      "sha256": "cb378ad809bdfaad294683307599e64b7ada8b1407784dbdf572ba052f9a3bca"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000002.png",
+      "sha256": "f36d39c96beb7b1fe2b70a76de38d59206a94952ad7a302309bfeb1e30888e5c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000003.png",
+      "sha256": "80093295ce013cd5a5a02f8a479550e52bd8ec9b0d72eac56dd5de8bfc87ee72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000004.png",
+      "sha256": "84c0e6dfe20deb316cab0b0eb2f04784b1e56e1a85da259f88e1307d2e780a31"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000005.png",
+      "sha256": "c648fe3a3f37e3598e7db22ad24039d58e0ec9bd5033eccb7cfc707be4d9e8c7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000006.png",
+      "sha256": "67d95d3ca301970438b12857247ae14c25190fd5e9dcf33f25d8380ef817bef7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000007.png",
+      "sha256": "ffe5ebcf86f1aea24b1940f5dd65b53636acf938e250e7dc7703ea599b9e7ea2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000008.png",
+      "sha256": "368fe305b5c9b758b0a710d8447639aac03e1855bf4b9fdd93886b8cd099d8d9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000009.png",
+      "sha256": "14eac7416c2e7c136ec6763bf79030248d87ad13ab9bf0d59084fe3c017d577c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000010.png",
+      "sha256": "03e7e6b9a9820d904f6a76ee26662a5ded7107b5baf48eb0e75170d3a003a57d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000011.png",
+      "sha256": "7f48d323f486c05f5ac4972ee3a3a1798b8999ca515cd9b32444a17277bd2868"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000012.png",
+      "sha256": "57551bdc5310585185a174aa48e47e8b717be1676d12b1d5970d32af7d1af2b5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000013.png",
+      "sha256": "0d7c65d76b27dc22821b2287183ddeef5defce8d42fc1068d056a442c3a1c969"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000014.png",
+      "sha256": "7105f61419532e39dccd7deedd909e7451e66a7125088245f1d6cf526849fc28"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000015.png",
+      "sha256": "e8e6e132e7c85d5bfc23cccece10f1555b77eee1f8621d43a8dd6010446675a1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000016.png",
+      "sha256": "4669cf647d35873f34fbf1faec513b8f57a6e0c8aa0cf0e3f009d1b0d30bf880"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000017.png",
+      "sha256": "1409b8860d35397fe33ab72610fed09d0161e3496e435c74cb5957adcfa4a5fa"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000018.png",
+      "sha256": "fa8eacfdb3e367a5e72fc9dc50ae9a02b74a6f70905c11b0545bab4593ddbb80"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000019.png",
+      "sha256": "753200a739c9ce3f7e2606af90f0d467e9734fa6f30d55518498c875ad8ae410"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000020.png",
+      "sha256": "e0f8fd18b68cbc70bfb94e2ca398e4fcd0db80c099c9193ce8b5b08ec9417bf4"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000021.png",
+      "sha256": "3560cf120d20c93e3a09debcc492fd2af18d7f6d82b1696bcdbbf7823753481e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000022.png",
+      "sha256": "b90141389490d68d8870afe0e5b9c9b258440f94c51d5042f90a670cf83ef890"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fd000023.png",
+      "sha256": "a7a4f543c64208adc414316a486dacd488a95278ca7cd510f0828bf2ead2e759"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000000.png",
+      "sha256": "21eb3985edd50ea2c2ea16c02d79a054bd3b9f7049c509d88c260de8d06629ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000001.png",
+      "sha256": "568742588acc51f57a58b4872857c70c810817180cf628c9679a81502e1495c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000002.png",
+      "sha256": "6bd04d574045e54744acadde24140663bbd0e15110c18d2f0e17139a93631c8e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000003.png",
+      "sha256": "016c0662de98bd4e7b96d8110989ba70ddbe768cc18e55ac07415d30c2c87fa5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000004.png",
+      "sha256": "34da0feedfb5f6bc909ac76ead93cf7627036e539731cadeb20f1c8807a542bb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000005.png",
+      "sha256": "f3244f3a07e09a1946003f62123ea8c098f3b303138a194443fcb2609fd46da9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000006.png",
+      "sha256": "f17ad1fb9a6f39967e3eac2d7ed05fb26a015967aa546f3b159bd12d23972a84"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000007.png",
+      "sha256": "fcd49c2af7df2f2242ea0bb43a17b858605015c01ea24cbb2d174da0f342b822"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000008.png",
+      "sha256": "46988688b6d659fb2cf6060545c459120b71515dd95889d2cbcb1e13a1e2e07e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000009.png",
+      "sha256": "8d8513fed22a8ecc44f1a533278ee66a8f0feacb2554381cae7039bdac13369a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000010.png",
+      "sha256": "47a09cda968eb1bbdb9e34ff7fb04ad76d75929590334de12793f89b619734c8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000011.png",
+      "sha256": "1bf50a41e045cf8cfb8741c615123262c2880caa5e6a35db5f48286694a7ee23"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000012.png",
+      "sha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000013.png",
+      "sha256": "9b0affedb97f67e7ef24b676fdbaa05ceae261e505c704cc67a20ac93203fa92"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000014.png",
+      "sha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000015.png",
+      "sha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000016.png",
+      "sha256": "d469ed3b37bec5bc4cd2147418c805bd5c9c29cff76c965336b363e58d144486"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000017.png",
+      "sha256": "2085040ee2ba86014bccac608152c86a8fde5eb162d8e37d7e68854dca21ae59"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000018.png",
+      "sha256": "e424c2eccbf8fcd719874cd5e793f5b0e4e019daa96b148360f47214d1abda79"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000019.png",
+      "sha256": "1e86f7724e0e1a746422dcefa06ecc43aaa55dc8002a5ce9229b711990cbaedd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000020.png",
+      "sha256": "b878203d7ec888402c952ce0303358c241b4cad1fb45c60cac13ac5eec1359c1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000021.png",
+      "sha256": "d13b103c0e2e0146baedfbb95a9d661c0524305a47f19f5ba647a8ae376e26e3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000022.png",
+      "sha256": "a1e28bb240f3e2084a15b6b9837a679437094d8a05ba38007c8d0dc6c7467134"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000023.png",
+      "sha256": "7392df94362da8e01d61b56bf0f09e3c32ff087e1acea577baa29289cfa366be"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000024.png",
+      "sha256": "3ceaf93af3370e10e3c74653499fc05130aa07b2da73eef8dca0c93ac8d14b01"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000025.png",
+      "sha256": "7a08d4309b1bb55fbe26a2e66ecba66cce5de93cae5b45f978c451c95a4916ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000026.png",
+      "sha256": "964464357e163682a35c745b01b563564d943f5860f427d1f195876ba2226247"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000027.png",
+      "sha256": "341c899865bbb68077a5f7813ccc3474882cbb50127a70b5e273541872678a92"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000028.png",
+      "sha256": "4bf6896db517194866765574bb66ee71fd9e320a0f688e4ce7b16a3fec8e26c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000029.png",
+      "sha256": "ca16943d90fd4e0125d71b2a540d1b566f0940acb897292658791595d18a72a5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000030.png",
+      "sha256": "32aff72ae057f351134a0ba13892a0b7abcfc95d4f4dfe1cb94329da809e685f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000031.png",
+      "sha256": "1bcf3721c8e70d7be7003e02573d3fe4612faac16c8e01173363b7dbe9230f3a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000032.png",
+      "sha256": "06913784ad01867fbfdbbcd38137d006aecb1f5badf2da6b7e626c8a92726deb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000033.png",
+      "sha256": "01ef0a6bdbb549336a0a160bd73783b145beda609753baea2e2fb0738806e6d7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000034.png",
+      "sha256": "d3d09c55a4d9da984d5092f2a08c6b935b52fd3472f744cdc63d40b3801f4b3c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000035.png",
+      "sha256": "64929b4ff2b4e897edaf42956edfb0ef7d9f82cb271386a28e541cf4c047a40b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000036.png",
+      "sha256": "5d3b3cd4cdd1f5b0fb012e18c5c713a75866ddede628135d373c6427c3cc5fe3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000037.png",
+      "sha256": "4fe501a3b522a79c487192886ae0d288267ba228bb3363cf891ec344eb50ad37"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000038.png",
+      "sha256": "3dcd52ee5b14d81833fe8dce70adaf7cd098d147981d2a79d1e654146443ca6c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000039.png",
+      "sha256": "0de0323d5b9b62c0fe7f124f8af872f957eca8fc02d86d2e31814abd082e0ddc"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000040.png",
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000041.png",
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000042.png",
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000043.png",
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000044.png",
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000045.png",
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000046.png",
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000047.png",
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000048.png",
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000049.png",
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000050.png",
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000051.png",
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000052.png",
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000053.png",
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000054.png",
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000055.png",
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000056.png",
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000057.png",
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000058.png",
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000059.png",
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000060.png",
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000061.png",
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000062.png",
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000063.png",
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000064.png",
+      "sha256": "e216c21c2bf8a805ff481266bf882ef180fe0b070bbf976ed50fc23a25318e09"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000065.png",
+      "sha256": "09e21c423f274ce925b4d370e5371b02a47aac12220aa71c721e981a0bcc67b8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000066.png",
+      "sha256": "96ee372046abb8dca626b13a72eceba719c23f50114ef833f5d45e5f01c306a8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000067.png",
+      "sha256": "5b21946d4de33d73dc57f6b251c6799b37889392048f52cfb787539b14c1ff22"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/fs000068.png",
+      "sha256": "c7e4f1532b6ad30e5eca091ccee7d0bde6012483970e7ecd1a90b59c48d875ae"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icon.png",
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00000.png",
+      "sha256": "3646c46af7f77bf8b404bb4365424b7592cfb787c3714845653df924e1dafa9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00001.png",
+      "sha256": "e67f627d14020268059423596ccbe06cfdd1634a30f31c0ff0dc7395dfd4b7d5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00002.png",
+      "sha256": "2f8e89ded30cb074c92593684ff349d327896d21fd6e1281cd5600fb6d95534f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00003.png",
+      "sha256": "d18c65b6a90e6f312cb1f3ffb96fc7bc152e5fdbc00a0f3d679e0a3ee9959e03"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00004.png",
+      "sha256": "5cdaff5a4b2be05553f219417ac9aaa864285ecae104a8540efa5dfdc0ca6a9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00005.png",
+      "sha256": "2f092ebca043171d2e7a413d6101544e1cd2e0294d35c739948cbddb19063ae7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00006.png",
+      "sha256": "11c609ba7f939929fac3336df8e610d7cc6aa2ec96b2d9357524dcf2dc9a816d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00007.png",
+      "sha256": "5b2eba6c2e2572e66fc4b1b310105a99c969d22ec9540ed1daab5c340c8b5963"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00008.png",
+      "sha256": "520c18185dfeecbfb3d139ed3048ae959b477da01b10affdc9b5a95b6ce69ba5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00009.png",
+      "sha256": "adeac4894cca70a66540b6e62720a91d8aa45c49895153edc2f9d37a61306d94"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00010.png",
+      "sha256": "a4aae9e25b67403d1b9efbb70dc81778b66cd910676e8313a0a1b30e205cb02c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00011.png",
+      "sha256": "c8fa854ca859b4ee541fabe90ab25c3411f27aa344460c573c7a87bf1573ab72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00012.png",
+      "sha256": "9bae52824055d357ea3ffa7b1a765911ce2031873eedd191f33b0121d6a6efbf"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00013.png",
+      "sha256": "3f8395101397b3d1a966bec77563b72a059f09b9ce9e6eb1d5ead40cd5d18760"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00014.png",
+      "sha256": "6bcb70141b2deaa7ed85858dc12ebc037898cdb1f8172b905fbe7e70a8c8aaa0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00015.png",
+      "sha256": "4b42490e534335a7bfd5f8a824fd68f28722f229284e7058ea6fdc97382c075d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00016.png",
+      "sha256": "7ad97f5e6cb0eb5be8e98dee27677a78ad4fadd4841673d19c4863c63b99871a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00017.png",
+      "sha256": "1cf6a67d3d5d92a83926f29dfd1691f887a58f0526f0da9615d09cee43cbbda3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00018.png",
+      "sha256": "356efb922c4407deb1a9130c5bde61be06750db62575a11b2bfb8058e51d1634"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00019.png",
+      "sha256": "04ffb8573b8f3586d046a6cfd8184c7aacceecf6fef591df0b6826cf98641472"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00020.png",
+      "sha256": "f19cbac24fd4e538597f72101a9433daf0afc01796cf8d94a7a889c91b790de8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00021.png",
+      "sha256": "234b6edfa98c75869d06e961593a15de96108c5098346ebf6d0d47b3e6f5e80f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00022.png",
+      "sha256": "409fe8530ded2e576f526d53bb8375fa0cafa8fe9fad3c95aa5ae6b60db25972"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/icx00023.png",
+      "sha256": "12add61ff4d8084312ddc3bfc49d50b19b6f4d1f9de3e79e48bd0f288915e15f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/assets/Inventory/package.xml",
+      "sha256": "c050db8aaafe3a80db25c98a5a3b2998d92118367ccb19b565c7f8819b59c3b1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/settings/Adaptation.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/settings/Common.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/project/settings/Publish.json",
+      "sha256": "38ae21b145d54820ce70c6a104c2800041d9d44e87906ad091ec754865dd83cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/art-manifest.json",
+      "sha256": "9f8560743f46abf44583cb3ec164ea62269c722e7b9522ce9372a5d96ac1d67b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/cxback01.png",
+      "sha256": "29d817ee381518852ef2394e78eba02adefdcbe8ebf7376e5751bb8feb0988cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icon0001.png",
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00000.png",
+      "sha256": "3646c46af7f77bf8b404bb4365424b7592cfb787c3714845653df924e1dafa9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00001.png",
+      "sha256": "e67f627d14020268059423596ccbe06cfdd1634a30f31c0ff0dc7395dfd4b7d5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00002.png",
+      "sha256": "2f8e89ded30cb074c92593684ff349d327896d21fd6e1281cd5600fb6d95534f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00003.png",
+      "sha256": "d18c65b6a90e6f312cb1f3ffb96fc7bc152e5fdbc00a0f3d679e0a3ee9959e03"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00004.png",
+      "sha256": "5cdaff5a4b2be05553f219417ac9aaa864285ecae104a8540efa5dfdc0ca6a9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00005.png",
+      "sha256": "2f092ebca043171d2e7a413d6101544e1cd2e0294d35c739948cbddb19063ae7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00006.png",
+      "sha256": "11c609ba7f939929fac3336df8e610d7cc6aa2ec96b2d9357524dcf2dc9a816d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00007.png",
+      "sha256": "5b2eba6c2e2572e66fc4b1b310105a99c969d22ec9540ed1daab5c340c8b5963"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00008.png",
+      "sha256": "520c18185dfeecbfb3d139ed3048ae959b477da01b10affdc9b5a95b6ce69ba5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00009.png",
+      "sha256": "adeac4894cca70a66540b6e62720a91d8aa45c49895153edc2f9d37a61306d94"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00010.png",
+      "sha256": "a4aae9e25b67403d1b9efbb70dc81778b66cd910676e8313a0a1b30e205cb02c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00011.png",
+      "sha256": "c8fa854ca859b4ee541fabe90ab25c3411f27aa344460c573c7a87bf1573ab72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00012.png",
+      "sha256": "9bae52824055d357ea3ffa7b1a765911ce2031873eedd191f33b0121d6a6efbf"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00013.png",
+      "sha256": "3f8395101397b3d1a966bec77563b72a059f09b9ce9e6eb1d5ead40cd5d18760"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00014.png",
+      "sha256": "6bcb70141b2deaa7ed85858dc12ebc037898cdb1f8172b905fbe7e70a8c8aaa0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00015.png",
+      "sha256": "4b42490e534335a7bfd5f8a824fd68f28722f229284e7058ea6fdc97382c075d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00016.png",
+      "sha256": "7ad97f5e6cb0eb5be8e98dee27677a78ad4fadd4841673d19c4863c63b99871a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00017.png",
+      "sha256": "1cf6a67d3d5d92a83926f29dfd1691f887a58f0526f0da9615d09cee43cbbda3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00018.png",
+      "sha256": "356efb922c4407deb1a9130c5bde61be06750db62575a11b2bfb8058e51d1634"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00019.png",
+      "sha256": "04ffb8573b8f3586d046a6cfd8184c7aacceecf6fef591df0b6826cf98641472"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00020.png",
+      "sha256": "f19cbac24fd4e538597f72101a9433daf0afc01796cf8d94a7a889c91b790de8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00021.png",
+      "sha256": "234b6edfa98c75869d06e961593a15de96108c5098346ebf6d0d47b3e6f5e80f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00022.png",
+      "sha256": "409fe8530ded2e576f526d53bb8375fa0cafa8fe9fad3c95aa5ae6b60db25972"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/icx00023.png",
+      "sha256": "12add61ff4d8084312ddc3bfc49d50b19b6f4d1f9de3e79e48bd0f288915e15f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/manifest.json",
+      "sha256": "84aa52c36022dde5ebb583a7e725397d89e4cd68e240343a62855a2d5f7c9359"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/dom/package.xml",
+      "sha256": "0892a885f8ead9e1062e5e366abdb51a583dd250c5a880d33bd05755a1891186"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/failure-01-package-metadata.json",
+      "sha256": "55f0cb74d4c88c8e3902e2f708fcfcc37b789164157872e56d6c02b8d8a678d8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/failure-02-staging-parent.json",
+      "sha256": "0f18b16845fd5f8c7172a907a7378e6161adc75e15cf27ecca5452a79d590cd0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/failure-03-backend-response-budget.json",
+      "sha256": "ffe42f13c0145b518c27687de96600b8432a3c58f6b991294089b9c8b65b272b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/failure-04-core-source-not-hydrated.json",
+      "sha256": "6b3bc1ff643f99fdd0ab250dc9bbe898f13ba8066b1f600be8b84d223ebf7026"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-resource-map.json",
+      "sha256": "f5b04aa504f8da3651735d085c6a0e0f4b30ae83efe6986813cd9ea592279fa1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/Inventory.fairy",
+      "sha256": "25c87f86ef704e473bcf963fef88fa5b7f96e4b01018454c14e64fc3823e1839"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/Btn.xml",
+      "sha256": "58a7259d43ad1f7a2f478fc65acf5853d72385edd0544fc0d6e30b22d7036e97"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/ComplexBtn.xml",
+      "sha256": "0658f3167e386eda2df711ca8791c162771979952e225f042acac56e322043e1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/ComplexMain.xml",
+      "sha256": "0fea2d998f1f777e182d2cc31942869eef59e3e9aba6baa5f047f68f99fa6957"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/Detail.xml",
+      "sha256": "2d8455af46e9cc14a8a76d03a9bee14b8e0f2cd72c4eb7684147d1ca0c680529"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/FidelityCloseBtn.xml",
+      "sha256": "6d7ca83501e429c73d8b566c1762f9347ebcf8677fed623e04d4989bcf3082d9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/FidelityMenuBtn.xml",
+      "sha256": "19b2b25be12d00d056c184dd724cd3b839ec3a4af6d971c24df104a735aeb7ae"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/FidelitySecondaryBtn.xml",
+      "sha256": "72f8194bf00caec5e913deaa9e05b2e30372140b94d71daa4bab18d98e6cbb9a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/FidelitySortBtn.xml",
+      "sha256": "d7c5b9aa876fee7e45ebdfd658f6196b0aa98fee3cbeff341142c48efbcb34fa"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/FidelityTabBtn.xml",
+      "sha256": "93a41e69f8dcec547ba8d45b2fdc0e56a7cc3d2561bec19532c92c46a4ad8302"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/ItemRow.xml",
+      "sha256": "a422f3706b7e5fd91fe30a1e7ae80af5fdf0698c2b7ca078b130a775a1b3d9b9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/ItemSlot.xml",
+      "sha256": "6444f6385e5108c3484d1a82e992519bbcc1c080078d356860af5678d601bd30"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/Main.xml",
+      "sha256": "13d0f1d20aa97a021753b5fc2486e9004e1100281bba39d5351ba11ba732e647"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/Reward.xml",
+      "sha256": "93896ac08670a191ee997458b5adae2d44f594f1d81970e8e82995ca3b5858e8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000000.png",
+      "sha256": "dbf1bdfaa26532227184fef0391ed457bdba02f045d634183cfb7dc6dfe5f31b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000001.png",
+      "sha256": "cb378ad809bdfaad294683307599e64b7ada8b1407784dbdf572ba052f9a3bca"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000002.png",
+      "sha256": "f36d39c96beb7b1fe2b70a76de38d59206a94952ad7a302309bfeb1e30888e5c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000003.png",
+      "sha256": "80093295ce013cd5a5a02f8a479550e52bd8ec9b0d72eac56dd5de8bfc87ee72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000004.png",
+      "sha256": "84c0e6dfe20deb316cab0b0eb2f04784b1e56e1a85da259f88e1307d2e780a31"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000005.png",
+      "sha256": "c648fe3a3f37e3598e7db22ad24039d58e0ec9bd5033eccb7cfc707be4d9e8c7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000006.png",
+      "sha256": "67d95d3ca301970438b12857247ae14c25190fd5e9dcf33f25d8380ef817bef7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000007.png",
+      "sha256": "ffe5ebcf86f1aea24b1940f5dd65b53636acf938e250e7dc7703ea599b9e7ea2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000008.png",
+      "sha256": "368fe305b5c9b758b0a710d8447639aac03e1855bf4b9fdd93886b8cd099d8d9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000009.png",
+      "sha256": "14eac7416c2e7c136ec6763bf79030248d87ad13ab9bf0d59084fe3c017d577c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000010.png",
+      "sha256": "03e7e6b9a9820d904f6a76ee26662a5ded7107b5baf48eb0e75170d3a003a57d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000011.png",
+      "sha256": "7f48d323f486c05f5ac4972ee3a3a1798b8999ca515cd9b32444a17277bd2868"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000012.png",
+      "sha256": "57551bdc5310585185a174aa48e47e8b717be1676d12b1d5970d32af7d1af2b5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000013.png",
+      "sha256": "0d7c65d76b27dc22821b2287183ddeef5defce8d42fc1068d056a442c3a1c969"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000014.png",
+      "sha256": "7105f61419532e39dccd7deedd909e7451e66a7125088245f1d6cf526849fc28"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000015.png",
+      "sha256": "e8e6e132e7c85d5bfc23cccece10f1555b77eee1f8621d43a8dd6010446675a1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000016.png",
+      "sha256": "4669cf647d35873f34fbf1faec513b8f57a6e0c8aa0cf0e3f009d1b0d30bf880"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000017.png",
+      "sha256": "1409b8860d35397fe33ab72610fed09d0161e3496e435c74cb5957adcfa4a5fa"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000018.png",
+      "sha256": "fa8eacfdb3e367a5e72fc9dc50ae9a02b74a6f70905c11b0545bab4593ddbb80"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000019.png",
+      "sha256": "753200a739c9ce3f7e2606af90f0d467e9734fa6f30d55518498c875ad8ae410"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000020.png",
+      "sha256": "e0f8fd18b68cbc70bfb94e2ca398e4fcd0db80c099c9193ce8b5b08ec9417bf4"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000021.png",
+      "sha256": "3560cf120d20c93e3a09debcc492fd2af18d7f6d82b1696bcdbbf7823753481e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000022.png",
+      "sha256": "b90141389490d68d8870afe0e5b9c9b258440f94c51d5042f90a670cf83ef890"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fd000023.png",
+      "sha256": "a7a4f543c64208adc414316a486dacd488a95278ca7cd510f0828bf2ead2e759"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000000.png",
+      "sha256": "21eb3985edd50ea2c2ea16c02d79a054bd3b9f7049c509d88c260de8d06629ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000001.png",
+      "sha256": "568742588acc51f57a58b4872857c70c810817180cf628c9679a81502e1495c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000002.png",
+      "sha256": "6bd04d574045e54744acadde24140663bbd0e15110c18d2f0e17139a93631c8e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000003.png",
+      "sha256": "016c0662de98bd4e7b96d8110989ba70ddbe768cc18e55ac07415d30c2c87fa5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000004.png",
+      "sha256": "34da0feedfb5f6bc909ac76ead93cf7627036e539731cadeb20f1c8807a542bb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000005.png",
+      "sha256": "f3244f3a07e09a1946003f62123ea8c098f3b303138a194443fcb2609fd46da9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000006.png",
+      "sha256": "f17ad1fb9a6f39967e3eac2d7ed05fb26a015967aa546f3b159bd12d23972a84"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000007.png",
+      "sha256": "fcd49c2af7df2f2242ea0bb43a17b858605015c01ea24cbb2d174da0f342b822"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000008.png",
+      "sha256": "46988688b6d659fb2cf6060545c459120b71515dd95889d2cbcb1e13a1e2e07e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000009.png",
+      "sha256": "8d8513fed22a8ecc44f1a533278ee66a8f0feacb2554381cae7039bdac13369a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000010.png",
+      "sha256": "47a09cda968eb1bbdb9e34ff7fb04ad76d75929590334de12793f89b619734c8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000011.png",
+      "sha256": "1bf50a41e045cf8cfb8741c615123262c2880caa5e6a35db5f48286694a7ee23"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000012.png",
+      "sha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000013.png",
+      "sha256": "9b0affedb97f67e7ef24b676fdbaa05ceae261e505c704cc67a20ac93203fa92"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000014.png",
+      "sha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000015.png",
+      "sha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000016.png",
+      "sha256": "d469ed3b37bec5bc4cd2147418c805bd5c9c29cff76c965336b363e58d144486"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000017.png",
+      "sha256": "2085040ee2ba86014bccac608152c86a8fde5eb162d8e37d7e68854dca21ae59"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000018.png",
+      "sha256": "e424c2eccbf8fcd719874cd5e793f5b0e4e019daa96b148360f47214d1abda79"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000019.png",
+      "sha256": "1e86f7724e0e1a746422dcefa06ecc43aaa55dc8002a5ce9229b711990cbaedd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000020.png",
+      "sha256": "b878203d7ec888402c952ce0303358c241b4cad1fb45c60cac13ac5eec1359c1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000021.png",
+      "sha256": "d13b103c0e2e0146baedfbb95a9d661c0524305a47f19f5ba647a8ae376e26e3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000022.png",
+      "sha256": "a1e28bb240f3e2084a15b6b9837a679437094d8a05ba38007c8d0dc6c7467134"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000023.png",
+      "sha256": "7392df94362da8e01d61b56bf0f09e3c32ff087e1acea577baa29289cfa366be"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000024.png",
+      "sha256": "3ceaf93af3370e10e3c74653499fc05130aa07b2da73eef8dca0c93ac8d14b01"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000025.png",
+      "sha256": "7a08d4309b1bb55fbe26a2e66ecba66cce5de93cae5b45f978c451c95a4916ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000026.png",
+      "sha256": "964464357e163682a35c745b01b563564d943f5860f427d1f195876ba2226247"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000027.png",
+      "sha256": "341c899865bbb68077a5f7813ccc3474882cbb50127a70b5e273541872678a92"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000028.png",
+      "sha256": "4bf6896db517194866765574bb66ee71fd9e320a0f688e4ce7b16a3fec8e26c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000029.png",
+      "sha256": "ca16943d90fd4e0125d71b2a540d1b566f0940acb897292658791595d18a72a5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000030.png",
+      "sha256": "32aff72ae057f351134a0ba13892a0b7abcfc95d4f4dfe1cb94329da809e685f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000031.png",
+      "sha256": "1bcf3721c8e70d7be7003e02573d3fe4612faac16c8e01173363b7dbe9230f3a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000032.png",
+      "sha256": "06913784ad01867fbfdbbcd38137d006aecb1f5badf2da6b7e626c8a92726deb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000033.png",
+      "sha256": "01ef0a6bdbb549336a0a160bd73783b145beda609753baea2e2fb0738806e6d7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000034.png",
+      "sha256": "d3d09c55a4d9da984d5092f2a08c6b935b52fd3472f744cdc63d40b3801f4b3c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000035.png",
+      "sha256": "64929b4ff2b4e897edaf42956edfb0ef7d9f82cb271386a28e541cf4c047a40b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000036.png",
+      "sha256": "5d3b3cd4cdd1f5b0fb012e18c5c713a75866ddede628135d373c6427c3cc5fe3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000037.png",
+      "sha256": "4fe501a3b522a79c487192886ae0d288267ba228bb3363cf891ec344eb50ad37"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000038.png",
+      "sha256": "3dcd52ee5b14d81833fe8dce70adaf7cd098d147981d2a79d1e654146443ca6c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000039.png",
+      "sha256": "0de0323d5b9b62c0fe7f124f8af872f957eca8fc02d86d2e31814abd082e0ddc"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000040.png",
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000041.png",
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000042.png",
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000043.png",
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000044.png",
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000045.png",
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000046.png",
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000047.png",
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000048.png",
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000049.png",
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000050.png",
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000051.png",
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000052.png",
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000053.png",
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000054.png",
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000055.png",
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000056.png",
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000057.png",
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000058.png",
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000059.png",
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000060.png",
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000061.png",
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000062.png",
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000063.png",
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000064.png",
+      "sha256": "e216c21c2bf8a805ff481266bf882ef180fe0b070bbf976ed50fc23a25318e09"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000065.png",
+      "sha256": "09e21c423f274ce925b4d370e5371b02a47aac12220aa71c721e981a0bcc67b8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000066.png",
+      "sha256": "96ee372046abb8dca626b13a72eceba719c23f50114ef833f5d45e5f01c306a8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000067.png",
+      "sha256": "5b21946d4de33d73dc57f6b251c6799b37889392048f52cfb787539b14c1ff22"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/fs000068.png",
+      "sha256": "c7e4f1532b6ad30e5eca091ccee7d0bde6012483970e7ecd1a90b59c48d875ae"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/assets/Inventory/package.xml",
+      "sha256": "c050db8aaafe3a80db25c98a5a3b2998d92118367ccb19b565c7f8819b59c3b1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/settings/Adaptation.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/settings/Common.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-staged-project/settings/Publish.json",
+      "sha256": "38ae21b145d54820ce70c6a104c2800041d9d44e87906ad091ec754865dd83cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-structure.json",
+      "sha256": "f1f363f0894c07a81f58843928218db3fa4f39ab15d83f5e82d71da859afae17"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity-sync-report.json",
+      "sha256": "0109caf2a0e903fb577f76fa5487e0703503d82afd35f0aadf787891922f2361"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/cxback01.png",
+      "sha256": "29d817ee381518852ef2394e78eba02adefdcbe8ebf7376e5751bb8feb0988cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000000.png",
+      "sha256": "dbf1bdfaa26532227184fef0391ed457bdba02f045d634183cfb7dc6dfe5f31b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000001.png",
+      "sha256": "cb378ad809bdfaad294683307599e64b7ada8b1407784dbdf572ba052f9a3bca"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000002.png",
+      "sha256": "f36d39c96beb7b1fe2b70a76de38d59206a94952ad7a302309bfeb1e30888e5c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000003.png",
+      "sha256": "80093295ce013cd5a5a02f8a479550e52bd8ec9b0d72eac56dd5de8bfc87ee72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000004.png",
+      "sha256": "84c0e6dfe20deb316cab0b0eb2f04784b1e56e1a85da259f88e1307d2e780a31"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000005.png",
+      "sha256": "c648fe3a3f37e3598e7db22ad24039d58e0ec9bd5033eccb7cfc707be4d9e8c7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000006.png",
+      "sha256": "67d95d3ca301970438b12857247ae14c25190fd5e9dcf33f25d8380ef817bef7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000007.png",
+      "sha256": "ffe5ebcf86f1aea24b1940f5dd65b53636acf938e250e7dc7703ea599b9e7ea2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000008.png",
+      "sha256": "368fe305b5c9b758b0a710d8447639aac03e1855bf4b9fdd93886b8cd099d8d9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000009.png",
+      "sha256": "14eac7416c2e7c136ec6763bf79030248d87ad13ab9bf0d59084fe3c017d577c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000010.png",
+      "sha256": "03e7e6b9a9820d904f6a76ee26662a5ded7107b5baf48eb0e75170d3a003a57d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000011.png",
+      "sha256": "7f48d323f486c05f5ac4972ee3a3a1798b8999ca515cd9b32444a17277bd2868"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000012.png",
+      "sha256": "57551bdc5310585185a174aa48e47e8b717be1676d12b1d5970d32af7d1af2b5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000013.png",
+      "sha256": "0d7c65d76b27dc22821b2287183ddeef5defce8d42fc1068d056a442c3a1c969"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000014.png",
+      "sha256": "7105f61419532e39dccd7deedd909e7451e66a7125088245f1d6cf526849fc28"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000015.png",
+      "sha256": "e8e6e132e7c85d5bfc23cccece10f1555b77eee1f8621d43a8dd6010446675a1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000016.png",
+      "sha256": "4669cf647d35873f34fbf1faec513b8f57a6e0c8aa0cf0e3f009d1b0d30bf880"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000017.png",
+      "sha256": "1409b8860d35397fe33ab72610fed09d0161e3496e435c74cb5957adcfa4a5fa"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000018.png",
+      "sha256": "fa8eacfdb3e367a5e72fc9dc50ae9a02b74a6f70905c11b0545bab4593ddbb80"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000019.png",
+      "sha256": "753200a739c9ce3f7e2606af90f0d467e9734fa6f30d55518498c875ad8ae410"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000020.png",
+      "sha256": "e0f8fd18b68cbc70bfb94e2ca398e4fcd0db80c099c9193ce8b5b08ec9417bf4"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000021.png",
+      "sha256": "3560cf120d20c93e3a09debcc492fd2af18d7f6d82b1696bcdbbf7823753481e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000022.png",
+      "sha256": "b90141389490d68d8870afe0e5b9c9b258440f94c51d5042f90a670cf83ef890"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fd000023.png",
+      "sha256": "a7a4f543c64208adc414316a486dacd488a95278ca7cd510f0828bf2ead2e759"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000000.png",
+      "sha256": "21eb3985edd50ea2c2ea16c02d79a054bd3b9f7049c509d88c260de8d06629ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000001.png",
+      "sha256": "568742588acc51f57a58b4872857c70c810817180cf628c9679a81502e1495c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000002.png",
+      "sha256": "6bd04d574045e54744acadde24140663bbd0e15110c18d2f0e17139a93631c8e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000003.png",
+      "sha256": "016c0662de98bd4e7b96d8110989ba70ddbe768cc18e55ac07415d30c2c87fa5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000004.png",
+      "sha256": "34da0feedfb5f6bc909ac76ead93cf7627036e539731cadeb20f1c8807a542bb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000005.png",
+      "sha256": "f3244f3a07e09a1946003f62123ea8c098f3b303138a194443fcb2609fd46da9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000006.png",
+      "sha256": "f17ad1fb9a6f39967e3eac2d7ed05fb26a015967aa546f3b159bd12d23972a84"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000007.png",
+      "sha256": "fcd49c2af7df2f2242ea0bb43a17b858605015c01ea24cbb2d174da0f342b822"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000008.png",
+      "sha256": "46988688b6d659fb2cf6060545c459120b71515dd95889d2cbcb1e13a1e2e07e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000009.png",
+      "sha256": "8d8513fed22a8ecc44f1a533278ee66a8f0feacb2554381cae7039bdac13369a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000010.png",
+      "sha256": "47a09cda968eb1bbdb9e34ff7fb04ad76d75929590334de12793f89b619734c8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000011.png",
+      "sha256": "1bf50a41e045cf8cfb8741c615123262c2880caa5e6a35db5f48286694a7ee23"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000012.png",
+      "sha256": "48fc34a17e57d91d5d4cc76b9c6134cda808130123e5563bee04be2102868387"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000013.png",
+      "sha256": "9b0affedb97f67e7ef24b676fdbaa05ceae261e505c704cc67a20ac93203fa92"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000014.png",
+      "sha256": "67c43c72a8d0dd1f9052546808f5e9c3e23846e1a6841ad6b4e1dc7d8f7358f2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000015.png",
+      "sha256": "3bb01463f2564836866499ddc57865d2d9e20b7f87c6577b389055f3bad20875"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000016.png",
+      "sha256": "d469ed3b37bec5bc4cd2147418c805bd5c9c29cff76c965336b363e58d144486"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000017.png",
+      "sha256": "2085040ee2ba86014bccac608152c86a8fde5eb162d8e37d7e68854dca21ae59"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000018.png",
+      "sha256": "e424c2eccbf8fcd719874cd5e793f5b0e4e019daa96b148360f47214d1abda79"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000019.png",
+      "sha256": "1e86f7724e0e1a746422dcefa06ecc43aaa55dc8002a5ce9229b711990cbaedd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000020.png",
+      "sha256": "b878203d7ec888402c952ce0303358c241b4cad1fb45c60cac13ac5eec1359c1"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000021.png",
+      "sha256": "d13b103c0e2e0146baedfbb95a9d661c0524305a47f19f5ba647a8ae376e26e3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000022.png",
+      "sha256": "a1e28bb240f3e2084a15b6b9837a679437094d8a05ba38007c8d0dc6c7467134"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000023.png",
+      "sha256": "7392df94362da8e01d61b56bf0f09e3c32ff087e1acea577baa29289cfa366be"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000024.png",
+      "sha256": "3ceaf93af3370e10e3c74653499fc05130aa07b2da73eef8dca0c93ac8d14b01"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000025.png",
+      "sha256": "7a08d4309b1bb55fbe26a2e66ecba66cce5de93cae5b45f978c451c95a4916ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000026.png",
+      "sha256": "964464357e163682a35c745b01b563564d943f5860f427d1f195876ba2226247"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000027.png",
+      "sha256": "341c899865bbb68077a5f7813ccc3474882cbb50127a70b5e273541872678a92"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000028.png",
+      "sha256": "4bf6896db517194866765574bb66ee71fd9e320a0f688e4ce7b16a3fec8e26c9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000029.png",
+      "sha256": "ca16943d90fd4e0125d71b2a540d1b566f0940acb897292658791595d18a72a5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000030.png",
+      "sha256": "32aff72ae057f351134a0ba13892a0b7abcfc95d4f4dfe1cb94329da809e685f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000031.png",
+      "sha256": "1bcf3721c8e70d7be7003e02573d3fe4612faac16c8e01173363b7dbe9230f3a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000032.png",
+      "sha256": "06913784ad01867fbfdbbcd38137d006aecb1f5badf2da6b7e626c8a92726deb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000033.png",
+      "sha256": "01ef0a6bdbb549336a0a160bd73783b145beda609753baea2e2fb0738806e6d7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000034.png",
+      "sha256": "d3d09c55a4d9da984d5092f2a08c6b935b52fd3472f744cdc63d40b3801f4b3c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000035.png",
+      "sha256": "64929b4ff2b4e897edaf42956edfb0ef7d9f82cb271386a28e541cf4c047a40b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000036.png",
+      "sha256": "5d3b3cd4cdd1f5b0fb012e18c5c713a75866ddede628135d373c6427c3cc5fe3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000037.png",
+      "sha256": "4fe501a3b522a79c487192886ae0d288267ba228bb3363cf891ec344eb50ad37"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000038.png",
+      "sha256": "3dcd52ee5b14d81833fe8dce70adaf7cd098d147981d2a79d1e654146443ca6c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000039.png",
+      "sha256": "0de0323d5b9b62c0fe7f124f8af872f957eca8fc02d86d2e31814abd082e0ddc"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000040.png",
+      "sha256": "ae7a97575c8a37e3f2f33742319ebbc7b6e9b14cd1bdef5c2d3a465d56b9db32"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000041.png",
+      "sha256": "e13b264036f933b4763ee236c7aa5a1792431e8ca2790aa2ca60dbce37e58349"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000042.png",
+      "sha256": "7a130be1d0a15c589d6739682f972219d6aab593ad908ebad02729c9d86cad8b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000043.png",
+      "sha256": "3b52b7c0e812d6e3d8f8807506daceca70568fd913c670c2a6a3463b9993b151"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000044.png",
+      "sha256": "a26c1c75eac3affc2d830e4dcfa6402540a00b81c419f65d7f059fb6dfbe4d98"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000045.png",
+      "sha256": "2a936013b25c0ec6856ddd0c97fa3197cc520879b0866fdbbde920adba473d8f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000046.png",
+      "sha256": "416da3240c7129408803502a0212579c3a7eeccaf6b85ae37524a0a1f3f63842"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000047.png",
+      "sha256": "66f2ddc439996e36c8b29d0e072eef3e0fde262b9db6faefa0959fa7efe4de20"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000048.png",
+      "sha256": "1475b64a61df9f43ae1ef37336c613d1d10e7db7ee655652f44f7fd09af125f9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000049.png",
+      "sha256": "c24bcdd30dbbac836df332aa77d959de7b4021d6aee73d848008a8356cb76f11"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000050.png",
+      "sha256": "d984d5cce97dd36fab5896f3c3d54f5a73869f5591849abe9ad658901af4fda8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000051.png",
+      "sha256": "f2cf32ec5cecc63994b31d02fc19d9c5fd4fe154d070c9e7bcfa4d87c2f94945"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000052.png",
+      "sha256": "c7d99bfeb3e248016d8695a6592e9c74fed2be02ad61e10a571c395feb76f5e5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000053.png",
+      "sha256": "e44795246cff24a5a7427e3790b3044f58d5b047e77e555f7f23f3f083dc9b0e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000054.png",
+      "sha256": "2d9437752a4fe51f74a402b4c02ff8037258652c75659f37cd6044013a276a2d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000055.png",
+      "sha256": "e9445eb7ed7f97d057f5ca4cd35a3e885878dabd5cd850956bf11410a238343f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000056.png",
+      "sha256": "44932526cde134e308fee2de0fd79a8a6fd9f59733c2dd5f914d2c03edf71534"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000057.png",
+      "sha256": "598061d41d8354e0281dc79d09f6712c15bc0fae75d28507b643ba23f50274ec"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000058.png",
+      "sha256": "2872e3afc5b149ed37bc35cb000774ea66f3c3567f15f86b728f9eec866d73bd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000059.png",
+      "sha256": "c81fa5566ac67e3d4d30d84173a6a34b3117d30029464ae483df2969d3b34043"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000060.png",
+      "sha256": "c671ac81efa9a0a30ad40de9804ae54880462b6a8510fafe073b038f003f057e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000061.png",
+      "sha256": "7690426abb71b83ee2e369b3ef5470cdc469276ebfe1fa0c7121c695cae20c8b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000062.png",
+      "sha256": "7270a401bd762c8a01e02d75f28ec6e1e17dee7f2c6744595acadddea9d23ee8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000063.png",
+      "sha256": "d103d9b17554bc99f11a72a21d529e490eb6642b4d64d9682b9ce6e961a3ecc8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000064.png",
+      "sha256": "e216c21c2bf8a805ff481266bf882ef180fe0b070bbf976ed50fc23a25318e09"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000065.png",
+      "sha256": "09e21c423f274ce925b4d370e5371b02a47aac12220aa71c721e981a0bcc67b8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000066.png",
+      "sha256": "96ee372046abb8dca626b13a72eceba719c23f50114ef833f5d45e5f01c306a8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000067.png",
+      "sha256": "5b21946d4de33d73dc57f6b251c6799b37889392048f52cfb787539b14c1ff22"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/fs000068.png",
+      "sha256": "c7e4f1532b6ad30e5eca091ccee7d0bde6012483970e7ecd1a90b59c48d875ae"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icon0001.png",
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00000.png",
+      "sha256": "3646c46af7f77bf8b404bb4365424b7592cfb787c3714845653df924e1dafa9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00001.png",
+      "sha256": "e67f627d14020268059423596ccbe06cfdd1634a30f31c0ff0dc7395dfd4b7d5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00002.png",
+      "sha256": "2f8e89ded30cb074c92593684ff349d327896d21fd6e1281cd5600fb6d95534f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00003.png",
+      "sha256": "d18c65b6a90e6f312cb1f3ffb96fc7bc152e5fdbc00a0f3d679e0a3ee9959e03"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00004.png",
+      "sha256": "5cdaff5a4b2be05553f219417ac9aaa864285ecae104a8540efa5dfdc0ca6a9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00005.png",
+      "sha256": "2f092ebca043171d2e7a413d6101544e1cd2e0294d35c739948cbddb19063ae7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00006.png",
+      "sha256": "11c609ba7f939929fac3336df8e610d7cc6aa2ec96b2d9357524dcf2dc9a816d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00007.png",
+      "sha256": "5b2eba6c2e2572e66fc4b1b310105a99c969d22ec9540ed1daab5c340c8b5963"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00008.png",
+      "sha256": "520c18185dfeecbfb3d139ed3048ae959b477da01b10affdc9b5a95b6ce69ba5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00009.png",
+      "sha256": "adeac4894cca70a66540b6e62720a91d8aa45c49895153edc2f9d37a61306d94"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00010.png",
+      "sha256": "a4aae9e25b67403d1b9efbb70dc81778b66cd910676e8313a0a1b30e205cb02c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00011.png",
+      "sha256": "c8fa854ca859b4ee541fabe90ab25c3411f27aa344460c573c7a87bf1573ab72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00012.png",
+      "sha256": "9bae52824055d357ea3ffa7b1a765911ce2031873eedd191f33b0121d6a6efbf"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00013.png",
+      "sha256": "3f8395101397b3d1a966bec77563b72a059f09b9ce9e6eb1d5ead40cd5d18760"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00014.png",
+      "sha256": "6bcb70141b2deaa7ed85858dc12ebc037898cdb1f8172b905fbe7e70a8c8aaa0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00015.png",
+      "sha256": "4b42490e534335a7bfd5f8a824fd68f28722f229284e7058ea6fdc97382c075d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00016.png",
+      "sha256": "7ad97f5e6cb0eb5be8e98dee27677a78ad4fadd4841673d19c4863c63b99871a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00017.png",
+      "sha256": "1cf6a67d3d5d92a83926f29dfd1691f887a58f0526f0da9615d09cee43cbbda3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00018.png",
+      "sha256": "356efb922c4407deb1a9130c5bde61be06750db62575a11b2bfb8058e51d1634"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00019.png",
+      "sha256": "04ffb8573b8f3586d046a6cfd8184c7aacceecf6fef591df0b6826cf98641472"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00020.png",
+      "sha256": "f19cbac24fd4e538597f72101a9433daf0afc01796cf8d94a7a889c91b790de8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00021.png",
+      "sha256": "234b6edfa98c75869d06e961593a15de96108c5098346ebf6d0d47b3e6f5e80f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00022.png",
+      "sha256": "409fe8530ded2e576f526d53bb8375fa0cafa8fe9fad3c95aa5ae6b60db25972"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/icx00023.png",
+      "sha256": "12add61ff4d8084312ddc3bfc49d50b19b6f4d1f9de3e79e48bd0f288915e15f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/manifest.json",
+      "sha256": "27d5390cf27367340367bfe43296df42b1af37bf39746fa32468337f54d98ac2"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/dom/package.xml",
+      "sha256": "122ffe1868f8776b62e0b6e305573c426ad8e1822a4ef35175263983a644072f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/layabox/Inventory.fui",
+      "sha256": "122ffe1868f8776b62e0b6e305573c426ad8e1822a4ef35175263983a644072f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/layabox/Inventory_atlas0.png",
+      "sha256": "6dc803339439cbe564dbb4a4d517ae4ee48d6ca51bf86c18fc0195ccce1a3706"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/layabox/Inventory_atlas1.png",
+      "sha256": "4b13a388994e5f872346d7ff669298675672dead3caacec57931e5565a62676c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/layabox/Inventory_atlas2.png",
+      "sha256": "6fb5469b54050abf7d86a883a88b9e925363becb944174d1c4f19ede913d44dd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/layabox/Inventory_atlas3.png",
+      "sha256": "77c42c8947905d39bb753dd7fcaab53612d623e3871d2e01c6ce838487136596"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/source-audit.json",
+      "sha256": "c200b29e1aaf5b92a757cdbb99f37cfdc152169be1df3ab054bc12b80c2ef5a9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/unity/Inventory_atlas0.png",
+      "sha256": "224a7124ad8c880d995fcca3029d800c33f884b329d11a3843006deea57f2cd6"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/unity/Inventory_atlas1.png",
+      "sha256": "da53d41d851dd0042d78a4bb421cdfea11c3ac6fb1c250a23a84df2d1fdcd2e8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/unity/Inventory_atlas2.png",
+      "sha256": "fc2041bd019304e121ae43c719ac7f15162eae22ba9a25c76c4f9b2931957138"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/unity/Inventory_atlas3.png",
+      "sha256": "77c42c8947905d39bb753dd7fcaab53612d623e3871d2e01c6ce838487136596"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/fidelity/unity/Inventory_fui.bytes",
+      "sha256": "ffbf11d73f31bb278f1b900f3a96c32ac86bc390567e952596709951770a799f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/layabox-projection.json",
+      "sha256": "ba97fd4595bfe5d43776ccdf8f638e74336b7f34acd54263af1b161a1384dd2b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/layabox/Inventory.fui",
+      "sha256": "0892a885f8ead9e1062e5e366abdb51a583dd250c5a880d33bd05755a1891186"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/layabox/Inventory_atlas0.png",
+      "sha256": "a94b062213c3477ede98bcfd3b746db44d8216f8e767f4b431739d712ac31f9e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/layout.json",
+      "sha256": "d62b039974f18859ab274190ddad60144748d1882778102f7c4d500d8f4d548e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/source-baseline-manifest.json",
+      "sha256": "f626503278075039eedca930ef2b40fffacd0d80383923eb0ad0cf530ea52609"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/source-diff-manifest.json",
+      "sha256": "536595154e56e37be5439b44a061792eca72661ac23d3c904172698a8fd51bec"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/source-projection.json",
+      "sha256": "af677d69f3513601dd200214c96ec332aa86fe1071d4d7682b9f731fc7907c40"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/Inventory.fairy",
+      "sha256": "25c87f86ef704e473bcf963fef88fa5b7f96e4b01018454c14e64fc3823e1839"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/Btn.xml",
+      "sha256": "58a7259d43ad1f7a2f478fc65acf5853d72385edd0544fc0d6e30b22d7036e97"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/ComplexBtn.xml",
+      "sha256": "699d986a388c45f5fa59f271341d6173f99f69cd22f046ce7ec00ddabf47a810"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/ComplexMain.xml",
+      "sha256": "cd12bd2bac37e315a76e72fc6503ef9fe379ac3ef6d983f8ba672191447cb541"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/Detail.xml",
+      "sha256": "8318a3b5ca8490daef28d2d57295e9f59c48da574a7d62dafb6fa42948613cf8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/ItemRow.xml",
+      "sha256": "a422f3706b7e5fd91fe30a1e7ae80af5fdf0698c2b7ca078b130a775a1b3d9b9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/ItemSlot.xml",
+      "sha256": "dd5199d835c70cf601a4a90515215bfbb2fd0eff14b7f31029f8b750a21345ff"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/Main.xml",
+      "sha256": "13d0f1d20aa97a021753b5fc2486e9004e1100281bba39d5351ba11ba732e647"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/Reward.xml",
+      "sha256": "93896ac08670a191ee997458b5adae2d44f594f1d81970e8e82995ca3b5858e8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/cxback01.png",
+      "sha256": "29d817ee381518852ef2394e78eba02adefdcbe8ebf7376e5751bb8feb0988cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00000.png",
+      "sha256": "3646c46af7f77bf8b404bb4365424b7592cfb787c3714845653df924e1dafa9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00001.png",
+      "sha256": "e67f627d14020268059423596ccbe06cfdd1634a30f31c0ff0dc7395dfd4b7d5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00002.png",
+      "sha256": "2f8e89ded30cb074c92593684ff349d327896d21fd6e1281cd5600fb6d95534f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00003.png",
+      "sha256": "d18c65b6a90e6f312cb1f3ffb96fc7bc152e5fdbc00a0f3d679e0a3ee9959e03"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00004.png",
+      "sha256": "5cdaff5a4b2be05553f219417ac9aaa864285ecae104a8540efa5dfdc0ca6a9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00005.png",
+      "sha256": "2f092ebca043171d2e7a413d6101544e1cd2e0294d35c739948cbddb19063ae7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00006.png",
+      "sha256": "11c609ba7f939929fac3336df8e610d7cc6aa2ec96b2d9357524dcf2dc9a816d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00007.png",
+      "sha256": "5b2eba6c2e2572e66fc4b1b310105a99c969d22ec9540ed1daab5c340c8b5963"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00008.png",
+      "sha256": "520c18185dfeecbfb3d139ed3048ae959b477da01b10affdc9b5a95b6ce69ba5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00009.png",
+      "sha256": "adeac4894cca70a66540b6e62720a91d8aa45c49895153edc2f9d37a61306d94"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00010.png",
+      "sha256": "a4aae9e25b67403d1b9efbb70dc81778b66cd910676e8313a0a1b30e205cb02c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00011.png",
+      "sha256": "c8fa854ca859b4ee541fabe90ab25c3411f27aa344460c573c7a87bf1573ab72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00012.png",
+      "sha256": "9bae52824055d357ea3ffa7b1a765911ce2031873eedd191f33b0121d6a6efbf"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00013.png",
+      "sha256": "3f8395101397b3d1a966bec77563b72a059f09b9ce9e6eb1d5ead40cd5d18760"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00014.png",
+      "sha256": "6bcb70141b2deaa7ed85858dc12ebc037898cdb1f8172b905fbe7e70a8c8aaa0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00015.png",
+      "sha256": "4b42490e534335a7bfd5f8a824fd68f28722f229284e7058ea6fdc97382c075d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00016.png",
+      "sha256": "7ad97f5e6cb0eb5be8e98dee27677a78ad4fadd4841673d19c4863c63b99871a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00017.png",
+      "sha256": "1cf6a67d3d5d92a83926f29dfd1691f887a58f0526f0da9615d09cee43cbbda3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00018.png",
+      "sha256": "356efb922c4407deb1a9130c5bde61be06750db62575a11b2bfb8058e51d1634"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00019.png",
+      "sha256": "04ffb8573b8f3586d046a6cfd8184c7aacceecf6fef591df0b6826cf98641472"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00020.png",
+      "sha256": "f19cbac24fd4e538597f72101a9433daf0afc01796cf8d94a7a889c91b790de8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00021.png",
+      "sha256": "234b6edfa98c75869d06e961593a15de96108c5098346ebf6d0d47b3e6f5e80f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00022.png",
+      "sha256": "409fe8530ded2e576f526d53bb8375fa0cafa8fe9fad3c95aa5ae6b60db25972"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/icx00023.png",
+      "sha256": "12add61ff4d8084312ddc3bfc49d50b19b6f4d1f9de3e79e48bd0f288915e15f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/assets/Inventory/package.xml",
+      "sha256": "0072c065d051e0be64f222a8987a473cb89b06362e09f84e9127818c1a5375e0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/settings/Adaptation.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/settings/Common.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/staged-project/settings/Publish.json",
+      "sha256": "38ae21b145d54820ce70c6a104c2800041d9d44e87906ad091ec754865dd83cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/unity-projection.json",
+      "sha256": "ba97fd4595bfe5d43776ccdf8f638e74336b7f34acd54263af1b161a1384dd2b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/unity/Inventory_atlas0.png",
+      "sha256": "a94b062213c3477ede98bcfd3b746db44d8216f8e767f4b431739d712ac31f9e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/published/unity/Inventory_fui.bytes",
+      "sha256": "0892a885f8ead9e1062e5e366abdb51a583dd250c5a880d33bd05755a1891186"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/accept-browser.mjs",
+      "sha256": "8a136c0d18bf42d24c0acb2e4f07eb483502fbfeaafabb53a05cd8418c719bf6"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/accept-unity.mjs",
+      "sha256": "7237958a204413df862ab1fa24ce3586cff9fa472c0915885525be33327cfd22"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/build-app.mjs",
+      "sha256": "052bcb3268e31750043e85cf319cd98700ce78f7cf36cca9055ba84bd4b64118"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/build-web.mjs",
+      "sha256": "8c40d9f9c8e833b290e947272ea3e261ec7d7015dd31b06936851ec300c1e0a5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/compare-runtimes.mjs",
+      "sha256": "1f4f3dfc0dc677f26999644bc6ba06a68ed4581d64c697bcc2c4152f548758f0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/contract.mjs",
+      "sha256": "7d7259c0d02f3f7251f92663f704ff0a0f281b2a9fcfc9ce8fc33b2c43bd7805"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/create-publish.mjs",
+      "sha256": "741b20e4a694958c61cfc5bc1b398e7dc44ed23dc572d04935a65df16efaabcd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/layout.js",
+      "sha256": "98be3c0641f2c460a6de8084980eedac795c39309ec6c0f6a15faa34f7d174d7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/layout.test.mjs",
+      "sha256": "ab59a14bd4aaead23879a6f874d93b2c5c8f29e8986a47ea0e9755286352d78c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/package-fidelity.ps1",
+      "sha256": "cc1caf9411a796328111a426e85b2c2e261ea34ced44a127478393d8da6295f3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/publish-fidelity-project.mjs",
+      "sha256": "94963a092627f0064e03f4f449cc1cd93f3490c6e15b5c23f40a3e330dee2019"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/run-complex.ps1",
+      "sha256": "aade7b5fb2aa820259db988ed2b35590467041f4e7382ca60b65d4422ead06fb"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/run-fidelity.ps1",
+      "sha256": "5c20a031faf5e9e188d46d926ea979f901ec99ec18a1a069f1eded1f6b9bc5da"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/serve.mjs",
+      "sha256": "84962850fadcddefa0cda89a7231d76b6b2d74fe06e87f87c883dd51ce49cae9"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/setup-fidelity-unity.mjs",
+      "sha256": "2f5b665a47428fd067793d9b4188ba34b5cc721f99caf658d7a9014d0a656d88"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/setup-unity.mjs",
+      "sha256": "50885d893c74488854526fcd1b8ea8763c6a8791d93635b1144153bdea9ded29"
+    },
+    {
+      "path": "unity-migration/complex-inventory/scripts/sync-fidelity-project.mjs",
+      "sha256": "0c60ce126f36920153466352df6be9c6904d5330ccbf8644adae9f767a31b061"
+    },
+    {
+      "path": "unity-migration/complex-inventory/shared/catalog.ts",
+      "sha256": "7350c4ac441cf8c6b54f02deadfa24688b0f3d63aa00875588ccccf2c36e62c3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/shared/complex-inventory.test.mjs",
+      "sha256": "579dd59f053c5aad5521a07bd5af85c7b5c90edbc4cdb803d0e7856b7a02a06e"
+    },
+    {
+      "path": "unity-migration/complex-inventory/shared/entry.ts",
+      "sha256": "d8a4f1ac877d919d8e50360f285287e3908615d8f67cdaade8c0dc6672740426"
+    },
+    {
+      "path": "unity-migration/complex-inventory/shared/index.ts",
+      "sha256": "6af42c16ed9605e6fb95c2e777ba7667c51f8fea3ee5787dceda50d0c3805be5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/shared/model.ts",
+      "sha256": "f4deee79af7de5206c503918f66d2b77a29a800cbfc69f1f60b09719793ddcfc"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/app.js",
+      "sha256": "3875d59f13ec5517ed711c92d075a3bc7681386d698b20a456d9b2339283af2b"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/Inventory.fui",
+      "sha256": "0892a885f8ead9e1062e5e366abdb51a583dd250c5a880d33bd05755a1891186"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/cxback01.png",
+      "sha256": "29d817ee381518852ef2394e78eba02adefdcbe8ebf7376e5751bb8feb0988cd"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icon0001.png",
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00000.png",
+      "sha256": "3646c46af7f77bf8b404bb4365424b7592cfb787c3714845653df924e1dafa9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00001.png",
+      "sha256": "e67f627d14020268059423596ccbe06cfdd1634a30f31c0ff0dc7395dfd4b7d5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00002.png",
+      "sha256": "2f8e89ded30cb074c92593684ff349d327896d21fd6e1281cd5600fb6d95534f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00003.png",
+      "sha256": "d18c65b6a90e6f312cb1f3ffb96fc7bc152e5fdbc00a0f3d679e0a3ee9959e03"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00004.png",
+      "sha256": "5cdaff5a4b2be05553f219417ac9aaa864285ecae104a8540efa5dfdc0ca6a9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00005.png",
+      "sha256": "2f092ebca043171d2e7a413d6101544e1cd2e0294d35c739948cbddb19063ae7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00006.png",
+      "sha256": "11c609ba7f939929fac3336df8e610d7cc6aa2ec96b2d9357524dcf2dc9a816d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00007.png",
+      "sha256": "5b2eba6c2e2572e66fc4b1b310105a99c969d22ec9540ed1daab5c340c8b5963"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00008.png",
+      "sha256": "520c18185dfeecbfb3d139ed3048ae959b477da01b10affdc9b5a95b6ce69ba5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00009.png",
+      "sha256": "adeac4894cca70a66540b6e62720a91d8aa45c49895153edc2f9d37a61306d94"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00010.png",
+      "sha256": "a4aae9e25b67403d1b9efbb70dc81778b66cd910676e8313a0a1b30e205cb02c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00011.png",
+      "sha256": "c8fa854ca859b4ee541fabe90ab25c3411f27aa344460c573c7a87bf1573ab72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00012.png",
+      "sha256": "9bae52824055d357ea3ffa7b1a765911ce2031873eedd191f33b0121d6a6efbf"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00013.png",
+      "sha256": "3f8395101397b3d1a966bec77563b72a059f09b9ce9e6eb1d5ead40cd5d18760"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00014.png",
+      "sha256": "6bcb70141b2deaa7ed85858dc12ebc037898cdb1f8172b905fbe7e70a8c8aaa0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00015.png",
+      "sha256": "4b42490e534335a7bfd5f8a824fd68f28722f229284e7058ea6fdc97382c075d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00016.png",
+      "sha256": "7ad97f5e6cb0eb5be8e98dee27677a78ad4fadd4841673d19c4863c63b99871a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00017.png",
+      "sha256": "1cf6a67d3d5d92a83926f29dfd1691f887a58f0526f0da9615d09cee43cbbda3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00018.png",
+      "sha256": "356efb922c4407deb1a9130c5bde61be06750db62575a11b2bfb8058e51d1634"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00019.png",
+      "sha256": "04ffb8573b8f3586d046a6cfd8184c7aacceecf6fef591df0b6826cf98641472"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00020.png",
+      "sha256": "f19cbac24fd4e538597f72101a9433daf0afc01796cf8d94a7a889c91b790de8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00021.png",
+      "sha256": "234b6edfa98c75869d06e961593a15de96108c5098346ebf6d0d47b3e6f5e80f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00022.png",
+      "sha256": "409fe8530ded2e576f526d53bb8375fa0cafa8fe9fad3c95aa5ae6b60db25972"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/icx00023.png",
+      "sha256": "12add61ff4d8084312ddc3bfc49d50b19b6f4d1f9de3e79e48bd0f288915e15f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/manifest.json",
+      "sha256": "84aa52c36022dde5ebb583a7e725397d89e4cd68e240343a62855a2d5f7c9359"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/Inventory/package.xml",
+      "sha256": "0892a885f8ead9e1062e5e366abdb51a583dd250c5a880d33bd05755a1891186"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icon0001.png",
+      "sha256": "bcc26ec8ac99d4e60a078a9861874331ad30680fed5a1c292f25f8ddf3ef0551"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00000.png",
+      "sha256": "3646c46af7f77bf8b404bb4365424b7592cfb787c3714845653df924e1dafa9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00001.png",
+      "sha256": "e67f627d14020268059423596ccbe06cfdd1634a30f31c0ff0dc7395dfd4b7d5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00002.png",
+      "sha256": "2f8e89ded30cb074c92593684ff349d327896d21fd6e1281cd5600fb6d95534f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00003.png",
+      "sha256": "d18c65b6a90e6f312cb1f3ffb96fc7bc152e5fdbc00a0f3d679e0a3ee9959e03"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00004.png",
+      "sha256": "5cdaff5a4b2be05553f219417ac9aaa864285ecae104a8540efa5dfdc0ca6a9c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00005.png",
+      "sha256": "2f092ebca043171d2e7a413d6101544e1cd2e0294d35c739948cbddb19063ae7"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00006.png",
+      "sha256": "11c609ba7f939929fac3336df8e610d7cc6aa2ec96b2d9357524dcf2dc9a816d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00007.png",
+      "sha256": "5b2eba6c2e2572e66fc4b1b310105a99c969d22ec9540ed1daab5c340c8b5963"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00008.png",
+      "sha256": "520c18185dfeecbfb3d139ed3048ae959b477da01b10affdc9b5a95b6ce69ba5"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00009.png",
+      "sha256": "adeac4894cca70a66540b6e62720a91d8aa45c49895153edc2f9d37a61306d94"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00010.png",
+      "sha256": "a4aae9e25b67403d1b9efbb70dc81778b66cd910676e8313a0a1b30e205cb02c"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00011.png",
+      "sha256": "c8fa854ca859b4ee541fabe90ab25c3411f27aa344460c573c7a87bf1573ab72"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00012.png",
+      "sha256": "9bae52824055d357ea3ffa7b1a765911ce2031873eedd191f33b0121d6a6efbf"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00013.png",
+      "sha256": "3f8395101397b3d1a966bec77563b72a059f09b9ce9e6eb1d5ead40cd5d18760"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00014.png",
+      "sha256": "6bcb70141b2deaa7ed85858dc12ebc037898cdb1f8172b905fbe7e70a8c8aaa0"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00015.png",
+      "sha256": "4b42490e534335a7bfd5f8a824fd68f28722f229284e7058ea6fdc97382c075d"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00016.png",
+      "sha256": "7ad97f5e6cb0eb5be8e98dee27677a78ad4fadd4841673d19c4863c63b99871a"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00017.png",
+      "sha256": "1cf6a67d3d5d92a83926f29dfd1691f887a58f0526f0da9615d09cee43cbbda3"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00018.png",
+      "sha256": "356efb922c4407deb1a9130c5bde61be06750db62575a11b2bfb8058e51d1634"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00019.png",
+      "sha256": "04ffb8573b8f3586d046a6cfd8184c7aacceecf6fef591df0b6826cf98641472"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00020.png",
+      "sha256": "f19cbac24fd4e538597f72101a9433daf0afc01796cf8d94a7a889c91b790de8"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00021.png",
+      "sha256": "234b6edfa98c75869d06e961593a15de96108c5098346ebf6d0d47b3e6f5e80f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00022.png",
+      "sha256": "409fe8530ded2e576f526d53bb8375fa0cafa8fe9fad3c95aa5ae6b60db25972"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/icx00023.png",
+      "sha256": "12add61ff4d8084312ddc3bfc49d50b19b6f4d1f9de3e79e48bd0f288915e15f"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/assets/package.xml",
+      "sha256": "0892a885f8ead9e1062e5e366abdb51a583dd250c5a880d33bd05755a1891186"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/dom.js",
+      "sha256": "187c45cb1093462af32a4dac624bd54991fadf3c742c8e0890e3085e83ff3d89"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/dom.ts",
+      "sha256": "187c45cb1093462af32a4dac624bd54991fadf3c742c8e0890e3085e83ff3d89"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/index.html",
+      "sha256": "e5bb1a5aef32d22bc8e7e1969e7e1fca7010f8bed3355eccc570de62a0947f14"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/vendor/FairyGUI-LICENSE.txt",
+      "sha256": "2420bf6f4ca9ecde38d78c9c035f0400fb876029982038598ddb63b7bf568161"
+    },
+    {
+      "path": "unity-migration/complex-inventory/web/vendor/fairygui.module.js",
+      "sha256": "b8edcee657aac0dc1eb37bc970a6e2881d879eedda6a8176ae165e15a6938752"
+    },
+    {
+      "path": "unity-migration/scripts/acceptance-policy.test.mjs",
+      "sha256": "0e4356f61f4459617021e97aed6c889d988ec5c67d47401b9d456a9a643b228e"
+    },
+    {
+      "path": "unity-migration/scripts/acceptance.mjs",
+      "sha256": "4b5bbf52b7991c9dc48452facd279de2c943b8b6ee291740573965d8a297fdd6"
+    },
+    {
+      "path": "unity-migration/scripts/build-ts.mjs",
+      "sha256": "b5169e3f2ad971e08e4e46468c033d0205be0c128e8cba4739c73c463cc9a62b"
+    },
+    {
+      "path": "unity-migration/scripts/command.mjs",
+      "sha256": "6b20df2a032482e1cc265f27b85ce1c228353bd64fdcddbbbd8c68c0c9cba0f4"
+    },
+    {
+      "path": "unity-migration/scripts/download-range.mjs",
+      "sha256": "df8a6f2023c92463e882f71b57f631be235c85ad3e8d3e37d280e206d03bb626"
+    },
+    {
+      "path": "unity-migration/scripts/install-unity.ps1",
+      "sha256": "4719b5bd54e50ed90465b6f437afa8bcfb60ef178432c9363a25e72d7878b194"
+    },
+    {
+      "path": "unity-migration/scripts/publish-unity-assets.mjs",
+      "sha256": "6e282613aa1fff12968d88cb8623f53d93476cf033f02f0b3fd66a3b3d977a57"
+    },
+    {
+      "path": "unity-migration/scripts/run-unity.ps1",
+      "sha256": "e6a235cbb946c5805deaf1bada4fafbace959179358f04ea93b2680292e71139"
+    },
+    {
+      "path": "unity-migration/scripts/setup-project.mjs",
+      "sha256": "6add4dd44d2044b58db22cdbc0547c4d619d704ce2ccf66645b25fcb690a1c61"
+    },
+    {
+      "path": "unity-migration/scripts/setup-puerts.ps1",
+      "sha256": "440dc03b77426e3fddd9801a5c1061ccb2d121eecb70162f9f9689cd064f0c4a"
+    },
+    {
+      "path": "unity-migration/ts/app.test.mjs",
+      "sha256": "31e43ba75b812395744580b2c5d846fffb129b38c815c0f05930abd9c2fc07bc"
+    },
+    {
+      "path": "unity-migration/ts/bundle.test.mjs",
+      "sha256": "654699c410529233af9c0585a2b022812e0c90457ab87a723dc6a606fbc45877"
+    },
+    {
+      "path": "unity-migration/ts/dist/inventory-app.js.txt",
+      "sha256": "b8a02238b1be501469fb8cc19f5299c32193a5d233a54a7ecdab6abddf4e15c1"
+    },
+    {
+      "path": "unity-migration/ts/index.ts",
+      "sha256": "45e7b5119502949ca8d6865dd08598543b8d4c343b27f1c2f44d7f3045897b33"
+    },
+    {
+      "path": "unity-migration/ts/inventory-app.ts",
+      "sha256": "5ce97fdad9db0f214b0f62ef62b2ee9b68773f612e9ba5c3aff47765f389c481"
+    },
+    {
+      "path": "闭环验证/agent-cli.mjs",
+      "sha256": "11d5f63ab49e78b9ff046b16a6523936ee562c750e156c1f67671b94dc60c21b"
+    },
+    {
+      "path": "闭环验证/browser-acceptance.mjs",
+      "sha256": "80c3b95d52fe32d4bef7741852fdfaf8f9dd0115293749b0756588fecdec02e2"
+    },
+    {
+      "path": "闭环验证/text-fix/inspector-text-regression.test.mjs",
+      "sha256": "b5073146d9be1c13182116b8cc8a147497b15a150eda4a016871e3b1438317af"
+    }
+  ]
+}

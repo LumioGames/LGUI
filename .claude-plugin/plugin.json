@@ -1,0 +1,19 @@
+{
+  "name": "lgui",
+  "version": "0.1.0",
+  "description": "Agent-authored, browser-first FairyGUI UI workflows with shared TypeScript and Unity/PuerTS migration.",
+  "author": {
+    "name": "LumioGames",
+    "url": "https://github.com/LumioGames"
+  },
+  "homepage": "https://github.com/LumioGames/LGUI#readme",
+  "repository": "https://github.com/LumioGames/LGUI",
+  "license": "MIT",
+  "keywords": [
+    "fairygui",
+    "ui",
+    "typescript",
+    "unity",
+    "puerts"
+  ]
+}

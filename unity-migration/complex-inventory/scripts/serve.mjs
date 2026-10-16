@@ -2,7 +2,10 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'), port=4182;
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const args=process.argv.slice(2),index=args.indexOf('--port');
+const port=Number(index<0?(process.env.LGUI_WEB_PORT||4182):args[index+1]);
+if(!Number.isInteger(port)||port<1024||port>65535)throw Error('Use --port between 1024 and 65535.');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.png':'image/png','.fui':'application/octet-stream'};
 http.createServer((req,res)=>{
  try{
@@ -13,4 +16,4 @@ http.createServer((req,res)=>{
   if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}
   const bytes=fs.readFileSync(file);res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store'});res.end(bytes);
  }catch(error){res.writeHead(404).end('not found');}
-}).listen(port,'127.0.0.1',()=>console.log(JSON.stringify({pid:process.pid,url:'http://127.0.0.1:'+port+'/web/',root})));
+}).listen(port,'127.0.0.1',()=>console.log(JSON.stringify({pid:process.pid,url:'http://127.0.0.1:'+port+'/fidelity/',root})));

@@ -21,6 +21,10 @@ Editor Online 的官方 UI 工程、图标与生成包沿用上游资源。官�
 
 ## npm 与图像依赖
 
+插件工程化新增根验证依赖：Ajv 8.20.0（MIT）、yaml 2.9.1（ISC）和 node-tar 7.5.22（BlueOak-1.0.0）；完整解析版本、传递依赖和 integrity 留在根 package-lock.json。它们仅在用户工作区或维护者 checkout 恢复，不随包携带 node_modules。
+
+`tools/schemas/agent-plugin-1.0.0.schema.json` 来自 [Agent Plugins 官方 schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json)，于 2026-10-16 获取，未修改内容。按[上游许可](https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md)，schema 与软件采用 Apache-2.0，文档采用 CC BY 4.0；此 schema 的 Apache-2.0 副本保留在 [tools/schemas/Apache-2.0.txt](tools/schemas/Apache-2.0.txt)，不属于 LGUI 原创 MIT。
+
 各目录的 `package-lock.json` 保留完整解析版本、下载地址和 integrity。bootstrap 使用 `npm ci --ignore-scripts --include=optional --no-audit --no-fund`，不执行依赖安装生命周期脚本，不自动下载浏览器二进制。以下是主要已核对依赖，不能替代全部传递依赖的通知集合：
 
 | 组件 | 工具链已解析版本 | package 声明许可 |
