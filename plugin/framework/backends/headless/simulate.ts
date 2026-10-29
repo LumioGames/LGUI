@@ -20,11 +20,20 @@ export async function advance(backend: HeadlessBackend, ms: number): Promise<voi
   await Promise.resolve();
 }
 
-// 指针事件：先给舞台（原始输入），再从目标往上冒泡给每一级的 onPointer。
+// 指针事件：和浏览器一样，先从目标往上冒泡给每一级的 onPointer，最后到舞台（原始输入）。
 function send(backend: HeadlessBackend, target: HeadlessObject, type: PointerInput['type'], pointerId: number, x: number, y: number, pointerType: PointerInput['pointerType']): void {
   const event: PointerInput = {type, pointerId, pointerType, x, y, time: backend.state.now};
-  backend.state.handlers.pointer.emit(event);
   for (let o: HeadlessObject | null = target; o; o = o.parent) o.pointer.emit(event);
+  backend.state.handlers.pointer.emit(event);
+}
+
+/** 鼠标移到某个控件上（悬停），然后移到空白处。 */
+export async function hover(backend: HeadlessBackend, object: UIObject, ms = 100): Promise<void> {
+  const {o, x, y} = target(object);
+  send(backend, o, 'move', 1, x, y, 'mouse');
+  await advance(backend, ms);
+  backend.state.handlers.pointer.emit({type: 'move', pointerId: 1, pointerType: 'mouse', x: -1, y: -1, time: backend.state.now});
+  await advance(backend, 0);
 }
 
 function target(object: UIObject): {o: HeadlessObject; x: number; y: number} {
