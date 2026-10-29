@@ -7,6 +7,7 @@ LGUI 的 MIT 许可（[LICENSE](LICENSE)）只覆盖 LumioGames 的原创代码�
 | 组件 | 位置 | 固定版本 | 许可与署名 |
 | --- | --- | --- | --- |
 | [FairyGUI-dom](https://github.com/fairygui/FairyGUI-dom/tree/fade49fc33bdcd5673351e04637d4cc08d2297f3) 运行时 | `framework/backends/h5/vendor/` | 提交 `fade49fc33bdcd5673351e04637d4cc08d2297f3` | MIT，Copyright (c) 2021 FairyGUI；许可原文同目录 `FairyGUI-LICENSE.txt`，并见文末 |
+| [FairyGUI-unity](https://github.com/fairygui/FairyGUI-unity/tree/8cc8f214cca79685532eef13372d0a4f74acdf08) 运行时 | `framework/backends/unity/package/FairyGUI/` | 提交 `8cc8f214cca79685532eef13372d0a4f74acdf08` 的 `Assets/Scripts`，以及同提交必需的 Image、Text、BMFont 三个 shader | MIT，Copyright (c) 2015 fairygui.com；原 LICENSE 随源码附带。保留 DOTween 条款链接、Robert Penner BSD 声明及 RTLSupport 的单独声明，见下方 |
 | PuerTS 兼容补丁 | `framework/backends/unity/patches/puerts-3.0.3-unity-6.6-unbox.patch` | 针对 [PuerTS Unity_v3.0.3](https://github.com/Tencent/puerts/releases/tag/Unity_v3.0.3)（源码提交 `d8871238a3774fd10600995a5325e4b2ab4e39fb`） | 补丁内含 PuerTS 源码片段：BSD-3-Clause，Copyright (C) 2020 Tencent，许可原文见文末。补丁只把固定 C++ 模板里四处 `Object::Unbox` 改为公开的 `il2cpp_object_unbox`，用于 Unity 6000.6，不改变原许可 |
 | 技能 `skills/` | `skills/` | — | LumioGames 原创，MIT。`lgui-ui` 的动效说明改写自 0.2.0 的 `lgui-author`（其 references 并入过团队提供的 fairygui-ui 设计技能：2026-10-16 维护者确认「团队原创，可随 LGUI 按 MIT 发布」，原包 SHA256 `e0ac8457ea7214d34a74f3297b570d5cff7096a87e06cb383a94b4504d25a858`） |
 | TypeScript | `tools/vendor/node_modules/typescript/` | 5.9.3 | Apache-2.0，Copyright (c) Microsoft Corporation；许可原文在包内 `LICENSE.txt` |
@@ -31,11 +32,7 @@ FairyGUI-dom 的 `src/tween/EaseManager.ts` 含 Daniele Giardini/DOTween 条款�
 
 **编辑器的界面资源和品牌。** 编辑器的界面资源沿用官方 FairyGUI-Editor 界面工程：上游 README 声称可以自由使用，但没有独立的标准许可文件；上游 `TRADEMARKS.md` 提到的口头授权只覆盖它自己，不自动延伸到 fork 和再发行。LGUI 的编译版已经把页面上的 FairyGUI 名称和 Logo 换成 LGUI（清单见仓库 `scripts/build-editor/README.md`），保留了「FairyGUI 名称和 Logo 归其权利人所有、本项目不是 FairyGUI 官方产品」的声明。改名不授予 FairyGUI 的名称、Logo、品牌或官方背书；这些界面资源的再发行许可没有取得书面确认。
 
-## 后续任务打包时要附带的说明
-
-下面一项现在还没有打包进插件，对应任务打包时照这里的说明处理。
-
-**FairyGUI-unity（S3-01 打包）。** [FairyGUI-unity](https://github.com/fairygui/FairyGUI-unity/tree/8cc8f214cca79685532eef13372d0a4f74acdf08) 提交 `8cc8f214cca79685532eef13372d0a4f74acdf08`，MIT，Copyright (c) 2015 fairygui.com；只复制 `Assets/Scripts`，同时复制原 LICENSE。`Assets/Scripts/Tween/EaseManager.cs` 含 DOTween 条款链接及 Robert Penner 的 BSD 声明。`Assets/Scripts/Core/Text/RTLSupport.cs` 另有 Copyright (c) 2018 Tadpole Studio、All rights reserved 的声明，目前只确认该声明存在，没有单独取得授权链证明；不能把它称为 LGUI 原创 MIT 代码。
+**FairyGUI-unity（S3-01）。** 复制固定提交的 `Assets/Scripts`、原 LICENSE，以及同提交 `Assets/Resources/Shaders/` 下必需的 `FairyGUI-Image.shader`、`FairyGUI-Text.shader`、`FairyGUI-BMFont.shader` 和原 `.meta`/文件夹 metadata。三份 shader 沿用该提交的原 MIT 许可，没有复制 Unity 自带的 `UnityCG.cginc`。这是 Owner 确认后补齐的最小渲染资源范围。`Tween/EaseManager.cs` 含 DOTween 条款链接及 Robert Penner 的 BSD 声明。`Core/Text/RTLSupport.cs` 另有 Copyright (c) 2018 Tadpole Studio、All rights reserved 的声明，没有单独取得授权链证明；不能把它称为 LGUI 原创 MIT 代码。S3-01 在 Unity 6000.6.6f1 中实际移除该文件试编译，`TextField.cs:22` 报 `CS0246`（缺少 `RTLSupport` 类型）；因此保留原文件和原声明，不宣称第一版支持从右往左排版。
 
 
 ## 许可原文

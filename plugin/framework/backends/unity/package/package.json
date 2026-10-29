@@ -1,0 +1,13 @@
+{
+  "name": "com.lumiogames.lgui",
+  "version": "0.3.0",
+  "displayName": "LGUI",
+  "description": "LGUI runtime host and FairyGUI for shared TypeScript UI.",
+  "unity": "6000.6",
+  "author": { "name": "LumioGames", "url": "https://github.com/LumioGames" },
+  "license": "MIT",
+  "dependencies": {
+    "com.tencent.puerts.core": "3.0.3",
+    "com.unity.ugui": "2.0.0"
+  }
+}

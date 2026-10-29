@@ -112,6 +112,8 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-220` | 写了 `dragData` 的控件不是加载器或按钮，又没写 `dragIcon`，拖起时没有图标 | 加上 `dragIcon`，或者把 `dragData` 写在加载器、按钮上 |
 | `LGUI-RT-221` | 写了 `dragIcon` 但没写 `dragData` | 加上 `dragData`，或者去掉 `dragIcon` |
 | `LGUI-RT-027` | 后端还没启动就开始用 | 先调用 `backend.init(config)`（框架启动时会自动调用） |
+| `LGUI-RT-160` | Unity 启动脚本或 Resources 文本缺失、PuerTS 启动失败、每帧驱动或退出清理失败 | 重新运行 `lgui unity export`，核对生成物和 PuerTS 3.0.3 本地包，按日志修正后重新启动场景 |
+| `LGUI-RT-161` | Unity 平台存储、HTTP、音频等服务失败 | 按日志检查存储权限、请求参数、资源地址或本地 PuerTS 环境 |
 | `LGUI-RT-170` | 声音地址 `ui://…` 没有登记在 `ui/` 的包里 | 把 mp3 放进包目录，在 `package.xml` 里登记成 `<sound … exported="true"/>`，地址写成 `ui://包名/声音名` |
 | `LGUI-RT-171` | ArtText 用的字体所在的包没有加载 | 把 ArtText 放在字体所在包的组件里，或者让界面用到那个包的组件 |
 | `LGUI-RT-172` | 没有 Common 包或 `Common/ActionHintBar`，建不了操作提示栏（开发和测试里启动就报；正式构建里不显示提示栏） | 用 `lgui init` 自带的 Common 包，不要删掉 `ActionHintBar` |

@@ -1,0 +1,6 @@
+<linker>
+  <assembly fullname="FairyGUI" preserve="all" />
+  <assembly fullname="LGUI.Runtime" preserve="all" />
+  <assembly fullname="com.tencent.puerts.core" preserve="all" />
+  <assembly fullname="com.tencent.puerts.v8" preserve="all" />
+</linker>
