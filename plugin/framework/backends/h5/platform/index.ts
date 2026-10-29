@@ -1,11 +1,13 @@
 // h5 后端的平台服务：浏览器 API。
 import * as fgui from '../vendor/fairygui.module.js';
 import type {
-  Platform, KeyInput, WheelInput, LogEntry, NetResponse, NetSocket, Insets, PointerInput, Rect, Unsubscribe
+  Platform, KeyInput, WheelInput, NetResponse, NetSocket, Insets, PointerInput, Rect, Unsubscribe
 } from '../../../core/index';
 import {LgRuntimeError} from '../../../core/index';
 import {fitDesign, stage, toDesign} from '../scale';
 import {pointerEventTypes, toPointerInput} from '../pointer';
+import {createH5Audio} from './audio';
+import {consoleLogger} from './log';
 
 // 一组回调，返回取消函数。传了 onError 时，一个回调出错交给 onError，其余回调照常调用。
 class Handlers<T> {
@@ -44,10 +46,9 @@ export function createH5Platform(projectName: string, uiBase: string): Platform 
   const keys = new Handlers<KeyInput>();
   const wheels = new Handlers<WheelInput>();
   const resizes = new Handlers<{width: number; height: number}>();
-  const logs: LogEntry[] = [];
   let composing = false;
-  let audio: AudioContext | null = null;
-  const sounds = new Map<string, Promise<AudioBuffer>>();
+  const audio = createH5Audio(uiBase);
+  const unlockAudio = (): void => audio.unlock(); // 第一次点击或按键时解锁声音
 
   // 每帧：先排好下一帧，再逐个调用回调。一个回调出错，错误照常报到页面上（未捕获的错误），
   // 但不影响别的回调，也不会让以后的帧停掉（定时器、lgui.time.wait、请求超时、旋转换版都靠它）。
@@ -80,18 +81,6 @@ export function createH5Platform(projectName: string, uiBase: string): Platform 
   window.addEventListener('resize', onResize);
   window.addEventListener('orientationchange', onResize);
   window.visualViewport?.addEventListener('resize', onResize);
-
-  // 音频：第一次点击或按键时解锁
-  function unlockAudio(): void {
-    if (!audio) audio = new AudioContext();
-    if (audio.state === 'suspended') void audio.resume();
-  }
-
-  const write = (level: LogEntry['level'], message: string): void => {
-    logs.push({level, message, time: performance.now()});
-    if (logs.length > 200) logs.shift();
-    console[level === 'debug' ? 'debug' : level](message);
-  };
 
   const prefix = `lgui:${projectName}:`;
 
@@ -129,24 +118,9 @@ export function createH5Platform(projectName: string, uiBase: string): Platform 
         return visible;
       }
     },
-    audio: {
-      play(url, options = {}) {
-        if (!audio) return; // 没解锁之前浏览器不让放声音
-        const context = audio;
-        let buffer = sounds.get(url);
-        if (!buffer) { buffer = fetch(url).then(r => r.arrayBuffer()).then(data => context.decodeAudioData(data)); sounds.set(url, buffer); }
-        void buffer.then(decoded => {
-          const source = context.createBufferSource();
-          const gain = context.createGain();
-          gain.gain.value = options.volume ?? 1;
-          source.buffer = decoded;
-          source.connect(gain).connect(context.destination);
-          source.start();
-        }, () => write('error', `LGUI-RT-026  音效 ${url} 加载失败。`));
-      }
-    },
+    audio: audio.service,
     locale: {systemLanguages: () => navigator.languages.length ? [...navigator.languages] : [navigator.language]},
-    log: {write, recent: () => logs},
+    log: consoleLogger(),
     net: {
       async fetch(url, init = {}): Promise<NetResponse> {
         const response = await fetch(url, init);

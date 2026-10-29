@@ -97,6 +97,10 @@ export interface UIButton extends UIComponent {
   icon: string;
   /** 是否选中（单选、多选按钮）。 */
   selected: boolean;
+  /** ui/ 里给这个按钮设的点击音效（实例上写的优先，其次是按钮组件的），没设是空字符串。 */
+  readonly sound: string;
+  /** ui/ 里设的点击音效音量（0–1，没设是 1；0 表示这个按钮不出声）。 */
+  readonly soundVolume: number;
 }
 
 /** 图片。fill 用于进度显示（比如长按进度、冷却）。 */

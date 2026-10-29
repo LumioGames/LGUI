@@ -200,7 +200,7 @@ test('加载失败报 LGUI-RT-080，不留半成品；关闭没打开的界面�
   await assert.rejects(lgui.ui.open(Broken), e => e.code === 'LGUI-RT-080');
   assert.deepEqual([ui.all().length, ui.packageRefs().length], [0, 0]);
   lgui.ui.close(DetailView);
-  assert.match(backend.state.logs.at(-1).message, /LGUI-RT-082/);
+  assert.deepEqual([backend.state.logs.at(-1).level, backend.state.logs.at(-1).data.code], ['info', 'LGUI-RT-082']);
 });
 
 test('界面关闭后包引用归零、监听和定时器清干净', async () => {

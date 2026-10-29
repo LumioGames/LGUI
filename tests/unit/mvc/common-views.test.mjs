@@ -4,7 +4,7 @@ import {started} from '../../helpers/framework.mjs';
 
 async function setup(config) {
   const ctx = await started({config});
-  ctx.fw.setTexts({'zh-CN': {'bag.sold': '已售出 {count} 件', 'bag.sellTitle': '出售', 'bag.sellAsk': '确定出售？', 'lgui.requestFailed': '请求失败（{code}）'}}, 'zh-CN');
+  ctx.fw.setTexts({'zh-CN': {'bag.sold': '已售出 {count} 件', 'bag.sellTitle': '出售', 'bag.sellAsk': '确定出售？', 'lgui.requestFailed': '请求失败（{code}）', 'lgui.back': '返回'}}, 'zh-CN');
   const {View} = ctx.fw;
   let clicks = 0;
   class MainView extends View { static component = 'Bag/BagPanel'; static layer = 'page'; static fullScreen = true; bind = {sellButton: {click: () => { clicks++; }}}; }

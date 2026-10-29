@@ -1,4 +1,4 @@
-// 接口层的平台服务：每个后端各实现一份。游戏代码只通过 lgui.platform 用到其中的网络和存储。
+// 接口层的平台服务：每个后端各实现一份。游戏代码只通过 lgui.platform 用到其中的网络和存储；日志和声音的出口可以在 lgui.app({ platform }) 里换掉。
 import type {PointerInput, Rect, Unsubscribe} from './ui';
 
 /** 时间。 */
@@ -97,10 +97,14 @@ export interface ScreenService {
   applyDesignSize(design: {width: number; height: number}): Rect;
 }
 
-/** 音频：只放界面音效。 */
+/** 声音：界面音效和背景音乐。地址是 ui://包名/声音名（登记在 ui/ 包里的 mp3，也认 ui://包ID资源ID）或网络地址；音量是框架算好的最终音量（0–1）。 */
 export interface AudioService {
-  /** 播放一个音效（ui:// 或网络地址）。 */
-  play(url: string, options?: {volume?: number}): void;
+  /** 放一次音效。地址没登记或加载失败时调用 onError（没登记的报 LGUI-RT-170，加载失败报 LGUI-RT-026）。 */
+  play(url: string, volume: number, onError: (error: unknown) => void): void;
+  /** 背景音乐换成 url（null 是停掉），新旧两首用 fadeMs 毫秒淡入淡出；url 和正在放的一样时只改音量，不从头放。声音还没解锁（网页里用户还没点过）时先记下，解锁后再放。 */
+  music(url: string | null, volume: number, fadeMs: number, onError: (error: unknown) => void): void;
+  /** 暂停或恢复全部声音（切到后台时由框架调用）。 */
+  setPaused(paused: boolean): void;
 }
 
 /** 语言。 */
@@ -109,22 +113,23 @@ export interface LocaleService {
   systemLanguages(): readonly string[];
 }
 
-/** 一条日志。 */
-export interface LogEntry {
-  /** 级别。 */
-  level: 'debug' | 'info' | 'warn' | 'error';
-  /** 内容。 */
-  message: string;
-  /** 记录时间（毫秒）。 */
-  time: number;
-}
+/** 日志级别。 */
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-/** 统一日志出口。 */
-export interface LogService {
-  /** 写一条日志。 */
-  write(level: LogEntry['level'], message: string): void;
-  /** 最近的日志（最多 200 条），给调试面板和测试用。 */
-  recent(): readonly LogEntry[];
+/** 统一日志出口。形状和 Lumio 引擎的 Logger 一样，Lumio 游戏可以直接交进 sdk.logger.child({}, 'ui')。事件名是固定的 snake_case，不带变化的文字；变化的内容放 data（写成函数时，这一级真要记才调用）。 */
+export interface Logger {
+  /** 这一级现在记不记。 */
+  enabled(level: LogLevel): boolean;
+  /** 调试信息。 */
+  debug(event: string, data?: unknown): void;
+  /** 正常的事情。 */
+  info(event: string, data?: unknown): void;
+  /** 外部的东西失败了（网络、加载），程序照常运行。 */
+  warn(event: string, data?: unknown, error?: unknown): void;
+  /** 代码或界面写错了。 */
+  error(event: string, error?: unknown, data?: unknown): void;
+  /** 带上更多上下文、换一个子分类的日志。 */
+  child(context: object, category?: string): Logger;
 }
 
 /** 网络响应。 */
@@ -175,12 +180,12 @@ export interface Platform {
   textInput: TextInputService;
   /** 屏幕。 */
   screen: ScreenService;
-  /** 音频。 */
+  /** 声音。 */
   audio: AudioService;
   /** 语言。 */
   locale: LocaleService;
   /** 日志。 */
-  log: LogService;
+  log: Logger;
   /** 网络。 */
   net: NetService;
 }

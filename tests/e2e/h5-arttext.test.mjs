@@ -28,7 +28,7 @@ class FxView extends View<any> { static component = 'Bag/Fx'; static layer = 'po
 (async () => {
   const backend = createH5Backend();
   await backend.init({projectName: 'demo', defaultFont: null, uiBase: '/ui'});
-  await boot(backend, {backend: 'h5', start() {}}, defaultConfig, ${JSON.stringify(deps)});
+  await boot(backend, {backend: 'h5', start() {}}, defaultConfig, ${JSON.stringify(deps)}, {language: 'zh-CN', texts: {'zh-CN': {'lgui.back': '返回', 'lgui.requestFailed': '请求失败（{code}）'}}});
   const view = await lgui.ui.open(FxView);
   Object.assign(window, {view, ready: true});
 })().catch(e => { (window as any).failure = String(e); });`);

@@ -27,7 +27,7 @@ test('lgui.request：成功、失败、超时三种状态都能被 pick 读到',
   assert.deepEqual([timedOut.ok, timedOut.error.code], [false, 'LGUI-RT-100']);
   resolveSlow?.({late: true});
   assert.deepEqual(seen, ['pending', 'succeeded', 'pending', 'failed', 'pending', 'failed']);
-  assert.ok(backend.state.logs.some(l => /LGUI-RT-100/.test(l.message)));
+  assert.ok(backend.state.logs.some(l => l.level === 'warn' && l.event === 'lgui_rt_100'));
 });
 
 test('按钮在请求等待中保持锁住（lockWhilePending + lgui.request）', async () => {
@@ -61,7 +61,7 @@ test('await 之后目标界面已关：close 跳过，只记日志', async () =>
   lgui.ui.close(PickerView);          // 用户先按了返回
   finish();
   await done;
-  assert.match(backend.state.logs.at(-1).message, /LGUI-RT-082/);
+  assert.equal(backend.state.logs.at(-1).event, 'lgui_rt_082');
 });
 
 test('lgui.service：main.ts 注册真实实现，测试里换成假实现；没注册报 LGUI-RT-102', async () => {

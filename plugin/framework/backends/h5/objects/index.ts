@@ -93,6 +93,8 @@ class H5Button extends H5Component implements UIButton {
   set icon(value: string) { this.native.icon = value; }
   get selected(): boolean { return this.native.selected; }
   set selected(value: boolean) { this.native.selected = value; }
+  get sound(): string { return this.native.sound ?? ''; }
+  get soundVolume(): number { return this.native.soundVolumeScale ?? 1; }
 }
 
 const fillMethods = ['none', 'horizontal', 'vertical', 'radial90', 'radial180', 'radial360'] as const;

@@ -1,5 +1,5 @@
 // lgui 对象：游戏代码用到的全部框架功能。写法见 references/mvc-spec.md。
-import type {NetService, Rect, StorageService} from '../core/index';
+import type {Logger, NetService, Rect, StorageService} from '../core/index';
 import {LgRuntimeError} from '../core/index';
 import type {InputMode, InputType, Layer, Orientation, ParamsOf, Readable, ResultOf, ViewClass} from './types';
 import {todo} from './todo';
@@ -14,7 +14,13 @@ import * as common from './common-views';
 import {getRedDot, setRedDot} from './red-dot';
 import type {Entry} from './ui/manager';
 import {runtime, wallNow} from './runtime';
+import type {PlatformOverrides} from './runtime';
 import type {Model} from './model';
+import {frameWait} from './wait';
+import {log} from './log';
+import * as sound from './sound';
+import type {SoundChannel, SoundSettings} from './sound';
+import {switchBackendLanguage} from './boot';
 
 /** 入口 main.ts 的定义。 */
 export interface AppDefinition {
@@ -22,11 +28,13 @@ export interface AppDefinition {
   backend: 'h5' | 'headless' | 'unity';
   /** 注册服务：名字 → 创建函数。 */
   services?: Record<string, () => object>;
+  /** 换掉后端自带的平台服务，只换给出的几项：log（日志出口，形状和 Lumio 引擎的 Logger 一样）、audio（声音出口）。lgui test 里不生效。 */
+  platform?: PlatformOverrides;
   /** 启动：通常是打开第一个界面。 */
   start(): void | Promise<void>;
 }
 
-export type {Model};
+export type {Model, SoundChannel, SoundSettings, PlatformOverrides};
 
 /** 请求状态。 */
 export interface RequestState<T> {
@@ -115,6 +123,10 @@ export interface TestHarness {
   setInputType(type: InputType): void;
   /** 让假时钟往前走。 */
   advance(ms: number): Promise<void>;
+  /** 放过的音效（按顺序；地址是 ui://包名/声音名，音量是最终音量）。 */
+  sounds(): {url: string; volume: number}[];
+  /** 正在放的背景音乐，没有是 null。 */
+  music(): string | null;
   /** 当前快照。 */
   snapshot(): Snapshot;
   /** 关闭所有界面，检查监听和定时器都已清理。 */
@@ -200,7 +212,7 @@ export const lgui = {
     const {config, backend} = runtime();
     if (!config.languages.includes(language)) throw new LgRuntimeError('LGUI-RT-140', `工程不支持语言 ${language}（languages 是 ${config.languages.join('、')}）。`, '在 .lgui/project.json 的 languages 里加上它，并新建 i18n/' + language + '.json。');
     // 1. 加载新语言的翻译，卸载并重新加载界面包；2. 换 lgui.t 的文本表；3. 重建已打开的界面（和旋转同一套机制）；4. 发出 languageChange。
-    await backend.setLanguage(language);
+    await switchBackendLanguage(backend, language);
     setCurrentLanguage(language);
     manager().rebuildAll();
     bus.emit(builtinEvents.languageChange, {language});
@@ -213,17 +225,21 @@ export const lgui = {
     now(): number { return wallNow(); },
     /** 设置和服务器的时间差。 */
     setServerOffset(ms: number): void { runtime().serverOffset = ms; },
-    /** 等 ms 毫秒（按每帧的时间累计，lgui test 的假时钟也能推进）。给 Service 模拟延迟、重试间隔用；界面上的定时器用 View 的 this.after。 */
-    wait(ms: number): Promise<void> {
-      return new Promise(resolve => {
-        let left = ms;
-        if (left <= 0) { resolve(); return; }
-        const stop = runtime().backend.platform.time.onFrame(dt => {
-          left -= dt;
-          if (left <= 0) { stop(); resolve(); }
-        });
-      });
-    }
+    /** 等 ms 毫秒（按每帧的时间累计，lgui test 的假时钟也能推进；切到后台时不走）。给 Service 模拟延迟、重试间隔用；界面上的定时器用 View 的 this.after。 */
+    wait(ms: number): Promise<void> { return frameWait(ms).promise; }
+  },
+  /** 日志：lgui.log.info('bag_opened', { count })。事件名是固定的 snake_case，变化的内容放第二个参数。写到 main.ts 里交进来的日志出口（不交就是后端自带的）。 */
+  log: log as Logger,
+  /** 声音（背景音乐由 View 的 static music 决定，按钮音写在 ui/ 里）。 */
+  sound: {
+    /** 放一次音效（只在 Controller 里用）：ui://包名/声音名，volume 0–1，再乘上音效声道的音量。 */
+    play(url: string, options?: {volume?: number}): void { sound.play(url, options); },
+    /** 设一个声道（'music' 或 'sfx'）的音量 0–1，自动存进本地存储。 */
+    setVolume(channel: SoundChannel, volume: number): void { sound.setVolume(channel, volume); },
+    /** 设一个声道静音或不静音，自动存进本地存储。 */
+    setMuted(channel: SoundChannel, muted: boolean): void { sound.setMuted(channel, muted); },
+    /** 当前的声音设置 { music: { volume, muted }, sfx: { volume, muted } }，界面用 pick 读。 */
+    settings: sound.soundSettings as Readable<SoundSettings>
   },
   /** 声明一个事件。 */
   defineEvent<P>(name: string): EventDef<P> { return defineEvent<P>(name); },

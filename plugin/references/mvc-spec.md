@@ -56,6 +56,8 @@ export default lgui.app({
 });
 ```
 
+要把日志、声音交给宿主（比如 Lumio 引擎）时，加一项 `platform`，见第 14.3 节。
+
 ## 5. Model
 
 ```ts
@@ -132,7 +134,7 @@ export class BagView extends View<BagPanelUI> {
 - 绑定表一定写类型：`View` 写 `bind: Bind<组件UI> = {…}`，`ItemView` 写 `bind: ItemBind<组件UI, 数据> = {…}`，`PartView` 写 `bind: Bind<组件UI> = {…}`；按键表写 `keys: Keys = {…}`。不写类型时，TypeScript 查不出写错的键名。
 - `static layer` 写成 `static layer = 'page' as const;`。
 
-### 6.2 View 的 7 项 static
+### 6.2 View 的 8 项 static
 
 | 项 | 必填 | 默认值 | 说明 |
 |---|---|---|---|
@@ -143,6 +145,7 @@ export class BagView extends View<BagPanelUI> {
 | `result` | 否 | 不交回 | 关闭时可以顺带交回什么，只写类型：`static result: { itemId: string };` |
 | `inputMode` | 否 | `hud` 层是 `'game'`，其余是 `'ui'` | `'ui'`：只有界面收输入；`'game'`：只有游戏场景收；`'all'`：两边都收 |
 | `bothOrientations` | 否 | `false` | 全屏界面没有竖版时写 `true`，表示两种方向共用这一版 |
+| `music` | 否 | 不放 | 背景音乐 `'ui://<包>/<声音名>'`，见第 15.1 节 |
 
 写了表外的 static，`lgui check` 报 `LGUI-MVC-003`。
 
@@ -221,10 +224,11 @@ export const bagController = new BagController();
 - `lgui.request(函数)` 把一个请求包一层，返回请求对象：
   - `run(...参数)` 返回 `{ ok, value, error }`；状态依次变成 `pending` → `succeeded` 或 `failed`，没跑过时是 `idle`；
   - 超时按工程配置 `requestTimeoutMs`（默认 10 秒），报 `LGUI-RT` 错误码；
-  - 失败时，工程配置 `requestErrorToast` 为 `true`（默认）时自动弹出统一的错误提示；
+  - 失败不抛错：`run` 返回 `{ ok: false, error }`，记一条 `warn` 日志（第 14 节）；工程配置 `requestErrorToast` 为 `true`（默认）时自动弹出统一的错误提示；
   - 界面用 `pick(bagController.sellRequest, r => r.status === 'pending')` 读状态。
 - Controller 不能碰控件。
-- `await` 之后要关界面、换界面时，目标界面已经关了，框架就跳过并记一条日志。
+- `await` 之后要关界面、换界面时，目标界面已经关了，框架就跳过并记一条 `info` 日志（`LGUI-RT-082`）。
+- 放音效用 `lgui.sound.play`（第 15.3 节），只在 Controller 里用。
 
 ## 8. Service
 
@@ -319,7 +323,9 @@ keys: Keys = {
 | `format.number(n)`、`format.date(d)`、`format.currency(n, 'CNY')` | 按当前语言格式化 |
 | `lgui.setLanguage('en')` | 切换语言，已打开的界面自动重建 |
 | `lgui.time.now()`、`lgui.time.setServerOffset(毫秒)` | 当前时间（和服务器对齐） |
-| `await lgui.time.wait(毫秒)` | 等一段时间（Service 模拟延迟、重试间隔用；界面上的定时器用 View 的 `this.after`） |
+| `await lgui.time.wait(毫秒)` | 等一段时间（Service 模拟延迟、重试间隔用；界面上的定时器用 View 的 `this.after`）。按帧累计，切到后台时不走；请求超时也是这样算的 |
+| `lgui.log.info('bag_opened', { count })` | 写日志（第 14.2 节） |
+| `lgui.sound.play(…)`、`setVolume`、`setMuted`、`settings` | 声音（第 15 节） |
 
 **文本表 `i18n/<语言>.json`：** 扁平的「键 → 文字」，键名是可读的点号键。要按数量变化的文字，值写成按复数形式分开的对象，用参数 `count` 选（形式名和 `Intl.PluralRules` 一致；中文、日文、韩文只写 `other`）：
 
@@ -330,7 +336,7 @@ keys: Keys = {
 }
 ```
 
-找不到键时，界面上显示键名，并记一条 `LGUI-RT-090` 日志。启动时的语言：系统语言里第一个工程支持的，都不支持就用 `defaultLanguage`。
+找不到键是写错了（`LGUI-RT-090`，第 14.1 节）：`lgui dev`、`lgui test` 里直接抛错；正式构建里界面上显示键名，并记一条 `error` 日志（同一个键只记一次）。框架自己用到的键 `lgui.back`、`lgui.requestFailed` 也要在每种语言的文本表里（`lgui init` 生成的文本表里有）。启动时的语言：系统语言里第一个工程支持的，都不支持就用 `defaultLanguage`。
 
 **定时器**（写在 View 里用 `this.`，跟着界面走：被盖住时暂停，关闭时取消）：
 
@@ -394,12 +400,16 @@ test('选中道具后出售，金币增加', async () => {
 | `text(路径)`、`visible(路径)`、`enabled(路径)`、`page(路径)`、`items(路径)` | 读控件属性：文字（字符串）、显示 / 可用（布尔）、控制器当前页（页名）、列表项数（数字） |
 | `setScreen(宽, 高)`、`setLanguage(语言)`、`setInputType('touch' \| 'keyboardMouse')` | 模拟旋转、换语言、换输入设备 |
 | `advance(毫秒)` | 让假时钟往前走 |
+| `sounds()` | 放过的音效，按顺序：`[{ url: 'ui://Common/click', volume: 1 }]`（音量是最终音量） |
+| `music()` | 正在放的背景音乐（`'ui://Common/bgm'`），没有是 `null` |
 | `snapshot()` | 返回 `lgui.debug.snapshot()` |
 | `end()` | 关闭所有界面，检查监听和定时器都已清理 |
 
 路径写成 `<包>/<组件>.<控件路径>`；列表子项用 `list[序号]`。
 
 - **假时钟：** 点了按钮以后，打开新界面、请求返回都要等一帧，先 `await t.advance(16)` 再读；一串请求就多等几帧。
+- **记了 `error` 日志也算失败：** 代码或界面写错了（第 14.1 节），或者游戏代码自己 `lgui.log.error(…)`，这个测试失败，报 `LGUI-RT-176` 并写明是哪条日志。外部失败（请求、网络图片、声音加载）记 `warn`，不算失败。
+- **日志和声音总是记进 headless：** `lgui.app({ platform })` 在 `lgui test` 里不生效。
 - **整个文件没跑起来也算失败：** 测试文件加载时出错（顶层抛错、import 失败）或者测试结束后还有没处理的错误，`lgui test` 把这个文件记为失败（失败项是 `tests/` 里的文件名）。
 - **Model 在测试之间不重置**（同一个测试文件里的测试共用一份）：给 Model 加一个 `reset()` 规则，在 `beforeEach` 里调用：
 
@@ -416,7 +426,7 @@ beforeEach(() => bagModel.reset());
 |---|---|---|---|
 | `LGUI-MVC-001` | 游戏代码只 import `lgui`、`lgui/ui` 和工程内的相对路径；不用 `document`、`window`、`globalThis`、`CS`、`localStorage`、`fetch` 等平台全局对象 | `lgui.platform.net.fetch(…)` | `fetch(…)`、`document.body` |
 | `LGUI-MVC-002` | View 写了必填的 `component` 和 `layer` | `static layer = 'page'` | 没写 `layer` |
-| `LGUI-MVC-003` | View 只写 6.2 表里的 7 项 static；`ItemView`、`PartView` 只写 `component` | — | `static cache = true` |
+| `LGUI-MVC-003` | View 只写 6.2 表里的 8 项 static；`ItemView`、`PartView` 只写 `component` | — | `static cache = true` |
 | `LGUI-MVC-004` | static 的值合法：`layer` 是 5 层之一，`component` 是存在的导出组件，`inputMode` 是 `ui`/`game`/`all` | `static layer = 'popup'` | `static layer = 'dialog'` |
 | `LGUI-MVC-005` | 绑定表的键是组件里真实存在的控件、控制器或点号路径 | `'header.count'` | `'header.cnt'` |
 | `LGUI-MVC-006` | 绑定表只用词表里的词；控制器只用 `page`、`change` | `{ text: … }` | `{ label: … }`、控制器上写 `visible` |
@@ -435,3 +445,98 @@ beforeEach(() => bagModel.reset());
 | `LGUI-MVC-019` | `keys` 表：`back` 是 `'close'`、`'none'` 或函数；其他动作是 `{ do, hint? }`，`hint` 是文本键 | `confirm: { do: …, hint: 'bag.sell' }` | `confirm: 'sell'` |
 
 TypeScript 自己的类型错误也一起报出来（带 TS 的错误码）。靠人看、机器查不出的：Model 的规则写得对不对、交互是否顺手。
+
+## 14. 报错、日志和平台服务
+
+### 14.1 报错分三类
+
+| 类 | 什么情况 | 框架怎么做 | 例子 |
+|---|---|---|---|
+| ① 写错了 | 代码或界面写错了 | 抛 `LgRuntimeError`，并记一条 `error` 日志 | 缺文本键 `LGUI-RT-090`、加载器的图片所在的包没加载 `LGUI-RT-071`、ArtText 缺字符 `LGUI-RT-130`、字体的包没加载 `LGUI-RT-171`、没有 `Common/ActionHintBar` `LGUI-RT-172`、没配 `i18nBase` 就换语言 `LGUI-RT-173`、声音没登记 `LGUI-RT-170`、`lgui.sound` 参数不对 `LGUI-RT-174` |
+| ② 外部失败 | 网络、加载这类外部的东西失败了 | 不抛错，把失败交回给代码；记一条 `warn` 日志 | 请求失败 `LGUI-RT-100` / `101`（`run` 返回 `{ ok: false }`）、网络图片加载失败 `LGUI-RT-070`（留着占位图）、声音加载失败 `LGUI-RT-026`、存着的声音设置读不出来 `LGUI-RT-175` |
+| ③ 正常的先后顺序 | 不是错，只是先后顺序 | 记一条 `info` 日志 | `await` 之后要关的界面已经关了 `LGUI-RT-082` |
+
+**第 ① 类在开发和正式构建里不一样：**
+
+- **开发和测试**（`lgui dev`、`lgui verify`、`lgui test`）：直接抛错。`lgui dev` 的页面上显示报错，`lgui test` 里这个测试失败。
+- **正式构建：** 只记 `error` 日志（宿主的日志出口会把它上报），界面照常运行：缺文本键显示键名，ArtText 缺的字符跳过，没有提示栏就不显示提示栏，`lgui.sound` 参数不对这次调用不生效。
+
+框架靠打包时 esbuild 的 `define` 知道是不是开发模式：`LGUI_DEV` 为 `true` 是开发模式（`lgui dev`、`lgui verify`、`lgui test` 都这样打包），正式构建定义成 `false`；没定义时按开发模式。
+
+### 14.2 日志：`lgui.log`
+
+```ts
+lgui.log.info('bag_opened', { count: items.length });
+lgui.log.warn('save_slow', { ms });
+lgui.log.error('save_failed', error, { slot });
+const log = lgui.log.child({ module: 'shop' }, 'shop');   // 可以写在模块顶层
+log.debug('price_loaded', () => ({ prices }));             // 数据写成函数时，这一级真要记才算
+```
+
+- 四级：`debug`、`info`、`warn`、`error`；`enabled(级别)` 查这一级记不记。`error` 的第二个参数是错误，第三个是数据；其余几级第二个参数是数据（`warn` 第三个参数可以带错误）。
+- **事件名是固定的 `snake_case`，不带变化的文字**；变化的内容放数据里。
+- 框架自己记的日志，事件名由错误码得来（`LGUI-RT-090` → `lgui_rt_090`），数据里有 `code`、`message`、`fix` 和相关字段（比如 `key`、`url`）。
+- 框架还没启动时写日志报 `LGUI-RT-050`；`lgui.log.child(…)` 本身可以写在模块顶层，到真正写的时候才找日志出口。
+- 写到哪里由日志出口决定（14.3）：h5 默认写到浏览器控制台，headless 记进测试状态。
+
+### 14.3 换掉平台服务：`lgui.app({ platform })`
+
+游戏代码只用 `lgui.log.*` 和 `lgui.sound.*`；日志、声音真正写到哪里、从哪里放出来，由宿主在 `main.ts` 里决定。只换给出的几项，其余用后端自带的：
+
+```ts
+export default lgui.app({
+  backend: 'h5',
+  platform: {
+    log: sdk.logger.child({}, 'ui'),   // 日志出口：形状和 Lumio 引擎的 Logger 一样，可以直接交进来
+    // audio: myAudio,                 // 声音出口：play、music、setPaused（见 AudioService）
+  },
+  async start() { await lgui.ui.open(MainView); },
+});
+```
+
+| 服务 | 后端自带的 |
+|---|---|
+| `log`（`Logger`：`enabled`、`debug`、`info`、`warn`、`error`、`child`） | h5：浏览器控制台；headless：记进测试状态，`error` 级的让测试失败 |
+| `audio`（`AudioService`：`play`、`music`、`setPaused`） | h5：浏览器的 Web Audio；headless：记下放过的音效和当前的背景音乐 |
+
+LGUI 不依赖 Lumio 引擎，只是日志接口照抄了引擎 `Logger` 的形状。`lgui test` 里 `platform` 不生效。
+
+## 15. 界面声音
+
+声音文件是 mp3，登记在 `ui/` 的包里（UI 开发规范第 5 节），地址写成 `ui://<包>/<声音名>`。分两个声道：背景音乐 `music`、音效 `sfx`（按钮音和 `lgui.sound.play`）。
+
+### 15.1 背景音乐：`static music`
+
+```ts
+export class MainView extends View<MainViewUI> {
+  static component = 'Main/MainView';
+  static layer = 'page' as const;
+  static fullScreen = true;
+  static music = 'ui://Common/bgm';
+}
+```
+
+- 界面栈里从上往下（`modal`、`popup`、`page`、`hud`，`toast` 层不算）第一个写了 `music` 的界面（已打开或正在打开；排队中的 modal 不算）决定放哪首；都没写就停。
+- 同一首接着放，不从头来（比如 `replace` 成放同一首的界面）。换曲时新旧两首固定淡入淡出 500 毫秒。
+- 切到后台时暂停，回来接着放。
+- 网页里浏览器要求用户先点一下或按一下键才能出声：之前要放的背景音乐先记着，解锁后再放；之前的音效不放。
+- 背景音乐整首解码进内存循环播放，用短的循环曲。
+
+### 15.2 按钮音
+
+- 按钮在 `ui/` 里写的音效（`<Button sound="…" volume="…"/>`，UI 开发规范第 6 节）优先；按钮组件自己写的是它所有实例的默认值；都没写就用工程配置 `sounds.click`。
+- **不出声：** 把按钮的音量写成 0（`volume="0"`），实例上写就是这一个按钮，按钮组件上写就是这个组件的所有按钮。
+- 只有绑定表里写了 `click`、点击真的执行了（界面激活、控件可用、没在 `lockWhilePending` 里）才出声。不是按钮的控件绑了 `click`，用 `sounds.click`。
+
+### 15.3 代码播放和音量
+
+| 写法 | 作用 |
+|---|---|
+| `lgui.sound.play('ui://Bag/coin', { volume: 0.8 })` | 放一次音效（只在 Controller 里用）；最终音量 = `volume` × 音效声道的音量 |
+| `lgui.sound.setVolume('music', 0.5)` | 设一个声道的音量（0–1） |
+| `lgui.sound.setMuted('sfx', true)` | 一个声道静音或取消静音 |
+| `pick(lgui.sound.settings, s => s.music.volume)` | 界面读当前设置：`{ music: { volume, muted }, sfx: { volume, muted } }` |
+
+- 音量和静音改了自动存进本地存储（键 `lgui.sound`），下次启动恢复；存的东西坏了记 `warn`（`LGUI-RT-175`），用默认值（都是 1、不静音）。
+- 静音的声道：音效不放；背景音乐照常往下走，只是音量是 0，取消静音时接着放。
+- 声道不是 `music` / `sfx`、音量不在 0–1、静音不是布尔值，报 `LGUI-RT-174`；`ui://` 声音没登记报 `LGUI-RT-170`；声音文件加载失败记 `warn`（`LGUI-RT-026`）。

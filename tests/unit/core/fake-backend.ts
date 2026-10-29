@@ -1,5 +1,5 @@
 // 一个最小的假后端：证明接口层能被完整实现，并用来测事件订阅和取消。
-import type {Backend, Platform, UIComponent, UIObject, UIController, PointerInput, Unsubscribe, Rect} from '../../../plugin/framework/core/index';
+import type {Backend, Logger, Platform, UIComponent, UIObject, UIController, PointerInput, Unsubscribe, Rect} from '../../../plugin/framework/core/index';
 import {LgRuntimeError, notImplemented} from '../../../plugin/framework/core/index';
 
 // 简单的事件源：订阅返回取消函数。
@@ -49,6 +49,9 @@ export class FakeComponent extends FakeObject implements UIComponent {
 
 const unsupported = (feature: string): never => { throw notImplemented(feature, 'fake'); };
 
+// 什么都不记的日志出口。
+const silentLog: Logger = {enabled: () => false, debug: () => {}, info: () => {}, warn: () => {}, error: () => {}, child: () => silentLog};
+
 export function createFakeBackend(): Backend {
   const frame = new Emitter<number>();
   const platform: Platform = {
@@ -58,9 +61,9 @@ export function createFakeBackend(): Backend {
     input: {onPointer: () => () => {}, onKey: () => () => {}, onWheel: () => () => {}, setInputMode: () => {}},
     textInput: {isComposing: () => false},
     screen: {size: () => ({width: 1920, height: 1080}), safeArea: () => ({top: 0, right: 0, bottom: 0, left: 0}), onResize: () => () => {}, applyDesignSize: () => ({x: 0, y: 0, width: 1920, height: 1080})},
-    audio: {play: () => {}},
+    audio: {play: () => {}, music: () => {}, setPaused: () => {}},
     locale: {systemLanguages: () => ['zh-CN']},
-    log: {write: () => {}, recent: () => []},
+    log: silentLog,
     net: {fetch: () => unsupported('网络'), webSocket: () => unsupported('WebSocket')}
   };
   return {

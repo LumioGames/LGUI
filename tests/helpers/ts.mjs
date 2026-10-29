@@ -21,10 +21,10 @@ export function typecheck(files, options = {}) {
 
 const host = ts => ({getCanonicalFileName: f => f, getCurrentDirectory: () => process.cwd(), getNewLine: () => '\n'});
 
-// 把一个 TS 入口打包成 ESM 并 import 进来。alias 同工程里的写法。
-export async function importTs(entry, {alias = {}} = {}) {
+// 把一个 TS 入口打包成 ESM 并 import 进来。alias 同工程里的写法；define 比如 {LGUI_DEV: 'false'}（正式构建）。
+export async function importTs(entry, {alias = {}, define = {}} = {}) {
   const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-ts-')), 'bundle.mjs');
-  await esbuild().build({entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', target: 'es2020', outfile: out, alias, logLevel: 'silent', keepNames: true});
+  await esbuild().build({entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', target: 'es2020', outfile: out, alias, define, logLevel: 'silent', keepNames: true});
   return import(pathToFileURL(out).href);
 }
 

@@ -61,6 +61,8 @@ export class GButton extends GComponent {
   title: string;
   icon: string;
   selected: boolean;
+  sound: string | null;
+  soundVolumeScale: number;
 }
 
 export class GImage extends GObject {

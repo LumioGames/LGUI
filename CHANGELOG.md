@@ -24,6 +24,10 @@
 - 多语言：`lgui.t`、复数、格式化、运行时切换语言、带字图片、伪翻译。
 - 定时器（跟着界面暂停和取消；回调出错时照常报错，不影响别的定时器和以后的帧）、广播站、红点、按钮音效、图片占位、通用弹窗（提示、确认、加载中）、ArtText 美术字、`lgui.time.wait`。
 - 后端：h5（FairyGUI-dom，带补丁）和 headless（测试用）；两者用一致性测试保证行为一样。
+- 报错分三类：代码或界面写错了 → 抛错并记 `error`（开发和测试里抛，正式构建里只记日志、界面照常显示）；外部失败 → 不抛，交回给代码，记 `warn`；正常的先后顺序 → 记 `info`。缺文本键、加载器的图片包没加载、ArtText 缺字符、没有 `Common/ActionHintBar`、没配 `i18nBase` 就换语言都不再默默跳过；`lgui test` 里记了 `error` 日志的测试判失败。开发模式由打包时的 `LGUI_DEV` 决定。
+- `lgui.log`（`debug` / `info` / `warn` / `error` / `child`，形状和 Lumio 引擎的 `Logger` 一样）；`lgui.app({ platform: { log, audio } })` 只换给出的平台服务。
+- 界面声音：View 的 `static music`（栈里最上面写了的界面决定，同一首接着放，换曲淡入淡出，切到后台暂停，解锁后才放）、`ui/` 里按钮的音效（`volume="0"` 不出声，没写用 `sounds.click`）、`lgui.sound.play`、音乐和音效两个声道的音量和静音（`lgui.sound.settings` 能用 `pick` 读，自动存进本地存储）；mp3 登记在 `ui/` 的包里，网页界面包带上它们；测试里 `t.sounds()`、`t.music()`。
+- `lgui.time.wait` 和请求超时用同一个按帧等待。
 
 **编辑器**
 

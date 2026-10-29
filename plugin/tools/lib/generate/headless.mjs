@@ -1,12 +1,28 @@
 // 给 headless 后端的界面结构：.lgui/build/headless/<包名>.json。
-// 每个组件的控件树：名字、类型、初始属性、控制器和页面、列表的子项组件、子组件引用。
+// 每个组件的控件树：名字、类型、初始属性（按钮带音效）、控制器和页面、列表的子项组件、子组件引用；每个包的图片和声音。
 import fs from 'node:fs';
 import path from 'node:path';
 import {parsePages} from './model.mjs';
 
 const bool = (value, fallback) => value === undefined ? fallback : value === 'true';
 
-function props(child) {
+// 按钮的音效地址：ui://包ID资源ID 换成 ui://包名/声音名（运行时和测试里都用这种写法），别的写法照写。
+function soundUrl(model, url) {
+  const m = /^ui:\/\/([a-z0-9]{8})([a-z0-9]{8})$/.exec(url);
+  const pkg = m && model?.byId.get(m[1]);
+  const sound = pkg?.resources.find(r => r.id === m[2] && r.type === 'sound');
+  return sound ? `ui://${pkg.name}/${sound.name}` : url;
+}
+
+// <Button sound="…" volume="百分比"/> → {sound, soundVolume}（只放写了的）。
+function buttonSound(model, attrs = {}) {
+  const p = {};
+  if (attrs.sound !== undefined && attrs.sound !== '') p.sound = soundUrl(model, attrs.sound);
+  if (attrs.volume !== undefined) p.soundVolume = Number(attrs.volume) / 100;
+  return p;
+}
+
+function props(child, model) {
   const a = child.attrs;
   const p = {visible: bool(a.visible, true), enabled: !bool(a.grayed, false), touchable: bool(a.touchable, true)};
   if (a.customData) p.customData = a.customData;
@@ -18,6 +34,7 @@ function props(child) {
     p.title = button.title ?? '';
     p.icon = button.icon ?? '';
     p.selected = button.checked === 'true';
+    Object.assign(p, buttonSound(model, button));
   }
   if (child.kind === 'progress') {
     const bar = child.children.find(node => node.tag === 'ProgressBar')?.attrs ?? {};
@@ -28,13 +45,14 @@ function props(child) {
   return p;
 }
 
-export function describeComponent(component) {
+export function describeComponent(component, model) {
   return {
     name: component.fullName,
     id: component.id,
     exported: component.exported,
     extension: component.extension,
     buttonMode: component.buttonMode,
+    ...(component.extension === 'Button' ? buttonSound(model, component.root.children.find(node => node.tag === 'Button')?.attrs) : {}),
     size: component.size.split(',').map(Number),
     controllers: component.controllers.map(c => ({name: c.name, pages: c.pages.map(page => page.name), selected: c.pages[c.selected]?.name ?? c.pages[0]?.name ?? null})),
     transitions: component.transitions,
@@ -45,7 +63,7 @@ export function describeComponent(component) {
       ref: child.tag === 'component' ? child.ref?.fullName ?? null : null,
       defaultItem: child.kind === 'list' ? child.ref?.fullName ?? null : null,
       rect: [...(child.attrs.xy ?? '0,0').split(',').map(Number), ...(child.attrs.size ?? '0,0').split(',').map(Number)],
-      props: props(child),
+      props: props(child, model),
       // 按钮自带的 button 控制器、组件实例上覆写的控制器页面
       overrides: child.children.filter(node => node.tag === 'Button' || node.tag === 'ProgressBar').map(node => ({tag: node.tag, attrs: node.attrs}))
     }))
@@ -72,7 +90,8 @@ export function generateHeadless(model, out) {
   for (const pkg of model.packages) {
     const file = path.join(out, `${pkg.name}.json`);
     const images = pkg.resources.filter(r => r.type === 'image').map(r => ({name: r.name, ...imageSize(r)}));
-    fs.writeFileSync(file, JSON.stringify({schemaVersion: 1, package: pkg.name, id: pkg.id, components: pkg.components.map(describeComponent), images}, null, 2) + '\n');
+    const sounds = pkg.resources.filter(r => r.type === 'sound').map(r => ({id: r.id, name: r.name}));
+    fs.writeFileSync(file, JSON.stringify({schemaVersion: 1, package: pkg.name, id: pkg.id, components: pkg.components.map(c => describeComponent(c, model)), images, sounds}, null, 2) + '\n');
     files.push(file);
   }
   return {files};

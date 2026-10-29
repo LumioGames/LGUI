@@ -91,6 +91,8 @@ class HeadlessInput extends HeadlessText implements UIInput {
 class HeadlessButton extends HeadlessComponent implements UIButton {
   title = '';
   icon = '';
+  sound = '';
+  soundVolume = 1;
   mode = 'Common';
   private isSelected = false;
   // 和 FairyGUI 一样：Common 模式不保持选中；Check、Radio 选中时 button 控制器到 down 页，取消时回到 up 页。
@@ -245,6 +247,9 @@ export function buildComponent(descriptor: ComponentDescriptor, lookup: Lookup, 
     button.title = props?.title ?? '';
     button.icon = props?.icon ?? '';
     button.mode = descriptor.buttonMode ?? 'Common';
+    // 和 FairyGUI 一样：实例上写的音效、音量各自优先，其次是按钮组件的。
+    button.sound = props?.sound ?? descriptor.sound ?? '';
+    button.soundVolume = props?.soundVolume ?? descriptor.soundVolume ?? 1;
     component = button;
   } else if (kind === 'progress' || descriptor.extension === 'ProgressBar') {
     const bar = new HeadlessProgress(name, descriptor.name, 'progress');

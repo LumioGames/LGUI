@@ -10,9 +10,9 @@
     <text id="n2" name="title" xy="700,230" size="520,70" fontSize="44" color="#e8c27a" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="获得道具">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <loader id="n3" name="icon" xy="860,320" size="200,200" align="center" vAlign="middle" fill="scale">
+    <component id="n3" name="slot" pkg="bag00001" src="slot0001" xy="880,340" size="160,160" touchable="false">
       <relation target="" sidePair="center-center,middle-middle"/>
-    </loader>
+    </component>
     <text id="n4" name="itemText" xy="700,540" size="520,200" fontSize="30" color="#f3ead6" align="center" vAlign="top" autoSize="height" text="">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>

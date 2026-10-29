@@ -1,8 +1,26 @@
 // headless 后端：在 Node 里跑，只模拟控件树和属性，不算布局、不渲染。lgui test 用它。
-import type {Backend, BackendConfig, KeyInput, LogEntry, Platform, PointerInput, UIComponent, WheelInput} from '../../core/index';
+import type {Backend, BackendConfig, KeyInput, LogLevel, Logger, Platform, PointerInput, UIComponent, WheelInput} from '../../core/index';
 import {LgRuntimeError, notImplemented} from '../../core/index';
 import type {ComponentDescriptor, PackageDescriptor} from './descriptor';
 import {Handlers, HeadlessComponent, HeadlessLoader, buildComponent, buildImage} from './objects';
+
+/** headless 记下的一条日志。 */
+export interface HeadlessLogRecord {
+  /** 级别。 */
+  level: LogLevel;
+  /** 分类：默认是 game，child 往后接。 */
+  category: string;
+  /** 事件名。 */
+  event: string;
+  /** 数据（写成函数的已经算出来）。 */
+  data?: unknown;
+  /** 错误。 */
+  error?: unknown;
+  /** child 带上的上下文。 */
+  context?: object;
+  /** 记录时间（假时钟，毫秒）。 */
+  time: number;
+}
 
 /** headless 后端独有的状态，模拟操作和测试断言用。 */
 export interface HeadlessState {
@@ -14,10 +32,14 @@ export interface HeadlessState {
   languages: string[];
   /** 存储。 */
   storage: Map<string, string>;
-  /** 播放过的音效。 */
+  /** 放过的音效（地址统一成 ui://包名/声音名，音量是最终音量）。 */
   sounds: {url: string; volume: number}[];
+  /** 正在放的背景音乐，没有是 null。 */
+  music: {url: string; volume: number} | null;
+  /** 声音是不是暂停着（切到后台）。 */
+  audioPaused: boolean;
   /** 全部日志。 */
-  logs: LogEntry[];
+  logs: HeadlessLogRecord[];
   /** 当前告诉游戏场景的输入模式。 */
   inputMode: 'ui' | 'game' | 'all';
   /** 已加载的包。 */
@@ -29,6 +51,26 @@ export interface HeadlessState {
 export interface HeadlessBackend extends Backend {
   /** 模拟和断言用的状态。 */
   readonly state: HeadlessState;
+}
+
+// 默认的日志出口：全部记进 state.logs（lgui test 里有 error 级的记录，这个测试就判失败）。
+function recorder(state: HeadlessState, category: string, context: object): Logger {
+  const write = (level: LogLevel, event: string, data: unknown, error: unknown): void => {
+    const record: HeadlessLogRecord = {level, category, event, time: state.now};
+    const value = typeof data === 'function' ? (data as () => unknown)() : data;
+    if (value !== undefined) record.data = value;
+    if (error !== undefined) record.error = error;
+    if (Object.keys(context).length) record.context = context;
+    state.logs.push(record);
+  };
+  return {
+    enabled: () => true,
+    debug: (event, data) => write('debug', event, data, undefined),
+    info: (event, data) => write('info', event, data, undefined),
+    warn: (event, data, error) => write('warn', event, data, error),
+    error: (event, error, data) => write('error', event, data, error),
+    child: (extra, sub) => recorder(state, sub ? `${category}.${sub}` : category, {...context, ...extra})
+  };
 }
 
 /** packages 是 lgui 生成的 headless 描述（.lgui/build/headless/*.json），由 lgui test 打包进测试。 */
@@ -46,8 +88,17 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[], tr
     if (!found) throw new LgRuntimeError('LGUI-RT-003', `没有组件 ${name}。`, '用 lgui ui list 查看有哪些组件。');
     return found;
   };
+  // 登记过的声音：ui://包名/声音名 和 ui://包ID资源ID 都认，统一成 ui://包名/声音名。
+  const sounds = new Map<string, string>();
+  for (const p of packages) for (const sound of p.sounds ?? []) { const url = `ui://${p.package}/${sound.name}`; sounds.set(url, url); sounds.set(`ui://${p.id}${sound.id}`, url); }
+  const soundUrl = (url: string, onError: (error: unknown) => void): string | null => {
+    if (!url.startsWith('ui://')) return url;
+    const found = sounds.get(url);
+    if (!found) onError(new LgRuntimeError('LGUI-RT-170', `声音 ${url} 没有登记在 ui/ 的包里。`, '把 mp3 放进包目录，在 package.xml 里登记成 <sound … exported="true"/>，地址写成 ui://包名/声音名。'));
+    return found ?? null;
+  };
   const state: HeadlessState = {
-    now: 0, screen: {width: 1920, height: 1080}, languages: ['zh-CN'], storage: new Map(), sounds: [], logs: [], inputMode: 'ui', loaded: new Set(),
+    now: 0, screen: {width: 1920, height: 1080}, languages: ['zh-CN'], storage: new Map(), sounds: [], music: null, audioPaused: false, logs: [], inputMode: 'ui', loaded: new Set(),
     handlers: {frame: new Handlers(), visibility: new Handlers(), pointer: new Handlers(), key: new Handlers(), wheel: new Handlers(), resize: new Handlers()}
   };
   let prefix = '';
@@ -80,9 +131,17 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[], tr
         return visible;
       }
     },
-    audio: {play: (url, options = {}) => { state.sounds.push({url, volume: options.volume ?? 1}); }},
+    audio: {
+      play(url, volume, onError) { const found = soundUrl(url, onError); if (found) state.sounds.push({url: found, volume}); },
+      music(url, volume, _fadeMs, onError) {
+        if (url === null) { state.music = null; return; }
+        const found = soundUrl(url, onError);
+        if (found) state.music = {url: found, volume};
+      },
+      setPaused(paused) { state.audioPaused = paused; }
+    },
     locale: {systemLanguages: () => [...state.languages]},
-    log: {write: (level, message) => { state.logs.push({level, message, time: state.now}); }, recent: () => state.logs.slice(-200)},
+    log: recorder(state, 'game', {}),
     net: {fetch: () => { throw notImplemented('网络（测试里用 Service 的假实现）', 'headless'); }, webSocket: () => { throw notImplemented('WebSocket（测试里用 Service 的假实现）', 'headless'); }}
   };
   return {

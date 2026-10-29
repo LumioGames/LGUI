@@ -16,7 +16,7 @@ export interface ChildDescriptor {
   /** [x, y, 宽, 高]（设计尺寸）。 */
   rect: [number, number, number, number];
   /** 初始属性。 */
-  props: {visible: boolean; enabled: boolean; touchable: boolean; customData?: string; text?: string; promptText?: string; url?: string; title?: string; icon?: string; selected?: boolean; value?: number; max?: number; color?: string};
+  props: {visible: boolean; enabled: boolean; touchable: boolean; customData?: string; text?: string; promptText?: string; url?: string; title?: string; icon?: string; selected?: boolean; value?: number; max?: number; color?: string; sound?: string; soundVolume?: number};
 }
 
 /** 一个组件。 */
@@ -31,6 +31,10 @@ export interface ComponentDescriptor {
   extension: string | null;
   /** 按钮的模式：Common 不保持选中；Check、Radio 保持（列表的选中项靠它显示）。 */
   buttonMode?: string | null;
+  /** 按钮组件自己设的点击音效（ui://包名/声音名）。 */
+  sound?: string;
+  /** 按钮组件自己设的音效音量（0–1，0 是不出声）。 */
+  soundVolume?: number;
   /** [宽, 高]。 */
   size: [number, number];
   /** 控制器。 */
@@ -53,4 +57,6 @@ export interface PackageDescriptor {
   components: ComponentDescriptor[];
   /** 图片：名字和尺寸（ArtText 拼字时要用）。 */
   images: {name: string; width: number; height: number}[];
+  /** 声音：资源 ID 和名字。 */
+  sounds?: {id: string; name: string}[];
 }

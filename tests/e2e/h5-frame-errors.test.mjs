@@ -34,7 +34,7 @@ class ThrowView extends View<any> { static component = 'Bag/ItemSlot'; static la
 (async () => {
   const backend = createH5Backend();
   await backend.init({projectName: 'demo', defaultFont: null, uiBase: '/ui'});
-  await boot(backend, {backend: 'h5', start() {}}, defaultConfig, ${JSON.stringify(deps)});
+  await boot(backend, {backend: 'h5', start() {}}, defaultConfig, ${JSON.stringify(deps)}, {language: 'zh-CN', texts: {'zh-CN': {'lgui.back': '返回', 'lgui.requestFailed': '请求失败（{code}）'}}});
   await lgui.ui.open(SpinView);
   await lgui.ui.open(ThrowView);
   await lgui.time.wait(500);
