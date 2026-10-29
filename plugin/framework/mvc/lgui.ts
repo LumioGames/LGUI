@@ -212,7 +212,18 @@ export const lgui = {
     /** 当前时间（毫秒，和服务器对齐过）。 */
     now(): number { return wallNow(); },
     /** 设置和服务器的时间差。 */
-    setServerOffset(ms: number): void { runtime().serverOffset = ms; }
+    setServerOffset(ms: number): void { runtime().serverOffset = ms; },
+    /** 等 ms 毫秒（按每帧的时间累计，lgui test 的假时钟也能推进）。给 Service 模拟延迟、重试间隔用；界面上的定时器用 View 的 this.after。 */
+    wait(ms: number): Promise<void> {
+      return new Promise(resolve => {
+        let left = ms;
+        if (left <= 0) { resolve(); return; }
+        const stop = runtime().backend.platform.time.onFrame(dt => {
+          left -= dt;
+          if (left <= 0) { stop(); resolve(); }
+        });
+      });
+    }
   },
   /** 声明一个事件。 */
   defineEvent<P>(name: string): EventDef<P> { return defineEvent<P>(name); },

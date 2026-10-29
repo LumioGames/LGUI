@@ -190,12 +190,24 @@ export function redDotBindings({ts, root, files}) {
 /** 代码里 lgui.t(…) 用到的文本键（字符串字面量）：[{ key, loc }]。 */
 export function usedTextKeys({ts, root, files}) {
   const out = [];
+  // 键的写法：字符串 → 一个键；条件表达式 → 两边各自的键；模板字符串（`item.${kind}.name`）→ 一个匹配规则（只用来判断「有没有用到」）。
+  const keysIn = expr => {
+    if (ts.isParenthesizedExpression(expr)) return keysIn(expr.expression);
+    if (ts.isStringLiteral(expr) || ts.isNoSubstitutionTemplateLiteral(expr)) return [{key: expr.text, loc: where(root, expr)}];
+    if (ts.isConditionalExpression(expr)) return [...keysIn(expr.whenTrue), ...keysIn(expr.whenFalse)];
+    if (ts.isTemplateExpression(expr)) {
+      const escape = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const source = escape(expr.head.text) + expr.templateSpans.map(span => '.+' + escape(span.literal.text)).join('');
+      return [{pattern: new RegExp(`^${source}$`), loc: where(root, expr)}];
+    }
+    return [];
+  };
   for (const sf of files) {
     const visit = node => {
       if (ts.isCallExpression(node)) {
         const callee = node.expression.getText(sf);
         const first = node.arguments[0];
-        if ((callee === 'lgui.t' || callee === 'lgui.toast') && first && ts.isStringLiteral(first)) out.push({key: first.text, loc: where(root, first)});
+        if ((callee === 'lgui.t' || callee === 'lgui.toast') && first) out.push(...keysIn(first));
         if (callee === 'lgui.confirm' && first && ts.isObjectLiteralExpression(first)) for (const p of first.properties) if (ts.isPropertyAssignment(p) && ts.isStringLiteral(p.initializer)) out.push({key: p.initializer.text, loc: where(root, p.initializer)});
       }
       if (ts.isPropertyAssignment(node) && node.name.getText(sf) === 'hint' && ts.isStringLiteral(node.initializer)) out.push({key: node.initializer.text, loc: where(root, node.initializer)});

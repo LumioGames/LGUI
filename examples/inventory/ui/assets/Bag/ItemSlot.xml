@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="160,160" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <controller name="rarity" pages="0,common,1,uncommon,2,rare,3,epic,4,legendary" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="160,160" type="rect" lineSize="0" fillColor="#1a2333">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n1" name="frameCommon" xy="0,0" size="160,160" type="rect" lineSize="2" lineColor="#6d7783" fillColor="#00000000">
+      <gearDisplay controller="rarity" pages="0"/>
+    </graph>
+    <graph id="n2" name="frameUncommon" xy="0,0" size="160,160" type="rect" lineSize="2" lineColor="#4f9a5a" fillColor="#00000000">
+      <gearDisplay controller="rarity" pages="1"/>
+    </graph>
+    <graph id="n3" name="frameRare" xy="0,0" size="160,160" type="rect" lineSize="2" lineColor="#3f7fd0" fillColor="#00000000">
+      <gearDisplay controller="rarity" pages="2"/>
+    </graph>
+    <graph id="n4" name="frameEpic" xy="0,0" size="160,160" type="rect" lineSize="2" lineColor="#9a5bd0" fillColor="#00000000">
+      <gearDisplay controller="rarity" pages="3"/>
+    </graph>
+    <graph id="n5" name="frameLegendary" xy="0,0" size="160,160" type="rect" lineSize="2" lineColor="#e0a339" fillColor="#00000000">
+      <gearDisplay controller="rarity" pages="4"/>
+    </graph>
+    <graph id="n6" name="selectedFrame" xy="0,0" size="160,160" type="rect" lineSize="2" lineColor="#ffd27a" fillColor="#33ffd27a">
+      <gearDisplay controller="button" pages="1,3"/>
+    </graph>
+    <loader id="n7" name="icon" xy="16,12" size="128,128" align="center" vAlign="middle" fill="scale"/>
+    <text id="n8" name="count" xy="84,120" size="68,34" fontSize="24" color="#f3ead6" align="right" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+    <component id="n9" name="newMark" pkg="cmn00001" visible="false" src="reddot01" xy="128,4" size="28,28"/>
+  </displayList>
+  <Button/>
+</component>

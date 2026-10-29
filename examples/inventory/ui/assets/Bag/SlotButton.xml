@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="660,64" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="660,64" type="rect" lineSize="2" lineColor="#8a6d3b" fillColor="#1a2333">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <loader id="n1" name="icon" xy="8,4" size="56,56" align="center" vAlign="middle" fill="scale"/>
+    <text id="n2" name="title" xy="76,0" size="576,64" fontSize="26" color="#f3ead6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="">
+      <relation target="" sidePair="width-width"/>
+    </text>
+  </displayList>
+  <Button/>
+</component>

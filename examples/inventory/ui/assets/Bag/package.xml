@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="bag00001">
+  <resources>
+    <component id="bagpanl1" name="BagPanel.xml" path="/" exported="true"/>
+    <component id="bagpanl2" name="BagPanel@portrait.xml" path="/" exported="true"/>
+    <component id="slot0001" name="ItemSlot.xml" path="/" exported="true"/>
+    <component id="holdbtn1" name="HoldButton.xml" path="/" exported="true"/>
+    <component id="slotbtn1" name="SlotButton.xml" path="/" exported="true"/>
+    <component id="itemdet1" name="ItemDetail.xml" path="/" exported="true"/>
+    <component id="picker01" name="ItemPicker.xml" path="/" exported="true"/>
+    <component id="pick0001" name="PickerItem.xml" path="/" exported="true"/>
+    <image id="title001" name="title.png" path="/" exported="true"/>
+    <image id="title002" name="title@en.png" path="/" exported="true"/>
+    <image id="art00000" name="sword.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00001" name="axe.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00002" name="bow.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00003" name="staff.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00004" name="shield.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00005" name="helmet.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00006" name="armor.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00007" name="boots.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00008" name="ring.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00009" name="amulet.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00010" name="redPotion.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00011" name="bluePotion.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00012" name="staminaPotion.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00013" name="antidote.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00014" name="elixir.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00015" name="herb.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00016" name="mushroom.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00017" name="ore.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00018" name="crystal.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00019" name="leather.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00020" name="key.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00021" name="scroll.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00022" name="coinPouch.png" path="/" exported="true" width="128" height="128"/>
+    <image id="art00023" name="gem.png" path="/" exported="true" width="128" height="128"/>
+  </resources>
+</packageDescription>

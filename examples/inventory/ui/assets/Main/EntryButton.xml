@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="360,96" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="360,96" type="rect" lineSize="2" lineColor="#8a6d3b" fillColor="#dd111a28">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="0,0" size="360,96" fontSize="34" color="#f3ead6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="">
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+    <component id="n2" name="redDot" pkg="cmn00001" visible="false" src="reddot01" xy="332,-10" size="36,36">
+      <relation target="" sidePair="right-right"/>
+    </component>
+  </displayList>
+  <Button/>
+</component>

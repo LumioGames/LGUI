@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="cmn00001">
+  <resources>
+    <component id="button01" name="Button.xml" path="/" exported="true"/>
+    <component id="toast001" name="Toast.xml" path="/" exported="true"/>
+    <component id="confirm1" name="Confirm.xml" path="/" exported="true"/>
+    <component id="loading1" name="Loading.xml" path="/" exported="true"/>
+    <component id="hintbar1" name="ActionHintBar.xml" path="/" exported="true"/>
+    <component id="hint0001" name="ActionHint.xml" path="/" exported="true"/>
+    <component id="reddot01" name="RedDot.xml" path="/" exported="true"/>
+    <component id="holdprg1" name="HoldProgress.xml" path="/" exported="true"/>
+    <component id="arttext1" name="ArtText.xml" path="/" exported="true"/>
+    <component id="curbar01" name="CurrencyBar.xml" path="/" exported="true"/>
+    <image id="placehd1" name="placeholder.png" path="/" exported="true"/>
+    <image id="coin0001" name="coin.png" path="/" exported="true"/>
+    <image id="coinf000" name="coin_0.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf001" name="coin_1.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf002" name="coin_2.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf003" name="coin_3.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf004" name="coin_4.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf005" name="coin_5.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf006" name="coin_6.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf007" name="coin_7.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf008" name="coin_8.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf009" name="coin_9.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf010" name="coin_plus.png" path="/artfont/coin/" exported="true"/>
+    <image id="coinf011" name="coin_minus.png" path="/artfont/coin/" exported="true"/>
+  </resources>
+</packageDescription>

@@ -14,7 +14,9 @@ export function i18nRules({model, tables, defaultLanguage, usedKeys}) {
   const out = [];
   const uiKeys = extractTexts(model).map(e => e.key);
   const codeKeys = new Map();
-  for (const u of usedKeys) if (!codeKeys.has(u.key)) codeKeys.set(u.key, u.loc);
+  for (const u of usedKeys) if (u.key !== undefined && !codeKeys.has(u.key)) codeKeys.set(u.key, u.loc);
+  // 模板字符串拼出来的键：只用来判断「有没有用到」，缺了查不出来。
+  const patterns = usedKeys.filter(u => u.pattern).map(u => u.pattern);
   const required = new Set([...uiKeys, ...codeKeys.keys(), ...FRAMEWORK_KEYS]);
   for (const [language, table] of Object.entries(tables)) {
     const file = `i18n/${language}.json`;
@@ -24,7 +26,7 @@ export function i18nRules({model, tables, defaultLanguage, usedKeys}) {
       out.push(finding('LGUI-UI-030', `${file} 里缺少键 ${key}${loc ? `（${loc.file}:${loc.line} 用到了）` : uiKeys.includes(key) ? '（ui/ 里的固定文字）' : '（框架用到）'}。`, `在 ${file} 里加上 ${key}；ui/ 里的固定文字先运行 lgui i18n extract。`, {file, line: 1, col: 1}));
     }
     for (const key of Object.keys(table)) {
-      if (!required.has(key)) out.push(finding('LGUI-UI-031', `${file} 里的键 ${key} 没有用到。`, '确认不要了就删掉；用变量拼键名的地方 lgui check 查不出来，可以忽略这条。', {file, line: 1, col: 1, level: 'warning'}));
+      if (!required.has(key) && !patterns.some(p => p.test(key))) out.push(finding('LGUI-UI-031', `${file} 里的键 ${key} 没有用到。`, '确认不要了就删掉。用模板字符串拼的键（lgui.t(`item.${kind}.name`)）算用到了；用变量传进来的键查不出来，可以忽略这条。', {file, line: 1, col: 1, level: 'warning'}));
     }
   }
   const base = tables[defaultLanguage] ?? {};

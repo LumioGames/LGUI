@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="300,64">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="300,64" type="rect" lineSize="2" lineColor="#8a6d3b" fillColor="#cc0b1220">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n1" name="coin" src="coin0001" xy="12,8" size="48,48"/>
+    <text id="n2" name="amount" xy="72,8" size="216,48" fontSize="32" color="#e8c27a" align="right" vAlign="middle" autoSize="shrink" singleLine="true" text="0">
+      <relation target="" sidePair="width-width"/>
+    </text>
+  </displayList>
+</component>
