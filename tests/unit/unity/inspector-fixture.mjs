@@ -30,7 +30,11 @@ export async function fixture(onRequest, discovery) {
       '258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64');
     socket.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n' +
       `Sec-WebSocket-Accept: ${accept}\r\n\r\n`);
-    let pending = head;
+    let pending = head, closeSent = false;
+    const close = () => {
+      if (!closeSent) { closeSent = true; socket.end(frame('', 8)); }
+      return socket;
+    };
     const consume = data => {
       pending = Buffer.concat([pending, data]);
       while (pending.length >= 2) {
@@ -51,7 +55,8 @@ export async function fixture(onRequest, discovery) {
         const body = Buffer.from(pending.subarray(offset, offset + length));
         if (masked) for (let index = 0; index < body.length; index++) body[index] ^= mask[index % 4];
         pending = pending.subarray(offset + length);
-        if (opcode === 8) { socket.end(frame('', 8)); return; }
+        if (opcode === 8) { close(); return; }
+        if (closeSent) continue;
         if (opcode === 9) { socket.write(frame(body, 10)); continue; }
         assert.equal(opcode, 1);
         const message = JSON.parse(body.toString());
@@ -60,7 +65,7 @@ export async function fixture(onRequest, discovery) {
           reply: result => socket.write(frame(JSON.stringify({id: message.id, result}))),
           raw: text => socket.write(frame(text)),
           error: error => socket.write(frame(JSON.stringify({id: message.id, error}))),
-          close: () => socket.end(frame('', 8))
+          close
         });
       }
     };

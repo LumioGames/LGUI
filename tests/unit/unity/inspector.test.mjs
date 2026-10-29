@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import net from 'node:net';
+import {once} from 'node:events';
+import {randomBytes} from 'node:crypto';
 import {fixture} from './inspector-fixture.mjs';
 
 const entry = new URL('../../unity/acceptance/inspector.mjs', import.meta.url);
@@ -17,6 +20,78 @@ async function connected(t, handle, discovery, options = {}) {
   t.after(() => client.close());
   return {module, server, client};
 }
+
+function maskedFrame(text, opcode = 1) {
+  const body = Buffer.from(text), mask = randomBytes(4);
+  assert.ok(body.length < 126, 'controlled frames remain short');
+  return Buffer.concat([Buffer.from([0x80 | opcode, 0x80 | body.length]), mask,
+    Buffer.from(body.map((byte, index) => byte ^ mask[index % 4]))]);
+}
+
+async function rawPeer(t, port) {
+  const socket = net.createConnection({host: '127.0.0.1', port, allowHalfOpen: true});
+  const chunks = [], errors = [];
+  let receivedHeaders;
+  const upgraded = new Promise(resolve => { receivedHeaders = resolve; });
+  socket.on('data', data => { chunks.push(data); if (Buffer.concat(chunks).includes('\r\n\r\n')) receivedHeaders(); });
+  socket.on('error', error => errors.push(error));
+  const ended = new Promise(resolve => socket.once('end', resolve));
+  const closed = new Promise(resolve => socket.once('close', resolve));
+  t.after(() => socket.destroy());
+  await once(socket, 'connect');
+  socket.write('GET / HTTP/1.1\r\nHost: 127.0.0.1:' + port + '\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n' +
+    'Sec-WebSocket-Version: 13\r\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n');
+  await upgraded;
+  return {socket, errors, ended, closed, frames() {
+    const received = Buffer.concat(chunks), offset = received.indexOf('\r\n\r\n');
+    assert.ok(offset >= 0);
+    assert.match(received.subarray(0, offset).toString(), /^HTTP\/1\.1 101 /);
+    return received.subarray(offset + 4);
+  }};
+}
+
+test('fixture Close: server already ended before the masked peer reply sends no second Close', {timeout: 5000}, async t => {
+  let receivedRequest;
+  const requested = new Promise(resolve => { receivedRequest = resolve; });
+  const serverErrors = [], peerFrames = [];
+  const server = await fixture((_, wire) => {
+    const socket = wire.close();
+    socket.on('error', error => serverErrors.push(error));
+    socket.on('data', data => peerFrames.push(data));
+    const finished = socket.writableFinished ? Promise.resolve() : once(socket, 'finish');
+    const closed = new Promise(resolve => socket.once('close', resolve));
+    receivedRequest({socket, finished, closed});
+  });
+  t.after(() => server.close());
+  const peer = await rawPeer(t, server.port);
+  peer.socket.write(maskedFrame(JSON.stringify({id: 1, method: 'Runtime.evaluate'})));
+  const outgoing = await requested;
+  await outgoing.finished;
+  assert.equal(outgoing.socket.writableEnded, true, 'server writable must already be ended before the peer Close');
+  await peer.ended;
+  const close = maskedFrame('', 8);
+  assert.equal(close[1] & 0x80, 0x80, 'the actual peer Close must be masked');
+  peer.socket.end(close);
+  await outgoing.closed;
+  await peer.closed;
+  assert.deepEqual(peer.frames(), Buffer.from([0x88, 0]), 'server must send exactly one Close frame before FIN');
+  assert.deepEqual(Buffer.concat(peerFrames), close, 'server must consume exactly the one peer Close');
+  assert.deepEqual(serverErrors.map(error => error.code), [], 'socket errors must fail instead of being ignored');
+  assert.deepEqual(peer.errors, []);
+});
+
+test('fixture Close: peer initiated Close receives exactly one server response', {timeout: 5000}, async t => {
+  const server = await fixture(() => assert.fail('Close is not an application command'));
+  t.after(() => server.close());
+  const peer = await rawPeer(t, server.port);
+  const close = maskedFrame('', 8);
+  assert.equal(close[1] & 0x80, 0x80);
+  peer.socket.end(close);
+  await peer.ended;
+  await peer.closed;
+  assert.deepEqual(peer.frames(), Buffer.from([0x88, 0]), 'one peer Close requires exactly one server Close response');
+  assert.deepEqual(peer.errors, []);
+});
 
 test('V8 sampling waits for native GC acknowledgement before requesting heap usage', async t => {
   let acknowledgeGc;
