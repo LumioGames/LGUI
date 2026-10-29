@@ -25,7 +25,8 @@ export async function loadFramework() {
     `export {validateViewClass} from ${f('mvc/view.ts')};`,
     `export {inputType} from ${f('mvc/input/input-type.ts')};`,
     `export {listenerCount} from ${f('mvc/model.ts')};`,
-    `export {HeadlessLoader} from ${f('backends/headless/objects.ts')};`
+    `export {HeadlessLoader} from ${f('backends/headless/objects.ts')};`,
+    `export {boot} from ${f('mvc/boot.ts')};`
   ].join('\n'));
   cached = await importTs(entry);
   return cached;
@@ -39,6 +40,14 @@ export async function headless({root = writeFixture(), config = {}} = {}) {
   const packages = fs.readdirSync(dir).map(file => JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8')));
   const backend = fw.createHeadlessBackend(packages);
   await backend.init({projectName: 'test', defaultFont: null, uiBase: ''});
-  fw.setRuntime(backend, {...fw.defaultConfig, ...config}, 1_700_000_000_000);
-  return {fw, backend, root};
+  const deps = JSON.parse(fs.readFileSync(path.join(root, '.lgui/build/deps.json'), 'utf8'));
+  fw.setRuntime(backend, {...fw.defaultConfig, ...config}, 1_700_000_000_000, deps);
+  return {fw, backend, root, deps};
+}
+
+// 再加上 UIManager（不调用 app.start）。
+export async function started(options = {}) {
+  const ctx = await headless(options);
+  const ui = await ctx.fw.boot(ctx.backend, {backend: 'headless', start() {}}, {...ctx.fw.defaultConfig, ...(options.config ?? {})}, ctx.deps, {wallBase: 1_700_000_000_000});
+  return {...ctx, ui, sim: ctx.fw.sim};
 }

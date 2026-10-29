@@ -33,12 +33,12 @@ abstract class ViewBase<UI> {
   }
 
   /** 内部用：绑到一个组件上。已经绑过就先把旧组件的绑定全部清掉（换版时同一个实例重新绑定）。 */
-  __mount(component: UIComponent, options: {isActive?: () => boolean; item?: {data: unknown}} = {}): void {
+  __mount(component: UIComponent, options: {isActive?: () => boolean; item?: {data: unknown}; owner?: object} = {}): void {
     this.__unmount();
     this.__component = component;
     const scope = new Scope();
     this.__bindScope = scope;
-    applyBindings(component, this.bind as Table, {owner: this, scope, isActive: options.isActive ?? (() => true), item: options.item, where: this.constructor.name});
+    applyBindings(component, this.bind as Table, {owner: options.owner ?? this, scope, isActive: options.isActive ?? (() => true), item: options.item, where: this.constructor.name});
   }
 
   /** 内部用：解绑。 */
@@ -99,8 +99,8 @@ export abstract class ItemView<UI, Data> extends ViewBase<UI> {
   bind: ItemBind<UI, Data> = {};
 
   /** 内部用：渲染列表里的一项（数据变了就重新绑定）。 */
-  __render(component: UIComponent, data: unknown, isActive: () => boolean): void {
-    this.__mount(component, {item: {data}, isActive});
+  __render(component: UIComponent, data: unknown, isActive: () => boolean, owner: object): void {
+    this.__mount(component, {item: {data}, isActive, owner});
   }
 }
 

@@ -8,7 +8,7 @@ import {watch} from './index';
 
 /** 列表子项 View 的内部接口（ItemView 实现它）。 */
 export interface ItemViewInstance {
-  __render(component: UIComponent, data: unknown, isActive: () => boolean): void;
+  __render(component: UIComponent, data: unknown, isActive: () => boolean, owner: object): void;
   __dispose(): void;
 }
 
@@ -29,7 +29,7 @@ export function bindList(list: UIList, binding: Record<string, unknown>, ctx: Bi
     }
     let view = views.get(component);
     if (!view) { view = new ItemClass(); views.set(component, view); }
-    view.__render(component, items[index], ctx.isActive);
+    view.__render(component, items[index], ctx.isActive, ctx.owner);
   };
   ctx.scope.add(() => {
     list.itemRenderer = null;
