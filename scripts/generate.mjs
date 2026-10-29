@@ -43,12 +43,19 @@ export function generatedFiles() {
   };
 }
 
+// 原样复制的文本文件：根目录的 CHANGELOG.md → plugin/CHANGELOG.md（lgui upgrade 要读它）。
+export function copiedFiles() {
+  return {'plugin/CHANGELOG.md': fs.readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8')};
+}
+
+const render = data => typeof data === 'string' ? data : JSON.stringify(data, null, 2) + '\n';
+
 // 返回不一致的文件列表（只比较，不写）。
 export function staleFiles() {
-  return Object.entries(generatedFiles())
+  return Object.entries({...generatedFiles(), ...copiedFiles()})
     .filter(([file, data]) => {
       const destination = path.join(root, file);
-      return !fs.existsSync(destination) || fs.readFileSync(destination, 'utf8') !== JSON.stringify(data, null, 2) + '\n';
+      return !fs.existsSync(destination) || fs.readFileSync(destination, 'utf8') !== render(data);
     })
     .map(([file]) => file);
 }
@@ -62,10 +69,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     }
     console.log('生成文件和 plugin/plugin.json 一致。');
   } else {
-    for (const [file, data] of Object.entries(generatedFiles())) {
+    for (const [file, data] of Object.entries({...generatedFiles(), ...copiedFiles()})) {
       const destination = path.join(root, file);
       fs.mkdirSync(path.dirname(destination), {recursive: true});
-      fs.writeFileSync(destination, JSON.stringify(data, null, 2) + '\n');
+      fs.writeFileSync(destination, render(data));
     }
     console.log('已从 plugin/plugin.json 生成两个宿主清单和两份 marketplace 清单。');
   }
