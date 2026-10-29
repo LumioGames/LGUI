@@ -36,6 +36,10 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-062` | `--lang` 写的语言工程不支持 | 用 `languages` 里的语言，或者 `pseudo` |
 | `LGUI-CLI-063` | `--view` 写的 View 在 `src/modules/` 里没有导出 | 写 View 的类名 |
 | `LGUI-CLI-064` | 截图时页面报错 | 按报错改代码；`lgui dev` 里能看到同样的错误 |
+| `LGUI-CLI-070` | Node 版本低于 24 | 安装 Node 24（推荐 24.22.1） |
+| `LGUI-CLI-072` | 随插件带的工具加载失败 | 插件不完整，重新安装 LGUI 插件 |
+| `LGUI-CLI-073` | 没找到 Chrome 或 Edge | 装一个 Chrome 或 Edge |
+| `LGUI-CLI-074` | 工程的 `devPort` 被占用 | 改 `devPort`，或者 `lgui dev --port <端口>` |
 | `LGUI-CLI-999` | 命令行内部错误（LGUI 自己的缺陷） | 把输出报告给维护者 |
 
 ## LGUI-RT-xxx

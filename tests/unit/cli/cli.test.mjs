@@ -50,10 +50,13 @@ test('版本不一致时报 LGUI-CLI-003，原话提示运行 lgui upgrade', asy
 
 test('init、doctor、upgrade 不做版本检查', async () => {
   const root = tempProject({lguiVersion: '0.0.1'});
-  for (const argv of [['init'], ['doctor'], ['upgrade']]) {
+  for (const argv of [['init'], ['upgrade']]) {
     const json = parse((await run([...argv, '--json'], root)).stdout);
     assert.notEqual(json.errors[0].code, 'LGUI-CLI-003', argv.join(' '));
   }
+  // doctor 不被版本检查拦住：照常跑完，把版本不一致作为它自己的一项检查结果报出来
+  const doctor = parse((await run(['doctor', '--json'], root)).stdout);
+  assert.ok(doctor.data.items.some(i => i.name === '工程版本' && !i.ok));
 });
 
 test('还没实现的命令报 LGUI-CLI-000', async () => {
