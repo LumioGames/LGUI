@@ -75,16 +75,24 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
     onPointer(handler: (event: PointerInput) => void): Unsubscribe {
       let owners = pointers.get(this.native);
       if (!owners) { owners = new Set(); pointers.set(this.native, owners); }
-      owners.add(handler);
+      let previous: PointerInput | null = null;
+      // A captured mouse move reaches both stage hover forwarding and the native
+      // GObject monitor. Deduplicate each subscription using their shared input.
+      const deliver = (input: PointerInput): void => {
+        if (input === previous) return;
+        previous = input;
+        handler(input);
+      };
+      owners.add(deliver);
       const send = (type: PointerInput['type']): NativeEventHandler => context => {
         if (!context.inputEvent) return;
         if (type === 'down') context.CaptureTouch();
-        handler(toPointerInput(type, context));
+        deliver(toPointerInput(type, context));
       };
       const down = this.listen(this.native.onTouchBegin, send('down'));
       const move = this.listen(this.native.onTouchMove, send('move'));
       const up = this.listen(this.native.onTouchEnd, send('up'));
-      return this.track(() => { down(); move(); up(); owners.delete(handler); if (!owners.size) pointers.delete(this.native); });
+      return this.track(() => { down(); move(); up(); owners.delete(deliver); previous = null; if (!owners.size) pointers.delete(this.native); });
     }
   }
 

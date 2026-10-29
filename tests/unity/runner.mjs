@@ -41,7 +41,9 @@ type Native = {width: number; height: number; LocalToGlobal(point: Point): Point
 declare const CS: {
   UnityEngine: {Vector2: new (x: number,y: number) => Point};
   LGUI: {Tests: {ConformanceBridge: {
-    Complete(json: string): void; Pointer(x: number,y: number,down: boolean,touch: boolean): void;
+    readonly RenderedFrame: number;
+    readonly ConsumedPointerDown: number; readonly ConsumedPointerUp: number;
+    Complete(json: string): void; Pointer(x: number,y: number,down: boolean,touch: boolean): number;
     Key(key: string): void; Wheel(x: number,y: number,dx: number,dy: number): void;
     SetScreen(width: number,height: number): void; SizeMatches(width: number,height: number): boolean;
   }}};
@@ -52,20 +54,42 @@ const wait = (ms: number) => new Promise<void>(resolve => {
   const end = backend.platform.time.now() + ms;
   const off = backend.platform.time.onFrame(() => { if (backend.platform.time.now() >= end) { off(); resolve(); } });
 });
+// app.start/open 在原生布局与第一次渲染之前就能完成。等真实 Stage.afterUpdate，
+// 避免首次字体/着色器准备把一次 50ms 的测试点击拉长成超过 tapMs 的真实长按。
+const rendered = async () => {
+  const previous=native.RenderedFrame;
+  const deadline=backend.platform.time.now()+10000;
+  while(native.RenderedFrame<=previous) {
+    if(backend.platform.time.now()>deadline)throw new Error('LGUI-RT-001 Unity Stage 未完成原生布局与渲染更新。');
+    await wait(0);
+  }
+};
+const consumed = async (sequence: number,down: boolean) => {
+  const deadline=backend.platform.time.now()+10000;
+  while((down?native.ConsumedPointerDown:native.ConsumedPointerUp)<sequence) {
+    if(backend.platform.time.now()>deadline)throw new Error('LGUI-RT-001 Unity Stage 未消费对应的测试指针事件。');
+    await wait(0);
+  }
+};
 const center = (object: unknown): Point => {
   const n = (object as {native: Native}).native;
   return n.LocalToGlobal(new CS.UnityEngine.Vector2(n.width/2,n.height/2));
 };
 const press = async (object: unknown,ms: number,touch = false) => {
-  const p = center(object); native.Pointer(p.x,p.y,true,touch); await wait(ms);
-  native.Pointer(p.x,p.y,false,touch); await wait(50);
+  await rendered();
+  const p = center(object);
+  await consumed(native.Pointer(p.x,p.y,true,touch),true);
+  await wait(ms);
+  await consumed(native.Pointer(p.x,p.y,false,touch),false);
+  await wait(50);
 };
 const move = async (object: unknown,dx: number,dy: number,ms: number,steps: number) => {
+  await rendered();
   const p = center(object);
   const scale = backend.platform.screen.size().width / backend.root.rect.width;
-  native.Pointer(p.x,p.y,true,true); await wait(20);
+  await consumed(native.Pointer(p.x,p.y,true,true),true); await wait(20);
   for (let i=1;i<=steps;i++) { await wait(ms/steps); native.Pointer(p.x+dx*scale*i/steps,p.y+dy*scale*i/steps,true,true); }
-  native.Pointer(p.x+dx*scale,p.y+dy*scale,false,true); await wait(50);
+  await consumed(native.Pointer(p.x+dx*scale,p.y+dy*scale,false,true),false); await wait(50);
 };
 const sim = {
   click: (_b: unknown,o: unknown,ms=50,pointerType='mouse') => press(o,ms,pointerType==='touch'),
@@ -74,8 +98,8 @@ const sim = {
   drag: (_b: unknown,o: unknown,dx: number,dy: number) => move(o,dx,dy,400,10),
   swipe: (_b: unknown,o: unknown,dx: number,dy: number) => move(o,dx,dy,80,4),
   async pinch() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接双指缩放输入。'); },
-  async wheel(_b: unknown,o: unknown,dy: number) { const p=center(o);native.Wheel(p.x,p.y,0,dy);await wait(50); },
-  async key(_b: unknown,key: string) { native.Key(key);await wait(50); },
+  async wheel(_b: unknown,o: unknown,dy: number) { await rendered();const p=center(o);native.Wheel(p.x,p.y,0,dy);await wait(50); },
+  async key(_b: unknown,key: string) { await rendered();native.Key(key);await wait(50); },
   async setScreen(_b: unknown,width: number,height: number) {
     native.SetScreen(width,height);
     const deadline=backend.platform.time.now()+10000;
@@ -125,6 +149,7 @@ export function prepareUnityProject(project, {unityPackage, puertsCore, puertsV8
   fs.mkdirSync(path.join(project, 'Packages'), {recursive: true});
   fs.mkdirSync(path.join(project, 'ProjectSettings'), {recursive: true});
   fs.cpSync(path.join(here, 'Assets'), path.join(project, 'Assets'), {recursive: true});
+  fs.cpSync(path.join(here, 'UserSettings'), path.join(project, 'UserSettings'), {recursive: true});
   const dependencies = {'com.unity.ugui': '2.0.0'};
   for (const module of ['animation','assetbundle','audio','imageconversion','imgui','jsonserialize','particlesystem','physics','physics2d','screencapture','terrain','terrainphysics','ui','uielements','unitywebrequest','unitywebrequestaudio','unitywebrequesttexture','video']) dependencies[`com.unity.modules.${module}`] = '1.0.0';
   for (const [name, source] of packages) {
@@ -138,12 +163,13 @@ export function prepareUnityProject(project, {unityPackage, puertsCore, puertsV8
 }
 
 /** 实际启动 Editor Play，等待同一份用例完成；编译成功不会被当作运行成功。 */
-export async function runUnityConformance({editor, project, result, log, timeout = 180, screen = {width: 1280, height: 720}}) {
+export async function runUnityConformance({editor, project, result, log, timeout = 180, screen = {width: 1280, height: 720}, trace = false}) {
   fs.mkdirSync(path.dirname(result), {recursive: true});
   fs.mkdirSync(path.dirname(log), {recursive: true});
   if (fs.existsSync(result)) throw new Error(`LGUI-RT-001 验收结果文件已存在：${result}。请使用新路径，避免读到旧结果。`);
   const args = ['-batchmode', '-projectPath', project, '-executeMethod', 'LGUI.Tests.LGUIConformanceEditor.Run', '-logFile', log,
     '-lguiResult', result, '-lguiTimeout', String(timeout), '-lguiWidth', String(screen.width), '-lguiHeight', String(screen.height)];
+  if (trace) args.push('-lguiTrace');
   const exitCode = await new Promise((resolve, reject) => {
     const child = spawn(editor, args, {windowsHide: true, stdio: 'ignore'});
     child.on('error', reject);

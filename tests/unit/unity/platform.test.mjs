@@ -75,6 +75,21 @@ function environment() {
   return {options: {projectName: 'test', uiBase: 'UI', host, fgui, objects, createLoader, scale}, calls, host, stage, root, listeners, event, loaders, scale, storage};
 }
 
+test('Unity 平台：一个每帧回调抛错照常记日志，其他回调和后续帧继续运行', async () => {
+  const e = environment();
+  const u = await create(e.options);
+  let healthy = 0;
+  u.platform.time.onFrame(() => { throw new Error('frame failed'); });
+  u.platform.time.onFrame(() => { healthy++; });
+  assert.doesNotThrow(() => u.tick(16));
+  assert.doesNotThrow(() => u.tick(16));
+  assert.equal(healthy, 2);
+  const errors = u.platform.log.recent();
+  assert.equal(errors.length, 2);
+  assert.ok(errors.every(entry => entry.level === 'error' && entry.message.includes('LGUI-RT-160') && entry.message.includes('frame failed')));
+  u.dispose();
+});
+
 test('Unity 平台：存储按工程隔离，时间事件可取消，退出后停止派发', async () => {
   const e = environment();
   const u = await create(e.options);
@@ -115,7 +130,7 @@ test('Unity 平台：设计尺寸、安全区、旋转通知和原始输入使�
   e.host.IsComposing = true; e.event('onKeyDown').emit(ctx);
   assert.equal(keys.length, 3); assert.equal(p.textInput.isComposing(), true);
   e.event('onMouseWheel').emit(ctx);
-  assert.deepEqual(wheels[0], {x: 960, y: 540, deltaX: 18, deltaY: 60});
+  assert.deepEqual(wheels[0], {x: 960, y: 540, deltaX: 12, deltaY: 40}, '与 h5/headless 一样只转换坐标，滚动量保留像素单位');
   e.host.ScreenWidth = 720; e.host.ScreenHeight = 1280; u.tick(16);
   assert.deepEqual(sizes, [{width: 720, height: 1280}]);
   p.input.setInputMode('all'); assert.equal(e.host.InputMode, 'all');

@@ -20,6 +20,7 @@ namespace LGUI.Tests
     {
         static readonly List<string> errors = new List<string>();
         static readonly List<string> trace = new List<string>();
+        static bool traceEnabled;
         static bool pointerActive;
         static bool pointerDown;
         static Vector2 pointer;
@@ -31,6 +32,7 @@ namespace LGUI.Tests
         static Stage observedStage;
         static int updates;
         static int lateUpdates;
+        static int pointerSequence;
         static readonly FieldInfo stageInstance = typeof(Stage).GetField("_inst", BindingFlags.NonPublic | BindingFlags.Static);
         static readonly FieldInfo touchTarget = typeof(Stage).GetField("_touchTarget", BindingFlags.NonPublic | BindingFlags.Instance);
         static readonly Encoding utf8 = new UTF8Encoding(false);
@@ -39,15 +41,23 @@ namespace LGUI.Tests
         [Preserve]
         public static int RenderedFrame { get; private set; } = -1;
 
+        [Preserve]
+        public static int ConsumedPointerDown { get; private set; }
+
+        [Preserve]
+        public static int ConsumedPointerUp { get; private set; }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
             errors.Clear();
             trace.Clear();
+            traceEnabled = Array.IndexOf(Environment.GetCommandLineArgs(), "-lguiTrace") >= 0;
             pointerActive = pointerDown = completed = false;
             pendingWheel = null;
             observedStage = null;
             updates = lateUpdates = 0;
+            pointerSequence = ConsumedPointerDown = ConsumedPointerUp = 0;
             RenderedFrame = -1;
             resultPath = Argument("-lguiResult");
             Application.logMessageReceived -= CaptureError;
@@ -86,7 +96,7 @@ namespace LGUI.Tests
 
         static void Trace(string kind, string detail)
         {
-            if (string.IsNullOrEmpty(resultPath) || trace.Count >= 12000) return;
+            if (!traceEnabled || string.IsNullOrEmpty(resultPath) || trace.Count >= 12000) return;
             trace.Add("frame=" + Time.frameCount + " realtimeMs=" + F(Time.realtimeSinceStartupAsDouble * 1000) +
                 " unscaledMs=" + F(Time.unscaledTimeAsDouble * 1000) + " deltaMs=" + F(Time.unscaledDeltaTime * 1000) +
                 " rendered=" + RenderedFrame + " focus=" + Application.isFocused + " kind=" + kind + " " + detail);
@@ -107,15 +117,21 @@ namespace LGUI.Tests
             var stage = stageInstance == null ? null : stageInstance.GetValue(null) as Stage;
             if (stage == null || stage == observedStage) return;
             observedStage = stage;
+            // Consumption acknowledgements are part of the test input contract,
+            // independent of optional tracing.
             observedStage.onTouchBegin.AddCapture(StageBegin);
             observedStage.onTouchEnd.AddCapture(StageEnd);
-            observedStage.onTouchMove.AddCapture(StageMove);
+            if (traceEnabled)
+            {
+                observedStage.onTouchMove.AddCapture(StageMove);
+            }
             observedStage.afterUpdate += StageRendered;
             Trace("stage-attached", "target=" + HitTarget());
         }
 
         static void StageInput(string kind, EventContext context)
         {
+            if (!traceEnabled) return;
             var input = context.inputEvent;
             Trace(kind, input == null ? "input=<none>" :
                 "x=" + F(input.x) + " y=" + F(input.y) + " id=" + input.touchId +
@@ -123,24 +139,48 @@ namespace LGUI.Tests
                 " clicks=" + input.clickCount + " target=" + HitTarget());
         }
 
-        static void StageBegin(EventContext context) { StageInput("stage-down", context); }
-        static void StageEnd(EventContext context) { StageInput("stage-up", context); }
+        static bool MatchesPointer(EventContext context, bool down)
+        {
+            var input = context.inputEvent;
+            return pointerActive && pointerDown == down && input != null && input.touchId == 0 && input.button == 0 &&
+                Stage.touchScreen == pointerTouch && Math.Abs(input.x - pointer.x) <= 0.5f && Math.Abs(input.y - pointer.y) <= 0.5f;
+        }
+
+        static void StageBegin(EventContext context)
+        {
+            if (MatchesPointer(context, true))
+            {
+                ConsumedPointerDown = pointerSequence;
+                Trace("pointer-consumed-down", "seq=" + pointerSequence);
+            }
+            StageInput("stage-down", context);
+        }
+
+        static void StageEnd(EventContext context)
+        {
+            if (MatchesPointer(context, false))
+            {
+                ConsumedPointerUp = pointerSequence;
+                Trace("pointer-consumed-up", "seq=" + pointerSequence);
+            }
+            StageInput("stage-up", context);
+        }
         static void StageMove(EventContext context) { StageInput("stage-move", context); }
         static void StageRendered()
         {
             RenderedFrame = Time.frameCount;
-            Trace("stage-after-update", "target=" + HitTarget());
+            if (traceEnabled) Trace("stage-after-update", "target=" + HitTarget());
         }
 
         static void WriteTrace()
         {
-            if (!string.IsNullOrEmpty(resultPath)) WriteAtomically(resultPath + ".trace.log", string.Join("\n", trace) + "\n");
+            if (traceEnabled && !string.IsNullOrEmpty(resultPath)) WriteAtomically(resultPath + ".trace.log", string.Join("\n", trace) + "\n");
         }
 
         internal static void LateTick()
         {
             lateUpdates++;
-            Trace("driver-late", "count=" + lateUpdates);
+            if (traceEnabled) Trace("driver-late", "count=" + lateUpdates);
         }
 
         internal static void Focus(bool focused) { Trace("application-focus", "value=" + focused); }
@@ -197,7 +237,7 @@ namespace LGUI.Tests
         {
             updates++;
             AttachTrace();
-            Trace("driver-update", "count=" + updates + " pointer=" + pointerActive + " down=" + pointerDown);
+            if (traceEnabled) Trace("driver-update", "count=" + updates + " pointer=" + pointerActive + " down=" + pointerDown);
             if (pointerActive) ApplyPointer();
             // Stage resolves the hit target in LateUpdate. Dispatch the wheel only after
             // the preceding frame has consumed its pointer coordinates.
@@ -239,15 +279,17 @@ namespace LGUI.Tests
         }
 
         [Preserve]
-        public static void Pointer(float x, float y, bool down, bool touch)
+        public static int Pointer(float x, float y, bool down, bool touch)
         {
             AttachTrace();
-            Trace("pointer-request", "x=" + F(x) + " y=" + F(y) + " down=" + down + " touch=" + touch + " priorTarget=" + HitTarget());
+            pointerSequence++;
+            Trace("pointer-request", "seq=" + pointerSequence + " x=" + F(x) + " y=" + F(y) + " down=" + down + " touch=" + touch + " priorTarget=" + HitTarget());
             pointer = new Vector2(x, y);
             pointerDown = down;
             pointerTouch = touch;
             pointerActive = true;
             ApplyPointer();
+            return pointerSequence;
         }
 
         static void ApplyPointer()

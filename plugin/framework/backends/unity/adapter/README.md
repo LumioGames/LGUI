@@ -9,4 +9,6 @@ Unity 后端的 TypeScript 适配层。`createUnityBackend()` 实现 `core/` 的
 
 Unity 包的 `LGUIBoot` 每帧调用 `__lguiFrame(deltaMs)`，前后台变化时调用 `__lguiVisibility(visible)`，销毁脚本环境前调用 `__lguiDispose()`。这些入口只在适配层内部使用。
 
+每帧回调的异常记录为 `LGUI-RT-160` 并保留堆栈；同一帧其余回调和后续帧继续运行。它与 h5 一样不会因为单个界面的回调出错而停止全部定时器或请求超时。
+
 开发验证工程与共用一致性用例的启动器在仓库的 `tests/unity/`；它们不随插件下发。编译、Editor Play 与 Windows IL2CPP Player 的验收应分别记录。

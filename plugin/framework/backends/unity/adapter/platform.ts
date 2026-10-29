@@ -7,7 +7,12 @@ import type {UnityPlatformOptions} from './native-platform';
 class Handlers<T> {
   private readonly handlers = new Set<(value: T) => void>();
   add(handler: (value: T) => void): Unsubscribe { this.handlers.add(handler); return () => { this.handlers.delete(handler); }; }
-  emit(value: T): void { for (const handler of [...this.handlers]) handler(value); }
+  emit(value: T, onError?: (error: unknown) => void): void {
+    for (const handler of [...this.handlers]) {
+      if (!onError) { handler(value); continue; }
+      try { handler(value); } catch (error) { onError(error); }
+    }
+  }
   clear(): void { this.handlers.clear(); }
 }
 
@@ -87,7 +92,8 @@ export function createUnityPlatform(options: UnityPlatformOptions): {platform: P
   }
   capture('onMouseWheel', context => {
     const input = context.inputEvent;
-    if (input) wheels.emit({x: input.x / scale.value, y: input.y / scale.value, deltaX: host.WheelDeltaX / scale.value, deltaY: input.mouseWheelDelta / scale.value});
+    // h5/headless 的滚动量都是输入像素；只有落点坐标随设计尺寸转换。
+    if (input) wheels.emit({x: input.x / scale.value, y: input.y / scale.value, deltaX: host.WheelDeltaX, deltaY: input.mouseWheelDelta});
   });
 
   const platform: Platform = {
@@ -213,7 +219,9 @@ export function createUnityPlatform(options: UnityPlatformOptions): {platform: P
       if (disposed) return;
       const next = size();
       if (next.width !== previousSize.width || next.height !== previousSize.height) { previousSize = next; resizes.emit(next); }
-      frame.emit(deltaMs);
+      // 与 h5 相同：错误照常报告，但一个界面的回调不能终止其余回调或下一帧。
+      // 异常不能越过 PuerTS 的帧桥，否则 LGUIBoot 会按宿主启动失败关闭整个环境。
+      frame.emit(deltaMs, error => platform.log.write('error', `LGUI-RT-160 Unity 每帧回调出错：${error instanceof Error ? error.stack ?? error.message : String(error)}  → 按堆栈修正该回调；其他每帧回调继续运行。`));
     },
     visibility(value) {
       if (disposed) return;

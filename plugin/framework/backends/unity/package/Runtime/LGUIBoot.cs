@@ -58,6 +58,7 @@ namespace LGUI
             {
                 environment.Tick();
                 frame?.Invoke(Time.unscaledDeltaTime * 1000.0);
+                ExternalImageCache.Trim();
             }
             catch (Exception error) { Fail(error); }
         }

@@ -51,6 +51,7 @@ namespace LGUI
         {
             if (owner != instance) return;
             generation++;
+            ExternalImageCache.Clear();
             if (owner != null) owner.StopAllCoroutines();
             foreach (var request in new List<UnityWebRequest>(requests))
             {

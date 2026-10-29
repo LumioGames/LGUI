@@ -187,6 +187,58 @@ test('Unity hover routes the stage move to the hit object and its ancestors befo
   offParent(); offChild(); a.dispatchHover(child, input); assert.equal(seen.length, 2);
 });
 
+test('Unity delivers a captured mouse move once per subscriber across hover and native monitor routes', async () => {
+  const a = await adapter(fgui, () => 12, (x, y) => ({x, y}));
+  const native = new Button();
+  const first = [], second = [];
+  const offFirst = a.wrap(native).onPointer(event => first.push(event));
+  const offSecond = a.wrap(native).onPointer(event => second.push(event));
+  const event = context(40, 60, 0);
+
+  // FairyGUI TouchInfo.Move sends the stage capture chain before GObject monitors.
+  a.dispatchHover(native, event);
+  const stageInput = a.toPointerInput('move', event);
+  native.onTouchMove.Call(event);
+  assert.equal(first.length, 1);
+  assert.equal(second.length, 1);
+  assert.strictEqual(first[0], stageInput);
+  assert.strictEqual(second[0], stageInput);
+
+  // A new frame reuses the C# InputEvent, but must still deliver a fresh move.
+  a.clearPointerCache();
+  a.dispatchHover(native, event);
+  native.onTouchMove.Call(event);
+  assert.equal(first.length, 2);
+  assert.equal(second.length, 2);
+  assert.notStrictEqual(first[1], first[0]);
+
+  offFirst();
+  a.clearPointerCache();
+  a.dispatchHover(native, event);
+  native.onTouchMove.Call(event);
+  assert.equal(first.length, 2);
+  assert.equal(second.length, 3);
+  offSecond();
+});
+
+test('Unity pointer subscriptions remain independent when the same callback is registered twice', async () => {
+  const a = await adapter(fgui, () => 12, (x, y) => ({x, y}));
+  const native = new Button(); const seen = [];
+  const handler = event => seen.push(event);
+  const offFirst = a.wrap(native).onPointer(handler);
+  const offSecond = a.wrap(native).onPointer(handler);
+  const event = context(40, 60, 0);
+  a.dispatchHover(native, event);
+  native.onTouchMove.Call(event);
+  assert.equal(seen.length, 2);
+  offFirst();
+  a.clearPointerCache();
+  a.dispatchHover(native, event);
+  native.onTouchMove.Call(event);
+  assert.equal(seen.length, 3);
+  offSecond();
+});
+
 test('Unity component disposal detaches descendant and controller subscriptions and list delegates', async () => {
   const a = await adapter(fgui, () => 0, (x, y) => ({x, y}));
   const root = new Component(); const list = new List(); const loader = new Loader(); root.AddChild(list); root.AddChild(loader);
