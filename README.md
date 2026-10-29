@@ -44,13 +44,11 @@ LGUI 是一个面向 AI Agent 的开源 UI 引擎框架。UI 资源、预制结�
 
 | 技能 | 什么时候用 |
 |---|---|
-| `lgui-setup` | 安装、建工程、检查环境、打开预览 |
-| `lgui-author` | 拼界面 |
-| `lgui-edit` | 和人一起在编辑器里改界面 |
-| `lgui-verify` | 截图和测试验证 |
-| `lgui-unity` | 接 Unity |
-
-现在 `plugin/skills/` 里还是 0.2.0 的技能内容，会按新命令重写。
+| `lgui-setup` | 建工程、检查环境、打开预览 |
+| `lgui-ui` | 拼界面：XML、排布模式、出图拆图、动效、编辑器 |
+| `lgui-code` | 写功能：Model、View、Controller、Service、测试 |
+| `lgui-verify` | 截图、测试、调试快照 |
+| `lgui-unity` | 接 Unity（阶段 3 实现） |
 
 ## 已知限制
 

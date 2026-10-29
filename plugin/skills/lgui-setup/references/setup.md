@@ -1,5 +1,0 @@
-Use the installed `tools/lgui.mjs`; `--workspace` is mandatory and must be outside the plugin tree. `init` checks every copied file before writing. Repeating it before editing is safe; after user changes it reports conflicts. Updates use a fresh workspace and an explicit diff, not a blind template overwrite.
-
-The configuration `.lgui/workspace.json` records schemaVersion, template and version; `.lgui/project.json` records actual project entries. Default initialization is blank; only the explicit inventory recipe retains the reference paths. See configuration and migration. Dependencies, browser profiles and outputs live in the workspace. `doctor` reports presence; a successful `bootstrap --install` verifies pinned manifests, checkouts and patches. It does not prove every existing node_modules file unmodified. Never suppress an integrity error.
-
-Read installation for host commands and troubleshooting when blocked.

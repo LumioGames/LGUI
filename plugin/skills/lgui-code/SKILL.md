@@ -1,0 +1,27 @@
+---
+name: lgui-code
+description: "在 LGUI 工程里写界面背后的功能：按 MVC 开发规范写 Model、View 绑定表、Controller、Service 和测试，用 new module 生成骨架，用 check 和 test 收口。要让界面能操作、接数据、接服务器时用。"
+license: MIT
+---
+
+# lgui-code：写功能
+
+**什么时候用：** 界面已经有了（或者用 `--pattern` 一起生成），要写数据、操作、请求、存档、多语言文字、测试。界面的样子用 `lgui-ui`。
+
+**先读：** [MVC 开发规范](../../references/mvc-spec.md)。第 1 节是固定步骤，每次照做。
+
+**输入：** 要做的功能、用到哪些界面（`lgui ui list` 查组件和控件名）、要不要接服务器。
+
+**命令：**
+
+| 要做的事 | 命令 |
+|---|---|
+| 生成 Model、Controller、测试的骨架 | `lgui new module <名字>`；连界面一起：加 `--pattern <模式>` |
+| 给已有模块加界面和 View | `lgui new view <包>/<组件> --pattern <模式>` |
+| 类型检查和规范检查 | `lgui check`（`LGUI-MVC-xxx`、`LGUI-UI-03x`、`TSxxxx`），报错全部改掉 |
+| ui/ 里的固定文字提取到文本表 | `lgui i18n extract`，再翻译其他语言的 `i18n/<语言>.json` |
+| 跑测试 | `lgui test`（headless 后端、假时钟） |
+
+**要点：** 只 `import` 自 `lgui` 和 `lgui/ui`；Model 只放数据和规则；View 只写绑定表（显示类用 `pick`，动作只调用一个 Controller 方法）；Controller 改 Model、调服务、开关界面；Service 先写接口，再写真实实现和测试用的假实现。用户看得到的文字都用文本键。完整的参照工程是仓库里的 `examples/inventory/`。
+
+**产出：** `src/` 和 `tests/` 里的代码，`lgui check` 没有错误，`lgui test` 全部通过。接着用 `lgui-verify` 截图。
