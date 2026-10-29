@@ -19,9 +19,11 @@ async function openEditor(context, server) {
   await page.goto(`${server.baseUrl}/?agent=1`);
   await page.waitForFunction(() => window.fairyEditorAgent, null, {timeout: 20000});
   try {
+    // 每次查询最多等 2 秒：导入时编辑器会换一个新的会话，发给旧会话的查询可能永远不回，不能卡在它上面。
     await page.waitForFunction(async () => {
-      const state = await window.fairyEditorAgent.request({method: 'state'});
-      return state.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession;
+      const timeout = new Promise(resolve => setTimeout(() => resolve(null), 2000));
+      const state = await Promise.race([window.fairyEditorAgent.request({method: 'state'}), timeout]);
+      return Boolean(state?.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession);
     }, null, {timeout: 120000, polling: 500}); // CI 的机器没有显卡，编辑器导入要慢得多
   } catch (error) {
     // 没导入成功：把编辑器自己的状态、状态栏和页面报错带出来，方便在 CI 上查原因。
