@@ -2,13 +2,26 @@
 import path from 'node:path';
 import {generateWeb} from './web.mjs';
 import {generateUnity} from './unity.mjs';
+import {readUiProject} from './read.mjs';
+import {readUiModel} from './model.mjs';
+import {generateTypes} from './types.mjs';
+import {generateHeadless} from './headless.mjs';
 
-export {generateWeb, generateUnity};
+export {generateWeb, generateUnity, readUiModel, generateTypes, generateHeadless};
 
 // 工程里的固定位置：ui/UI.fairy → .lgui/build/web/ui/、.lgui/build/unity/ui/。
 export const uiProjectPath = root => path.join(root, 'ui', 'UI.fairy');
 export const webUiDir = root => path.join(root, '.lgui', 'build', 'web', 'ui');
 export const unityUiDir = root => path.join(root, '.lgui', 'build', 'unity', 'ui');
+export const typesDir = root => path.join(root, '.lgui', 'build', 'types');
+export const headlessDir = root => path.join(root, '.lgui', 'build', 'headless');
+
+// 控件类型和 headless 描述（先用 OpenFairyGUI 校验 ui/）。
+export async function generateProjectTypes(root) {
+  await readUiProject(uiProjectPath(root));
+  const model = readUiModel(uiProjectPath(root));
+  return {model, types: generateTypes(model, typesDir(root)), headless: generateHeadless(model, headlessDir(root))};
+}
 
 export async function generateProjectUi(root, {web = true, unity = false} = {}) {
   const fairy = uiProjectPath(root);
