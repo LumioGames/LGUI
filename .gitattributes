@@ -11,3 +11,6 @@
 .gitignore text eol=lf
 .gitattributes text eol=lf
 LICENSE text eol=lf
+
+# 随插件带的工具按原样保存，不改换行。
+plugin/tools/vendor/node_modules/** -text

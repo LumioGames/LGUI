@@ -26,7 +26,14 @@
 
 ## 怎么更新随插件带的工具
 
-（S2-A1 完成后补上。）
+随插件带的工具放在 `plugin/tools/vendor/`（TypeScript、esbuild、OpenFairyGUI、sharp、playwright-core），连同 `node_modules/` 一起提交进 git，用户不用装任何东西。
+
+1. 改 `scripts/vendor-tools.mjs` 开头的版本表。
+2. 运行 `node scripts/vendor-tools.mjs`（需要能访问 npm 仓库）。它会在临时目录里按 macOS arm64、macOS x64、Linux x64（glibc）、Windows x64 各装一次（`--ignore-scripts`，不跑安装脚本），合并成一份 `node_modules/`，原生包每个平台留一份；再写 `package.json`、`package-lock.json` 和 `VERSIONS.md`（每个包的版本、许可、大小）。有单个文件超过 100 MB（GitHub 的上限）就停下报错。
+3. 运行 `node scripts/tools-smoke.mjs`，5 个工具都要通过（没有 Chrome 也没有 Edge 时浏览器那一项会标「跳过」）。
+4. 新增或换掉的第三方包，同一个 PR 里更新 `plugin/THIRD_PARTY_NOTICES.md`。
+
+框架和命令行通过 `plugin/tools/lib/vendor.mjs` 加载这些工具；不在 4 个平台之内时报 `LGUI-CLI-005`。
 
 ## 怎么重新编译编辑器
 

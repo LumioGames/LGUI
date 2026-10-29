@@ -18,4 +18,5 @@ jobs:
         with:
           node-version: 24.22.1
       - run: npm run check
+      - run: node scripts/tools-smoke.mjs
       - run: npm test
