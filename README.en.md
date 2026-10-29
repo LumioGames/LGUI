@@ -1,7 +1,5 @@
 # LGUI
 
-> **In development — 0.3.0 is not released yet.** The install steps and commands below work only after 0.3.0 ships; the old 0.2.0 is at tag `v0.2.0-final`.
-
 ## For AI agents: install and first use
 
 When the user sends you this repository, follow these steps. If any step fails, stop and show the user the exact error; do not skip it.
@@ -39,22 +37,20 @@ See "For AI agents" above. Only the repository's `plugin/` folder is shipped as 
 
 | Skill | Use it for |
 |---|---|
-| `lgui-setup` | Install, create a project, check the environment, open the preview |
-| `lgui-author` | Build screens |
-| `lgui-edit` | Edit screens in the editor together with a person |
-| `lgui-verify` | Screenshot and test verification |
-| `lgui-unity` | Unity integration |
-
-`plugin/skills/` still holds the 0.2.0 skill content and will be rewritten for the new commands.
+| `lgui-setup` | Create a project, check the environment, open the preview |
+| `lgui-ui` | Build screens: XML, layout patterns, AI art and splitting, motion, the editor |
+| `lgui-code` | Write features: Model, View, Controller, Service, tests |
+| `lgui-verify` | Screenshots, tests, debug snapshots |
+| `lgui-unity` | Unity integration (phase 3) |
 
 ## Known limitations
 
-- 0.3.0 is in development: the CLI, framework and inventory example are being rewritten for the new layout, and the old commands do not run for now.
 - Skills take effect only in a new session (a host limitation); the CLI is not affected.
-- Unity support comes last.
+- Unity export (`lgui unity export`) comes in phase 3.
+- Version and release status: see the [changelog](CHANGELOG.md).
 
 ## Links
 
-[Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [UI spec](plugin/references/ui-spec.md) · [MVC spec](plugin/references/mvc-spec.md) · [Project layout](plugin/references/project-layout.md) · [Unity (phase 3)](plugin/references/unity.md) · [Error codes](plugin/references/error-codes.md) · [Third-party notices](plugin/THIRD_PARTY_NOTICES.md)
+[Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [UI spec](plugin/references/ui-spec.md) · [MVC spec](plugin/references/mvc-spec.md) · [Project layout](plugin/references/project-layout.md) · [Unity (phase 3)](plugin/references/unity.md) · [Error codes](plugin/references/error-codes.md) · [Inventory example](examples/inventory/README.md) · [Third-party notices](plugin/THIRD_PARTY_NOTICES.md)
 
 Original work is licensed under [MIT](LICENSE), Copyright © 2026 LumioGames.

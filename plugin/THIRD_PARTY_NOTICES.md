@@ -19,16 +19,24 @@ LGUI 的 MIT 许可（[LICENSE](LICENSE)）只覆盖 LumioGames 的原创代码�
 | libvips 及其依赖库（`@img/sharp-libvips-darwin-arm64`、`darwin-x64`、`linux-x64`；Windows 版打包在 `@img/sharp-win32-x64` 里） | `tools/vendor/node_modules/@img/sharp-libvips-*/`、`@img/sharp-win32-x64/` | sharp-libvips 1.2.4（libvips 8.17.3） | libvips 是 LGPL-3.0-or-later，许可全文见文末；上游源码 `https://github.com/libvips/libvips`，预编译包的构建脚本 `https://github.com/lovell/sharp-libvips`。其中各个依赖库的许可（LGPLv3、MIT、BSD、MPL-2.0、zlib、libpng 等）逐项列在各 `@img/sharp-libvips-*` 包的 `README.md` 里，各库版本见包内 `versions.json` |
 | zustand vanilla | `framework/mvc/vendor/zustand-vanilla.ts` | 5.0.16（`esm/vanilla.mjs` 照抄成 TS，逻辑不改） | MIT，Copyright (c) 2019 Paul Henschel；许可全文在文件开头 |
 | playwright-core | `tools/vendor/node_modules/playwright-core/` | 1.64.1 | Apache-2.0，Copyright (c) Microsoft Corporation；许可原文和 NOTICE 在包内。只连用户已有的 Chrome 或 Edge，不带浏览器 |
+| [FairyGUI Editor Online](https://github.com/OpenFairyGUI/FairyGUI-Editor-Online/tree/45f0bef93bb16d507552b673ace6d5af417a8a0f) 编译版（LGUI 打了补丁、换了品牌，见仓库 `scripts/build-editor/`） | `editor/` | 提交 `45f0bef93bb16d507552b673ace6d5af417a8a0f` | 原创代码和文档 MIT，Copyright (c) 2026 FairyGUI Editor Online contributors；它自己的 `LICENSE`、`THIRD_PARTY_NOTICES.md`、`TRADEMARKS.md` 原样放在 `editor/` 里 |
+| 编辑器内嵌：LayaAir 网页运行时 | `editor/laya/` | 3.3.10 | MIT，Copyright (c) 2022 layabox |
+| 编辑器内嵌：FairyGUI for Layabox 运行时 | `editor/fairygui/` | 随上游提交 | MIT，Copyright (c) 2015 fairygui.com；保留其中 DOTween 条款链接、Robert Penner 的 BSD 声明和 zlib.js（imaya）的 MIT 声明 |
+| 编辑器内嵌：OpenFairyGUI 浏览器后端（含 fast-xml-parser 5.10.1、jpeg-js 0.4.4、pako 2.2.0、property-graph 4.1.0） | `editor/resources/editor/runtime/` | OpenFairyGUI 0.2.4 | MIT（jpeg-js 为 BSD-3-Clause，pako 为 MIT AND Zlib）；明细见 `editor/THIRD_PARTY_NOTICES.md` |
+| 编辑器内嵌：fflate | `editor/assets/` 的打包脚本里 | 0.8.3 | MIT，Copyright (c) 2026 Arjun Barrett |
+| 编辑器的界面资源（编辑器自己的 UI 工程生成的包和图标） | `editor/resources/ui/` | 随上游子模块 `vendor/FairyGUI-Editor` | 来自官方 [FairyGUI-Editor](https://github.com/fairygui/FairyGUI-Editor) 界面工程。上游 README 写「可以自由使用」，但没有独立的标准许可文件；见下方说明 |
+| 编辑器的 LGUI Logo | `editor/resources/ui/` 里替换后的 `logo128` | — | LumioGames 原创，MIT（源文件在仓库 `scripts/build-editor/brand/`） |
 
 FairyGUI-dom 的 `src/tween/EaseManager.ts` 含 Daniele Giardini/DOTween 条款链接及 Robert Penner 的 BSD 声明，随运行时一起保留。
 
+**编辑器的界面资源和品牌。** 编辑器的界面资源沿用官方 FairyGUI-Editor 界面工程：上游 README 声称可以自由使用，但没有独立的标准许可文件；上游 `TRADEMARKS.md` 提到的口头授权只覆盖它自己，不自动延伸到 fork 和再发行。LGUI 的编译版已经把页面上的 FairyGUI 名称和 Logo 换成 LGUI（清单见仓库 `scripts/build-editor/README.md`），保留了「FairyGUI 名称和 Logo 归其权利人所有、本项目不是 FairyGUI 官方产品」的声明。改名不授予 FairyGUI 的名称、Logo、品牌或官方背书；这些界面资源的再发行许可没有取得书面确认。
+
 ## 后续任务打包时要附带的说明
 
-下面两项现在还没有打包进插件，对应任务打包时照这里的说明处理。
+下面一项现在还没有打包进插件，对应任务打包时照这里的说明处理。
 
 **FairyGUI-unity（S3-01 打包）。** [FairyGUI-unity](https://github.com/fairygui/FairyGUI-unity/tree/8cc8f214cca79685532eef13372d0a4f74acdf08) 提交 `8cc8f214cca79685532eef13372d0a4f74acdf08`，MIT，Copyright (c) 2015 fairygui.com；只复制 `Assets/Scripts`，同时复制原 LICENSE。`Assets/Scripts/Tween/EaseManager.cs` 含 DOTween 条款链接及 Robert Penner 的 BSD 声明。`Assets/Scripts/Core/Text/RTLSupport.cs` 另有 Copyright (c) 2018 Tadpole Studio、All rights reserved 的声明，目前只确认该声明存在，没有单独取得授权链证明；不能把它称为 LGUI 原创 MIT 代码。
 
-**编辑器（S2-I1 打包）。** [FairyGUI Editor Online](https://github.com/OpenFairyGUI/FairyGUI-Editor-Online/tree/45f0bef93bb16d507552b673ace6d5af417a8a0f) 提交 `45f0bef93bb16d507552b673ace6d5af417a8a0f`：原创代码和文档 MIT，Copyright (c) 2026 FairyGUI Editor Online contributors；打包时保留它的 LICENSE、THIRD_PARTY_NOTICES、TRADEMARKS（原文见文末）。它内嵌 LayaAir 3.3.10（MIT，Copyright (c) 2022 layabox）、FairyGUI-Layabox（MIT，Copyright (c) 2015 fairygui.com，含 easing 与 zlib.js/imaya 通知）、OpenFairyGUI 0.2.4（MIT）、fflate 0.8.3 等。编辑器的官方 UI 工程、图标与生成包沿用上游资源：上游 README 声称 UI 工程可自由使用，但没有独立的标准许可文件，上游提到的口头授权不会自动延伸到 fork。改名 LGUI 不授予 FairyGUI 的名称、Logo、品牌或官方背书。再发行编辑器构建前，要保留上述通知并单独核实这些资源的许可。
 
 ## 许可原文
 
