@@ -1,6 +1,6 @@
 // 绑定引擎：把 View 的绑定表接到控件上。每个绑定的订阅、手势识别都登记在 scope 里，解绑时一次清掉。
 // 词表和写法见 references/mvc-spec.md 第 6.4 节。
-import type {UIButton, UIComponent, UIController, UIImage, UIList, UILoader, UIObject, UIProgress, UIText} from '../../core/index';
+import type {UIButton, UIComboBox, UIComponent, UIController, UIImage, UIInput, UIList, UILoader, UIMovieClip, UIObject, UIProgress, UISlider, UIText, UITree} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
 import {isPicked} from '../pick';
 import type {Scope} from '../scope';
@@ -11,6 +11,7 @@ import {recognize} from '../input/gestures';
 import type {GestureHandlers} from '../input/gestures';
 import type {InputType} from '../types';
 import {bindList} from './list';
+import {bindTree} from './tree';
 import {bindPart} from './part';
 import {applyIcon} from './icon';
 import {pick} from '../pick';
@@ -33,9 +34,11 @@ export interface BindContext {
 
 type Table = Record<string, Record<string, unknown> | undefined>;
 
-const displayWords = ['text', 'visible', 'enabled', 'icon', 'progress', 'redDot'];
+const displayWords = ['text', 'visible', 'enabled', 'icon', 'progress', 'redDot', 'value', 'playing'];
 const listWords = ['items', 'item', 'key', 'selected', 'select'];
 const actionWords = ['click', 'doubleClick', 'hold', 'drag', 'swipe', 'pinch', 'wheel', 'hover'];
+// 用户改了控件的值时调用：输入框的 input、滑动条的 change（下拉框、列表、树的 select 在 listWords 里）。
+const valueWords = ['input', 'change'];
 const modifierWords = ['lockWhilePending', 'visibleOn', 'placeholder'];
 const controllerWords = ['page', 'change'];
 
@@ -77,7 +80,7 @@ function setText(target: UIObject, text: string, where: string, key: string): vo
 /** 绑定一个控件。 */
 function bindObject(component: UIComponent, key: string, target: UIObject, binding: Record<string, unknown>, ctx: BindContext): void {
   for (const word of Object.keys(binding)) {
-    if (![...displayWords, ...listWords, ...actionWords, ...modifierWords, 'view'].includes(word)) {
+    if (![...displayWords, ...listWords, ...actionWords, ...valueWords, ...modifierWords, 'view'].includes(word)) {
       fail('LGUI-RT-063', `${ctx.where} 的 ${key} 用了词表以外的词 ${word}。`, `能用的词见 references/mvc-spec.md 第 6.4 节。`);
     }
   }
@@ -105,6 +108,14 @@ function bindObject(component: UIComponent, key: string, target: UIObject, bindi
     if (!('max' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不能绑定 progress（它不是进度条）。`, '换成进度条组件，或者去掉 progress。');
     watch<number>(binding.progress, ctx, v => { const bar = target as UIProgress; bar.value = (Math.max(0, Math.min(100, v)) / 100) * bar.max; });
   }
+  if ('value' in binding) {
+    if (!('min' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不能绑定 value（它不是滑动条）。`, '换成滑动条组件（扩展类型 Slider），或者去掉 value。');
+    watch<number>(binding.value, ctx, v => { (target as UISlider).value = v; });
+  }
+  if ('playing' in binding) {
+    if (!('playing' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不能绑定 playing（它不是序列帧动画）。`, '换成序列帧动画（movieclip），或者去掉 playing。');
+    watch<boolean>(binding.playing, ctx, v => { (target as UIMovieClip).playing = v; });
+  }
   if ('redDot' in binding) {
     const dot = 'child' in target ? (target as UIComponent).child('redDot') : null;
     if (!dot) fail('LGUI-UI-012', `${ctx.where} 的 ${key} 绑定了 redDot，但它里面没有名为 redDot 的子控件。`, '在 ui/ 里给这个控件放一个 Common/RedDot 的实例，名字叫 redDot（UI 开发规范第 10 节）。');
@@ -115,31 +126,41 @@ function bindObject(component: UIComponent, key: string, target: UIObject, bindi
       if (count && 'text' in count) count.text = s.count > 0 ? String(s.count) : '';
     });
   }
-  // 列表、部件
+  // 列表、树、下拉框、部件
   if (listWords.some(word => word in binding)) {
-    if (!('numItems' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不是列表，不能用 ${listWords.join('、')}。`, '换成列表控件。');
-    bindList(target as UIList, binding, ctx, key);
+    if ('setNodes' in target) bindTree(target as UITree, binding, ctx, key);
+    else if ('numItems' in target) bindList(target as UIList, binding, ctx, key);
+    else if ('items' in target) bindComboBox(target as UIComboBox, binding, ctx, key);
+    else fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不是列表、树或下拉框，不能用 ${listWords.join('、')}。`, '换成列表、树或下拉框。');
   }
   if ('view' in binding) {
     if (!('componentName' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不是组件，不能用 view。`, '换成子组件。');
     bindPart(target as UIComponent, binding.view, ctx);
   }
   // 动作
+  const lock = binding.lockWhilePending === true;
+  const run = (action: unknown, ...args: unknown[]): void => {
+    if (!ctx.isActive() || pending || !target.enabled) return;
+    const sound = runtime().config.sounds.click;
+    if (sound && action === binding.click) runtime().backend.platform.audio.play(sound);
+    const result = asActor(ctx.owner, () => (action as (...a: unknown[]) => unknown)(...args));
+    if (lock && result instanceof Promise) {
+      pending = true;
+      applyEnabled();
+      const done = (): void => { pending = false; applyEnabled(); };
+      result.then(done, done);
+    }
+  };
+  if (binding.input) {
+    if (!('promptText' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不能绑定 input（它不是输入框）。`, '换成输入框（inputtext），或者去掉 input。');
+    ctx.scope.add((target as UIInput).onChange(text => run(binding.input, text)));
+  }
+  if (binding.change) {
+    if (!('min' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不能绑定 change（只有控制器和滑动条能用）。`, '控制器切页、滑动条改值时用 change；按钮用 click。');
+    ctx.scope.add((target as UISlider).onChange(value => run(binding.change, value)));
+  }
   const actions = actionWords.filter(word => word in binding);
   if (actions.length) {
-    const lock = binding.lockWhilePending === true;
-    const run = (action: unknown, ...args: unknown[]): void => {
-      if (!ctx.isActive() || pending || !target.enabled) return;
-      const sound = runtime().config.sounds.click;
-      if (sound && action === binding.click) runtime().backend.platform.audio.play(sound);
-      const result = asActor(ctx.owner, () => (action as (...a: unknown[]) => unknown)(...args));
-      if (lock && result instanceof Promise) {
-        pending = true;
-        applyEnabled();
-        const done = (): void => { pending = false; applyEnabled(); };
-        result.then(done, done);
-      }
-    };
     const handlers: GestureHandlers = {pointer: e => inputType.set(e.pointerType === 'mouse' ? 'keyboardMouse' : 'touch')};
     if (binding.click) handlers.click = () => run(binding.click);
     if (binding.doubleClick) handlers.doubleClick = () => run(binding.doubleClick);
@@ -154,9 +175,22 @@ function bindObject(component: UIComponent, key: string, target: UIObject, bindi
     if (binding.hover) handlers.hover = inside => run(binding.hover, inside);
     const platform = runtime().backend.platform;
     ctx.scope.add(recognize(target, platform.input, platform.time, handlers));
-    if (binding.wheel) ctx.scope.add(platform.input.onWheel(e => run(binding.wheel, {dx: e.deltaX, dy: e.deltaY})));
+    // 滚轮只认落在这个控件（或它里面的控件）上的事件。
+    if (binding.wheel) ctx.scope.add(target.onWheel(e => run(binding.wheel, {dx: e.deltaX, dy: e.deltaY})));
   } else if (binding.lockWhilePending) {
     fail('LGUI-RT-063', `${ctx.where} 的 ${key} 写了 lockWhilePending，但没有动作。`, '和 click 一起用。');
+  }
+}
+
+/** 下拉框：items 是每一项的文字，selected 是选中项的序号，select 在用户选了一项时调用。 */
+function bindComboBox(combo: UIComboBox, binding: Record<string, unknown>, ctx: BindContext, key: string): void {
+  for (const word of ['item', 'key']) if (word in binding) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 是下拉框，不能用 ${word}。`, '下拉框只用 items、selected、select。');
+  let selected = -1;
+  if ('items' in binding) watch<readonly string[]>(binding.items, ctx, items => { combo.items = items.map(String); if ('selected' in binding) combo.selectedIndex = selected; });
+  if ('selected' in binding) watch<number>(binding.selected, ctx, index => { selected = index; combo.selectedIndex = index; });
+  if (binding.select) {
+    const select = binding.select as (index: number) => unknown;
+    ctx.scope.add(combo.onChange(index => { if (ctx.isActive() && combo.enabled) asActor(ctx.owner, () => select(index)); }));
   }
 }
 

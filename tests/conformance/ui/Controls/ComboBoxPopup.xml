@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="300,180">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="300,180" type="rect" lineSize="0" fillColor="#16202e">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <list id="n1" name="list" xy="0,0" size="300,180" layout="column" defaultItem="ui://ctl00001cbitem01" overflow="scroll">
+      <relation target="" sidePair="width-width,height-height"/>
+    </list>
+  </displayList>
+</component>

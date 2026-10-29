@@ -24,6 +24,8 @@
 - 多语言：`lgui.t`、复数、格式化、运行时切换语言、带字图片、伪翻译。
 - 定时器（跟着界面暂停和取消；回调出错时照常报错，不影响别的定时器和以后的帧）、广播站、红点、按钮音效、图片占位、通用弹窗（提示、确认、加载中）、ArtText 美术字、`lgui.time.wait`。
 - 后端：h5（FairyGUI-dom，带补丁）和 headless（测试用）；两者用一致性测试保证行为一样。
+- 控件：标签、滑动条（`value` + `change`）、下拉框（`items` / `selected` / `select`）、序列帧动画（`playing`）、树（和列表同样的词）；输入框加 `input`（输入法选字时不触发）；测试加 `t.type`、`t.setValue`、`t.choose`、`t.value`、`t.playing`。
+- headless 模拟显示齿轮（`gearDisplay`、`gearDisplay2`）和组，`t.visible` 在两个后端上都是「真的显示」；`wheel` 只认落在这个控件上的滚动；网页端不可用的控件在 FairyGUI 重新挂元素以后仍然点不到。
 
 **编辑器**
 

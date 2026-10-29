@@ -1,5 +1,5 @@
 // 一个最小的假后端：证明接口层能被完整实现，并用来测事件订阅和取消。
-import type {Backend, Platform, UIComponent, UIObject, UIController, PointerInput, Unsubscribe, Rect} from '../../../plugin/framework/core/index';
+import type {Backend, Platform, UIComponent, UIObject, UIController, PointerInput, WheelInput, Unsubscribe, Rect} from '../../../plugin/framework/core/index';
 import {LgRuntimeError, notImplemented} from '../../../plugin/framework/core/index';
 
 // 简单的事件源：订阅返回取消函数。
@@ -20,8 +20,11 @@ class FakeObject implements UIObject {
   rect: Rect = {x: 0, y: 0, width: 100, height: 100};
   customData = '';
   readonly pointer = new Emitter<PointerInput>();
+  readonly wheels = new Emitter<WheelInput>();
   constructor(readonly name: string) {}
+  get shown(): boolean { return this.visible; }
   onPointer(handler: (event: PointerInput) => void): Unsubscribe { return this.pointer.on(handler); }
+  onWheel(handler: (event: WheelInput) => void): Unsubscribe { return this.wheels.on(handler); }
 }
 
 export class FakeController implements UIController<'a' | 'b'> {

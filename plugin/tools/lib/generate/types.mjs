@@ -3,7 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {LgCliError, LgCliErrors} from '../errors.mjs';
 
-const typeNames = {component: 'UIComponent', text: 'UIText', richtext: 'UIRichText', input: 'UIInput', button: 'UIButton', image: 'UIImage', loader: 'UILoader', list: 'UIList', progress: 'UIProgress', graph: 'UIGraph'};
+const typeNames = {
+  component: 'UIComponent', text: 'UIText', richtext: 'UIRichText', input: 'UIInput', button: 'UIButton', image: 'UIImage', loader: 'UILoader', list: 'UIList', progress: 'UIProgress', graph: 'UIGraph',
+  label: 'UILabel', slider: 'UISlider', combobox: 'UIComboBox', movieclip: 'UIMovieClip', tree: 'UITree'
+};
 export const PORTRAIT = '@portrait';
 const isPortrait = component => component.name.endsWith(PORTRAIT);
 
@@ -15,8 +18,8 @@ export function members(component, prefix = '', seen = new Set()) {
   seen = new Set(seen).add(component);
   const names = new Map();
   for (const controller of component.controllers) {
-    // 按钮自带的 button 状态控制器是 FairyGUI 内部用的，不进类型。
-    if (component.extension === 'Button' && controller.name === 'button') continue;
+    // 按钮、下拉框自带的 button 状态控制器是 FairyGUI 内部用的，不进类型。
+    if (['Button', 'ComboBox'].includes(component.extension) && controller.name === 'button') continue;
     const key = prefix + controller.name;
     names.set(controller.name, 'controller');
     result.set(key, {kind: 'controller', pages: controller.pages.map(page => page.name), line: controller.line, file: component.file});
@@ -94,7 +97,7 @@ export function generateTypes(model, out) {
   if (errors.length) throw new LgCliErrors(errors);
   fs.rmSync(out, {recursive: true, force: true});
   fs.mkdirSync(out, {recursive: true});
-  const header = "// 由 ui/ 生成，不要手改。\nimport type { UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UIProgress, UIGraph } from 'lgui';\n";
+  const header = "// 由 ui/ 生成，不要手改。\nimport type { UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UIProgress, UIGraph, UILabel, UISlider, UIComboBox, UIMovieClip, UITree } from 'lgui';\n";
   const files = [];
   for (const [pkgName, blocks] of perPackage) {
     const file = path.join(out, `${pkgName}.d.ts`);

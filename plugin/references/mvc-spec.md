@@ -157,30 +157,34 @@ export class BagView extends View<BagPanelUI> {
 
 | 词 | 用在 | 值 | 例子 |
 |---|---|---|---|
-| `text` | 文字、按钮标题、`ArtText` | 固定值或 `pick` | `text: pick(bagModel, s => s.gold, format.number)` |
+| `text` | 文字、按钮和标签的标题、输入框、`ArtText` | 固定值或 `pick`；输入框显示 Model 的值 | `text: pick(bagModel, s => s.gold, format.number)` |
 | `visible` | 任意控件 | 布尔 | `visible: pick(bagModel, s => s.items.length === 0)` |
 | `enabled` | 任意控件 | 布尔；`false` 时变灰、不可点 | `enabled: pick(bagModel, s => s.selectedId !== null)` |
-| `icon` | 加载器、按钮图标 | 图片地址 | `icon: it => it.iconUrl` |
+| `icon` | 加载器、按钮和标签的图标 | 图片地址 | `icon: it => it.iconUrl` |
 | `progress` | 进度条 | 0–100 | `progress: pick(taskModel, s => s.percent)` |
+| `value` | 滑动条 | 数字，滑动条自己的单位（在 `ui/` 里写的 min 和 max 之间） | `value: pick(settingsModel, s => s.volume)` |
+| `playing` | 序列帧动画 | 布尔：真就播，假就停 | `playing: pick(fxModel, s => s.spinning)` |
 | `page` | 控制器 | 页名 | `page: pick(bagModel, s => s.tab)` |
 | `redDot` | 有 `redDot` 子控件的控件 | 红点路径 | `redDot: 'bag.equip'` |
-| `items` | 列表 | 数组 | `items: pick(bagModel, s => s.items)` |
-| `item` | 列表 | 子项的 `ItemView` 类 | `item: ItemSlotView` |
-| `key` | 列表 | 认出同一项的函数（参数要写上这一项的类型） | `key: (it: BagItem) => it.id` |
-| `selected` | 列表 | 选中项的 key | `selected: pick(bagModel, s => s.selectedId)` |
+| `items` | 列表、树、下拉框 | 数组。树：每个节点的子节点放在 `children` 字段里；下拉框：每一项显示的文字 | `items: pick(bagModel, s => s.items)` |
+| `item` | 列表、树 | 子项（节点）的 `ItemView` 类 | `item: ItemSlotView` |
+| `key` | 列表、树 | 认出同一项的函数（参数要写上这一项的类型）；树必须写 | `key: (it: BagItem) => it.id` |
+| `selected` | 列表、树、下拉框 | 列表、树：选中项的 key；下拉框：选中项的序号，`-1` 表示没有选中 | `selected: pick(bagModel, s => s.selectedId)` |
 | `view` | 子组件 | `PartView` 类 | `view: CurrencyBarView` |
 | `click` / `doubleClick` | 任意控件 | 调用 Controller 方法 | `click: () => bagController.sell()` |
 | `hold` | 任意控件 | `{ ms, action }`，按满才执行 | `hold: { ms: 1000, action: () => bagController.salvage() }` |
-| `drag` / `swipe` / `pinch` / `wheel` / `hover` | 任意控件 | 收到手势参数，调用 Controller 方法 | `swipe: e => mapController.pan(e.dx, e.dy)` |
-| `change` | 控制器 | 用户切页时调用 | `change: tab => bagController.switchTab(tab)` |
-| `select` | 列表 | 用户点选时调用，参数是 key | `select: id => bagController.select(id)` |
+| `drag` / `swipe` / `pinch` / `wheel` / `hover` | 任意控件 | 收到手势参数，调用 Controller 方法；`wheel` 只认落在这个控件（或它里面的控件）上的滚动 | `swipe: e => mapController.pan(e.dx, e.dy)` |
+| `change` | 控制器、滑动条 | 用户切页时调用，参数是页名；用户拖动滑动条时调用，参数是新值 | `change: tab => bagController.switchTab(tab)` |
+| `input` | 输入框 | 用户改了文字时调用，参数是新文字（输入法还在选字时不调用，选完调用一次） | `input: text => searchController.setKeyword(text)` |
+| `select` | 列表、树、下拉框 | 用户点选时调用。列表、树：参数是 key；下拉框：参数是序号 | `select: id => bagController.select(id)` |
 | `lockWhilePending` | 有 `click` 的控件 | `true`：动作返回的 Promise 结束前保持锁住 | `lockWhilePending: true` |
 | `visibleOn` | 任意控件 | 只在这些输入类型下显示 | `visibleOn: ['keyboardMouse']` |
 | `placeholder` | 加载器 | 加载中和失败时显示的图，不写用工程配置的默认占位图 | `placeholder: 'ui://Bag/iconLoading'` |
 
 - **显示类的值只有两种写法：** 固定值，或 `pick(数据, 取字段, 格式化?)`。`ItemView` 里写成函数：传入这一项的数据，返回要显示的内容。
 - **动作类只调用 Controller 的方法**，一句话写完，View 里不写业务逻辑。
-- **点击和手势绑在能接收输入的控件上：** 按钮、组件、列表、有填充的图形。文字、富文本、图片自己收不到点击（FairyGUI 的各个运行时都这样），绑上去不会触发；`lgui test` 里点它们报 `LGUI-RT-032`。
+- **点击和手势绑在能接收输入的控件上：** 按钮、组件、列表、有填充的图形。文字、富文本、图片、序列帧动画自己收不到点击（FairyGUI 的各个运行时都这样），绑上去不会触发；`lgui test` 里点它们报 `LGUI-RT-032`。
+- **用户改值的控件：** 输入框、滑动条、下拉框都是「显示 Model 的值 + 用户改了就调用 Controller」：`text` / `value` / `selected` 显示，`input` / `change` / `select` 交给 Controller 改 Model，改完再显示回来。
 - **绑定表里不写死用户能看到的文字。** 固定文字放在 `ui/` 里，动态文字用 `lgui.t`。
 - **没写进绑定表的控件，代码里一律不碰。** 特殊情况用生命周期钩子（第 9 节），钩子里用 `this.ui.<控件名>`。
 - **不写坐标和尺寸。**
@@ -391,13 +395,17 @@ test('选中道具后出售，金币增加', async () => {
 |---|---|
 | `open(View, 参数?)` | 打开界面 |
 | `click(路径)`、`hold(路径, 毫秒)`、`drag(路径, dx, dy)`、`swipe(路径, dx, dy)`、`pinch(路径, 比例)`、`wheel(路径, dy)`、`key(按键名)` | 模拟操作 |
-| `text(路径)`、`visible(路径)`、`enabled(路径)`、`page(路径)`、`items(路径)` | 读控件属性：文字（字符串）、显示 / 可用（布尔）、控制器当前页（页名）、列表项数（数字） |
+| `type(路径, 文字)`、`setValue(路径, 值)`、`choose(路径, 序号)` | 模拟改值：在输入框里打字（先点一下、全选，再一个字一个字地输入，每个字调用一次 `input`，第二个字起接在框里现在的文字后面；空字符串清空）；把滑动条拖到某个值（夹在范围内、按 `ui/` 的设置取整，值变了才调用 `change`）；点开下拉框选第几项（从 0 开始） |
+| `text(路径)`、`visible(路径)`、`enabled(路径)`、`page(路径)`、`items(路径)`、`value(路径)`、`playing(路径)` | 读控件属性：文字（字符串）；显示（布尔，「真的显示」：自己和各级父组件都显示，也没被齿轮或组藏起来）；可用（布尔）；控制器当前页（页名）；列表项数、树显示着的节点数（数字）；滑动条、进度条的值，下拉框的选中序号（数字）；序列帧动画是否在播放（布尔） |
 | `setScreen(宽, 高)`、`setLanguage(语言)`、`setInputType('touch' \| 'keyboardMouse')` | 模拟旋转、换语言、换输入设备 |
 | `advance(毫秒)` | 让假时钟往前走 |
 | `snapshot()` | 返回 `lgui.debug.snapshot()` |
 | `end()` | 关闭所有界面，检查监听和定时器都已清理 |
 
-路径写成 `<包>/<组件>.<控件路径>`；列表子项用 `list[序号]`。
+路径写成 `<包>/<组件>.<控件路径>`；列表子项用 `list[序号]`，树的节点也一样（`tree[序号]` 是显示着的第几个节点）。
+
+- **点不到的控件：** 模拟操作的控件自己或上级没显示、被齿轮或组藏起来、不可用或不接收输入时报 `LGUI-RT-032`；`type`、`setValue`、`choose` 用在不对的控件上报 `LGUI-RT-150`。
+- **headless 不模拟、和网页可能不一样的地方：** 布局（关联、自动排布、文字自动缩放；控件的位置和尺寸是 `ui/` 里写的初始值）；命中测试（被同级控件挡住的按钮在测试里照样点得到）；虚拟列表的回收（列表的每一项在测试里都有对象，网页上看不见的项可能没有）；改属性的齿轮（`gearXY`、`gearText` 等，只模拟 `gearDisplay`、`gearDisplay2`）；按钮直接绑控制器。这些用 `lgui verify` 的截图看。
 
 - **假时钟：** 点了按钮以后，打开新界面、请求返回都要等一帧，先 `await t.advance(16)` 再读；一串请求就多等几帧。
 - **整个文件没跑起来也算失败：** 测试文件加载时出错（顶层抛错、import 失败）或者测试结束后还有没处理的错误，`lgui test` 把这个文件记为失败（失败项是 `tests/` 里的文件名）。

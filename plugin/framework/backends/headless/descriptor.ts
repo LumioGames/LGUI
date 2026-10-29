@@ -1,6 +1,28 @@
 // lgui 生成的 headless 描述（.lgui/build/headless/<包名>.json）的类型。
 import type {UIKind} from '../../core/index';
 
+/** 控制显示的齿轮（页名已经从页 ID 换好）。 */
+export interface GearsDescriptor {
+  /** gearDisplay：控制器在这些页时显示。 */
+  display?: {controller: string; pages: string[]};
+  /** gearDisplay2：再加一个条件，condition 0 是「并且」、1 是「或者」。 */
+  display2?: {controller: string; pages: string[]; condition: number};
+}
+
+/** 一个组（不进控件树，只管组里控件的显隐）。 */
+export interface GroupDescriptor {
+  /** 元素 ID（控件的 group 写它）。 */
+  id: string;
+  /** 组名。 */
+  name: string;
+  /** 初始是否显示。 */
+  visible: boolean;
+  /** 所在的上一级组。 */
+  group: string | null;
+  /** 齿轮。 */
+  gears?: GearsDescriptor;
+}
+
 /** 一个子控件。 */
 export interface ChildDescriptor {
   /** 控件名。 */
@@ -16,7 +38,14 @@ export interface ChildDescriptor {
   /** [x, y, 宽, 高]（设计尺寸）。 */
   rect: [number, number, number, number];
   /** 初始属性。 */
-  props: {visible: boolean; enabled: boolean; touchable: boolean; customData?: string; text?: string; promptText?: string; url?: string; title?: string; icon?: string; selected?: boolean; value?: number; max?: number; color?: string};
+  props: {
+    visible: boolean; enabled: boolean; touchable: boolean; customData?: string; text?: string; promptText?: string; url?: string; title?: string; icon?: string;
+    selected?: boolean; selectedIndex?: number; value?: number; max?: number; min?: number; color?: string; items?: string[]; playing?: boolean; frame?: number; clickToExpand?: number;
+  };
+  /** 所在的组（组的元素 ID）。 */
+  group?: string | null;
+  /** 齿轮。 */
+  gears?: GearsDescriptor;
 }
 
 /** 一个组件。 */
@@ -31,12 +60,16 @@ export interface ComponentDescriptor {
   extension: string | null;
   /** 按钮的模式：Common 不保持选中；Check、Radio 保持（列表的选中项靠它显示）。 */
   buttonMode?: string | null;
+  /** 滑动条：用户拖动时是否取整。 */
+  wholeNumbers?: boolean;
   /** [宽, 高]。 */
   size: [number, number];
   /** 控制器。 */
   controllers: {name: string; pages: string[]; selected: string | null}[];
   /** 动效名。 */
   transitions: string[];
+  /** 组。 */
+  groups?: GroupDescriptor[];
   /** 子控件。 */
   children: ChildDescriptor[];
 }

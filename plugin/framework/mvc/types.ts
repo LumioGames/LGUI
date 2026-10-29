@@ -1,6 +1,7 @@
 // MVC 框架对外的类型：绑定表、按键表、View 的固定信息。写法以 references/mvc-spec.md 为准。
 import type {
-  UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UIProgress, UIGraph
+  UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UIProgress, UIGraph,
+  UILabel, UISlider, UIComboBox, UIMovieClip, UITree
 } from '../core/index';
 
 /** 5 层，从下到上。 */
@@ -110,7 +111,13 @@ export interface TextBinding extends CommonBinding {
   text?: Value<string>;
 }
 
-/** 按钮。 */
+/** 输入框。 */
+export interface InputBinding extends TextBinding {
+  /** 用户改了文字时调用（输入法还在选字时不调用），参数是新文字。 */
+  input?: Action<[string]>;
+}
+
+/** 按钮、标签。 */
 export interface ButtonBinding extends CommonBinding {
   /** 标题。 */
   text?: Value<string>;
@@ -132,6 +139,30 @@ export interface ProgressBinding extends CommonBinding {
   progress?: Value<number>;
 }
 
+/** 滑动条。 */
+export interface SliderBinding extends CommonBinding {
+  /** 当前值（滑动条自己的单位，在 ui/ 里写的 min 和 max 之间）。 */
+  value?: Value<number>;
+  /** 用户拖动或点击改了值时调用，参数是新值。 */
+  change?: Action<[number]>;
+}
+
+/** 下拉框。 */
+export interface ComboBoxBinding extends CommonBinding {
+  /** 每一项显示的文字。 */
+  items?: Value<readonly string[]>;
+  /** 选中项的序号，-1 表示没有选中。 */
+  selected?: Value<number>;
+  /** 用户选了一项时调用，参数是序号。 */
+  select?: Action<[number]>;
+}
+
+/** 序列帧动画。 */
+export interface MovieClipBinding extends CommonBinding {
+  /** 是否播放。 */
+  playing?: Value<boolean>;
+}
+
 /** 列表子项的 key。 */
 export type ItemKey = string | number;
 
@@ -148,6 +179,9 @@ export interface ListBinding extends CommonBinding {
   /** 用户点选时调用，参数是 key。 */
   select?: Action<[never]>;
 }
+
+/** 树：和列表同样的词；items 里每个节点的子节点放在 children 字段里，key 必须写。 */
+export type TreeBinding = ListBinding;
 
 /** 控制器。 */
 export interface ControllerBinding<Page extends string> {
@@ -168,12 +202,18 @@ export interface ComponentBinding extends CommonBinding {
 /** 按控件类型选绑定表里能用的词。 */
 export type BindingFor<X> =
   X extends UIController<infer Page> ? ControllerBinding<Page> :
+  X extends UITree ? TreeBinding :
   X extends UIList ? ListBinding :
+  X extends UIComboBox ? ComboBoxBinding :
   X extends UIButton ? ButtonBinding :
+  X extends UILabel ? ButtonBinding :
+  X extends UISlider ? SliderBinding :
   X extends UIProgress ? ProgressBinding :
   X extends UILoader ? LoaderBinding :
   X extends UIImage ? CommonBinding :
-  X extends UIInput | UIRichText | UIText ? TextBinding :
+  X extends UIMovieClip ? MovieClipBinding :
+  X extends UIInput ? InputBinding :
+  X extends UIRichText | UIText ? TextBinding :
   X extends UIGraph ? CommonBinding :
   X extends UIComponent ? ComponentBinding :
   never;

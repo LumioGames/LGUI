@@ -1,6 +1,6 @@
 // lgui.testing：只在 lgui test 里能用。用 headless 后端和假时钟启动 app，提供模拟操作和读控件属性。
 // 路径写成「包/组件.控件路径」，列表子项用 list[序号]。
-import type {Backend, UIComponent, UIController, UIList, UIObject, UIText, UIButton} from '../core/index';
+import type {Backend, UIComponent, UIController, UIList, UIObject, UIText, UIButton, UISlider, UIComboBox, UIMovieClip} from '../core/index';
 import {LgRuntimeError} from '../core/index';
 import type {AppDefinition, Snapshot, TestHarness} from './lgui';
 import type {InputType, ParamsOf, ViewClass} from './types';
@@ -32,6 +32,9 @@ type Sim = {
   pinch(b: Backend, o: UIObject, scale: number): Promise<void>;
   wheel(b: Backend, o: UIObject, dy: number): Promise<void>;
   key(b: Backend, name: string): Promise<void>;
+  type(b: Backend, o: UIObject, text: string): Promise<void>;
+  setValue(b: Backend, o: UIObject, value: number): Promise<void>;
+  choose(b: Backend, o: UIObject, index: number): Promise<void>;
   setScreen(b: Backend, w: number, h: number): Promise<void>;
   advance(b: Backend, ms: number): Promise<void>;
 };
@@ -90,6 +93,9 @@ class Harness implements TestHarness {
   pinch(path: string, scale: number): Promise<void> { return this.sim.pinch(this.backend, this.object(path), scale); }
   wheel(path: string, dy: number): Promise<void> { return this.sim.wheel(this.backend, this.object(path), dy); }
   key(name: string): Promise<void> { return this.sim.key(this.backend, name); }
+  type(path: string, text: string): Promise<void> { return this.sim.type(this.backend, this.object(path), text); }
+  setValue(path: string, value: number): Promise<void> { return this.sim.setValue(this.backend, this.object(path), value); }
+  choose(path: string, index: number): Promise<void> { return this.sim.choose(this.backend, this.object(path), index); }
   text(path: string): string {
     const o = this.object(path);
     if ('title' in o) return (o as UIButton).title;
@@ -97,7 +103,8 @@ class Harness implements TestHarness {
     if ('text' in o) return (o as UIText).text;
     throw new LgRuntimeError('LGUI-RT-111', `${path} 不是文字或按钮，读不了文字。`, '换一个文字控件的路径。');
   }
-  visible(path: string): boolean { return this.object(path).visible; }
+  /** 真的显示着：自己和各级父组件都显示，也没被齿轮或组藏起来。 */
+  visible(path: string): boolean { return this.object(path).shown; }
   enabled(path: string): boolean { return this.object(path).enabled; }
   page(path: string): string {
     const {parent, last} = this.resolve(path);
@@ -105,9 +112,20 @@ class Harness implements TestHarness {
     if (!controller) throw new LgRuntimeError('LGUI-RT-111', `${path} 不是控制器。`, '路径的最后一段写控制器名。');
     return controller.selectedPage;
   }
+  value(path: string): number {
+    const o = this.object(path);
+    if ('items' in o && 'selectedIndex' in o) return (o as UIComboBox).selectedIndex;
+    if ('value' in o) return (o as UISlider).value;
+    throw new LgRuntimeError('LGUI-RT-111', `${path} 不是滑动条、进度条或下拉框，读不了值。`, '换一个滑动条、进度条或下拉框的路径。');
+  }
+  playing(path: string): boolean {
+    const o = this.object(path);
+    if (!('playing' in o)) throw new LgRuntimeError('LGUI-RT-111', `${path} 不是序列帧动画。`, '换一个序列帧动画（movieclip）的路径。');
+    return (o as UIMovieClip).playing;
+  }
   items(path: string): number {
     const o = this.object(path);
-    if (!('numItems' in o)) throw new LgRuntimeError('LGUI-RT-111', `${path} 不是列表。`, '换一个列表的路径。');
+    if (!('numItems' in o)) throw new LgRuntimeError('LGUI-RT-111', `${path} 不是列表或树。`, '换一个列表或树的路径。');
     return (o as UIList).numItems;
   }
   /** 换屏幕尺寸，等防抖（150 毫秒）结束、换版完成后返回。 */
