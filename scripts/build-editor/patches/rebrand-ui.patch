@@ -1,0 +1,50 @@
+diff --git a/ui/assets/Builder/RecentItem.xml b/ui/assets/Builder/RecentItem.xml
+index 8b0c59b..59e142b 100644
+--- a/ui/assets/Builder/RecentItem.xml
++++ b/ui/assets/Builder/RecentItem.xml
+@@ -2,8 +2,8 @@
+ <component size="600,30" extention="Button">
+   <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+   <displayList>
+-    <richtext id="n0_et85" name="title" xy="33,3" size="166,24" fontSize="16" color="#68baba" ubb="true" singleLine="true" autoClearText="true" text="[url=xx]FairyGUI-Unity-Demo[/url]"/>
+-    <text id="n1_et85" name="path" xy="208,5" size="387,20" fontSize="13" color="#bdbdbd" autoSize="none" autoClearText="true" text="/Users/Documents/FairyGUI">
++    <richtext id="n0_et85" name="title" xy="33,3" size="166,24" fontSize="16" color="#68baba" ubb="true" singleLine="true" autoClearText="true" text="[url=xx]UIProject[/url]"/>
++    <text id="n1_et85" name="path" xy="208,5" size="387,20" fontSize="13" color="#bdbdbd" autoSize="none" autoClearText="true" text="/Users/Documents/UIProject">
+       <relation target="n0_et85" sidePair="leftext-right"/>
+       <relation target="" sidePair="width-width"/>
+     </text>
+diff --git a/ui/assets/Builder/StartScene.xml b/ui/assets/Builder/StartScene.xml
+index 82ada44..a400369 100644
+--- a/ui/assets/Builder/StartScene.xml
++++ b/ui/assets/Builder/StartScene.xml
+@@ -17,6 +17,6 @@
+       <item/>
+       <item/>
+     </list>
+-    <text id="n8_et85" name="n8" xy="125,30" size="304,49" fontSize="36" color="#c4c4c4" text="欢迎使用 FairyGUI"/>
++    <text id="n8_et85" name="n8" xy="125,30" size="304,49" fontSize="36" color="#c4c4c4" text="欢迎使用 LGUI"/>
+   </displayList>
+ </component>
+\ No newline at end of file
+diff --git a/ui/assets/Builder/dialogs/AboutDialog.xml b/ui/assets/Builder/dialogs/AboutDialog.xml
+index abe962d..cc64702 100644
+--- a/ui/assets/Builder/dialogs/AboutDialog.xml
++++ b/ui/assets/Builder/dialogs/AboutDialog.xml
+@@ -3,7 +3,7 @@
+   <displayList>
+     <component id="n0" name="frame" src="gcza1l" fileName="Window/WindowFrame.xml" pkg="nk9ejx23" xy="0,0" size="494,351">
+       <relation target="" sidePair="height-height,width-width"/>
+-      <Label title="关于 FairyGUI 编辑器"/>
++      <Label title="关于 LGUI 编辑器"/>
+     </component>
+     <graph id="n15_pmbq" name="n15" xy="2,213" size="487,134" type="rect" lineSize="0" lineColor="#ff5c5b5b" fillColor="#ff4a4a4a"/>
+     <image id="n4" name="n4" src="so5uixicsc" fileName="icons/logo128.png" xy="26,39" size="80,80"/>
+@@ -12,6 +12,6 @@
+       <Button title="关闭"/>
+     </component>
+     <richtext id="n16_pmbq" name="license" xy="7,221" size="364,118" fontSize="14" color="#bdbdbd" ubb="true" autoSize="none" text=""/>
+-    <text id="n17_et85" name="n17" xy="184,34" size="205,40" fontSize="30" color="#bdbdbd" text="FairyGUI Editor"/>
++    <text id="n17_et85" name="n17" xy="184,34" size="205,40" fontSize="30" color="#bdbdbd" text="LGUI Editor"/>
+   </displayList>
+ </component>
+\ No newline at end of file
