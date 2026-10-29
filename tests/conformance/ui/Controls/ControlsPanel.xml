@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <controller name="view" pages="0,simple,1,full" selected="0"/>
+  <controller name="lock" pages="0,off,1,on" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#0e1621">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <inputtext id="n1" name="nameInput" xy="60,60" size="600,60" fontSize="28" color="#ffffff" autoSize="none" singleLine="true" prompt="名字"/>
+    <text id="n2" name="nameText" xy="700,60" size="400,60" fontSize="28" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+    <component id="n3" name="volume" src="slider01" xy="60,160" size="400,40">
+      <Slider value="50" max="100"/>
+    </component>
+    <text id="n4" name="volumeText" xy="500,150" size="200,60" fontSize="28" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+    <component id="n5" name="mode" src="combo001" xy="60,240" size="300,60"/>
+    <text id="n6" name="modeText" xy="400,240" size="300,60" fontSize="28" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+    <component id="n7" name="badge" src="label001" xy="60,640" size="300,60">
+      <Label title="徽章"/>
+    </component>
+    <movieclip id="n8" name="spin" src="spin0001" xy="400,640" size="64,64"/>
+    <list id="n9" name="tree" xy="1200,60" size="400,600" layout="column" treeView="true" indent="20" clickToExpand="1" defaultItem="ui://ctl00001treeitm1" overflow="scroll"/>
+    <component id="n10" name="lockButton" pkg="cmn00001" src="button01" xy="60,740" size="240,72">
+      <Button title="锁"/>
+    </component>
+    <component id="n11" name="fullButton" pkg="cmn00001" src="button01" xy="340,740" size="240,72">
+      <Button title="切换"/>
+    </component>
+    <text id="n12" name="extraText" xy="60,860" size="300,60" fontSize="28" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text="更多" group="n14"/>
+    <component id="n13" name="extraButton" pkg="cmn00001" src="button01" xy="400,860" size="240,72" group="n14">
+      <Button title="更多"/>
+    </component>
+    <group id="n14" name="extra" xy="60,860" size="580,72" advanced="true">
+      <gearDisplay controller="view" pages="1"/>
+    </group>
+    <text id="n15" name="simpleText" xy="700,860" size="300,60" fontSize="28" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text="简单">
+      <gearDisplay controller="view" pages="0"/>
+    </text>
+    <text id="n16" name="lockedText" xy="1000,860" size="300,60" fontSize="28" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text="完整且锁定">
+      <gearDisplay controller="view" pages="1"/>
+      <gearDisplay2 controller="lock" pages="1" condition="0"/>
+    </text>
+  </displayList>
+</component>

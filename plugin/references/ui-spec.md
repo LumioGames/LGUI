@@ -126,6 +126,21 @@ ui/
 <!-- 列表：defaultItem 必须指向一个导出的组件 -->
 <list id="n7" name="list" xy="40,160" size="840,600" layout="flow_hz" lineGap="12" colGap="12" defaultItem="ui://bag00001slot0001" overflow="scroll" scrollBar="hidden"/>
 
+<!-- 树：列表加 treeView="true"；clickToExpand="1" 单击节点展开或收起（"2" 双击，不写或 "0" 点了不展开），见第 12 节 -->
+<list id="n10" name="tree" xy="40,160" size="400,600" layout="column" treeView="true" indent="20" clickToExpand="1" defaultItem="ui://bag00001node0001" overflow="scroll"/>
+
+<!-- 序列帧动画：src 是同包登记的 movieclip 资源（.jta）；playing 是初始是否播放 -->
+<movieclip id="n11" name="spin" src="spin0001" xy="0,0" size="64,64" playing="true"/>
+
+<!-- 标签、滑动条、下拉框：引用一个扩展类型是 Label / Slider / ComboBox 的组件（组件模板见下面）；实例上写初始值 -->
+<component id="n12" name="badge" src="label001" xy="20,320" size="300,60">
+  <Label title="徽章"/>
+</component>
+<component id="n13" name="volume" src="slider01" xy="20,400" size="400,40">
+  <Slider value="50" max="100"/>
+</component>
+<component id="n14" name="mode" src="combo001" xy="20,460" size="300,60"/>
+
 <!-- 图形 -->
 <graph id="n8" name="mask" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#80000000"/>
 
@@ -150,6 +165,62 @@ ui/
 </component>
 ```
 
+**标签组件**（`extention="Label"`，标题和图标控件名固定为 `title`、`icon`；不能点选，要点的用按钮）：
+
+```xml
+<component size="300,60" extention="Label">
+  <displayList>
+    <loader id="n0" name="icon" xy="0,0" size="60,60" align="center" vAlign="middle" fill="scale"/>
+    <text id="n1" name="title" xy="70,0" size="230,60" fontSize="24" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+  </displayList>
+  <Label/>
+</component>
+```
+
+**滑动条组件**（`extention="Slider"`，控件名固定：`bar` 是随值变长的条，`grip` 是滑块，`grip` 用关联贴在 `bar` 的右边；`wholeNumbers="true"` 时用户拖出来的值取整）：
+
+```xml
+<component size="400,40" extention="Slider">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="400,40" type="rect" lineSize="0" fillColor="#22344d">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n1" name="bar" xy="0,0" size="400,40" type="rect" lineSize="0" fillColor="#6aa7ff"/>
+    <graph id="n2" name="grip" xy="390,0" size="20,40" type="rect" lineSize="0" fillColor="#ffffff">
+      <relation target="n1" sidePair="left-right"/>
+    </graph>
+  </displayList>
+  <Slider wholeNumbers="true" changeOnClick="true"/>
+</component>
+```
+
+**下拉框组件**（`extention="ComboBox"`，选中项的文字显示在 `title` 里；`dropdown` 指向弹出的组件，它里面要有一个名为 `list` 的列表，子项是按钮。弹出组件和子项都放在下拉框所在的包里并导出）：
+
+```xml
+<!-- ComboBox.xml -->
+<component size="300,60" extention="ComboBox">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="300,60" type="rect" lineSize="2" lineColor="#6aa7ff" fillColor="#22344d">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="0,0" size="300,60" fontSize="24" color="#ffffff" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="">
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+  </displayList>
+  <ComboBox dropdown="ui://bag00001cbpopup1"/>
+</component>
+
+<!-- ComboBoxPopup.xml（cbpopup1）：子项 cbitem01 是一个带 title 的按钮组件 -->
+<component size="300,180">
+  <displayList>
+    <list id="n0" name="list" xy="0,0" size="300,180" layout="column" defaultItem="ui://bag00001cbitem01" overflow="scroll">
+      <relation target="" sidePair="width-width,height-height"/>
+    </list>
+  </displayList>
+</component>
+```
+
 **控制器、齿轮：** `pages` 是「页ID,页名」成对排列；齿轮的 `pages` 写页 ID，不是页名。
 
 ```xml
@@ -161,6 +232,8 @@ ui/
 
 - **用户能看到的文字不写在 `gearText` 里**：这些字不会被提取翻译，`lgui test` 里也看不到，`lgui check` 报 `LGUI-UI-060`。随状态变的文字在绑定表里写：`` stateText: { text: pick(taskModel, s => lgui.t(`task.${s.state}`)) } ``，文字放进 `i18n/<语言>.json`。
 - **按钮不直接绑控制器**（`<Button controller="tabs" page="1"/>`，点了就切页）：这样切页不经过 Model，`lgui test` 里也不会切，`lgui check` 报 `LGUI-UI-061`。点击写在绑定表里调用 Controller（`click: () => shopController.switchTab('second')`），控制器的页由 `page: pick(…)` 决定。
+- 显示齿轮（`gearDisplay`，再加条件的 `gearDisplay2`：`condition="0"` 是「并且」、`"1"` 是「或者」）和组（`<group>`，控件上写 `group="组的元素 ID"`）在网页和 `lgui test` 里一样生效：被藏起来的控件 `t.visible` 是 `false`，点它报 `LGUI-RT-032`。别的齿轮（`gearXY`、`gearText` 等）`lgui test` 不模拟。
+- **序列帧动画：** 网页端（FairyGUI-dom）目前不画序列帧的画面，只有 `playing`、当前帧这些状态（绑定表的 `playing` 照常生效）。
 
 **关联**（同一方向内适配不同宽高比，第 7.3 节）：
 
@@ -347,6 +420,7 @@ ui/
 - **显示选中项：** 子项组件做成按钮（`extention="Button"`，带 `button` 控制器），根节点下写 `<Button mode="Radio"/>`；选中时 `button` 控制器在 `down` 页（鼠标悬停时是 `selectedOver`），用 `<gearDisplay controller="button" pages="1,3"/>` 挂一个选中框。普通模式（不写 `mode`）的按钮不保持选中，列表选了也看不出来。`lgui new view --pattern split|grid` 生成的子项已经这样写好了。
 - 列表里不要放手写的子项，子项都由代码给数据生成。
 - **拖放的格子：** 拖起时跟手的图标默认用被拖控件自己的图片，所以子项里放一个加载器（比如叫 `icon`），代码把 `dragData`、`drop` 写在它上面；格子本身不动，拖放以后由数据重新生成。
+- **树：** 列表写 `treeView="true"` 就是树，每个节点用 `defaultItem` 的组件显示（做成 Radio 模式的按钮就能显示选中，和列表一样）。绑定表和列表用同样的词，节点的子节点放在数据的 `children` 字段里，`key` 必须写。节点默认展开；`clickToExpand="1"` 时单击有子节点的节点展开或收起，`"2"` 时双击；选中一个收起的节点里的子节点时，框架先展开它的父节点。树不是虚拟列表，节点多（几百个以上）时用列表。
 
 ## 13. 检查规则表
 

@@ -35,8 +35,8 @@ function parseXml(file, root) {
 }
 
 // 引用里的扩展类型 → 控件类型名（和接口层 UIKinds 一致）。
-const extensionKinds = {Button: 'button', ProgressBar: 'progress'};
-const tagKinds = {image: 'image', text: 'text', richtext: 'richtext', inputtext: 'input', graph: 'graph', loader: 'loader', list: 'list'};
+const extensionKinds = {Button: 'button', ProgressBar: 'progress', Label: 'label', Slider: 'slider', ComboBox: 'combobox'};
+const tagKinds = {image: 'image', text: 'text', richtext: 'richtext', inputtext: 'input', graph: 'graph', loader: 'loader', list: 'list', tree: 'tree', movieclip: 'movieclip'};
 
 // 解析 controller 的 pages="页ID,页名,页ID,页名…"。
 export function parsePages(pages = '') {
@@ -79,9 +79,11 @@ export function readUiModel(fairyPath) {
       const extension = root.attrs.extention ?? root.attrs.extension ?? null;
       // 按钮的模式（Common / Check / Radio）：只有 Check、Radio 能保持选中，列表的选中项靠它显示。
       const buttonMode = extension === 'Button' ? (root.children.find(child => child.tag === 'Button')?.attrs.mode ?? 'Common') : null;
+      // 滑动条是不是只取整数（用户拖动时取整）。
+      const wholeNumbers = extension === 'Slider' ? root.children.find(child => child.tag === 'Slider')?.attrs.wholeNumbers === 'true' : null;
       pkg.components.push({
         pkg, resource, id: resource.id, name: resource.name, fullName: `${pkg.name}/${resource.name}`,
-        exported: resource.exported, file: resource.file, size: root.attrs.size ?? '0,0', extension, buttonMode,
+        exported: resource.exported, file: resource.file, size: root.attrs.size ?? '0,0', extension, buttonMode, wholeNumbers,
         controllers: root.children.filter(child => child.tag === 'controller').map(child => ({name: child.attrs.name, pages: parsePages(child.attrs.pages), selected: Number(child.attrs.selected ?? 0), line: lineIn(resource.file, `name="${child.attrs.name}"`)})),
         transitions: root.children.filter(child => child.tag === 'transition').map(child => child.attrs.name),
         children: displayList.map(node => ({...node, name: node.attrs.name, id: node.attrs.id})),
@@ -94,7 +96,7 @@ export function readUiModel(fairyPath) {
   for (const pkg of packages) {
     for (const component of pkg.components) {
       for (const child of component.children) {
-        child.ref = child.tag === 'component' || child.tag === 'list' ? resolveRef(model, pkg, child) : null;
+        child.ref = ['component', 'list', 'tree'].includes(child.tag) ? resolveRef(model, pkg, child) : null;
         child.kind = kindOf(child);
       }
     }
@@ -111,7 +113,7 @@ function lineIn(file, needle) {
 function resolveRef(model, pkg, child) {
   let pkgId = child.attrs.pkg ?? pkg.id;
   let resId = child.attrs.src;
-  if (child.tag === 'list') {
+  if (child.tag === 'list' || child.tag === 'tree') {
     const url = child.attrs.defaultItem ?? '';
     if (!url.startsWith('ui://') || url.length < 'ui://'.length + 9) return null;
     pkgId = url.slice(5, url.length - 8);
@@ -122,9 +124,10 @@ function resolveRef(model, pkg, child) {
 }
 
 function kindOf(child) {
+  if (child.tag === 'list' && child.attrs.treeView === 'true') return 'tree';
   if (tagKinds[child.tag]) return tagKinds[child.tag];
   if (child.tag === 'component') return extensionKinds[child.ref?.extension] ?? 'component';
-  return null; // group、movieclip 等不进类型
+  return null; // group 等不进类型
 }
 
 export function findComponent(model, fullName) {

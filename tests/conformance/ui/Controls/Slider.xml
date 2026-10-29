@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="400,40" extention="Slider">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="400,40" type="rect" lineSize="0" fillColor="#22344d">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n1" name="bar" xy="0,0" size="400,40" type="rect" lineSize="0" fillColor="#6aa7ff"/>
+    <graph id="n2" name="grip" xy="390,0" size="20,40" type="rect" lineSize="0" fillColor="#ffffff">
+      <relation target="n1" sidePair="left-right"/>
+    </graph>
+  </displayList>
+  <Slider wholeNumbers="true" changeOnClick="true"/>
+</component>

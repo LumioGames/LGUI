@@ -1,11 +1,12 @@
 // 把 FairyGUI-dom 的对象包成接口层的 UI 对象。每个对象只包一次（WeakMap 缓存），事件一律返回取消函数。
 import * as fgui from '../vendor/fairygui.module.js';
 import type {
-  PointerInput, Rect, UIObject, UIComponent, UIText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, Unsubscribe
+  PointerInput, Rect, UIObject, UIComponent, UIText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, Unsubscribe,
+  UILabel, UISlider, UIComboBox, UIMovieClip, UITree, UITreeNode, WheelInput
 } from '../../../core/index';
 import {LgRuntimeError} from '../../../core/index';
 import {pointerEventTypes, toPointerInput} from '../pointer';
-import {stage} from '../scale';
+import {stage, toDesign} from '../scale';
 
 const toHex = (value: number): string => '#' + (value & 0xffffff).toString(16).padStart(6, '0');
 const fromHex = (value: string): number => {
@@ -22,15 +23,27 @@ function listen(target: fgui.EventDispatcher, type: string, handler: (event: fgu
 }
 
 class H5Object implements UIObject {
-  constructor(readonly native: fgui.GObject) {}
+  // 可用、接收输入分开记，一起决定 FairyGUI 的 touchable：直接写 pointer-events 会在 FairyGUI 重新挂元素时（齿轮切换、换层）被改回去。
+  private isEnabled: boolean;
+  private isTouchable: boolean;
+  constructor(readonly native: fgui.GObject) {
+    this.isEnabled = !native.grayed;
+    this.isTouchable = native.touchable;
+    if (!this.isEnabled) native.touchable = false;
+  }
   get name(): string { return this.native.name; }
   get visible(): boolean { return this.native.visible; }
   set visible(value: boolean) { this.native.visible = value; }
-  get enabled(): boolean { return !this.native.grayed; }
-  set enabled(value: boolean) { this.native.grayed = !value; this.native.element.style.pointerEvents = value ? '' : 'none'; }
+  // 真的显示：一路往上，每一级都没被齿轮藏起来（internalVisible）、自己和所在的组都显示（internalVisible2）。
+  get shown(): boolean {
+    for (let o: fgui.GObject | null = this.native; o; o = o.parent) if (!o.internalVisible || !o.internalVisible2) return false;
+    return true;
+  }
+  get enabled(): boolean { return this.isEnabled; }
+  set enabled(value: boolean) { this.isEnabled = value; this.native.grayed = !value; this.native.touchable = value && this.isTouchable; }
   get customData(): string { return this.native.data == null ? '' : String(this.native.data); }
-  get touchable(): boolean { return this.native.touchable; }
-  set touchable(value: boolean) { this.native.touchable = value; }
+  get touchable(): boolean { return this.isTouchable; }
+  set touchable(value: boolean) { this.isTouchable = value; this.native.touchable = value && this.isEnabled; }
   get rect(): Rect { return {x: this.native.x, y: this.native.y, width: this.native.width, height: this.native.height}; }
   set rect(value: Rect) { this.native.setPosition(value.x, value.y); this.native.setSize(value.width, value.height); }
   onPointer(handler: (event: PointerInput) => void): Unsubscribe {
@@ -44,6 +57,12 @@ class H5Object implements UIObject {
     let depth = 0;
     for (let el = document.elementFromPoint(x * stage.scale, y * stage.scale); el; el = el.parentElement, depth++) if (el === this.native.element) return depth;
     return -1;
+  }
+  onWheel(handler: (event: WheelInput) => void): Unsubscribe {
+    const element = this.native.element;
+    const listener = (event: WheelEvent): void => { const {x, y} = toDesign(event.clientX, event.clientY); handler({x, y, deltaX: event.deltaX, deltaY: event.deltaY}); };
+    element.addEventListener('wheel', listener, {passive: true});
+    return () => element.removeEventListener('wheel', listener);
   }
 }
 
@@ -88,9 +107,26 @@ class H5Text extends H5Object implements UIText {
 class H5Input extends H5Text implements UIInput {
   private prompt = '';
   constructor(readonly native: fgui.GTextInput) { super(native); }
+  get text(): string { return this.native.text; }
+  // 文字没变就不写：写一次会把光标挪到最后（绑定把 Model 的值写回来时，正在打字的人会察觉）。
+  set text(value: string) { if (this.native.text !== value) this.native.text = value; }
   get promptText(): string { return this.prompt; }
   set promptText(value: string) { this.prompt = value; this.native.setPromptText(value); }
-  onChange(handler: (text: string) => void): Unsubscribe { return listen(this.native, 'changed', () => handler(this.native.text)); }
+  // 输入法还在选字时（isComposing）不通知，选完（compositionend）通知一次；有的浏览器选完还会再发一次 input，跳过。
+  onChange(handler: (text: string) => void): Unsubscribe {
+    const element = this.native.element;
+    let ended: string | null = null;
+    const onInput = (event: Event): void => {
+      const text = this.native.text;
+      const repeat = ended === text;
+      ended = null;
+      if (!(event as InputEvent).isComposing && !repeat) handler(text);
+    };
+    const onEnd = (): void => { ended = this.native.text; handler(ended); };
+    element.addEventListener('input', onInput);
+    element.addEventListener('compositionend', onEnd);
+    return () => { element.removeEventListener('input', onInput); element.removeEventListener('compositionend', onEnd); };
+  }
 }
 
 class H5Button extends H5Component implements UIButton {
@@ -191,6 +227,102 @@ class H5Progress extends H5Component implements UIProgress {
   set max(value: number) { this.native.max = value; }
 }
 
+class H5Label extends H5Component implements UILabel {
+  constructor(readonly native: fgui.GLabel, componentName: string) { super(native, componentName); }
+  get title(): string { return this.native.title ?? ''; }
+  set title(value: string) { this.native.title = value; }
+  get icon(): string { return this.native.icon ?? ''; }
+  set icon(value: string) { this.native.icon = value; }
+}
+
+class H5Slider extends H5Component implements UISlider {
+  constructor(readonly native: fgui.GSlider, componentName: string) { super(native, componentName); }
+  get value(): number { return this.native.value; }
+  set value(value: number) { this.native.value = value; }
+  get min(): number { return this.native.min; }
+  set min(value: number) { this.native.min = value; }
+  get max(): number { return this.native.max; }
+  set max(value: number) { this.native.max = value; }
+  onChange(handler: (value: number) => void): Unsubscribe { return listen(this.native, 'changed', () => handler(this.native.value)); }
+}
+
+// 下拉框：选中序号统一成「在范围内，否则 -1」。FairyGUI 给 items 时会把 -1 改成 0、把超出的改成最后一项，这里改回来，和 headless 一致。
+class H5ComboBox extends H5Component implements UIComboBox {
+  constructor(readonly native: fgui.GComboBox, componentName: string) { super(native, componentName); }
+  get items(): readonly string[] { return this.native.items; }
+  set items(value: readonly string[]) { const keep = this.selectedIndex; this.native.items = [...value]; this.selectedIndex = keep; }
+  get selectedIndex(): number { const index = this.native.selectedIndex; return index >= 0 && index < this.native.items.length ? index : -1; }
+  set selectedIndex(value: number) { this.native.selectedIndex = value >= 0 && value < this.native.items.length ? value : -1; }
+  get text(): string { return this.native.text ?? ''; }
+  onChange(handler: (index: number) => void): Unsubscribe { return listen(this.native, 'status_changed', () => handler(this.selectedIndex)); }
+}
+
+class H5MovieClip extends H5Object implements UIMovieClip {
+  constructor(readonly native: fgui.GMovieClip) { super(native); }
+  get playing(): boolean { return this.native.playing; }
+  set playing(value: boolean) { this.native.playing = value; }
+  get frame(): number { return this.native.frame; }
+  set frame(value: number) { this.native.frame = value; }
+}
+
+type Key = string | number;
+
+// 树：每次换数据整棵重建（子项组件回到 FairyGUI 的对象池再复用），展开状态按 key 记下来；选中项自己记一份（和列表一样）。
+class H5Tree extends H5Object implements UITree {
+  private renderer: ((key: Key, item: UIComponent) => void) | null = null;
+  private readonly nodes = new Map<Key, fgui.GTreeNode>();
+  private readonly keys = new Map<fgui.GTreeNode, Key>();
+  private readonly expanded = new Map<Key, boolean>();
+  private selected: Key | null = null;
+  constructor(readonly native: fgui.GTree) {
+    super(native);
+    native.treeNodeRender = (node, cell) => { const key = this.keys.get(node); if (key !== undefined) this.renderer?.(key, wrapComponent(cell)); };
+  }
+  get nodeRenderer(): ((key: Key, item: UIComponent) => void) | null { return this.renderer; }
+  set nodeRenderer(value: ((key: Key, item: UIComponent) => void) | null) { this.renderer = value; }
+  setNodes(list: readonly UITreeNode[]): void {
+    for (const [key, node] of this.nodes) this.expanded.set(key, node.expanded);
+    const pane = this.native.scrollPane;
+    const position = {x: pane?.posX ?? 0, y: pane?.posY ?? 0};
+    this.native.rootNode.removeChildren();
+    this.nodes.clear();
+    this.keys.clear();
+    const add = (parent: fgui.GTreeNode, items: readonly UITreeNode[]): void => {
+      for (const item of items) {
+        const node = new fgui.GTreeNode(item.children.length > 0);
+        node.expanded = this.expanded.get(item.key) ?? true;
+        this.nodes.set(item.key, node);
+        this.keys.set(node, item.key);
+        parent.addChild(node);
+        add(node, item.children);
+      }
+    };
+    add(this.native.rootNode, list);
+    for (const key of [...this.expanded.keys()]) if (!this.nodes.has(key)) this.expanded.delete(key);
+    this.selectedKey = this.selected !== null && this.nodes.has(this.selected) ? this.selected : null;
+    if (pane) { this.native.ensureBoundsCorrect(); pane.setPosX(position.x, false); pane.setPosY(position.y, false); }
+  }
+  get selectedKey(): Key | null { return this.selected; }
+  set selectedKey(key: Key | null) {
+    this.selected = key;
+    this.native.clearSelection();
+    const node = key === null ? undefined : this.nodes.get(key);
+    if (node) this.native.selectNode(node);
+  }
+  get numItems(): number { return this.native.numChildren; }
+  itemAt(index: number): UIComponent | null { return index >= 0 && index < this.native.numChildren ? wrapComponent(this.native.getChildAt(index)) : null; }
+  onClickNode(handler: (key: Key) => void): Unsubscribe {
+    return listen(this.native, 'click_item', event => {
+      for (const [node, key] of this.keys) {
+        if (node.cell !== event.data) continue;
+        this.selected = key;
+        handler(key);
+        return;
+      }
+    });
+  }
+}
+
 class H5Graph extends H5Object implements UIGraph {
   constructor(readonly native: fgui.GGraph) { super(native); }
   get color(): string { return toHex(this.native.color); }
@@ -243,15 +375,20 @@ export function wrap(native: fgui.GObject): UIObject {
   const item = native.packageItem;
   const name = componentNames.get(native) ?? (item ? `${item.owner.name}/${item.name}` : '');
   let wrapped: UIObject;
-  if (native instanceof fgui.GList) wrapped = new H5List(native);
+  if (native instanceof fgui.GTree) wrapped = new H5Tree(native);
+  else if (native instanceof fgui.GList) wrapped = new H5List(native);
   else if (native instanceof fgui.GButton) wrapped = new H5Button(native, name);
   else if (native instanceof fgui.GProgressBar) wrapped = new H5Progress(native, name);
+  else if (native instanceof fgui.GLabel) wrapped = new H5Label(native, name);
+  else if (native instanceof fgui.GSlider) wrapped = new H5Slider(native, name);
+  else if (native instanceof fgui.GComboBox) wrapped = new H5ComboBox(native, name);
   else if (native instanceof fgui.GComponent) wrapped = new H5Component(native, name);
   else if (native instanceof fgui.GTextInput) wrapped = new H5Input(native);
   else if (native instanceof fgui.GTextField) wrapped = new H5Text(native);
   else if (native instanceof fgui.GImage) wrapped = new H5Image(native);
   else if (native instanceof fgui.GLoader) wrapped = new H5Loader(native);
   else if (native instanceof fgui.GGraph) wrapped = new H5Graph(native);
+  else if (native instanceof fgui.GMovieClip) wrapped = new H5MovieClip(native);
   else wrapped = new H5Object(native);
   cache.set(native, wrapped);
   natives.set(wrapped, native);

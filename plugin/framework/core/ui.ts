@@ -1,5 +1,6 @@
 // 接口层的 UI 对象：各后端的 FairyGUI 运行时统一成这一套写法。
 // 只在框架内部用；游戏代码通过绑定表和钩子里的 this.ui 用到这些类型。
+import type {WheelInput} from './platform';
 
 /** 取消订阅。所有事件订阅都返回它。 */
 export type Unsubscribe = () => void;
@@ -50,6 +51,10 @@ export interface UIObject {
   onPointer(handler: (event: PointerInput) => void): Unsubscribe;
   /** 内部用：设计尺寸里 (x, y) 这一点上最上面那个接收输入的控件在自己里面第几层（0 是自己），不在自己里面是 -1。拖放找落点用。 */
   hitDepth(x: number, y: number): number;
+  /** 订阅落在这个对象（或它里面的控件）上的滚轮事件，坐标是设计尺寸里的坐标。 */
+  onWheel(handler: (event: WheelInput) => void): Unsubscribe;
+  /** 内部用：是不是真的显示着：自己和各级父组件都显示，也没有被齿轮（gearDisplay）或组藏起来。 */
+  readonly shown: boolean;
 }
 
 /** 组件：可以按路径找子控件、控制器和动效。Name 是组件在 ui/ 里的「包/组件」名。 */
@@ -89,7 +94,7 @@ export interface UIRichText extends UIText {}
 export interface UIInput extends UIText {
   /** 没有输入时显示的提示文字。 */
   promptText: string;
-  /** 用户改了文字时调用，参数是新文字。 */
+  /** 用户改了文字时调用，参数是新文字；输入法还在选字时不调用，选完调用一次。 */
   onChange(handler: (text: string) => void): Unsubscribe;
 }
 
@@ -181,6 +186,70 @@ export interface UIProgress extends UIComponent {
   max: number;
 }
 
+/** 标签（扩展类型 Label）：标题文字加图标，不能点选。 */
+export interface UILabel extends UIComponent {
+  /** 标题文字（子控件 title）。 */
+  title: string;
+  /** 图标地址（子控件 icon）。 */
+  icon: string;
+}
+
+/** 滑动条（扩展类型 Slider）。 */
+export interface UISlider extends UIComponent {
+  /** 当前值（滑动条自己的单位，在 min 和 max 之间）。 */
+  value: number;
+  /** 最小值。 */
+  min: number;
+  /** 最大值。 */
+  max: number;
+  /** 用户拖动或点击改了值时调用（代码设置不调用），参数是新值。 */
+  onChange(handler: (value: number) => void): Unsubscribe;
+}
+
+/** 下拉框（扩展类型 ComboBox）：点开以后从弹出的列表里选一项。 */
+export interface UIComboBox extends UIComponent {
+  /** 每一项显示的文字。换了以后选中项还在范围内就保留，否则变成 -1。 */
+  items: readonly string[];
+  /** 选中项的序号，没有选中时是 -1。 */
+  selectedIndex: number;
+  /** 现在显示的文字（选中项的文字，没有选中时是空字符串）。 */
+  readonly text: string;
+  /** 用户选了一项时调用（代码设置不调用），参数是序号。 */
+  onChange(handler: (index: number) => void): Unsubscribe;
+}
+
+/** 序列帧动画（movieclip）。 */
+export interface UIMovieClip extends UIObject {
+  /** 是否在播放。 */
+  playing: boolean;
+  /** 当前帧。 */
+  frame: number;
+}
+
+/** 树的一个节点。 */
+export interface UITreeNode {
+  /** 认出同一个节点（整棵树里唯一）。 */
+  key: string | number;
+  /** 子节点；空数组表示叶子。 */
+  children: readonly UITreeNode[];
+}
+
+/** 树（列表写了 treeView="true"）：一层层的节点，每个节点用列表的子项组件显示。 */
+export interface UITree extends UIObject {
+  /** 换一整棵树。同一个 key 的节点保留展开状态，新节点是展开的。 */
+  setNodes(nodes: readonly UITreeNode[]): void;
+  /** 显示一个节点时调用：节点的 key 和它的子项组件（子项组件会复用）。 */
+  nodeRenderer: ((key: string | number, item: UIComponent) => void) | null;
+  /** 选中节点的 key，没有选中时是 null；设置时先展开它的各级父节点。 */
+  selectedKey: string | number | null;
+  /** 用户点了一个节点时调用，参数是 key。 */
+  onClickNode(handler: (key: string | number) => void): Unsubscribe;
+  /** 现在显示着的节点数（收起的节点下面的不算）。 */
+  readonly numItems: number;
+  /** 内部用：显示着的第 index 个节点的子项组件，没有时返回 null。 */
+  itemAt(index: number): UIComponent | null;
+}
+
 /** 图形（矩形、圆等）。 */
 export interface UIGraph extends UIObject {
   /** 填充颜色，#rrggbb 或 #aarrggbb。 */
@@ -209,6 +278,16 @@ export interface UIKinds {
   progress: UIProgress;
   /** 图形。 */
   graph: UIGraph;
+  /** 标签。 */
+  label: UILabel;
+  /** 滑动条。 */
+  slider: UISlider;
+  /** 下拉框。 */
+  combobox: UIComboBox;
+  /** 序列帧动画。 */
+  movieclip: UIMovieClip;
+  /** 树。 */
+  tree: UITree;
 }
 
 /** 控件类型名。 */

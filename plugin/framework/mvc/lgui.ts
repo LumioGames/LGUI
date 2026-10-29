@@ -99,15 +99,25 @@ export interface TestHarness {
   wheel(path: string, dy: number): Promise<void>;
   /** 按键。 */
   key(name: string): Promise<void>;
+  /** 在输入框里打字：先点一下，再把文字换成 text，一个字一个字地输入（每个字触发一次 input）。 */
+  type(path: string, text: string): Promise<void>;
+  /** 把滑动条拖到 value（夹在范围内，按 ui/ 的设置取整）。 */
+  setValue(path: string, value: number): Promise<void>;
+  /** 点开下拉框，选第 index 项（从 0 开始）。 */
+  choose(path: string, index: number): Promise<void>;
   /** 读文字。 */
   text(path: string): string;
-  /** 是否显示。 */
+  /** 是否真的显示着：自己和各级父组件都显示，也没被齿轮或组藏起来。 */
   visible(path: string): boolean;
   /** 是否可用。 */
   enabled(path: string): boolean;
   /** 控制器当前页。 */
   page(path: string): string;
-  /** 列表项数。 */
+  /** 值：滑动条、进度条的当前值，下拉框的选中序号。 */
+  value(path: string): number;
+  /** 序列帧动画是否在播放。 */
+  playing(path: string): boolean;
+  /** 列表项数；树是显示着的节点数。 */
   items(path: string): number;
   /** 模拟屏幕尺寸（旋转）。 */
   setScreen(width: number, height: number): Promise<void>;
