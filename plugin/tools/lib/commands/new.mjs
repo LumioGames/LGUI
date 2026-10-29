@@ -145,11 +145,13 @@ export async function newModule({projectRoot, project, args, flags}) {
   const vars = {...n, PKG: n.NAME, COMP: comp};
   const uiFiles = pattern ? writeUi(projectRoot, n.NAME, comp, pattern) : [];
   fs.mkdirSync(dir, {recursive: true});
-  fs.writeFileSync(files.model, fill(read('module/model.ts'), vars));
+  // 只有 tabs 模式用到标签页：别的模式去掉 tab 相关的行。
+  const dropTabs = text => (pattern === 'tabs' ? text : text.split('\n').filter(line => !/\btab\b|switchTab/.test(line)).join('\n'));
+  fs.writeFileSync(files.model, dropTabs(fill(read('module/model.ts'), vars)));
   const viewMethods = !pattern ? '' : pattern === 'dialog'
     ? `  confirm() { lgui.ui.close(${comp}View); }\n  close() { lgui.ui.close(${comp}View); }\n`
     : `  close() { lgui.ui.close(${comp}View); }\n`;
-  fs.writeFileSync(files.controller, fill(read('module/controller.ts'), {...vars, LGUI_IMPORT: pattern ? ', lgui' : '', VIEW_IMPORT: pattern ? `import { ${comp}View } from './${comp}View';\n` : '', VIEW_METHODS: viewMethods}));
+  fs.writeFileSync(files.controller, dropTabs(fill(read('module/controller.ts'), {...vars, LGUI_IMPORT: pattern ? ', lgui' : '', VIEW_IMPORT: pattern ? `import { ${comp}View } from './${comp}View';\n` : '', VIEW_METHODS: viewMethods})));
   if (pattern) {
     fs.writeFileSync(files.view, fill(read(`patterns/${pattern}/view.ts`), vars));
     if (files.item) fs.writeFileSync(files.item, fill(read(`patterns/${pattern}/item-view.ts`), vars));
@@ -161,6 +163,6 @@ export async function newModule({projectRoot, project, args, flags}) {
   const rel = f => path.relative(projectRoot, f);
   return {
     data: {code: Object.values(files).map(rel), ui: uiFiles.map(rel), translate: pending},
-    summary: [`生成了模块 ${n.feature}${pattern ? `（排布模式 ${pattern}）` : ''}：`, ...[...Object.values(files), ...uiFiles].map(f => `  ${rel(f)}`), ...(pattern ? [] : ['没有界面：要界面就再运行 lgui new view <包>/<组件> --pattern <模式>，或者用 lgui new module <名字> --pattern <模式> 一次生成。']), ...(pending.length ? [`新界面的固定文字已经补进文本表，其他语言先填的是原文，记得翻译（${pending.length} 条）。`] : []), '接着：lgui check → lgui test → lgui dev。']
+    summary: [`生成了模块 ${n.feature}${pattern ? `（排布模式 ${pattern}）` : ''}：`, ...[...Object.values(files), ...uiFiles].map(f => `  ${rel(f)}`), ...(pattern ? [] : ['没有界面：要界面就再运行 lgui new view <包>/<组件> --pattern <模式>，或者用 lgui new module <名字> --pattern <模式> 一次生成。']), ...(pending.length ? [`新界面的固定文字已经补进文本表，其他语言先填的是原文，记得翻译（${pending.length} 条）。`] : []), ...(pattern ? [`要它做第一个界面：src/main.ts 的 start() 里改成打开 ${comp}View，它的 keys 改成 { back: 'none' }（page 层最底下的主界面返回键关不掉）；不要的 Main 模块连同 ui/assets/Main/ 一起删掉，再运行 lgui check。`] : []), '接着：lgui check → lgui test → lgui dev。']
   };
 }

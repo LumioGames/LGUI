@@ -1,7 +1,5 @@
 # LGUI
 
-> **开发中，0.3.0 还没发布。** 下面的安装步骤和命令要等 0.3.0 发布后才能用；0.2.0 的旧版本在 tag `v0.2.0-final`。
-
 ## 给 AI Agent：安装与第一次使用
 
 用户把这个仓库地址发给你时，按下面的步骤做。任何一步失败，都停下来，把错误原文告诉用户，不要跳过。
@@ -44,19 +42,17 @@ LGUI 是一个面向 AI Agent 的开源 UI 引擎框架。UI 资源、预制结�
 
 | 技能 | 什么时候用 |
 |---|---|
-| `lgui-setup` | 安装、建工程、检查环境、打开预览 |
-| `lgui-author` | 拼界面 |
-| `lgui-edit` | 和人一起在编辑器里改界面 |
-| `lgui-verify` | 截图和测试验证 |
-| `lgui-unity` | 接 Unity |
-
-现在 `plugin/skills/` 里还是 0.2.0 的技能内容，会按新命令重写。
+| `lgui-setup` | 建工程、检查环境、打开预览 |
+| `lgui-ui` | 拼界面：XML、排布模式、出图拆图、动效、编辑器 |
+| `lgui-code` | 写功能：Model、View、Controller、Service、测试 |
+| `lgui-verify` | 截图、测试、调试快照 |
+| `lgui-unity` | 接 Unity（阶段 3 实现） |
 
 ## 已知限制
 
-- 0.3.0 还在开发：新的命令行、框架和背包示例正在按新结构重写，旧命令暂时跑不起来。
 - 技能要新开一个会话才生效（宿主的限制）；命令行不受影响。
-- Unity 支持放在最后做。
+- Unity 导出（`lgui unity export`）在阶段 3 实现。
+- 版本和发布状态见[更新记录](CHANGELOG.md)。
 
 ## 链接
 
@@ -66,6 +62,7 @@ LGUI 是一个面向 AI Agent 的开源 UI 引擎框架。UI 资源、预制结�
 - MVC 开发规范：[plugin/references/mvc-spec.md](plugin/references/mvc-spec.md)
 - 用户工程目录：[plugin/references/project-layout.md](plugin/references/project-layout.md)
 - 接入 Unity（阶段 3 实现）：[plugin/references/unity.md](plugin/references/unity.md)
+- 背包示例：[examples/inventory](examples/inventory/README.md)
 - 错误码：[plugin/references/error-codes.md](plugin/references/error-codes.md)
 - 第三方许可：[plugin/THIRD_PARTY_NOTICES.md](plugin/THIRD_PARTY_NOTICES.md)
 

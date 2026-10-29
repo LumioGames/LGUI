@@ -15,8 +15,9 @@ test('headless 后端在 strict 下类型检查通过（不依赖 DOM 和 Node �
   assert.deepEqual(typecheck(files), []);
 });
 
-async function setup() {
+async function setup(patch = () => {}) {
   const root = writeFixture();
+  patch(root);
   await generateProjectTypes(root);
   const packages = fs.readdirSync(path.join(root, '.lgui/build/headless')).map(f => JSON.parse(fs.readFileSync(path.join(root, '.lgui/build/headless', f), 'utf8')));
   const entry = path.join(root, 'entry.ts');
@@ -120,4 +121,31 @@ test('换屏幕尺寸、假时钟、存储、音频和日志', async () => {
   backend.platform.log.write('warn', '小心');
   assert.equal(backend.state.logs.at(-1).message, '小心');
   assert.throws(() => backend.platform.net.fetch('/x'), e => e.code === 'LGUI-RT-001');
+});
+
+test('列表选中同步到子项按钮：Radio 模式的子项 button 控制器到 down 页，换选时上一个回到 up；Common 模式不保持选中（和 FairyGUI 一样）', async () => {
+  const asButton = mode => root => {
+    const file = path.join(root, 'ui/assets/Bag/ItemSlot.xml');
+    fs.writeFileSync(file, fs.readFileSync(file, 'utf8')
+      .replace('<component size="128,128">', '<component size="128,128" extention="Button">\n  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>')
+      .replace('</component>', `  <Button${mode ? ` mode="${mode}"` : ''}/>\n</component>`));
+  };
+  {
+    const {backend, panel, sim} = await setup(asButton('Radio'));
+    const list = panel.child('list');
+    list.itemRenderer = () => {};
+    list.numItems = 3;
+    await sim.click(backend, list.itemAt(1));
+    assert.deepEqual([0, 1, 2].map(i => list.itemAt(i).controller('button').selectedPage), ['up', 'down', 'up']);
+    list.selectedIndex = 2;
+    assert.deepEqual([0, 1, 2].map(i => list.itemAt(i).selected), [false, false, true]);
+  }
+  {
+    const {backend, panel, sim} = await setup(asButton(null));
+    const list = panel.child('list');
+    list.itemRenderer = () => {};
+    list.numItems = 3;
+    await sim.click(backend, list.itemAt(1));
+    assert.deepEqual([list.selectedIndex, list.itemAt(1).selected, list.itemAt(1).controller('button').selectedPage], [1, false, 'up']);
+  }
 });

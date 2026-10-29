@@ -34,6 +34,7 @@ export function describeComponent(component) {
     id: component.id,
     exported: component.exported,
     extension: component.extension,
+    buttonMode: component.buttonMode,
     size: component.size.split(',').map(Number),
     controllers: component.controllers.map(c => ({name: c.name, pages: c.pages.map(page => page.name), selected: c.pages[c.selected]?.name ?? c.pages[0]?.name ?? null})),
     transitions: component.transitions,

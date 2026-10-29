@@ -9,5 +9,5 @@
     <text id="n2" name="label" xy="108,0" size="360,96" fontSize="28" color="#f3ead6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
     <text id="n3" name="statsText" xy="470,0" size="140,96" fontSize="24" color="#e8c27a" align="right" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
   </displayList>
-  <Button/>
+  <Button mode="Radio"/>
 </component>

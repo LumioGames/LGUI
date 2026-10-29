@@ -1,12 +1,27 @@
 ---
 name: lgui-verify
-description: "Run independent browser functional, persistence and visual checks for an LGUI UI, including responsive layouts and editor save/reopen. Use for LGUI verification requests; not as proof of Unity runtime, physical IME or mobile compatibility."
+description: "验证 LGUI 工程：按标准尺寸横竖截图、换语言和伪翻译截图、跑测试、读调试快照。做完界面或功能、交付之前，或者排查界面显示和行为问题时用。"
 license: MIT
-compatibility: "Initialized LGUI workspace, restored Playwright tooling and installed Chrome or Edge."
 ---
 
-Inputs: workspace, running local URL, intended UI/viewports and acceptance criteria. Resolve [CLI](../../tools/lgui.mjs) from this installed skill and read project entries. Run configured `test`, `serve` and `verify-browser -- --browser chrome` (or msedge where the chosen fixture supports it). For native runtime checks run configured `verify-unity`. A missing verification entry is untested, not a successful fallback. The blank fixture checks title rendering/geometry only; replace or extend it with the UI's actual interaction and persistence assertions. `verify-editor` also requires an explicit project fixture and a running editor.
+# lgui-verify：截图、测试、调试快照
 
-Read [verification scope](references/verification.md). For a different UI, adapt the fixture and interaction checks to its actual controls instead of carrying inventory assertions forward. Exercise real controls, save and reopen, inspect screenshots at relevant sizes, and separate source/build/functional/visual/user-acceptance results. Preserve failures in new evidence directories. Output versions, actual viewport, commands, evidence paths and limitations. A successful load or screenshot alone is not functional acceptance.
+**什么时候用：** 做完一个界面或功能要交付；改了布局或文字要看各种屏幕；测试失败或界面行为不对要排查。
 
-For motion work, follow the [motion handoff and acceptance](../lgui-author/references/motion-advisor.md). New designs need preserved visual-first and interaction-review passes, merged regional decisions and real node/platform bindings. Minor changes with unchanged purpose, hierarchy and interaction reuse the reviewed plan and record only their delta and affected checks. Review actual playback at normal speed for perceptibility, hierarchy, pacing and responsive input, then relevant interruption/reopen, reuse and reduced-motion behavior. Keep browser and native evidence separate. Changed properties or frame samples do not establish design coverage or continuous feel; say unverified where playback is unavailable.
+**输入：** 要看哪个界面（View 类名）、哪些尺寸和语言。
+
+**命令：**
+
+| 要做的事 | 命令 |
+|---|---|
+| 6 组标准尺寸 × 横竖，各截一张 | `lgui verify`；只看一组：`--size desktop`；先打开某个界面：`--view BagView` |
+| 换语言截图 | `lgui verify --lang en` |
+| 伪翻译（文字加长 40%）找截断 | `lgui verify --lang pseudo` |
+| 跑测试 | `lgui test`；失败时报错里附带测试结束时的界面状态快照 |
+| 规范检查 | `lgui check` |
+
+**怎么看：** 截图在 `.lgui/build/verify/`（每次运行先清空，要留的图先复制走），文件名是 `<尺寸名>-<方向>[-<语言>]`：每组尺寸都横竖各截一张，看设备转过来的样子。`--lang pseudo` 另外按最长的那种语言横竖各截一张。每张旁边有同名的 `.json` 快照（界面栈、激活界面、监听和定时器数、包引用数、方向、语言）。逐张看：文字有没有被截断、横竖两版排得对不对、该有的界面在不在栈里。页面报错时命令以错误码 `LGUI-CLI-064` 结束。
+
+**调试快照：** `lgui dev` 的页面里，`lgui.debug.snapshot()` 返回同样的快照；测试里用 `t.snapshot()`。关闭所有界面后监听、定时器、包引用都应该归零，`t.end()` 会检查。
+
+**产出：** 截图和快照的路径、测试结果、发现的问题（附截图名）。截图只能证明终态，动效的节奏要在 `lgui dev` 里看（见 `lgui-ui` 的动效说明）。错误码见 [error-codes.md](../../references/error-codes.md)。

@@ -11,5 +11,5 @@
       <relation target="" sidePair="right-right"/>
     </text>
   </displayList>
-  <Button/>
+  <Button mode="Radio"/>
 </component>
