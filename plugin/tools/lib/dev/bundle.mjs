@@ -46,8 +46,9 @@ const texts = ${JSON.stringify(readTexts(root, project.languages))};
 
 (async () => {
   const backend = createH5Backend();
-  await backend.init({projectName: config.name, defaultFont: ${JSON.stringify(project.defaultFont)}, uiBase: '/ui'});
-  (window as unknown as {__lgui: unknown}).__lgui = {snapshot: () => lgui.debug.snapshot()};
+  await backend.init({projectName: config.name, defaultFont: ${JSON.stringify(project.defaultFont)}, uiBase: '/ui', i18nBase: '/i18n'});
+  // 开发模式下给调试面板和端到端测试用。
+  (window as unknown as {__lgui: unknown}).__lgui = {snapshot: () => lgui.debug.snapshot(), lgui};
   await boot(backend, app, config, deps, {texts});
   (window as unknown as {__lguiReady: boolean}).__lguiReady = true;
 })().catch(error => {

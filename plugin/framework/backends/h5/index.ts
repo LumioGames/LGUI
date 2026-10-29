@@ -10,6 +10,9 @@ const parseUrl = (url: string): [string, string] | null => { const m = /^ui:\/\/
 export function createH5Backend(): Backend {
   let platform: Platform | null = null;
   let root: UIComponent | null = null;
+  let i18nBase: string | undefined;
+  let uiBaseUrl = '';
+  const loadedPackages = new Set<string>();
   const ready = (): Platform => {
     if (!platform) throw new LgRuntimeError('LGUI-RT-027', 'h5 后端还没有启动。', '先调用 backend.init(config)。');
     return platform;
@@ -18,6 +21,8 @@ export function createH5Backend(): Backend {
     name: 'h5',
     async init(config: BackendConfig) {
       if (config.defaultFont) fgui.UIConfig.defaultFont = config.defaultFont;
+      i18nBase = config.i18nBase;
+      uiBaseUrl = config.uiBase;
       await fgui.UIPackage.loadImageManifest(`${config.uiBase}/manifest.json`);
       platform = createH5Platform(config.projectName, config.uiBase);
       setComponentName(fgui.GRoot.inst, 'root');
@@ -27,8 +32,8 @@ export function createH5Backend(): Backend {
       if (!root) throw new LgRuntimeError('LGUI-RT-027', 'h5 后端还没有启动。', '先调用 backend.init(config)。');
       return root;
     },
-    loadPackage: name => ready().resource.loadPackage(name),
-    releasePackage: name => ready().resource.releasePackage(name),
+    loadPackage: async name => { await ready().resource.loadPackage(name); loadedPackages.add(name); },
+    releasePackage: name => { loadedPackages.delete(name); ready().resource.releasePackage(name); },
     create<Name extends string>(packageName: string, componentName: string): UIComponent<Name> {
       ready();
       if (!fgui.UIPackage.getByName(packageName)) throw new LgRuntimeError('LGUI-RT-002', `界面包 ${packageName} 还没加载。`, '先加载这个包（UIManager 打开界面时会自动加载）。');
@@ -36,6 +41,17 @@ export function createH5Backend(): Backend {
       if (!native) throw new LgRuntimeError('LGUI-RT-003', `界面包 ${packageName} 里没有组件 ${componentName}。`, '用 lgui ui list 查看有哪些组件。');
       setComponentName(native, `${packageName}/${componentName}`);
       return wrapComponent(native) as UIComponent<Name>;
+    },
+    async setLanguage(language: string): Promise<void> {
+      if (!i18nBase) return;
+      const url = `${i18nBase}/${language}.xml`;
+      const response = await fetch(url);
+      if (!response.ok) throw new LgRuntimeError('LGUI-RT-141', `读不到翻译文件 ${url}（HTTP ${response.status}）。`, '确认工程配置 languages 里有这种语言，并重新运行 lgui dev 生成翻译文件。');
+      fgui.TranslationHelper.loadFromXML(new fgui.XML(await response.text()));
+      // FairyGUI 的翻译只在组件第一次创建时写进包数据，所以已经加载的包要卸载、重新加载。
+      const loaded = [...loadedPackages];
+      for (const name of loaded) if (fgui.UIPackage.getByName(name)) fgui.UIPackage.removePackage(name);
+      for (const name of loaded) await fgui.UIPackage.loadPackage(`${uiBaseUrl}/${name}`);
     },
     has(packageName: string, componentName: string): boolean {
       const pkg = fgui.UIPackage.getByName(packageName);

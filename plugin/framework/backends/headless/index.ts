@@ -32,12 +32,15 @@ export interface HeadlessBackend extends Backend {
 }
 
 /** packages 是 lgui 生成的 headless 描述（.lgui/build/headless/*.json），由 lgui test 打包进测试。 */
-export function createHeadlessBackend(packages: readonly PackageDescriptor[]): HeadlessBackend {
+/** translations：每种语言「翻译文件里的名字 → 文字」（lgui test 生成）。 */
+export function createHeadlessBackend(packages: readonly PackageDescriptor[], translations: Record<string, Record<string, string>> = {}): HeadlessBackend {
   const byPackage = new Map(packages.map(p => [p.package, p]));
   const components = new Map<string, ComponentDescriptor>();
   const images = new Map<string, {width: number; height: number}>();
   for (const p of packages) for (const image of p.images ?? []) images.set(`ui://${p.package}/${image.name}`, image);
-  for (const p of packages) for (const c of p.components) components.set(c.name, c);
+  const owners = new Map<string, string>();
+  for (const p of packages) for (const c of p.components) { components.set(c.name, c); owners.set(c.name, p.id + c.id); }
+  let translation: Record<string, string> = {};
   const lookup = (name: string): ComponentDescriptor => {
     const found = components.get(name);
     if (!found) throw new LgRuntimeError('LGUI-RT-003', `没有组件 ${name}。`, '用 lgui ui list 查看有哪些组件。');
@@ -92,8 +95,9 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[]): H
     releasePackage: name => platform.resource.releasePackage(name),
     create<Name extends string>(packageName: string, componentName: string): UIComponent<Name> {
       if (!state.loaded.has(packageName)) throw new LgRuntimeError('LGUI-RT-002', `界面包 ${packageName} 还没加载。`, '先加载这个包（UIManager 打开界面时会自动加载）。');
-      return buildComponent(lookup(`${packageName}/${componentName}`), lookup) as unknown as UIComponent<Name>;
+      return buildComponent(lookup(`${packageName}/${componentName}`), lookup, undefined, undefined, undefined, {owners, translation}) as unknown as UIComponent<Name>;
     },
+    async setLanguage(language) { translation = translations[language] ?? {}; },
     imageSize: url => { const found = images.get(url); return found && state.loaded.has(url.slice(5).split('/')[0]) ? {width: found.width, height: found.height} : null; },
     createImage(url) { return buildImage(url, this.imageSize(url)); },
     has: (packageName, componentName) => state.loaded.has(packageName) && components.has(`${packageName}/${componentName}`),

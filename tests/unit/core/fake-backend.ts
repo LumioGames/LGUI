@@ -74,6 +74,7 @@ export function createFakeBackend(): Backend {
       return new FakeComponent(comp, `${pkg}/${comp}`) as unknown as UIComponent<Name>;
     },
     has: () => false,
+    setLanguage: async () => {},
     imageSize: () => null,
     createImage: url => new FakeObject(url),
     createContainer: name => new FakeComponent(name, ''),

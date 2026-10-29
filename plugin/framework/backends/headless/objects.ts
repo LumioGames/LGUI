@@ -129,14 +129,14 @@ export class HeadlessList extends HeadlessComponent implements UIList {
   selectedIndex = -1;
   readonly clicks = new Handlers<number>();
   private count = 0;
-  constructor(name: string, private readonly itemName: string | null, private readonly lookup: Lookup) { super(name, '', 'list'); }
+  constructor(name: string, private readonly itemName: string | null, private readonly lookup: Lookup, private readonly tr?: Translate) { super(name, '', 'list'); }
   get numItems(): number { return this.count; }
   set numItems(value: number) {
     // 不模拟虚拟列表的回收：按数量生成全部子项，结果和真实后端一致即可。
     if (value > 0 && !this.itemName) throw new LgRuntimeError('LGUI-RT-030', `列表 ${this.name} 没有设置子项组件（defaultItem）。`, '在 ui/ 里给列表设置 defaultItem。');
     while (this.children.length > value) (this.children[this.children.length - 1] as HeadlessComponent).dispose();
     while (this.children.length < value) {
-      const item = buildComponent(this.lookup(this.itemName as string), this.lookup, String(this.children.length));
+      const item = buildComponent(this.lookup(this.itemName as string), this.lookup, String(this.children.length), undefined, undefined, this.tr);
       this.addChild(item);
     }
     this.count = value;
@@ -186,8 +186,20 @@ export function asHeadless(object: UIObject): HeadlessObject {
   return object;
 }
 
-function buildChild(child: ChildDescriptor, lookup: Lookup): HeadlessObject {
-  const p = child.props;
+/** 翻译：组件的「包ID+组件ID」和当前语言的翻译表。 */
+export interface Translate {
+  owners: Map<string, string>;
+  translation: Record<string, string>;
+}
+
+function buildChild(child: ChildDescriptor, lookup: Lookup, owner: string | undefined, tr: Translate | undefined): HeadlessObject {
+  // 按当前语言的翻译改写固定文字（FairyGUI 在创建组件时做同样的事）。
+  const key = owner && child.elementId ? `${owner}-${child.elementId}` : null;
+  const translated = key && tr ? tr.translation[key] : undefined;
+  const prompt = key && tr ? tr.translation[`${key}-prompt`] : undefined;
+  const p = {...child.props};
+  if (translated !== undefined) { if (child.kind === 'button') p.title = translated; else p.text = translated; }
+  if (prompt !== undefined) p.promptText = prompt;
   let object: HeadlessObject;
   switch (child.kind) {
     case 'text': case 'richtext': { const t = new HeadlessText(child.name, child.kind); t.text = p.text ?? ''; object = t; break; }
@@ -195,10 +207,10 @@ function buildChild(child: ChildDescriptor, lookup: Lookup): HeadlessObject {
     case 'image': object = new HeadlessImage(child.name, 'image'); break;
     case 'loader': { const l = new HeadlessLoader(child.name, 'loader'); if (p.url) l.url = p.url; object = l; break; }
     case 'graph': { const g = new HeadlessGraph(child.name, 'graph'); g.color = p.color ?? '#ffffff'; object = g; break; }
-    case 'list': object = new HeadlessList(child.name, child.defaultItem, lookup); break;
+    case 'list': object = new HeadlessList(child.name, child.defaultItem, lookup, tr); break;
     default: {
       if (!child.ref) throw new LgRuntimeError('LGUI-RT-031', `子组件 ${child.name} 引用的组件不存在。`, '在 ui/ 里修好这个子组件的引用，再重新生成。');
-      object = buildComponent(lookup(child.ref), lookup, child.name, child.kind, p);
+      object = buildComponent(lookup(child.ref), lookup, child.name, child.kind, p, tr);
     }
   }
   object.visible = p.visible;
@@ -211,7 +223,7 @@ function buildChild(child: ChildDescriptor, lookup: Lookup): HeadlessObject {
 }
 
 /** 按描述建一个组件（连同全部子控件和子组件）。 */
-export function buildComponent(descriptor: ComponentDescriptor, lookup: Lookup, name = descriptor.name, kind: UIKind = 'component', props?: ChildDescriptor['props']): HeadlessComponent {
+export function buildComponent(descriptor: ComponentDescriptor, lookup: Lookup, name = descriptor.name, kind: UIKind = 'component', props?: ChildDescriptor['props'], tr?: Translate): HeadlessComponent {
   let component: HeadlessComponent;
   if (kind === 'button' || descriptor.extension === 'Button') {
     const button = new HeadlessButton(name, descriptor.name, 'button');
@@ -230,7 +242,8 @@ export function buildComponent(descriptor: ComponentDescriptor, lookup: Lookup, 
   component.rect = {x: 0, y: 0, width: descriptor.size[0], height: descriptor.size[1]};
   for (const c of descriptor.controllers) component.controllers.set(c.name, new HeadlessController(c.name, c.pages, c.selected));
   for (const t of descriptor.transitions) component.transitions.set(t, new HeadlessTransition(t));
-  for (const child of descriptor.children) component.addChild(buildChild(child, lookup));
+  const owner = tr?.owners.get(descriptor.name);
+  for (const child of descriptor.children) component.addChild(buildChild(child, lookup, owner, tr));
   return component;
 }
 
