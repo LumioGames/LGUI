@@ -2,7 +2,7 @@
 import type {Backend, BackendConfig, KeyInput, LogEntry, Platform, PointerInput, UIComponent, WheelInput} from '../../core/index';
 import {LgRuntimeError, notImplemented} from '../../core/index';
 import type {ComponentDescriptor, PackageDescriptor} from './descriptor';
-import {Handlers, HeadlessComponent, buildComponent} from './objects';
+import {Handlers, HeadlessComponent, HeadlessLoader, buildComponent} from './objects';
 
 /** headless 后端独有的状态，模拟操作和测试断言用。 */
 export interface HeadlessState {
@@ -58,7 +58,9 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[]): H
       },
       releasePackage: name => { state.loaded.delete(name); },
       hasPackage: name => state.loaded.has(name),
-      loadImage: async () => {}
+      loadImage: async url => {
+        if (HeadlessLoader.failExternal && !url.startsWith('ui://')) throw new LgRuntimeError('LGUI-RT-025', `图片 ${url} 加载失败。`, '确认地址对、文件存在。');
+      }
     },
     input: {onPointer: f => h.pointer.add(f), onKey: f => h.key.add(f), onWheel: f => h.wheel.add(f), setInputMode: mode => { state.inputMode = mode; }},
     textInput: {isComposing: () => false},

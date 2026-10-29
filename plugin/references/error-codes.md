@@ -47,4 +47,11 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-032` | 测试里点了一个点不到的控件（自己或上级没显示、不可用或不接收输入） | 检查控件和它所在的界面是不是显示、可用、激活 |
 | `LGUI-RT-040` | 同一个事件名声明了两次 | 换一个名字，或者 import 已经声明的那个 |
 | `LGUI-RT-050` | 框架还没启动就用了需要后端的功能（时间、界面等） | 用 `lgui dev` 预览，或者在测试里先调用 `lgui.testing.start(app)` |
+| `LGUI-RT-060` | View 缺少必填的 static（`component`、`layer`），或者值不对 | 照 mvc-spec.md 第 6.2 节写 |
+| `LGUI-RT-061` | View 写了 7 项以外的 static（ItemView、PartView 只能写 `component`） | 删掉多出来的 |
+| `LGUI-RT-062` | 绑定表的键在组件里找不到（不是控件、控制器，也不是点号路径） | 用 `lgui ui list` 查看真实的名字；改了 `ui/` 要重新生成 |
+| `LGUI-RT-063` | 绑定表用了词表以外的词，或者这个词不能用在这种控件上 | 见 mvc-spec.md 第 6.4 节的词表 |
+| `LGUI-RT-064` | 列表的 `item`、部件的 `view` 写得不对（缺少、或者对应的组件不一致） | 让 ItemView / PartView 的 `static component` 和 `ui/` 里的组件一致 |
+| `LGUI-RT-065` | 界面还没打开或已经关闭时用了 `this.ui` | 只在生命周期钩子里用 `this.ui` |
+| `LGUI-RT-070` | 图片加载失败，显示占位图 | 确认图片地址对、能访问 |
 | `LGUI-RT-027` | 后端还没启动就开始用 | 先调用 `backend.init(config)`（框架启动时会自动调用） |

@@ -21,7 +21,11 @@ export async function loadFramework() {
     `export {setRuntime, clearRuntime, defaultConfig} from ${f('mvc/runtime.ts')};`,
     `export {bus} from ${f('mvc/events.ts')};`,
     `export {recognize, thresholds} from ${f('mvc/input/gestures.ts')};`,
-    `export {actionForKey, keysForAction} from ${f('mvc/input/keys.ts')};`
+    `export {actionForKey, keysForAction} from ${f('mvc/input/keys.ts')};`,
+    `export {validateViewClass} from ${f('mvc/view.ts')};`,
+    `export {inputType} from ${f('mvc/input/input-type.ts')};`,
+    `export {listenerCount} from ${f('mvc/model.ts')};`,
+    `export {HeadlessLoader} from ${f('backends/headless/objects.ts')};`
   ].join('\n'));
   cached = await importTs(entry);
   return cached;
