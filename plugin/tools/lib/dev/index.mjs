@@ -28,7 +28,7 @@ export async function startDev(root, project, {port = project.devPort, log = () 
   // 1. 生成界面包、类型、包依赖；2. 写启动入口；3. 打包。
   const generateUi = async () => {
     await generateWeb(uiProjectPath(root), webUiDir(root));
-    await generateProjectTypes(root);
+    await generateProjectTypes(root, {validated: true});
   };
   let context = null;
   const bundle = async () => {
