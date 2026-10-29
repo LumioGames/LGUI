@@ -49,6 +49,11 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-091` | 要生成的文件已经存在（不会覆盖） | 换一个名字，或者先删掉旧文件 |
 | `LGUI-CLI-092` | 工程里没有 `Common/Button`，排布模式要用它 | 用 `lgui init` 生成的 Common 包 |
 | `LGUI-CLI-093` | 名字写法不对（`new view` 要写「包/组件」，`new module` 要写小写开头的英文名） | 照用法写 |
+| `LGUI-CLI-100` | 编辑器没开，或者编辑器页面没连上（`lgui editor props`） | 先在工程目录运行 `lgui editor`，等编辑器页面打开 |
+| `LGUI-CLI-101` | `lgui editor props` 的参数不对（属性名、值的写法） | 照用法写：`lgui editor props <组件> <控件> <属性>=<值> ...` |
+| `LGUI-CLI-102` | 组件或控件不存在（`ui/` 里没有，或者编辑器里打开的不是本工程的 `ui/`） | 用 `lgui ui list` 查名字；在编辑器里导入本工程的 `ui/` 文件夹 |
+| `LGUI-CLI-103` | 编辑器拒绝了查询或修改 | 按编辑器的提示改；内容刚变过就再运行一次 |
+| `LGUI-CLI-104` | 插件里没有编辑器文件 | 重新安装插件 |
 | `LGUI-CLI-999` | 命令行内部错误（LGUI 自己的缺陷） | 把输出报告给维护者 |
 
 ## LGUI-RT-xxx

@@ -160,10 +160,10 @@ index 0000000..3c4a1a0
 +}
 diff --git a/src/editor/services/BrowserAgentTransport.ts b/src/editor/services/BrowserAgentTransport.ts
 new file mode 100644
-index 0000000..77dbdfb
+index 0000000..0cebdea
 --- /dev/null
 +++ b/src/editor/services/BrowserAgentTransport.ts
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,40 @@
 +import type { EditorProjectSession } from "../modules/ProjectSessionModule";
 +import { BrowserAgentSession } from "./BrowserAgentSession";
 +
@@ -184,8 +184,9 @@ index 0000000..77dbdfb
 +    const clientId = crypto.randomUUID();
 +    const endpoint = { schemaVersion: 1 as const, clientId, request: (input: unknown) => api.request(input) };
 +    window.fairyEditorAgent = endpoint;
-+    const post = (route: string, body: unknown) => fetch(`${RELAY}/${route}`, {
-+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), keepalive: true,
++    // keepalive (body limit 64 KiB) only for the final "bye"; results can be large.
++    const post = (route: string, body: unknown, keepalive = false) => fetch(`${RELAY}/${route}`, {
++        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), keepalive,
 +    }).catch(() => undefined);
 +    const announce = () => post("hello", { clientId, url: location.href, schemaVersion: 1 });
 +    const events = new EventSource(`${RELAY}/events?clientId=${encodeURIComponent(clientId)}`);
@@ -199,7 +200,7 @@ index 0000000..77dbdfb
 +    return () => {
 +        window.clearInterval(timer);
 +        events.close();
-+        void post("bye", { clientId });
++        void post("bye", { clientId }, true);
 +        if (window.fairyEditorAgent === endpoint) delete window.fairyEditorAgent;
 +    };
 +}

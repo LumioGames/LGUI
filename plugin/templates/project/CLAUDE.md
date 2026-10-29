@@ -23,6 +23,8 @@ LGUI 是面向 AI Agent 的 UI 框架：界面在 `ui/`（FairyGUI 格式）里�
 | `lgui ui list` | 列出 `ui/` 里的组件和控件 |
 | `lgui new module <名字> [--pattern <模式>]` | 生成一个功能的骨架（带模式时连横竖两版界面一起生成） |
 | `lgui new view <包>/<组件> --pattern <模式>` | 按排布模式生成横竖两版界面和 View 骨架 |
+| `lgui editor` | 打开编辑器（第一次要在编辑器里导入本工程的 `ui/` 文件夹） |
+| `lgui editor props <组件> <控件> <属性>=<值> ...` | 编辑器开着时修改已有控件的属性，编辑器里马上变 |
 | `lgui doctor --paths` | 打印规范所在的目录 |
 
 ## 规范
