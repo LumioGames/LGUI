@@ -6,6 +6,7 @@ import {todo} from './todo';
 import {createModel} from './model';
 import {bus, builtinEvents, defineEvent} from './events';
 import {UIManager} from './ui/manager';
+import {currentLanguage, t} from './i18n';
 import type {Entry} from './ui/manager';
 import {runtime, wallNow} from './runtime';
 import type {Model} from './model';
@@ -188,11 +189,11 @@ export const lgui = {
     get(path: string): boolean | number { void path; return todo('lgui.redDot.get'); }
   },
   /** 取文本，占位符写成 {count}。 */
-  t(key: string, params?: Record<string, string | number>): string { void key; void params; return todo('lgui.t'); },
+  t(key: string, params?: Record<string, string | number>): string { return t(key, params); },
   /** 切换语言。 */
   setLanguage(language: string): Promise<void> { void language; return todo('lgui.setLanguage'); },
   /** 当前语言。 */
-  language(): string { return todo('lgui.language'); },
+  language(): string { return currentLanguage(); },
   /** 时间。 */
   time: {
     /** 当前时间（毫秒，和服务器对齐过）。 */
