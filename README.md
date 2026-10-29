@@ -46,12 +46,12 @@ LGUI 是一个面向 AI Agent 的开源 UI 引擎框架。UI 资源、预制结�
 | `lgui-ui` | 拼界面：XML、排布模式、出图拆图、动效、编辑器 |
 | `lgui-code` | 写功能：Model、View、Controller、Service、测试 |
 | `lgui-verify` | 截图、测试、调试快照 |
-| `lgui-unity` | 接 Unity（阶段 3 实现） |
+| `lgui-unity` | 导出到 Unity，运行和验证 Windows IL2CPP Player |
 
 ## 已知限制
 
 - 技能要新开一个会话才生效（宿主的限制）；命令行不受影响。
-- Unity 导出（`lgui unity export`）在阶段 3 实现。
+- Unity 导出需要已有 Unity 6000.6.x 工程和 PuerTS Core/V8 3.0.3 本地包；Player 的原生桥生成、构建在 Unity 中完成，步骤见接入文档。
 - 版本和发布状态见[更新记录](CHANGELOG.md)。
 
 ## 链接
@@ -61,7 +61,7 @@ LGUI 是一个面向 AI Agent 的开源 UI 引擎框架。UI 资源、预制结�
 - UI 开发规范：[plugin/references/ui-spec.md](plugin/references/ui-spec.md)
 - MVC 开发规范：[plugin/references/mvc-spec.md](plugin/references/mvc-spec.md)
 - 用户工程目录：[plugin/references/project-layout.md](plugin/references/project-layout.md)
-- 接入 Unity（阶段 3 实现）：[plugin/references/unity.md](plugin/references/unity.md)
+- 接入 Unity：[plugin/references/unity.md](plugin/references/unity.md)
 - 背包示例：[examples/inventory](examples/inventory/README.md)
 - 错误码：[plugin/references/error-codes.md](plugin/references/error-codes.md)
 - 第三方许可：[plugin/THIRD_PARTY_NOTICES.md](plugin/THIRD_PARTY_NOTICES.md)
