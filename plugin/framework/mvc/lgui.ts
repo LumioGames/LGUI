@@ -2,6 +2,8 @@
 import type {LgRuntimeError, NetService, Rect, StorageService} from '../core/index';
 import type {InputMode, InputType, Layer, Orientation, ParamsOf, Readable, ResultOf, ViewClass} from './types';
 import {todo} from './todo';
+import {createModel} from './model';
+import type {Model} from './model';
 
 /** 入口 main.ts 的定义。 */
 export interface AppDefinition {
@@ -13,11 +15,7 @@ export interface AppDefinition {
   start(): void | Promise<void>;
 }
 
-/** Model：数据加规则。 */
-export type Model<State extends object, Rules extends object> = Readable<State> & Rules & {
-  /** 只改给出的字段。 */
-  set(partial: Partial<State>): void;
-};
+export type {Model};
 
 /** 请求状态。 */
 export interface RequestState<T> {
@@ -126,8 +124,7 @@ export const lgui = {
 
   /** 定义一个 Model：初始数据加规则。 */
   Model<State extends object, Rules extends object = Record<never, never>>(initial: State, rules?: (set: (partial: Partial<State>) => void, get: () => State) => Rules): Model<State, Rules> {
-    void initial; void rules;
-    return todo('lgui.Model');
+    return createModel(initial, rules);
   },
 
   /** 把一个请求包一层，自带状态。 */

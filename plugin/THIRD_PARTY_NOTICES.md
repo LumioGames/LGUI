@@ -17,6 +17,7 @@ LGUI 的 MIT 许可（[LICENSE](LICENSE)）只覆盖 LumioGames 的原创代码�
 | pako | `tools/vendor/node_modules/pako/` | 2.2.0 | MIT AND Zlib；许可原文在包内 `LICENSE` |
 | sharp（含 `@img/sharp-darwin-arm64`、`darwin-x64`、`linux-x64`、`win32-x64`），以及依赖 `@img/colour` 1.1.0（MIT）、detect-libc 2.1.2（Apache-2.0）、semver 7.8.5（ISC） | `tools/vendor/node_modules/sharp/`、`@img/*` | 0.34.5 | Apache-2.0，Copyright 2013 Lovell Fuller and others；许可原文在各包 `LICENSE` |
 | libvips 及其依赖库（`@img/sharp-libvips-darwin-arm64`、`darwin-x64`、`linux-x64`；Windows 版打包在 `@img/sharp-win32-x64` 里） | `tools/vendor/node_modules/@img/sharp-libvips-*/`、`@img/sharp-win32-x64/` | sharp-libvips 1.2.4（libvips 8.17.3） | libvips 是 LGPL-3.0-or-later，许可全文见文末；上游源码 `https://github.com/libvips/libvips`，预编译包的构建脚本 `https://github.com/lovell/sharp-libvips`。其中各个依赖库的许可（LGPLv3、MIT、BSD、MPL-2.0、zlib、libpng 等）逐项列在各 `@img/sharp-libvips-*` 包的 `README.md` 里，各库版本见包内 `versions.json` |
+| zustand vanilla | `framework/mvc/vendor/zustand-vanilla.ts` | 5.0.16（`esm/vanilla.mjs` 照抄成 TS，逻辑不改） | MIT，Copyright (c) 2019 Paul Henschel；许可全文在文件开头 |
 | playwright-core | `tools/vendor/node_modules/playwright-core/` | 1.64.1 | Apache-2.0，Copyright (c) Microsoft Corporation；许可原文和 NOTICE 在包内。只连用户已有的 Chrome 或 Edge，不带浏览器 |
 
 FairyGUI-dom 的 `src/tween/EaseManager.ts` 含 Daniele Giardini/DOTween 条款链接及 Robert Penner 的 BSD 声明，随运行时一起保留。
