@@ -288,6 +288,27 @@ export class UIManager {
     for (const e of [...this.stacks[layer]].reverse()) this.closeEntry(e);
   }
 
+  /** 控件在设计尺寸下的位置和大小：路径写成「包/组件.控件路径」。找不到返回 null。 */
+  find(path: string): Rect | null {
+    const dot = path.indexOf('.');
+    const componentName = dot < 0 ? path : path.slice(0, dot);
+    const entry = this.all().find(e => e.state === 'open' && e.component && e.cls.component === componentName.replace(/@portrait$/, ''));
+    if (!entry || !entry.component) return null;
+    let {x, y, width, height} = entry.component.rect;
+    if (dot < 0) return {x, y, width, height};
+    const parts = path.slice(dot + 1).split('.');
+    for (let i = 1; i <= parts.length; i++) {
+      const object = entry.component.child(parts.slice(0, i).join('.'));
+      if (!object) return null;
+      const r = object.rect;
+      x += r.x;
+      y += r.y;
+      width = r.width;
+      height = r.height;
+    }
+    return {x, y, width, height};
+  }
+
   /** 内部用：每个界面的监听和定时器数量。 */
   views(): {name: string; listeners: number; timers: number}[] {
     return this.all().filter(e => e.state === 'open').map(e => ({name: e.cls.name, listeners: e.view.__listeners, timers: e.view.__timers.size}));
