@@ -2,7 +2,7 @@
 import type {Backend, BackendConfig, Insets, KeyInput, LogEntry, Platform, PointerInput, UIComponent, WheelInput} from '../../core/index';
 import {LgRuntimeError, notImplemented} from '../../core/index';
 import type {ComponentDescriptor, PackageDescriptor} from './descriptor';
-import {Handlers, HeadlessComponent, HeadlessLoader, buildComponent, buildImage} from './objects';
+import {Handlers, HeadlessComponent, HeadlessLoader, HeadlessObject, HeadlessTransition, buildComponent, buildImage} from './objects';
 
 /** headless 后端独有的状态，模拟操作和测试断言用。 */
 export interface HeadlessState {
@@ -55,6 +55,8 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[], tr
   let prefix = '';
   const root = new HeadlessComponent('root', 'root', 'container');
   const h = state.handlers;
+  HeadlessTransition.frames = h.frame;
+  HeadlessObject.pointerTarget = null;
   const platform: Platform = {
     time: {now: () => state.now, onFrame: f => h.frame.add(f), onVisibilityChange: f => h.visibility.add(f)},
     storage: {get: key => state.storage.get(prefix + key) ?? null, set: (key, value) => { state.storage.set(prefix + key, value); }, remove: key => { state.storage.delete(prefix + key); }},

@@ -1,6 +1,6 @@
 // 绑定引擎：把 View 的绑定表接到控件上。每个绑定的订阅、手势识别都登记在 scope 里，解绑时一次清掉。
 // 词表和写法见 references/mvc-spec.md 第 6.4 节。
-import type {UIButton, UIComponent, UIController, UIImage, UIList, UILoader, UIObject, UIProgress, UIText} from '../../core/index';
+import type {UIButton, UIComponent, UIController, UIImage, UIList, UILoader, UIObject, UIProgress, UIText, UITransition} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
 import {isPicked} from '../pick';
 import type {Scope} from '../scope';
@@ -8,10 +8,12 @@ import {runtime} from '../runtime';
 import {asActor} from '../actor';
 import {inputType} from '../input/input-type';
 import {recognize} from '../input/gestures';
+import {dragSource, dropTarget} from '../input/drag-drop';
 import type {GestureHandlers} from '../input/gestures';
 import type {InputType} from '../types';
 import {bindList} from './list';
 import {bindPart} from './part';
+import {bindTransition} from './transition';
 import {applyIcon} from './icon';
 import {pick} from '../pick';
 import {redDots, redDotState} from '../red-dot';
@@ -38,20 +40,23 @@ const listWords = ['items', 'item', 'key', 'selected', 'select'];
 const actionWords = ['click', 'doubleClick', 'hold', 'drag', 'swipe', 'pinch', 'wheel', 'hover'];
 const modifierWords = ['lockWhilePending', 'visibleOn', 'placeholder'];
 const controllerWords = ['page', 'change'];
+const dragWords = ['dragData', 'dragIcon', 'drop'];
 
 const fail = (code: string, message: string, next: string): never => { throw new LgRuntimeError(code, message, next); };
 
-/** 解析绑定表的键：控件名、控制器名，或者用「.」连起来的路径。 */
-function resolve(component: UIComponent, key: string, where: string): {kind: 'controller'; target: UIController} | {kind: 'object'; target: UIObject} {
+/** 解析绑定表的键：控件名、控制器名、动效名，或者用「.」连起来的路径。 */
+function resolve(component: UIComponent, key: string, where: string): {kind: 'controller'; target: UIController} | {kind: 'transition'; target: UITransition} | {kind: 'object'; target: UIObject} {
   const dot = key.lastIndexOf('.');
   const parent = dot < 0 ? component : component.child(key.slice(0, dot));
   const last = dot < 0 ? key : key.slice(dot + 1);
   if (parent && 'controller' in parent) {
     const controller = (parent as UIComponent).controller(last);
     if (controller) return {kind: 'controller', target: controller};
+    const transition = (parent as UIComponent).transition(last);
+    if (transition) return {kind: 'transition', target: transition};
   }
   const target = component.child(key);
-  if (!target) fail('LGUI-RT-062', `${where} 的绑定表里写了 ${key}，但组件 ${component.componentName} 里没有这个控件或控制器。`, '用 lgui ui list 查看真实的控件名；改了 ui/ 之后要重新生成。');
+  if (!target) fail('LGUI-RT-062', `${where} 的绑定表里写了 ${key}，但组件 ${component.componentName} 里没有这个控件、控制器或动效。`, '用 lgui ui list 查看真实的控件名；改了 ui/ 之后要重新生成。');
   return {kind: 'object', target: target as UIObject};
 }
 
@@ -77,7 +82,7 @@ function setText(target: UIObject, text: string, where: string, key: string): vo
 /** 绑定一个控件。 */
 function bindObject(component: UIComponent, key: string, target: UIObject, binding: Record<string, unknown>, ctx: BindContext): void {
   for (const word of Object.keys(binding)) {
-    if (![...displayWords, ...listWords, ...actionWords, ...modifierWords, 'view'].includes(word)) {
+    if (![...displayWords, ...listWords, ...actionWords, ...modifierWords, ...dragWords, 'view'].includes(word)) {
       fail('LGUI-RT-063', `${ctx.where} 的 ${key} 用了词表以外的词 ${word}。`, `能用的词见 references/mvc-spec.md 第 6.4 节。`);
     }
   }
@@ -124,9 +129,13 @@ function bindObject(component: UIComponent, key: string, target: UIObject, bindi
     if (!('componentName' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不是组件，不能用 view。`, '换成子组件。');
     bindPart(target as UIComponent, binding.view, ctx);
   }
+  // 拖放
+  if ('dragIcon' in binding && !('dragData' in binding)) fail('LGUI-RT-221', `${ctx.where} 的 ${key} 写了 dragIcon，但没写 dragData。`, '加上 dragData（拖起时带的数据），或者去掉 dragIcon。');
+  if ('drop' in binding) dropTarget(target, key, binding.drop, ctx);
+  const dragging = 'dragData' in binding ? dragSource(target, key, binding, ctx, () => ctx.isActive() && !pending && target.enabled) : null;
   // 动作
   const actions = actionWords.filter(word => word in binding);
-  if (actions.length) {
+  if (actions.length || dragging) {
     const lock = binding.lockWhilePending === true;
     const run = (action: unknown, ...args: unknown[]): void => {
       if (!ctx.isActive() || pending || !target.enabled) return;
@@ -148,7 +157,7 @@ function bindObject(component: UIComponent, key: string, target: UIObject, bindi
       const bar = 'child' in target ? (target as UIComponent).child('holdProgress') as UIProgress | null : null;
       handlers.hold = {ms: hold.ms, action: () => run(hold.action), progress: ratio => { if (bar && 'max' in bar && ctx.isActive()) bar.value = ratio * bar.max; }};
     }
-    if (binding.drag) handlers.drag = g => run(binding.drag, g);
+    if (binding.drag || dragging) handlers.drag = g => { if (binding.drag) run(binding.drag, g); dragging?.(g); };
     if (binding.swipe) handlers.swipe = g => run(binding.swipe, g);
     if (binding.pinch) handlers.pinch = g => run(binding.pinch, g);
     if (binding.hover) handlers.hover = inside => run(binding.hover, inside);
@@ -179,6 +188,7 @@ export function applyBindings(component: UIComponent, table: Table, ctx: BindCon
     if (!binding) continue;
     const resolved = resolve(component, key, ctx.where);
     if (resolved.kind === 'controller') bindController(resolved.target, key, binding, ctx);
+    else if (resolved.kind === 'transition') bindTransition(resolved.target, key, binding, ctx);
     else bindObject(component, key, resolved.target, binding, ctx);
   }
 }

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {LgCliError, LgCliErrors} from '../errors.mjs';
 
-const typeNames = {component: 'UIComponent', text: 'UIText', richtext: 'UIRichText', input: 'UIInput', button: 'UIButton', image: 'UIImage', loader: 'UILoader', list: 'UIList', progress: 'UIProgress', graph: 'UIGraph'};
+const typeNames = {component: 'UIComponent', text: 'UIText', richtext: 'UIRichText', input: 'UIInput', button: 'UIButton', image: 'UIImage', loader: 'UILoader', list: 'UIList', progress: 'UIProgress', graph: 'UIGraph', transition: 'UITransition'};
 export const PORTRAIT = '@portrait';
 const isPortrait = component => component.name.endsWith(PORTRAIT);
 
@@ -40,7 +40,23 @@ export function members(component, prefix = '', seen = new Set()) {
       for (const [nestedKey, value] of nested.result) result.set(nestedKey, value);
     }
   }
+  // 动效：动效名也是绑定表的键，不能和控件、控制器重名。
+  for (const name of component.transitions) {
+    if (!name) continue;
+    if (names.has(name)) {
+      errors.push(new LgCliError('LGUI-UI-005', `组件 ${component.fullName} 里动效 ${name} 和${names.get(name) === 'controller' ? '控制器' : '控件'}同名。`, {file: component.file, line: lineOf(component, name), fix: '给动效换一个名字。'}));
+      continue;
+    }
+    names.set(name, 'transition');
+    result.set(prefix + name, {kind: 'transition', line: lineOf(component, name), file: component.file});
+  }
   return {result, errors};
+}
+
+// 动效在组件 XML 里的行号（报错用）。
+function lineOf(component, name) {
+  const index = fs.readFileSync(component.file, 'utf8').split('\n').findIndex(line => line.includes(`<transition name="${name}"`));
+  return index >= 0 ? index + 1 : undefined;
 }
 
 function describe(member) {
@@ -94,7 +110,7 @@ export function generateTypes(model, out) {
   if (errors.length) throw new LgCliErrors(errors);
   fs.rmSync(out, {recursive: true, force: true});
   fs.mkdirSync(out, {recursive: true});
-  const header = "// 由 ui/ 生成，不要手改。\nimport type { UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UIProgress, UIGraph } from 'lgui';\n";
+  const header = "// 由 ui/ 生成，不要手改。\nimport type { UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph } from 'lgui';\n";
   const files = [];
   for (const [pkgName, blocks] of perPackage) {
     const file = path.join(out, `${pkgName}.d.ts`);

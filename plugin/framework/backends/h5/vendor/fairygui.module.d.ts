@@ -38,6 +38,8 @@ export class GComponent extends GObject {
   getChildAt(index: number): GObject;
   getController(name: string): Controller | null;
   getTransition(name: string): Transition | null;
+  /** 组件自己的全部动效（上游没有公开的读法，读内部字段）。 */
+  readonly _transitions: Transition[];
   addChild(child: GObject): GObject;
   removeChild(child: GObject, dispose?: boolean): GObject;
 }
@@ -116,6 +118,11 @@ export class Controller extends EventDispatcher {
 
 export class Transition {
   name: string;
+  readonly playing: boolean;
+  /** ui/ 里写的自动播放、播放次数、延迟（秒）（上游没有公开的读法，读内部字段）。 */
+  readonly _autoPlay: boolean;
+  readonly _autoPlayTimes: number;
+  readonly _autoPlayDelay: number;
   play(onComplete?: () => void, times?: number, delay?: number): void;
   stop(setToComplete?: boolean, processCallback?: boolean): void;
   setPaused(paused: boolean): void;

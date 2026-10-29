@@ -89,6 +89,8 @@ export interface TestHarness {
   hold(path: string, ms: number): Promise<void>;
   /** 拖拽。 */
   drag(path: string, dx: number, dy: number): Promise<void>;
+  /** 拖放：从一个控件拖到另一个控件上松手。 */
+  dragTo(from: string, to: string): Promise<void>;
   /** 滑动。 */
   swipe(path: string, dx: number, dy: number): Promise<void>;
   /** 双指缩放。 */

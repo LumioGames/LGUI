@@ -48,6 +48,8 @@ export interface UIObject {
   readonly customData: string;
   /** 订阅落在这个对象上的原始指针事件，手势由框架识别。 */
   onPointer(handler: (event: PointerInput) => void): Unsubscribe;
+  /** 内部用：设计尺寸里 (x, y) 这一点上最上面那个接收输入的控件在自己里面第几层（0 是自己），不在自己里面是 -1。拖放找落点用。 */
+  hitDepth(x: number, y: number): number;
 }
 
 /** 组件：可以按路径找子控件、控制器和动效。Name 是组件在 ui/ 里的「包/组件」名。 */
@@ -60,6 +62,8 @@ export interface UIComponent<Name extends string = string> extends UIObject {
   controller(name: string): UIController | null;
   /** 内部用：按名字找动效，找不到返回 null。 */
   transition(name: string): UITransition | null;
+  /** 内部用：组件自己的全部动效（不含子组件的）。 */
+  allTransitions(): readonly UITransition[];
   /** 内部用：直接子控件的名字，按显示顺序。 */
   childNames(): readonly string[];
   /** 内部用：把一个对象加到最上面（UIManager 往层里放界面时用）。 */
@@ -157,11 +161,15 @@ export interface UIController<Page extends string = string> {
 export interface UITransition {
   /** 动效名。 */
   readonly name: string;
-  /** 播放；放完时 Promise 完成。times 是播放次数，-1 表示一直循环。 */
-  play(options?: { times?: number; delay?: number }): Promise<void>;
+  /** ui/ 里写的设置：是否自动播放、播放次数（-1 一直循环）、自动播放前等多久（毫秒）。 */
+  readonly settings: {autoPlay: boolean; times: number; delay: number};
+  /** 是否正在播放（暂停着、还在等 delay 也算）。 */
+  readonly playing: boolean;
+  /** 从头播放 times 次（-1 一直循环），先等 delay 毫秒；正常放完时调用 onComplete，被 stop、重播或销毁打断时不调用。 */
+  play(options?: {times?: number; delay?: number}, onComplete?: () => void): void;
   /** 停止，停在最后一帧。 */
   stop(): void;
-  /** 暂停或恢复（界面被盖住时由框架调用）。 */
+  /** 暂停或恢复（界面被盖住时由框架调用）；没在播放时不起作用。 */
   setPaused(paused: boolean): void;
 }
 

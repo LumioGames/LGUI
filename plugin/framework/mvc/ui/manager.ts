@@ -62,6 +62,8 @@ interface ViewInstance {
   __mount(component: UIComponent, options: {isActive: () => boolean}): void;
   __dispose(): void;
   __timers: {pause(): void; resume(): void; size: number};
+  __pause(): void;
+  __resume(): void;
   __listeners: number;
   keys: Record<string, unknown>;
 }
@@ -362,8 +364,8 @@ export class UIManager {
       if (covered !== e.covered) {
         e.covered = covered;
         if (e.component) e.component.visible = !covered;
-        if (covered) { e.view.__timers.pause(); this.hook(e, 'onCovered'); bus.emit(builtinEvents.viewCovered, {view: e.cls}); }
-        else { e.view.__timers.resume(); this.hook(e, 'onRevealed'); bus.emit(builtinEvents.viewRevealed, {view: e.cls}); }
+        if (covered) { e.view.__pause(); this.hook(e, 'onCovered'); bus.emit(builtinEvents.viewCovered, {view: e.cls}); }
+        else { e.view.__resume(); this.hook(e, 'onRevealed'); bus.emit(builtinEvents.viewRevealed, {view: e.cls}); }
       }
       const isActive = e === active;
       if (e.component) e.component.touchable = isActive;

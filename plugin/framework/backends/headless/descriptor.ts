@@ -35,8 +35,8 @@ export interface ComponentDescriptor {
   size: [number, number];
   /** 控制器。 */
   controllers: {name: string; pages: string[]; selected: string | null}[];
-  /** 动效名。 */
-  transitions: string[];
+  /** 动效：名字、放一遍要多少毫秒（-1 是永远放不完）、自动播放、播放次数、自动播放前等多久（毫秒）。 */
+  transitions: {name: string; ms: number; autoPlay: boolean; times: number; delay: number}[];
   /** 子控件。 */
   children: ChildDescriptor[];
 }

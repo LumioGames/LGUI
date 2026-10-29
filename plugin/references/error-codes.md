@@ -101,4 +101,8 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-130` | ArtText 要显示的字符没有对应的图片（报错里写明是哪个字符） | 在字体目录下加上这个字符的图片，登记进 `package.xml` 并导出 |
 | `LGUI-RT-140` | 切换到工程不支持的语言 | 在 `.lgui/project.json` 的 `languages` 里加上它，并新建 `i18n/<语言>.json` |
 | `LGUI-RT-141` | 网页端读不到这种语言的翻译文件 | 重新运行 `lgui dev` 生成翻译文件 |
+| `LGUI-RT-210` | 动效只写了 `done`，但它不会自动播放，也没写 `playing` 或 `play`，永远放不完 | 加上 `playing` 或 `play`，或者在 `ui/` 里给它勾上自动播放 |
+| `LGUI-RT-211` | 动效同时写了 `playing` 和 `play`，或者在 `ItemView` 里写了 `play` | 二选一；`ItemView` 里用 `playing: it => …` |
+| `LGUI-RT-220` | 写了 `dragData` 的控件不是加载器或按钮，又没写 `dragIcon`，拖起时没有图标 | 加上 `dragIcon`，或者把 `dragData` 写在加载器、按钮上 |
+| `LGUI-RT-221` | 写了 `dragIcon` 但没写 `dragData` | 加上 `dragData`，或者去掉 `dragIcon` |
 | `LGUI-RT-027` | 后端还没启动就开始用 | 先调用 `backend.init(config)`（框架启动时会自动调用） |

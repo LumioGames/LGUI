@@ -148,7 +148,7 @@ export class BagView extends View<BagPanelUI> {
 
 ### 6.3 绑定表的键
 
-- 控件名，或者控制器名（控制器只能用 `page` 和 `change`）。
+- 控件名，或者控制器名（控制器只能用 `page` 和 `change`），或者动效名（动效只能用 `playing`、`play`、`done`）。
 - 只在这个界面里出现的子组件里的控件：用「.」连起来，`'header.count'`。
 - 好几个界面共用的子组件：做成 `PartView`，写 `topBar: { view: CurrencyBarView }`。
 - 键名和控件类型由 `ui/` 生成，写错编译就报错。
@@ -177,11 +177,19 @@ export class BagView extends View<BagPanelUI> {
 | `lockWhilePending` | 有 `click` 的控件 | `true`：动作返回的 Promise 结束前保持锁住 | `lockWhilePending: true` |
 | `visibleOn` | 任意控件 | 只在这些输入类型下显示 | `visibleOn: ['keyboardMouse']` |
 | `placeholder` | 加载器 | 加载中和失败时显示的图，不写用工程配置的默认占位图 | `placeholder: 'ui://Bag/iconLoading'` |
+| `playing` | 动效 | 布尔；为真就播（按 `ui/` 里的播放次数，`-1` 一直循环），为假就停 | `glow: { playing: pick(bagModel, s => s.hasNew) }` |
+| `play` | 动效 | 值每变一次播一遍（打开时的值不播），比如一个递增的计数；不能和 `playing` 一起写，不能写在 `ItemView` 里 | `levelUp: { play: pick(heroModel, s => s.levelUps) }` |
+| `done` | 动效 | 一次播放放完时调用，调用 Controller 方法（被停掉、重播、界面关闭时不调用） | `done: () => heroController.levelUpShown()` |
+| `dragData` | 任意控件 | 能拖起来；值是松手时交给 `drop` 的数据，`null` 时拖不起来（比如空格子） | `dragData: it => it.id` |
+| `dragIcon` | 写了 `dragData` 的控件 | 拖起时跟手的图标（图片地址），不写用加载器自己的图片或按钮的图标 | `dragIcon: it => it.iconUrl` |
+| `drop` | 任意控件 | 别的控件拖到这里松手时调用，参数是那边的 `dragData`；写在 `ItemView` 里时第二个参数是这一项的数据 | `drop: id => bagController.equip(id)` |
 
 - **显示类的值只有两种写法：** 固定值，或 `pick(数据, 取字段, 格式化?)`。`ItemView` 里写成函数：传入这一项的数据，返回要显示的内容。
 - **动作类只调用 Controller 的方法**，一句话写完，View 里不写业务逻辑。
 - **点击和手势绑在能接收输入的控件上：** 按钮、组件、列表、有填充的图形。文字、富文本、图片自己收不到点击（FairyGUI 的各个运行时都这样），绑上去不会触发；`lgui test` 里点它们报 `LGUI-RT-032`。
 - **绑定表里不写死用户能看到的文字。** 固定文字放在 `ui/` 里，动态文字用 `lgui.t`。
+- **动效：** `ui/` 里勾了自动播放的照旧自动播放，写了 `done` 时放完也通知。界面被全屏界面盖住时，它里面在放的动效（绑定的和自动播放的）都暂停，露出来接着放；界面关闭时停掉。动效放完不能当作业务完成（发奖、扣钱以 Controller 的结果为准）。
+- **拖放（游戏式）：** 被拖的控件不动；拖起时框架在最上面放一个跟手的临时图标（不接收输入），松手就去掉。松在写了 `drop` 的控件上才调用 `drop`，由 Controller 改 Model，列表按数据重画；松在别处什么也不改。只认激活界面里可用的控件；落点重叠时取最里面的（格子在列表里面，算格子的）。
 - **没写进绑定表的控件，代码里一律不碰。** 特殊情况用生命周期钩子（第 9 节），钩子里用 `this.ui.<控件名>`：可以读控件、调用控件的方法，但不给控件的属性赋值。旋转、换语言时组件会重建，钩子里赋的值就丢了；要显示的东西都写进绑定表（`lgui check` 报 `LGUI-MVC-020`）。
 - **不写坐标和尺寸。**
 
@@ -397,7 +405,7 @@ test('选中道具后出售，金币增加', async () => {
 | 方法 | 作用 |
 |---|---|
 | `open(View, 参数?)` | 打开界面 |
-| `click(路径)`、`hold(路径, 毫秒)`、`drag(路径, dx, dy)`、`swipe(路径, dx, dy)`、`pinch(路径, 比例)`、`wheel(路径, dy)`、`key(按键名)` | 模拟操作 |
+| `click(路径)`、`hold(路径, 毫秒)`、`drag(路径, dx, dy)`、`dragTo(从哪, 到哪)`、`swipe(路径, dx, dy)`、`pinch(路径, 比例)`、`wheel(路径, dy)`、`key(按键名)` | 模拟操作；`dragTo` 是拖放：从一个控件拖到另一个控件上松手 |
 | `text(路径)`、`visible(路径)`、`enabled(路径)`、`page(路径)`、`items(路径)` | 读控件属性：文字（字符串）、显示 / 可用（布尔）、控制器当前页（页名）、列表项数（数字） |
 | `setScreen(宽, 高)`、`setLanguage(语言)`、`setInputType('touch' \| 'keyboardMouse')` | 模拟旋转、换语言、换输入设备 |
 | `advance(毫秒)` | 让假时钟往前走 |
@@ -406,7 +414,7 @@ test('选中道具后出售，金币增加', async () => {
 
 路径写成 `<包>/<组件>.<控件路径>`；列表子项用 `list[序号]`。
 
-- **假时钟：** 点了按钮以后，打开新界面、请求返回都要等一帧，先 `await t.advance(16)` 再读；一串请求就多等几帧。
+- **假时钟：** 点了按钮以后，打开新界面、请求返回都要等一帧，先 `await t.advance(16)` 再读；一串请求就多等几帧。动效按 `ui/` 里写的时长走：要等 `done`，就 `await t.advance(动效的毫秒数)`。
 - **整个文件没跑起来也算失败：** 测试文件加载时出错（顶层抛错、import 失败）或者测试结束后还有没处理的错误，`lgui test` 把这个文件记为失败（失败项是 `tests/` 里的文件名）。
 - **Model 在测试之间不重置**（同一个测试文件里的测试共用一份）：给 Model 加一个 `reset()` 规则，在 `beforeEach` 里调用：
 
@@ -425,8 +433,8 @@ beforeEach(() => bagModel.reset());
 | `LGUI-MVC-002` | View 写了必填的 `component` 和 `layer` | `static layer = 'page'` | 没写 `layer` |
 | `LGUI-MVC-003` | View 只写 6.2 表里的 7 项 static；`ItemView`、`PartView` 只写 `component` | — | `static cache = true` |
 | `LGUI-MVC-004` | static 的值合法：`layer` 是 5 层之一，`component` 是存在的导出组件，`inputMode` 是 `ui`/`game`/`all` | `static layer = 'popup'` | `static layer = 'dialog'` |
-| `LGUI-MVC-005` | 绑定表的键是组件里真实存在的控件、控制器或点号路径 | `'header.count'` | `'header.cnt'` |
-| `LGUI-MVC-006` | 绑定表只用词表里的词；控制器只用 `page`、`change` | `{ text: … }` | `{ label: … }`、控制器上写 `visible` |
+| `LGUI-MVC-005` | 绑定表的键是组件里真实存在的控件、控制器、动效或点号路径 | `'header.count'` | `'header.cnt'` |
+| `LGUI-MVC-006` | 绑定表只用词表里的词；控制器只用 `page`、`change`；动效只用 `playing`、`play`、`done` | `{ text: … }` | `{ label: … }`、控制器上写 `visible` |
 | `LGUI-MVC-007` | View 里显示类的值是固定值或 `pick(…)`；`ItemView` 里是函数 | `pick(bagModel, s => s.gold)` | `bagModel.get().gold` |
 | `LGUI-MVC-008` | 动作类的值只调用一个 Controller 方法 | `() => bagController.sell()` | `() => { bagModel.set(…) }` |
 | `LGUI-MVC-009` | View 不改 Model | — | View 里调用 `bagModel.set` 或规则方法 |
