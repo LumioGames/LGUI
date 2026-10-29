@@ -1,3 +1,12 @@
 # unity/adapter
 
-Unity 后端的 TS 适配层：通过 PuerTS 调用 Unity 里的 FairyGUI。导出时编进游戏代码。
+Unity 后端的 TypeScript 适配层。`createUnityBackend()` 实现 `core/` 的控件和平台接口，由导出时生成的入口选择，游戏源码仍只 import `lgui`。
+
+- `index.ts`：后端启动、包与固定文字翻译加载；资源根为 `UI`，翻译根为 `UI/i18n`。
+- `objects.ts`：FairyGUI 控件、列表、控制器、动效和事件的包装。每个原生订阅都能取消，界面销毁与后端停止时释放。
+- `platform.ts`：通过 FairyGUI Stage 接收原始指针、键盘和滚轮，通过 Unity 包里的 `LGUI.Platform` 提供存储、屏幕、时间、音频和 HTTP。WebSocket 尚未实现，调用时报 `LGUI-RT-001`。
+- `native-*.ts`：固定版本 C# API 的严格类型边界。
+
+Unity 包的 `LGUIBoot` 每帧调用 `__lguiFrame(deltaMs)`，前后台变化时调用 `__lguiVisibility(visible)`，销毁脚本环境前调用 `__lguiDispose()`。这些入口只在适配层内部使用。
+
+开发验证工程与共用一致性用例的启动器在仓库的 `tests/unity/`；它们不随插件下发。编译、Editor Play 与 Windows IL2CPP Player 的验收应分别记录。
