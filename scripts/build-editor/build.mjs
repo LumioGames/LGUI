@@ -47,6 +47,7 @@ sh('npm', ['ci', '--no-audit', '--no-fund'], src);
 const patches = path.join(here, 'patches');
 sh('git', ['apply', path.join(patches, 'agent-session.patch')], src);
 sh('git', ['apply', path.join(patches, 'rebrand.patch')], src);
+sh('git', ['apply', path.join(patches, 'project-reload.patch')], src);
 sh('git', ['apply', path.join(patches, 'rebrand-ui.patch')], path.join(src, 'vendor', 'FairyGUI-Editor'));
 fs.copyFileSync(path.join(here, 'brand', 'logo128.png'), path.join(src, 'vendor', 'FairyGUI-Editor', 'ui', 'assets', 'Builder', 'icons', 'logo128.png'));
 

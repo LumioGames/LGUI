@@ -32,6 +32,7 @@ ui/
 
 - **一个功能一个包**（背包一个 `Bag`、商店一个 `Shop`）。好几个功能都用的东西放进 `Common` 或单独的公共包。
 - 跨包引用只能引用对方包里 `exported="true"` 的资源。
+- **跨包引用的写法**（编辑器能保存的样子，`lgui check` 的 `LGUI-UI-020`）：子组件跨包只写 `pkg`（包 ID）和 `src`（组件 ID），不写 `fileName`；图片不跨包引用——要用别的包的图片，就用那个包里导出的组件，或者装载器（`url` 写 `ui://包名/图片名`）。原因：编辑器（OpenFairyGUI 0.2.4）读进来时会丢掉这两样，判定工程「不能无损保存」，整个工程都存不了。
 - XML 以 **OpenFairyGUI 0.7.0** 能读写的格式为准。编辑器保存的格式也要能被 0.7.0 生成；有冲突时以 0.7.0 为准。
 
 ## 3. 命名
@@ -99,7 +100,7 @@ ui/
 控件（每种都可以照抄，改 `id`、`name`、位置、尺寸和内容）：
 
 ```xml
-<!-- 图片：src 是同包的资源 ID，跨包用 fileName + pkg -->
+<!-- 图片：src 是同包的资源 ID。图片不跨包引用（见第 2 节的「跨包引用的写法」） -->
 <image id="n0" name="bg" src="frame001" xy="0,0" size="400,300"/>
 
 <!-- 文字：必须写 autoSize，见第 8 节 -->
@@ -265,7 +266,7 @@ ui/
 
 ```xml
 <!-- 在按钮组件 TabButton.xml 的 displayList 末尾 -->
-<component id="n5" name="redDot" fileName="RedDot.xml" pkg="cmn00001" src="reddot01" xy="120,-8" size="32,32" visible="false"/>
+<component id="n5" name="redDot" pkg="cmn00001" src="reddot01" xy="120,-8" size="32,32" visible="false"/>
 ```
 
 **长按进度：** 用 `hold` 的按钮里放一个名字固定为 `holdProgress` 的进度条子控件。按住时框架让它从 0 涨到 100%，松手归零。没有这个子控件也能长按，只是不显示进度。
@@ -284,7 +285,7 @@ ui/
 - **在界面里放 ArtText：** 放一个 `Common/ArtText` 的实例，用 `customData` 写配置：
 
 ```xml
-<component id="n9" name="damage" fileName="ArtText.xml" pkg="cmn00001" src="arttext1" xy="800,400" size="320,80"
+<component id="n9" name="damage" pkg="cmn00001" src="arttext1" xy="800,400" size="320,80"
   customData="font=Bag/dmg;align=center;spacing=2"/>
 ```
 
@@ -324,6 +325,7 @@ ui/
 | `LGUI-UI-017` | `@<语言>` 图片有默认版本，语言在 `languages` 里 | `title.png` + `title@en.png` | 只有 `title@en.png`，或 `title@xx.png` |
 | `LGUI-UI-018` | `package.xml` 登记的文件都存在，包目录里的组件和图片都已登记 | 新图片登记进 `package.xml` | 放了图片没登记 |
 | `LGUI-UI-019` | 代码里用到的组件（View 的 `component`、列表子项）已导出 | `exported="true"` | 没写 `exported` |
+| `LGUI-UI-020`（警告） | 跨包引用写成编辑器能保存的样子：子组件跨包只写 `pkg` + `src`，不写 `fileName`；图片不跨包引用 | `pkg="cmn00001" src="button01"` | `fileName="Button.xml" pkg="cmn00001"`；`<image … pkg="cmn00001">` |
 | `LGUI-UI-030` | 代码里 `lgui.t` 用到的键、绑定的固定文字，在每种语言的文本表里都有 | 各语言都有 `bag.sold` | `en.json` 里缺 `bag.sold` |
 | `LGUI-UI-031`（警告） | 文本表里没有用不到的键（用变量拼键名的地方查不出来，所以只是警告） | — | 删掉了按钮，`Bag/BagPanel/oldButton` 还在表里 |
 | `LGUI-UI-032` | 同一个键在各语言里的占位符一致 | `已售出 {count} 件` / `Sold {count}` | `Sold {num}` |

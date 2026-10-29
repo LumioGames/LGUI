@@ -87,6 +87,10 @@ export function uiRules({root, model, languages, redDots = []}) {
           const target = model.byId.get(child.attrs.pkg ?? pkg.id);
           if (!target?.resources.some(r => r.id === child.attrs.src)) add('LGUI-UI-009', `组件 ${component.fullName} 的图片 ${child.name} 引用的资源 ${child.attrs.src} 不存在。`, '指向一个存在的图片资源。', component.file, child.line);
         }
+        // UI-020 编辑器保存不了的跨包写法（警告）
+        const editorWarn = (message, fix) => out.push(finding('LGUI-UI-020', message, fix, {file: rel(component.file), line: child.line, col: 1, level: 'warning'}));
+        if (child.tag === 'component' && child.attrs.pkg && child.attrs.fileName) editorWarn(`组件 ${component.fullName} 的子组件 ${child.name} 跨包引用写了 fileName，编辑器保存不了这个工程。`, '删掉 fileName，只写 pkg 和 src。');
+        if (child.tag === 'image' && child.attrs.pkg && child.attrs.pkg !== pkg.id) editorWarn(`组件 ${component.fullName} 的图片 ${child.name} 引用了别的包里的图片，编辑器保存不了这个工程。`, '把图片放进本包；或者用一个那个包里导出的组件（组件可以跨包）、或者装载器（url 写 ui://包名/图片名）。');
         // UI-016 列表 defaultItem
         if (child.tag === 'list' && (!child.ref || !child.ref.exported)) add('LGUI-UI-016', `组件 ${component.fullName} 的列表 ${child.name} 的 defaultItem 没设，或者指向的组件不存在、没导出。`, '写 defaultItem="ui://<包ID><组件ID>"，指向一个导出的组件。', component.file, child.line);
         // UI-013 ArtText

@@ -46,6 +46,7 @@ const cases = {
   'LGUI-UI-017': {fail: r => { fs.copyFileSync(path.join(r, 'ui/assets/Common/placeholder.png'), path.join(r, 'ui/assets/Common/logo@fr.png')); edit(r, 'ui/assets/Common/package.xml', '</resources>', '  <image id="logo0001" name="logo@fr.png" path="/" exported="true"/>\n  </resources>'); }},
   'LGUI-UI-018': {fail: r => fs.copyFileSync(path.join(r, 'ui/assets/Common/placeholder.png'), path.join(r, 'ui/assets/Main/stray.png'))},
   'LGUI-UI-019': {fail: r => { edit(r, MAIN_PKG, 'name="MainView.xml" path="/" exported="true"', 'name="MainView.xml" path="/"'); edit(r, MAIN_PKG, 'name="MainView@portrait.xml" path="/" exported="true"', 'name="MainView@portrait.xml" path="/"'); }},
+  'LGUI-UI-020': {fail: r => edit(r, MAIN_XML, 'pkg="cmn00001" src="button01"', 'fileName="Button.xml" pkg="cmn00001" src="button01"'), warning: true},
   'LGUI-UI-030': {fail: r => edit(r, 'i18n/en.json', /\s*"main\.hint": "[^"]*",/, '')},
   'LGUI-UI-031': {fail: r => edit(r, 'i18n/en.json', '{', '{\n  "nope.unused": "x",'), warning: true},
   'LGUI-UI-032': {fail: r => edit(r, 'i18n/en.json', 'Clicked {count} times', 'Clicked {n} times')},

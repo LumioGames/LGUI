@@ -1,0 +1,110 @@
+diff --git a/src/editor/EditorShell.ts b/src/editor/EditorShell.ts
+index 03d8dcb..7f0d4aa 100644
+--- a/src/editor/EditorShell.ts
++++ b/src/editor/EditorShell.ts
+@@ -462,6 +462,10 @@ export class EditorShell {
+         this.configureToolbarCapabilities();
+         this.layout();
+         void this.workspaceLifecycle.initialize();
++        // LGUI: opened by `lgui editor` → always start from the project's ui/.
++        if (location.hostname === "127.0.0.1" && new URL(location.href).searchParams.get("agent") === "1") {
++            void this.workspaceLifecycle.reloadFromLguiProject();
++        }
+ 
+         Laya.stage.on(Laya.Event.RESIZE, this, this.onStageResize);
+         Laya.stage.on(Laya.Event.MOUSE_DOWN, this, this.onStageMouseDown);
+diff --git a/src/editor/modules/WorkspaceLifecycleModule.ts b/src/editor/modules/WorkspaceLifecycleModule.ts
+index 8007269..74654ef 100644
+--- a/src/editor/modules/WorkspaceLifecycleModule.ts
++++ b/src/editor/modules/WorkspaceLifecycleModule.ts
+@@ -114,6 +114,33 @@ export class EditorWorkspaceLifecycle {
+         return this.track(this.session.runExclusive(() => this.importWorkspaceNow(picked, label, workspaceId)));
+     }
+ 
++    /**
++     * LGUI: when opened by `lgui editor` (127.0.0.1, ?agent=1), always re-import the project's ui/ folder,
++     * so the editor never shows a stale browser copy after an Agent changed ui/. The bound folder (if any)
++     * is kept, so saving still writes back to ui/.
++     */
++    reloadFromLguiProject(): Promise<boolean> {
++        if (!this.active) return Promise.resolve(false);
++        const workspaceId = this.registry.activeId;
++        return this.track(this.session.runExclusive(async () => {
++            let body: { name: string; files: { path: string; data: string }[] };
++            try {
++                const response = await fetch("/__lgui_editor/project", { cache: "no-store" });
++                if (!response.ok) throw new Error(`HTTP ${response.status}`);
++                body = await response.json();
++            } catch (error) {
++                this.chrome.setStatus(`LGUI: reading ui/ failed: ${error instanceof Error ? error.message : String(error)}`, "error");
++                return false;
++            }
++            const files = body.files.map((file) => ({
++                path: file.path,
++                data: Uint8Array.from(atob(file.data), (c) => c.charCodeAt(0)),
++            }));
++            const picked = await this.session.workspaceLifecycle.importFromLguiProject(body.name, files);
++            return this.importWorkspaceNow(picked, "ui/", workspaceId);
++        }));
++    }
++
+     pickDirectoryProject(): Promise<BrowserProjectImportResult> {
+         return this.session.workspaceLifecycle.pickDirectoryProject();
+     }
+diff --git a/src/editor/runtime/WorkspaceLifecycleController.ts b/src/editor/runtime/WorkspaceLifecycleController.ts
+index dc31b70..dae6440 100644
+--- a/src/editor/runtime/WorkspaceLifecycleController.ts
++++ b/src/editor/runtime/WorkspaceLifecycleController.ts
+@@ -5,6 +5,7 @@ import type { BrowserLiveSessionBridge } from "../services/BrowserLiveSessionBri
+ import type { BrowserProjectStorage } from "../services/BrowserProjectStorage";
+ import type {
+     BrowserSaveTarget,
++    BrowserWorkspaceFile,
+ } from "../model/BrowserWorkspace";
+ import {
+     BROWSER_WORKSPACE_REGISTRY_STORAGE_KEY,
+@@ -100,6 +101,11 @@ export class WorkspaceLifecycleController {
+         return this.coordinator.checkExternalChanges();
+     }
+ 
++    /** LGUI: re-import the project's ui/ served by `lgui editor`, keeping the bound folder for write-back. */
++    async importFromLguiProject(sourceName: string, files: BrowserWorkspaceFile[]): Promise<BrowserProjectImportResult> {
++        return this.importer.fromFiles(sourceName, files, await this.coordinator.getBoundDirectory());
++    }
++
+     async importWorkspace(picked: BrowserProjectImportResult) {
+         const result = await this.coordinator.importWorkspaceFiles(
+             picked.imported,
+diff --git a/src/editor/services/BrowserProjectImport.ts b/src/editor/services/BrowserProjectImport.ts
+index 760142e..6166c74 100644
+--- a/src/editor/services/BrowserProjectImport.ts
++++ b/src/editor/services/BrowserProjectImport.ts
+@@ -97,6 +97,11 @@ export class BrowserProjectImport {
+         return files;
+     }
+ 
++    /** LGUI: build an import from files served by `lgui editor` (the project's ui/ folder). */
++    fromFiles(sourceName: string, files: BrowserWorkspaceFile[], directoryHandle?: FileSystemDirectoryHandle): BrowserProjectImportResult {
++        return this.createImportResult({ source: "directory", sourceName, files, directoryHandle });
++    }
++
+     private createImportResult(candidate: ProjectImportCandidate): BrowserProjectImportResult {
+         const normalizedFiles = candidate.files
+             .map((file) => ({ path: normalizeImportPath(file.path), data: file.data }))
+diff --git a/src/editor/services/BrowserSaveCoordinator.ts b/src/editor/services/BrowserSaveCoordinator.ts
+index d02f081..cf760a0 100644
+--- a/src/editor/services/BrowserSaveCoordinator.ts
++++ b/src/editor/services/BrowserSaveCoordinator.ts
+@@ -121,6 +121,12 @@ export class BrowserSaveCoordinator {
+         return await this.resolveStorageState(await this.storage.getState());
+     }
+ 
++    /** LGUI: the folder this workspace writes back to, if one was bound and restored. */
++    async getBoundDirectory(): Promise<FileSystemDirectoryHandle | undefined> {
++        await this.restoreWorkspaceBinding();
++        return this.directoryBinding?.directory;
++    }
++
+     async checkExternalChanges(): Promise<BrowserWorkspaceWriteback> {
+         await this.restoreWorkspaceBinding();
+         const binding = this.directoryBinding;

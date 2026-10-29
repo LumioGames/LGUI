@@ -15,7 +15,7 @@ export const connectionPath = root => path.join(root, '.lgui', 'build', 'editor-
 /** 启动编辑器服务（测试也用它）。 */
 export async function startEditor(root) {
   if (!fs.existsSync(path.join(editorDir, 'index.html'))) throw new LgCliError('LGUI-CLI-104', `插件里没有编辑器（${editorDir}）。`, {fix: '重新安装插件；在 LGUI 仓库里开发时运行 node scripts/build-editor/build.mjs。'});
-  return startEditorServer({editorDir, connectionFile: connectionPath(root)});
+  return startEditorServer({editorDir, projectDir: path.join(root, 'ui'), connectionFile: connectionPath(root)});
 }
 
 export async function editor({projectRoot, flags}) {
@@ -30,7 +30,8 @@ export async function editor({projectRoot, flags}) {
     summary: [
       `编辑器地址：${url}`,
       opened ? '已经用 Chrome / Edge 打开。' : (flags['no-open'] ? '没有自动打开浏览器（--no-open）。' : '没找到 Chrome 或 Edge，请手动打开上面的地址。'),
-      `第一次用：在编辑器里点「文件 → 从文件夹导入…」，选择本工程的 ${path.join(projectRoot, 'ui')} 文件夹并允许读写。`,
+      '编辑器每次打开都从本工程的 ui/ 重新读取，显示的总是 ui/ 里的最新内容。',
+      `要在编辑器里保存回 ui/：第一次在编辑器里点「文件 → 从文件夹导入…」，选择 ${path.join(projectRoot, 'ui')} 并允许读写（只要做一次）。`,
       '编辑器开着时，Agent 可以用 lgui editor props 修改控件属性。按 Ctrl+C 停止。'
     ],
     errors: []

@@ -3,6 +3,7 @@
 // - Agent 一侧（/__lgui_editor/clients、/__lgui_editor/rpc）：必须带 Authorization: Bearer <令牌>；带了来源但不是编辑器自己的页面 → 403。
 // - 浏览器一侧（events、hello、response、bye）：只接受编辑器页面自己发的同源请求（Sec-Fetch-Site: same-origin，POST 还要核对 Origin）。
 // - 请求只发给指定的一个浏览器标签页，不广播；浏览器 15 秒没回结果按「结果未知」回 504。
+// - 编辑器页面每次打开时从 /__lgui_editor/project 读工程的 ui/（只读），保证显示的是 ui/ 里的最新内容。
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import http from 'node:http';
@@ -26,8 +27,23 @@ async function readBody(req, limit = MAX_BODY) {
   try { return JSON.parse(raw); } catch { throw Object.assign(new Error('请求不是合法的 JSON。'), {status: 400, code: 'invalid_request'}); }
 }
 
+// 工程 ui/ 下的全部文件（不含隐藏文件），路径用 /，内容 base64。
+function readProjectFiles(dir) {
+  const files = [];
+  const walk = rel => {
+    for (const e of fs.readdirSync(path.join(dir, rel), {withFileTypes: true})) {
+      if (e.name.startsWith('.')) continue;
+      const child = rel ? `${rel}/${e.name}` : e.name;
+      if (e.isDirectory()) walk(child);
+      else if (e.isFile()) files.push({path: child, data: fs.readFileSync(path.join(dir, child)).toString('base64')});
+    }
+  };
+  walk('');
+  return files;
+}
+
 /** 启动服务。返回 { baseUrl, token, close }。 */
-export async function startEditorServer({editorDir, connectionFile, timeoutMs = 15000}) {
+export async function startEditorServer({editorDir, projectDir, connectionFile, timeoutMs = 15000}) {
   const token = crypto.randomBytes(32).toString('hex');
   const clients = new Map();   // clientId → { res（SSE）, url, lastSeen }
   const pending = new Map();   // 请求 id → { res, timer, clientId }
@@ -54,6 +70,10 @@ export async function startEditorServer({editorDir, connectionFile, timeoutMs = 
 
   const browserRoute = async (name, req, res, url) => {
     if (!fromEditorPage(req)) return reject(res, 403, 'origin_rejected', '只接受编辑器页面自己的请求。');
+    if (name === 'project' && req.method === 'GET') {
+      if (!projectDir) return reject(res, 404, 'no_project', '没有工程目录。');
+      return json(res, 200, {name: path.basename(projectDir), files: readProjectFiles(projectDir)});
+    }
     if (name === 'events' && req.method === 'GET') {
       const clientId = url.searchParams.get('clientId') ?? '';
       if (!clientId || clientId.length > 128) return reject(res, 400, 'invalid_request', '缺少 clientId。');

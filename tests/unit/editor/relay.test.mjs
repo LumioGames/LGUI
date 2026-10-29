@@ -129,3 +129,24 @@ test('editor props 报错：控件不存在 LGUI-CLI-102；编辑器没开 LGUI-
   fs.writeFileSync(connectionPath(root), JSON.stringify({baseUrl: 'http://127.0.0.1:9', token: 'x'}));
   assert.equal((await json(['editor', 'props', 'Main/MainView', 'title', 'text=x'])).errors[0].code, 'LGUI-CLI-100');
 });
+
+test('编辑器页面从 /__lgui_editor/project 读工程的 ui/（只读、只认同源、不含隐藏文件）', async () => {
+  const dir = tmp();
+  const ui = path.join(dir, 'ui');
+  fs.mkdirSync(path.join(ui, 'assets', 'Main'), {recursive: true});
+  fs.writeFileSync(path.join(ui, 'UI.fairy'), '<projectDescription/>');
+  fs.writeFileSync(path.join(ui, 'assets', 'Main', 'package.xml'), '<packageDescription/>');
+  fs.writeFileSync(path.join(ui, '.gitkeep'), '');
+  const server = await startEditorServer({editorDir: dir, projectDir: ui, connectionFile: path.join(dir, 'c.json')});
+  try {
+    assert.equal((await request(server.baseUrl, '/__lgui_editor/project')).status, 403);
+    assert.equal((await request(server.baseUrl, '/__lgui_editor/project', {headers: {'sec-fetch-site': 'cross-site'}})).status, 403);
+    const res = await request(server.baseUrl, '/__lgui_editor/project', {headers: {'sec-fetch-site': 'same-origin'}});
+    assert.equal(res.body.name, 'ui');
+    assert.deepEqual(res.body.files.map(f => f.path).sort(), ['UI.fairy', 'assets/Main/package.xml']);
+    assert.equal(Buffer.from(res.body.files.find(f => f.path === 'UI.fairy').data, 'base64').toString(), '<projectDescription/>');
+    assert.equal((await request(server.baseUrl, '/__lgui_editor/project', {method: 'POST', headers: {'sec-fetch-site': 'same-origin', origin: server.baseUrl}, body: {}})).status, 404);
+  } finally {
+    await server.close();
+  }
+});
