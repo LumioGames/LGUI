@@ -1,5 +1,6 @@
 // 广播站：通知「发生了一件事」。先声明事件名和参数类型，再广播；谁关心谁收听。
-import type {EventDef} from './lgui';
+import type {EventDef, ViewEvent} from './lgui';
+import type {InputMode, InputType, Orientation} from './types';
 import {LgRuntimeError} from '../core/index';
 
 const names = new Set<string>();
@@ -39,3 +40,25 @@ export class EventBus {
 }
 
 export const bus = new EventBus();
+
+const builtin = <P>(name: string): EventDef<P> => defineEvent<P>(`lgui.${name}`);
+
+/** 框架自己广播的事件（lgui.events）。 */
+export const builtinEvents = {
+  /** 界面打开了。 */
+  viewOpened: builtin<ViewEvent>('viewOpened'),
+  /** 界面关闭了。 */
+  viewClosed: builtin<ViewEvent>('viewClosed'),
+  /** 界面被全屏界面盖住了。 */
+  viewCovered: builtin<ViewEvent>('viewCovered'),
+  /** 界面重新露出来了。 */
+  viewRevealed: builtin<ViewEvent>('viewRevealed'),
+  /** 屏幕方向变了。 */
+  orientationChange: builtin<{orientation: Orientation}>('orientationChange'),
+  /** 语言变了。 */
+  languageChange: builtin<{language: string}>('languageChange'),
+  /** 输入设备类型变了。 */
+  inputTypeChange: builtin<{inputType: InputType}>('inputTypeChange'),
+  /** 激活界面的输入模式变了（游戏场景代码收听它）。 */
+  inputModeChange: builtin<{inputMode: InputMode}>('inputModeChange')
+};

@@ -1,9 +1,12 @@
 // lgui 对象：游戏代码用到的全部框架功能。写法见 references/mvc-spec.md。
-import type {LgRuntimeError, NetService, Rect, StorageService} from '../core/index';
+import type {NetService, Rect, StorageService} from '../core/index';
+import {LgRuntimeError} from '../core/index';
 import type {InputMode, InputType, Layer, Orientation, ParamsOf, Readable, ResultOf, ViewClass} from './types';
 import {todo} from './todo';
 import {createModel} from './model';
-import {bus, defineEvent} from './events';
+import {bus, builtinEvents, defineEvent} from './events';
+import {UIManager} from './ui/manager';
+import type {Entry} from './ui/manager';
 import {runtime, wallNow} from './runtime';
 import type {Model} from './model';
 
@@ -118,7 +121,12 @@ export interface OpenOptions<V> {
   onClose?: (result: ResultOf<V> | undefined) => void;
 }
 
-const event = <P>(name: string): EventDef<P> => defineEvent<P>(`lgui.${name}`);
+const manager = (): UIManager => {
+  const ui = runtime().ui;
+  if (!(ui instanceof UIManager)) throw new LgRuntimeError('LGUI-RT-050', '框架还没启动。', '用 lgui dev 预览，或者在测试里先调用 lgui.testing.start(app)。');
+  return ui;
+};
+const viewOf = (entry: Entry | undefined): object | undefined => entry?.state === 'open' ? entry.view : undefined;
 
 export const lgui = {
   /** 定义入口。 */
@@ -138,25 +146,25 @@ export const lgui = {
   /** UIManager。 */
   ui: {
     /** 压栈打开。 */
-    open<V extends ViewClass>(view: V, params?: ParamsOf<V>, options?: OpenOptions<V>): Promise<InstanceType<V>> { void view; void params; void options; return todo('lgui.ui.open'); },
+    open<V extends ViewClass>(view: V, params?: ParamsOf<V>, options?: OpenOptions<V>): Promise<InstanceType<V>> { return manager().open(view, params as object | undefined, options as {onClose?: (result: unknown) => void}) as Promise<InstanceType<V>>; },
     /** 替换当前栈顶。 */
-    replace<V extends ViewClass>(view: V, params?: ParamsOf<V>): Promise<InstanceType<V>> { void view; void params; return todo('lgui.ui.replace'); },
+    replace<V extends ViewClass>(view: V, params?: ParamsOf<V>): Promise<InstanceType<V>> { return manager().replace(view, params as object | undefined) as Promise<InstanceType<V>>; },
     /** 关闭，可以顺带交回 static result 声明的东西。 */
-    close<V extends ViewClass>(view: V, result?: ResultOf<V>): void { void view; void result; todo('lgui.ui.close'); },
+    close<V extends ViewClass>(view: V, result?: ResultOf<V>): void { manager().close(view, result); },
     /** 和按返回键一样。 */
-    back(): void { todo('lgui.ui.back'); },
+    back(): void { manager().back(); },
     /** 一直关到指定界面。 */
-    popTo(view: ViewClass): void { void view; todo('lgui.ui.popTo'); },
+    popTo(view: ViewClass): void { manager().popTo(view); },
     /** 关闭某一层的全部界面。 */
-    closeAll(layer: Layer): void { void layer; todo('lgui.ui.closeAll'); },
+    closeAll(layer: Layer): void { manager().closeAll(layer); },
     /** 有没有打开。 */
-    isOpen(view: ViewClass): boolean { void view; return todo('lgui.ui.isOpen'); },
+    isOpen(view: ViewClass): boolean { return viewOf(manager().entryOf(view)) !== undefined; },
     /** 已经打开的实例。 */
-    get<V extends ViewClass>(view: V): InstanceType<V> | undefined { void view; return todo('lgui.ui.get'); },
+    get<V extends ViewClass>(view: V): InstanceType<V> | undefined { return viewOf(manager().entryOf(view)) as InstanceType<V> | undefined; },
     /** 最上层的界面，或某一层最上面的界面。 */
-    top(layer?: Layer): object | undefined { void layer; return todo('lgui.ui.top'); },
+    top(layer?: Layer): object | undefined { return viewOf(manager().top(layer)); },
     /** 某一层的全部界面，按栈的顺序。 */
-    list(layer: Layer): object[] { void layer; return todo('lgui.ui.list'); },
+    list(layer: Layer): object[] { return manager().shown(layer).map(e => e.view); },
     /** 控件在设计尺寸下的位置和大小，只读。 */
     find(path: string): Rect | null { void path; return todo('lgui.ui.find'); }
   },
@@ -197,30 +205,13 @@ export const lgui = {
   /** 广播一个事件。 */
   emit<P>(definition: EventDef<P>, payload: P): void { bus.emit(definition, payload); },
   /** 框架自己的事件。 */
-  events: {
-    /** 界面打开了。 */
-    viewOpened: event<ViewEvent>('viewOpened'),
-    /** 界面关闭了。 */
-    viewClosed: event<ViewEvent>('viewClosed'),
-    /** 界面被全屏界面盖住了。 */
-    viewCovered: event<ViewEvent>('viewCovered'),
-    /** 界面重新露出来了。 */
-    viewRevealed: event<ViewEvent>('viewRevealed'),
-    /** 屏幕方向变了。 */
-    orientationChange: event<{orientation: Orientation}>('orientationChange'),
-    /** 语言变了。 */
-    languageChange: event<{language: string}>('languageChange'),
-    /** 输入设备类型变了。 */
-    inputTypeChange: event<{inputType: InputType}>('inputTypeChange'),
-    /** 激活界面的输入模式变了（游戏场景代码收听它）。 */
-    inputModeChange: event<{inputMode: InputMode}>('inputModeChange')
-  },
+  events: builtinEvents,
   /** 平台服务里给游戏代码用的部分。 */
   platform: {
     /** 网络（只在 Service 里用）。 */
-    get net(): NetService { return todo('lgui.platform.net'); },
+    get net(): NetService { return runtime().backend.platform.net; },
     /** 本地存储。 */
-    get storage(): StorageService { return todo('lgui.platform.storage'); }
+    get storage(): StorageService { return runtime().backend.platform.storage; }
   },
   /** 调试。 */
   debug: {

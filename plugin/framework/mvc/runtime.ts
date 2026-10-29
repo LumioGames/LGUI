@@ -38,6 +38,10 @@ export const defaultConfig: RuntimeConfig = {
 interface Current {
   backend: Backend;
   config: RuntimeConfig;
+  /** 每个界面包依赖哪些别的包（lgui 生成的 .lgui/build/deps.json）。 */
+  deps: Record<string, string[]>;
+  /** UIManager（启动时创建）。 */
+  ui: unknown;
   /** 启动时的墙上时间和后端时钟，用来算 lgui.time.now()。 */
   wallBase: number;
   monoBase: number;
@@ -48,8 +52,8 @@ interface Current {
 let current: Current | null = null;
 
 /** 内部用：设置当前后端。 */
-export function setRuntime(backend: Backend, config: RuntimeConfig, wallBase = Date.now()): void {
-  current = {backend, config, wallBase, monoBase: backend.platform.time.now(), serverOffset: 0};
+export function setRuntime(backend: Backend, config: RuntimeConfig, wallBase = Date.now(), deps: Record<string, string[]> = {}): void {
+  current = {backend, config, deps, ui: null, wallBase, monoBase: backend.platform.time.now(), serverOffset: 0};
 }
 
 /** 内部用：清掉（测试之间用）。 */

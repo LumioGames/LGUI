@@ -5,7 +5,7 @@ import type {BindContext} from './index';
 
 /** 部件 View 的内部接口（PartView 实现它）。 */
 export interface PartViewInstance {
-  __mount(component: UIComponent, options: {isActive: () => boolean}): void;
+  __mount(component: UIComponent, options: {isActive: () => boolean; owner: object}): void;
   __dispose(): void;
 }
 
@@ -16,6 +16,6 @@ export function bindPart(component: UIComponent, PartClass: unknown, ctx: BindCo
     throw new LgRuntimeError('LGUI-RT-064', `${ctx.where} 把 ${component.componentName} 交给了 ${Part.name}，但它对应的是 ${Part.component}。`, '让 PartView 的 static component 和子组件一致。');
   }
   const part = new Part();
-  part.__mount(component, {isActive: ctx.isActive});
+  part.__mount(component, {isActive: ctx.isActive, owner: ctx.owner});
   ctx.scope.add(() => part.__dispose());
 }
