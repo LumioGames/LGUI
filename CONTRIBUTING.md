@@ -37,7 +37,11 @@
 
 ## 怎么重新编译编辑器
 
-（S2-I1 完成后补上。编辑器补丁现在在 `scripts/build-editor/patches/`。）
+```bash
+node scripts/build-editor/build.mjs
+```
+
+克隆上游编辑器的固定提交、打补丁（实时会话中转、换品牌）、编译，产物放进 `plugin/editor/`，提交进 git。补丁、Logo 和品牌出现位置的清单都在 [scripts/build-editor/README.md](scripts/build-editor/README.md)。升级上游提交时：改 `build.mjs` 里的 `COMMIT`，重新生成三个补丁，按清单再查一遍页面上有没有 FairyGUI 的名称和 Logo。
 
 ## 许可
 

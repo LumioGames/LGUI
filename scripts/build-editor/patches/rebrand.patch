@@ -1,0 +1,111 @@
+diff --git a/index.html b/index.html
+index 22ac116..6a28d25 100644
+--- a/index.html
++++ b/index.html
+@@ -3,7 +3,7 @@
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-    <title>FairyGUI Editor Online</title>
++    <title>LGUI Editor</title>
+     <style>
+       html,
+       body {
+diff --git a/src/Main.ts b/src/Main.ts
+index 5736616..8143eaa 100644
+--- a/src/Main.ts
++++ b/src/Main.ts
+@@ -139,7 +139,7 @@ export class Main extends Laya.Script {
+         panel.addChild(background);
+ 
+         const title = new fgui.GTextField();
+-        title.text = "FairyGUI Editor Online";
++        title.text = "LGUI Editor";
+         title.fontSize = 18;
+         title.color = "#ffffff";
+         title.singleLine = true;
+diff --git a/src/editor/EditorShell.ts b/src/editor/EditorShell.ts
+index 1334c20..03d8dcb 100644
+--- a/src/editor/EditorShell.ts
++++ b/src/editor/EditorShell.ts
+@@ -117,8 +117,8 @@ import { EditorDisplayListAuthoring } from "./modules/DisplayListAuthoringModule
+ import { EditorWorkspaceLifecycle } from "./modules/WorkspaceLifecycleModule";
+ import { downloadBrowserFile } from "./services/BrowserDownload";
+ 
+-const EDITOR_REPOSITORY_URL = "https://github.com/OpenFairyGUI/FairyGUI-Editor-Online";
+-const FAIRYGUI_WEBSITE_URL = "https://fairygui.com/";
++const EDITOR_REPOSITORY_URL = "https://github.com/LumioGames/LGUI";
++const UPSTREAM_REPOSITORY_URL = "https://github.com/OpenFairyGUI/FairyGUI-Editor-Online";
+ 
+ export class EditorShell {
+     private readonly mainView: fgui.GComponent;
+@@ -2026,7 +2026,7 @@ export class EditorShell {
+             );
+         });
+         menu.addSeperator();
+-        this.addMenuItem(menu, "desktopMenuAbout", "关于 FairyGUI 编辑器", () => {
++        this.addMenuItem(menu, "desktopMenuAbout", "关于 LGUI 编辑器", () => {
+             this.showAboutDialog();
+         });
+         this.showActionMenu(menu, anchor, "help", "已打开帮助菜单。");
+@@ -2076,13 +2076,13 @@ export class EditorShell {
+         dialog.name = "aboutDialog";
+         const content = fgui.UIPackage.createObject("Builder", "AboutDialog").asCom;
+         dialog.contentPane = content;
+-        content.getChild("msg").asRichTextField.text = "基于 OpenFairyGUI 的浏览器版 FairyGUI 编辑器";
++        content.getChild("msg").asRichTextField.text = "LGUI 编辑器：基于 FairyGUI Editor Online（OpenFairyGUI）修改，读写 FairyGUI 格式的工程。";
+         const links = content.getChild("license").asRichTextField;
+         links.text = [
+             "“FairyGUI”名称、官方 Logo 及相关品牌标识的权利归其权利人所有。本项目并非 FairyGUI 官方产品。",
+             "",
+-            `[url=${EDITOR_REPOSITORY_URL}]GitHub 仓库[/url]`,
+-            `[url=${FAIRYGUI_WEBSITE_URL}]FairyGUI 官网[/url]`,
++            `[url=${EDITOR_REPOSITORY_URL}]LGUI 仓库[/url]`,
++            `[url=${UPSTREAM_REPOSITORY_URL}]上游：FairyGUI Editor Online[/url]`,
+         ].join("\n");
+         links.on(Laya.Event.LINK, this, this.onAboutDialogLink);
+         content.getChild("n14").asButton.onClick(this, () => dialog.dispose());
+@@ -2095,7 +2095,7 @@ export class EditorShell {
+     }
+ 
+     private onAboutDialogLink(url: string): void {
+-        if (url !== EDITOR_REPOSITORY_URL && url !== FAIRYGUI_WEBSITE_URL) return;
++        if (url !== EDITOR_REPOSITORY_URL && url !== UPSTREAM_REPOSITORY_URL) return;
+         const opened = window.open(url, "_blank");
+         if (!opened) {
+             this.setTransientStatus("浏览器阻止了打开外部链接。");
+diff --git a/src/editor/runtime/BrowserWorkspaceRegistry.ts b/src/editor/runtime/BrowserWorkspaceRegistry.ts
+index 29dbf26..2611e88 100644
+--- a/src/editor/runtime/BrowserWorkspaceRegistry.ts
++++ b/src/editor/runtime/BrowserWorkspaceRegistry.ts
+@@ -23,7 +23,7 @@ export function createDefaultBrowserWorkspaceRegistry(now = new Date().toISOStri
+         entries: [{
+             id: DEFAULT_BROWSER_WORKSPACE_ID,
+             name: "Default workspace",
+-            fairyPath: "FairyGUI-layabox-demo.fairy",
++            fairyPath: "Demo.fairy",
+             lastOpenedAt: now,
+         }],
+     };
+@@ -240,7 +240,7 @@ export function addBrowserWorkspace(
+     const entry: BrowserWorkspaceRegistryEntry = {
+         id,
+         name: displayName,
+-        fairyPath: "FairyGUI-layabox-demo.fairy",
++        fairyPath: "Demo.fairy",
+         lastOpenedAt: now,
+     };
+     return {
+diff --git a/src/editor/services/BrowserProjectStorage.ts b/src/editor/services/BrowserProjectStorage.ts
+index 920f8ad..bdf0aef 100644
+--- a/src/editor/services/BrowserProjectStorage.ts
++++ b/src/editor/services/BrowserProjectStorage.ts
+@@ -53,7 +53,7 @@ const TEXT_DECODER = new TextDecoder();
+ 
+ // Persisted namespace. Changing this would orphan existing browser workspaces.
+ const LEGACY_DEFAULT_WORKSPACE_NAME = "fairygui-editor-online-phase8";
+-const DEFAULT_FAIRY_PATH = "FairyGUI-layabox-demo.fairy";
++const DEFAULT_FAIRY_PATH = "Demo.fairy";
+ 
+ export class BrowserProjectStorage {
+     private status: BrowserProjectStorageState["status"] = "idle";
