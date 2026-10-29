@@ -12,7 +12,8 @@ export function toPointerInput(event: PointerEvent): PointerInput {
   if (!input) {
     const {x, y} = toDesign(event.clientX, event.clientY);
     const pointerType = event.pointerType === 'touch' || event.pointerType === 'pen' ? event.pointerType : 'mouse';
-    input = {type: types[event.type], pointerId: event.pointerId, pointerType, x, y, time: performance.now()};
+    // 保留输入实际发生的时刻；主线程迟消费不能把慢拖的末段压成快滑。
+    input = {type: types[event.type], pointerId: event.pointerId, pointerType, x, y, time: event.timeStamp};
     converted.set(event, input);
   }
   return input;
