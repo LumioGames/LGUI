@@ -1,0 +1,328 @@
+# UI 开发规范
+
+拼界面、改界面时照这份规范做。界面只在 `ui/` 里定义；网页和 Unity 用的界面文件都由命令生成，不手改。文档里的 `lgui xxx` 指 `node <插件目录>/tools/lgui.mjs xxx`。
+
+## 1. 改界面的固定步骤
+
+1. 先 `lgui ui list` 看现有的包、组件和控件。
+2. 新界面用 `lgui new view <包>/<组件> --pattern <模式>` 一次生成横竖两版骨架（第 7 节）；改已有界面就直接编辑 `ui/` 里的 XML。
+3. 改完运行 `lgui check`，把报错全部改掉。
+4. `lgui dev` 打开预览看效果。
+5. `lgui verify` 按标准尺寸横竖各截一张图，逐张看一遍。
+
+编辑器开着时不要直接改 XML：同一时间只有一方修改 `ui/`。
+
+## 2. 工程结构
+
+```
+ui/
+├── UI.fairy                    # 工程文件，不用改
+├── assets/
+│   ├── Common/                 # 公共包：通用弹窗、红点、占位图等（第 10 节）
+│   │   ├── package.xml         #   包的资源清单
+│   │   ├── Toast.xml           #   组件
+│   │   └── placeholder.png     #   图片
+│   └── Bag/                    # 一个功能一个包
+│       ├── package.xml
+│       ├── BagPanel.xml
+│       ├── BagPanel@portrait.xml
+│       └── icons/sword.png     #   可以分子目录，路径写在 package.xml 的 path 里
+└── art-src/                    # AI 生成的原始大图，只作来源，界面不引用
+```
+
+- **一个功能一个包**（背包一个 `Bag`、商店一个 `Shop`）。好几个功能都用的东西放进 `Common` 或单独的公共包。
+- 跨包引用只能引用对方包里 `exported="true"` 的资源。
+- XML 以 **OpenFairyGUI 0.7.0** 能读写的格式为准。编辑器保存的格式也要能被 0.7.0 生成；有冲突时以 0.7.0 为准。
+
+## 3. 命名
+
+| 对象 | 写法 | 例子 |
+|---|---|---|
+| 包名 | 大写开头的驼峰 | `Bag`、`Common` |
+| 组件名 | 大写开头的驼峰 | `BagPanel`、`ItemSlot` |
+| 竖版组件 | 横版名加 `@portrait` | `BagPanel@portrait` |
+| 控件名、控制器名 | 小写开头的驼峰，只用字母和数字 | `sellButton`、`tabs` |
+| 带字图片的各语言版本 | 图片名加 `@<语言>` | `title.png`、`title@en.png` |
+| 图片名 | 小写开头的驼峰或带数字 | `sword`、`btnBg` |
+
+- **控件名就是绑定表的键名。** 每个要在代码里用到的控件都要起名；只做装饰的控件也要起名（`deco1` 这类），因为名字要在组件内唯一。
+- 同一个组件里，控件名不能重复，控件和控制器也不能重名。
+- **要生成类型的组件标「导出」**：在 `package.xml` 里写 `exported="true"`。代码里用 `View`、`ItemView`、`PartView` 对应的组件都必须导出；只在别的组件里当子组件、代码不直接绑的，可以不导出。
+
+## 4. ID 规则
+
+手写 XML 最容易错的地方。
+
+| ID | 规则 | 例子 |
+|---|---|---|
+| 包 ID | 8 位，小写字母和数字，整个工程里唯一。写在 `package.xml` 的 `<packageDescription id="…">` | `bag00001` |
+| 资源 ID | 8 位，小写字母和数字，同一个包里唯一。组件、图片都是资源 | `bagpnl01` |
+| 元素 ID | 组件内唯一。写 `n` 加数字，按出现顺序递增 | `n0`、`n1` |
+
+- **已有的 ID 一律不改**，改了会让别处的引用失效。新加资源时取一个没用过的 ID。
+- 引用资源的地址：`ui://<包ID><资源ID>`，比如 `ui://bag00001bagpnl01`。同包内的 `src` 只写资源 ID。
+- `lgui new view`、`lgui art split` 生成的 ID 已经满足规则。
+
+## 5. 资源登记（`package.xml`）
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="bag00001">
+  <resources>
+    <component id="bagpnl01" name="BagPanel.xml" path="/" exported="true"/>
+    <component id="bagpnl02" name="BagPanel@portrait.xml" path="/" exported="true"/>
+    <image id="sword001" name="sword.png" path="/icons/" exported="true"/>
+    <image id="frame001" name="frame.png" path="/" scale="9grid" scale9grid="12,12,40,40"/>
+  </resources>
+</packageDescription>
+```
+
+- 每个组件 XML 和图片都要登记；登记的文件必须存在，存在的文件也都要登记。
+- **九宫格：** 在图片上写 `scale="9grid"` 和 `scale9grid="左,上,宽,高"`（中间可拉伸区域），区域不能超出图片。边距按图片真实的边框像素取，不要统一取边长的四分之一。
+- **图集不用手管：** 生成时按包自动打图集。
+- `lgui art split` 拆出来的小图会自动登记。
+
+## 6. 最小写法模板
+
+组件文件的根节点：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <controller name="tabs" pages="0,equip,1,item" selected="0"/>
+  <displayList>
+    <!-- 控件按从下到上的顺序排列 -->
+  </displayList>
+</component>
+```
+
+控件（每种都可以照抄，改 `id`、`name`、位置、尺寸和内容）：
+
+```xml
+<!-- 图片：src 是同包的资源 ID，跨包用 fileName + pkg -->
+<image id="n0" name="bg" src="frame001" xy="0,0" size="400,300"/>
+
+<!-- 文字：必须写 autoSize，见第 8 节 -->
+<text id="n1" name="title" xy="20,20" size="360,40" fontSize="28" color="#ffffff" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="背包"/>
+
+<!-- 富文本 -->
+<richtext id="n2" name="desc" xy="20,70" size="360,120" fontSize="22" color="#dddddd" autoSize="height" text="[color=#ffcc00]稀有[/color] 道具"/>
+
+<!-- 输入框 -->
+<inputtext id="n3" name="search" xy="20,200" size="360,40" fontSize="22" color="#ffffff" autoSize="none" singleLine="true" prompt="搜索"/>
+
+<!-- 按钮：引用一个 extention="Button" 的组件 -->
+<component id="n4" name="sellButton" src="btn00001" xy="20,250" size="160,56">
+  <Button title="出售"/>
+</component>
+
+<!-- 子组件 -->
+<component id="n5" name="header" src="header01" xy="0,0" size="1920,120"/>
+
+<!-- 加载器：显示动态图片，url 可以先留空 -->
+<loader id="n6" name="icon" xy="0,0" size="128,128" align="center" vAlign="middle" fill="scale"/>
+
+<!-- 列表：defaultItem 必须指向一个导出的组件 -->
+<list id="n7" name="list" xy="40,160" size="840,600" layout="flow_hz" lineGap="12" colGap="12" defaultItem="ui://bag00001slot0001" overflow="scroll" scrollBar="hidden"/>
+
+<!-- 图形 -->
+<graph id="n8" name="mask" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#80000000"/>
+
+<!-- 组 -->
+<group id="n9" name="footer" xy="0,980" size="1920,100"/>
+```
+
+**按钮组件**（`extention="Button"`，标题和图标控件名固定为 `title`、`icon`）：
+
+```xml
+<component size="160,56" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <image id="n0" name="bg" src="btnbg001" xy="0,0" size="160,56">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <text id="n1" name="title" xy="0,0" size="160,56" fontSize="24" color="#ffffff" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="按钮">
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+  </displayList>
+  <Button/>
+</component>
+```
+
+**控制器、齿轮：** `pages` 是「页ID,页名」成对排列；齿轮的 `pages` 写页 ID，不是页名。
+
+```xml
+<controller name="state" pages="0,locked,1,ready,2,claimed" selected="0"/>
+<text id="n3" name="stateText" xy="0,0" size="200,40" fontSize="22" autoSize="shrink" text="未达成">
+  <gearText controller="state" pages="0,1,2" values="未达成|可领取|已领取" default="未达成"/>
+</text>
+<image id="n4" name="doneMark" src="done0001" xy="0,0" size="40,40">
+  <gearDisplay controller="state" pages="2"/>
+</image>
+```
+
+**关联**（同一方向内适配不同宽高比，第 7.3 节）：
+
+```xml
+<image id="n0" name="bg" src="bg000001" xy="0,0" size="1920,1080">
+  <relation target="" sidePair="width-width,height-height"/>   <!-- 跟着父组件拉伸 -->
+</image>
+<component id="n1" name="closeButton" src="btnclose" xy="1820,20" size="80,80">
+  <relation target="" sidePair="right-right,top-top"/>          <!-- 贴右上角 -->
+</component>
+```
+
+**动效：**
+
+```xml
+<transition name="enter">
+  <item time="0" type="Alpha" target="n0" duration="12" tween="true" startValue="0" endValue="1"/>
+</transition>
+```
+
+动效的设计方法见技能 `lgui-ui`。
+
+## 7. 横竖屏
+
+### 7.1 设计尺寸
+
+- 横屏 1920×1080，竖屏 1080×1920。两者短边相同，按钮、图标、字号在两种方向下一样大，美术资源直接共用。
+- 全屏界面的根组件尺寸写设计尺寸：横版 `size="1920,1080"`，竖版 `size="1080,1920"`。
+- 框架保证整个设计区域完整显示，多出来的空间交给关联。
+
+### 7.2 横竖两版组件
+
+- 需要两种排法的界面做两个组件：横版 `BagPanel` 和竖版 `BagPanel@portrait`，都要导出。
+- **两版的控件名和类型必须完全一致**（包括控制器和页名），代码只写一份。不一致时 `lgui check` 报 `LGUI-UI-007`。
+- 按钮、道具格子这类子组件两版共用。
+- 弹窗这类没有竖版的组件，两种方向通用，只靠关联适配。
+- **全屏界面必须有竖版**；确实两种方向都用同一版的，在 View 里写 `static bothOrientations = true`（见 MVC 开发规范）。
+- 不要用控制器在一个组件里分横竖两页：齿轮切换不了关联。
+
+### 7.3 同一方向内的适配
+
+- **关联：** 贴边、居中、跟着拉伸。全屏背景铺满屏幕（宽高都关联父组件）；可交互的内容由框架放进安全区，单个界面不用管。
+- **列表：** 用列表的自动排布（`layout="flow_hz"`），按宽度决定每行几个，不在代码里算列数。
+- **代码里不写坐标和尺寸**，布局只在 `ui/` 里定义。
+
+### 7.4 排布模式
+
+`lgui new view --pattern <模式>` 按下面的模式生成横竖两版骨架。每种模式的完整范例在插件的 `templates/patterns/<模式>/` 里。
+
+| 模式 | 横版 | 竖版 | 适合 |
+|---|---|---|---|
+| `split` | 左右分栏：左边列表，右边详情 | 上下堆叠：上面列表，下面详情 | 背包、图鉴 |
+| `tabs` | 顶部标签栏 | 底部标签栏 | 商店、设置 |
+| `grid` | 多列网格列表 | 少列网格列表（列数由宽度自动决定） | 关卡选择、商品列表 |
+| `dialog` | 居中弹窗 | 底部弹出 | 道具详情、二次确认 |
+
+## 8. 文字
+
+- **默认字体**在工程配置 `defaultFont` 里设置；XML 里不写 `font`，除非这一处必须用别的字体。
+- **最小字号 20**（按设计尺寸）。小于 20 时 `lgui check` 报 `LGUI-UI-011`。
+- **每个文字控件都要声明文字超长时怎么处理**，就是 `autoSize` 的取值：
+
+| 写法 | 效果 |
+|---|---|
+| `autoSize="shrink"` + `singleLine="true"` | 缩小字号塞进框里（按钮标题、短标签） |
+| `autoSize="height"` | 换行，框的高度跟着变（说明文字） |
+| `autoSize="ellipsis"` + `singleLine="true"` | 截断，末尾加省略号（道具名、玩家名） |
+| `autoSize="both"` | 框跟着文字变大（只用于确定不会超长的数字） |
+
+  写 `autoSize="none"` 或不写时 `lgui check` 报 `LGUI-UI-010`（输入框除外）。
+- **用户能看到的固定文字写在 `ui/` 里**，会被 `lgui i18n extract` 提取翻译。代码里动态生成的文字用 `lgui.t`。
+- 图里不放文字；实在要用带字图片，按第 9 节提供各语言版本。
+- 美术风格的数字（伤害、金币）用 `ArtText`（第 11 节）。
+
+## 9. 多语言
+
+- 第一版不支持从右往左排版的语言。
+- **固定文字**写在 `ui/` 里，`lgui i18n extract` 把它们提取到默认语言的 `i18n/<语言>.json`，键名是 `<包>/<组件>/<控件路径>`，比如 `Bag/BagPanel/sellButton`、`Bag/BagPanel/header.count`。按钮的标题、输入框的提示文字也一样提取。
+- 其他语言的 `i18n/<语言>.json` 照同样的键翻译。只编辑这些 JSON，不碰生成的翻译 XML。
+- 占位符写成 `{count}`，各语言的占位符必须一致。
+- **带字的图片**按 `@<语言>` 命名提供各语言版本，比如 `title.png`（默认）和 `title@en.png`。必须有不带后缀的默认版本；后缀的语言必须在工程配置 `languages` 里。
+- 布局要给翻译留空间：英文、德文通常比中文长 40% 以上。用 `lgui verify --lang pseudo` 检查（文字加长 40%）。
+
+## 10. Common 包（`lgui init` 自带）
+
+框架的通用功能用这些组件，名字和必有控件固定。可以改它们的样子，不能改名字、不能删必有控件。
+
+| 组件 | 用途 | 必有控件 |
+|---|---|---|
+| `Common/Toast` | `lgui.toast` 的提示 | `text`（文字） |
+| `Common/Confirm` | `lgui.confirm` 的确认框 | `title`、`message`（文字），`ok`、`cancel`（按钮） |
+| `Common/Loading` | `lgui.loading` 的加载中 | `text`（文字） |
+| `Common/ActionHintBar` | 操作提示栏 | `list`（列表），子项组件 `Common/ActionHint` 里有 `key`、`label`（文字） |
+| `Common/RedDot` | 红点 | `count`（文字，显示数字时用） |
+| `Common/HoldProgress` | 长按进度 | 本身是一个进度条组件（`extention="ProgressBar"`） |
+| `Common/ArtText` | 美术字的空容器（第 11 节） | 无 |
+| `Common/placeholder`（图片） | 默认占位图 | — |
+
+**红点：** 要显示红点的控件（按钮、子组件）里放一个名字固定为 `redDot` 的子控件，通常就是 `Common/RedDot` 的实例。绑定表写了 `redDot` 的控件里缺这个子控件时，`lgui check` 报 `LGUI-UI-012`。
+
+```xml
+<!-- 在按钮组件 TabButton.xml 的 displayList 末尾 -->
+<component id="n5" name="redDot" fileName="RedDot.xml" pkg="cmn00001" src="reddot01" xy="120,-8" size="32,32" visible="false"/>
+```
+
+**长按进度：** 用 `hold` 的按钮里放一个名字固定为 `holdProgress` 的进度条子控件。按住时框架让它从 0 涨到 100%，松手归零。没有这个子控件也能长按，只是不显示进度。
+
+## 11. ArtText 美术字
+
+伤害数字、金币数这类美术风格的文字，由美术画好每个字符的小图，`ArtText` 把它们一个个拼起来。网页和 Unity 都只用最基础的图片，显示一定一致。
+
+- **字符图片**放在某个包的 `artfont/<字体名>/` 目录下，文件名是 `<字体名>_<字符名>.png`，都要在 `package.xml` 里登记并导出。
+- **字符名：** `0`–`9` 直接用数字；其他字符用下面的名字：
+
+| 字符 | `+` | `-` | `x` | `%` | `.` | `,` | `:` | `/` |
+|---|---|---|---|---|---|---|---|---|
+| 字符名 | `plus` | `minus` | `x` | `percent` | `dot` | `comma` | `colon` | `slash` |
+
+- **在界面里放 ArtText：** 放一个 `Common/ArtText` 的实例，用 `customData` 写配置：
+
+```xml
+<component id="n9" name="damage" fileName="ArtText.xml" pkg="cmn00001" src="arttext1" xy="800,400" size="320,80"
+  customData="font=Bag/dmg;align=center;spacing=2"/>
+```
+
+  - `font=<包>/<字体名>`：必填；
+  - `align=left|center|right`：默认 `left`；
+  - `spacing=<像素>`：字间距，默认 `0`。
+- 绑定表里照常用 `text` 给它赋值。字符图片缺了某个字符时，运行时报 `LGUI-RT` 错误并指出是哪个字符；`customData` 写错或字体目录不存在时，`lgui check` 报 `LGUI-UI-013`。
+
+## 12. 列表
+
+- `defaultItem` 指向子项组件（导出），代码里用 `ItemView` 绑定。
+- 自动排布：`layout="column"`（竖排一列）、`layout="row"`（横排一行）、`layout="flow_hz"`（横向排满换行，网格用这个）、`layout="flow_vt"`。
+- 框架默认开虚拟列表，只创建看得见的子项，数据多也不卡。所以子项组件的尺寸要固定。
+- 列表里不要放手写的子项，子项都由代码给数据生成。
+
+## 13. 检查规则表
+
+`lgui check` 用 OpenFairyGUI 读 `ui/` 来查。报错格式：`文件:行:列  错误码  说明  → 怎么改`。
+
+| 错误码 | 规则 | 正确写法 | 错误写法 |
+|---|---|---|---|
+| `LGUI-UI-001` | 包 ID 是 8 位小写字母和数字，整个工程里唯一 | `id="bag00001"` | `id="Bag"`、两个包都叫 `bag00001` |
+| `LGUI-UI-002` | 资源 ID 是 8 位小写字母和数字，包内唯一 | `id="sword001"` | `id="sword"`、两个资源都叫 `sword001` |
+| `LGUI-UI-003` | 元素 ID 在组件内唯一 | `n0`、`n1` | 两个控件都是 `n3` |
+| `LGUI-UI-004` | 控件名、控制器名是小写开头的驼峰，组件内唯一 | `sellButton` | `SellButton`、`sell_button`、两个 `title` |
+| `LGUI-UI-005` | 控件和控制器不能重名 | 控制器 `tabs`，控件 `tabBar` | 控制器 `tabs`，控件也叫 `tabs` |
+| `LGUI-UI-006` | 包名、组件名是大写开头的驼峰；后缀只能是 `@portrait`（组件）或 `@<语言>`（图片） | `BagPanel@portrait.xml` | `bagPanel.xml`、`BagPanel_portrait.xml` |
+| `LGUI-UI-007` | 横竖两版的控件名、类型、控制器和页名完全一致 | 两版都有 `sellButton`（按钮） | 竖版少了 `sellButton`，或者竖版里它是文字 |
+| `LGUI-UI-009` | 引用的资源存在；跨包引用的资源已导出 | `src="sword001"`（存在） | 引用了已删掉的资源 |
+| `LGUI-UI-010` | 文字控件写了超长处理（`autoSize` 是 `shrink`、`height`、`ellipsis`、`both` 之一） | `autoSize="ellipsis" singleLine="true"` | 不写 `autoSize`，或写 `none` |
+| `LGUI-UI-011` | 字号不小于 20 | `fontSize="22"` | `fontSize="14"` |
+| `LGUI-UI-012` | 绑定了 `redDot` 的控件里有名为 `redDot` 的子控件 | 按钮里放了 `redDot` | 绑了 `redDot`，按钮里没有这个子控件 |
+| `LGUI-UI-013` | ArtText 的 `customData` 格式对，字体目录存在 | `font=Bag/dmg;align=center` | `font=dmg`、字体目录不存在 |
+| `LGUI-UI-014` | Common 包里的固定组件和必有控件都在 | `Common/Confirm` 里有 `ok`、`cancel` | 删了 `Common/Toast`，或 `Confirm` 里没有 `ok` |
+| `LGUI-UI-015` | 九宫格：`scale="9grid"` 和 `scale9grid` 成对出现，区域不超出图片 | `scale="9grid" scale9grid="12,12,40,40"` | 只写了 `scale="9grid"` |
+| `LGUI-UI-016` | 列表的 `defaultItem` 指向一个存在、已导出的组件 | `defaultItem="ui://bag00001slot0001"` | 不写 `defaultItem` |
+| `LGUI-UI-017` | `@<语言>` 图片有默认版本，语言在 `languages` 里 | `title.png` + `title@en.png` | 只有 `title@en.png`，或 `title@xx.png` |
+| `LGUI-UI-018` | `package.xml` 登记的文件都存在，包目录里的组件和图片都已登记 | 新图片登记进 `package.xml` | 放了图片没登记 |
+| `LGUI-UI-019` | 代码里用到的组件（View 的 `component`、列表子项）已导出 | `exported="true"` | 没写 `exported` |
+| `LGUI-UI-030` | 代码里 `lgui.t` 用到的键、绑定的固定文字，在每种语言的文本表里都有 | 各语言都有 `bag.sold` | `en.json` 里缺 `bag.sold` |
+| `LGUI-UI-031` | 文本表里没有用不到的键 | — | 删掉了按钮，`Bag/BagPanel/oldButton` 还在表里 |
+| `LGUI-UI-032` | 同一个键在各语言里的占位符一致 | `已售出 {count} 件` / `Sold {count}` | `Sold {num}` |
+
+靠人看、机器查不出的：图里不放文字；同一个工程的图风格一致；文字在各尺寸下没有被截断（看 `lgui verify` 的截图）。

@@ -62,6 +62,8 @@ LGUI 是一个面向 AI Agent 的开源 UI 引擎框架。UI 资源、预制结�
 
 - [更新记录](CHANGELOG.md)
 - [参与开发](CONTRIBUTING.md)
+- UI 开发规范：[plugin/references/ui-spec.md](plugin/references/ui-spec.md)
+- MVC 开发规范：[plugin/references/mvc-spec.md](plugin/references/mvc-spec.md)
 - 用户工程目录：[plugin/references/project-layout.md](plugin/references/project-layout.md)
 - 接入 Unity（阶段 3 实现）：[plugin/references/unity.md](plugin/references/unity.md)
 - 错误码：[plugin/references/error-codes.md](plugin/references/error-codes.md)
