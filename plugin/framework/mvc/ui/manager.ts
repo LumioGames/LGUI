@@ -1,13 +1,43 @@
 // UIManager：5 层、界面栈、激活和遮挡、打开和关闭、onClose。规则见方案 5.10 和 references/mvc-spec.md 第 9、10 节。
 import type {Backend, Rect, UIComponent} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
-import type {InputMode, Layer, ViewClass} from '../types';
+import type {InputMode, Layer, Orientation, ViewClass} from '../types';
+import type {UIList, UIObject} from '../../core/index';
+import {orientationState} from './orientation-state';
 import {validateViewClass} from '../view';
 import {asActor, currentActor} from '../actor';
 import {bus, builtinEvents} from '../events';
 
 /** 从下到上的 5 层。 */
 export const LAYERS: readonly Layer[] = ['hud', 'page', 'popup', 'modal', 'toast'];
+
+/** 方向相关的工程配置。 */
+export interface OrientationSettings {
+  designSize: {landscape: {width: number; height: number}; portrait: {width: number; height: number}};
+  orientation: 'both' | 'landscape' | 'portrait';
+}
+
+/** 找出组件里所有列表（不进列表内部），记下滚动位置和选中项，按控件路径。 */
+function listStates(component: UIComponent, prefix = ''): Map<string, {scroll: {x: number; y: number}; selected: number}> {
+  const states = new Map<string, {scroll: {x: number; y: number}; selected: number}>();
+  for (const name of component.childNames()) {
+    const child = component.child(name) as UIObject | null;
+    if (!child) continue;
+    const path = prefix + name;
+    if ('numItems' in child) states.set(path, {scroll: {...(child as UIList).scrollPosition}, selected: (child as UIList).selectedIndex});
+    else if ('childNames' in child) for (const [k, v] of listStates(child as UIComponent, path + '.')) states.set(k, v);
+  }
+  return states;
+}
+
+function restoreLists(component: UIComponent, states: Map<string, {scroll: {x: number; y: number}; selected: number}>): void {
+  for (const [path, state] of states) {
+    const list = component.child(path) as UIList | null;
+    if (!list || !('numItems' in list)) continue;
+    list.selectedIndex = state.selected;
+    list.scrollPosition = state.scroll;
+  }
+}
 
 type Hook = 'onOpen' | 'onActivate' | 'onDeactivate' | 'onCovered' | 'onRevealed' | 'onClose' | 'onOrientationChange';
 
@@ -27,6 +57,8 @@ export interface Entry {
   layer: Layer;
   fullScreen: boolean;
   component: UIComponent | null;
+  /** 当前用的是哪一版组件（组件名，竖版带 @portrait）。 */
+  version: string;
   state: 'opening' | 'queued' | 'open' | 'closed';
   active: boolean;
   covered: boolean;
@@ -47,8 +79,27 @@ export class UIManager {
   private loading = new Map<string, Promise<void>>();
   private visible: Rect;
 
-  constructor(private readonly backend: Backend, private readonly deps: Record<string, string[]>, design: {width: number; height: number}) {
-    this.visible = backend.platform.screen.applyDesignSize(design);
+  /** 当前方向。 */
+  orientation: Orientation;
+
+  constructor(private readonly backend: Backend, private readonly deps: Record<string, string[]>, private readonly settings: OrientationSettings) {
+    this.orientation = this.decideOrientation();
+    orientationState.current = this.orientation;
+    this.visible = backend.platform.screen.applyDesignSize(this.design());
+    // 屏幕尺寸一变：防抖 150 毫秒（拖动窗口时不来回切换）再判方向、换版。
+    let waiting = 0;
+    let stopWaiting: (() => void) | null = null;
+    backend.platform.screen.onResize(() => {
+      waiting = 0;
+      if (stopWaiting) return;
+      stopWaiting = backend.platform.time.onFrame(dt => {
+        waiting += dt;
+        if (waiting < 150) return;
+        stopWaiting?.();
+        stopWaiting = null;
+        this.applyOrientation();
+      });
+    });
     for (const layer of LAYERS) {
       // 层容器不设尺寸：只是容器，不能挡住下面层的点击（浏览器里一个铺满屏幕的空容器会吃掉所有指针事件）。
       const container = backend.createContainer(layer);
@@ -56,6 +107,72 @@ export class UIManager {
       backend.root.addChild(container);
       this.containers.set(layer, container);
     }
+  }
+
+  // ---------- 横竖屏 ----------
+
+  /** 宽 ≥ 高就是横屏；工程配置锁定了方向时只用那一版。 */
+  private decideOrientation(): Orientation {
+    if (this.settings.orientation !== 'both') return this.settings.orientation;
+    const {width, height} = this.backend.platform.screen.size();
+    return width >= height ? 'landscape' : 'portrait';
+  }
+
+  private design(): {width: number; height: number} {
+    return this.orientation === 'portrait' ? this.settings.designSize.portrait : this.settings.designSize.landscape;
+  }
+
+  /** 当前方向用哪一版组件：竖屏时有 @portrait 版本就用它。 */
+  private versionOf(cls: ViewClass): string {
+    const [pkg, name] = cls.component.split('/');
+    return this.orientation === 'portrait' && this.backend.has(pkg, `${name}@portrait`) ? `${name}@portrait` : name;
+  }
+
+  /** 按层和是否全屏摆放界面。 */
+  private place(entry: Entry, component: UIComponent): void {
+    if (entry.fullScreen) component.rect = {x: 0, y: 0, width: this.visible.width, height: this.visible.height};
+    else if (entry.layer === 'popup' || entry.layer === 'modal' || entry.layer === 'toast') {
+      const r = component.rect;
+      component.rect = {x: Math.round((this.visible.width - r.width) / 2), y: Math.round((this.visible.height - r.height) / 2), width: r.width, height: r.height};
+    }
+  }
+
+  /** 内部用：现在就按屏幕尺寸判方向并换版（平时由尺寸变化触发，测试里可以直接调用）。 */
+  applyOrientation(): void {
+    const next = this.decideOrientation();
+    const changed = next !== this.orientation;
+    this.orientation = next;
+    orientationState.current = next;
+    this.visible = this.backend.platform.screen.applyDesignSize(this.design());
+    for (const entry of this.all()) {
+      if (entry.state !== 'open' || !entry.component) continue;
+      const [pkg] = entry.cls.component.split('/');
+      const version = this.versionOf(entry.cls);
+      if (version !== entry.version) {
+        // 换版：记下列表的滚动位置和选中项，建另一版组件，用同一个 View 实例重新绑定，再恢复。
+        const lists = listStates(entry.component);
+        const old = entry.component;
+        const component = this.backend.create(pkg, version);
+        entry.component = component;
+        entry.version = version;
+        this.place(entry, component);
+        component.visible = !entry.covered;
+        component.touchable = entry.active;
+        (this.containers.get(entry.layer) as UIComponent).addChild(component);
+        entry.view.__mount(component, {isActive: () => entry.active && entry.state === 'open'});
+        restoreLists(component, lists);
+        old.dispose();
+      } else {
+        this.place(entry, entry.component);
+      }
+      if (changed) this.hook(entry, 'onOrientationChange', next);
+    }
+    // 换版的组件是后加进去的，按栈的顺序重新排一遍，层内的上下关系不变。
+    for (const layer of LAYERS) {
+      const container = this.containers.get(layer) as UIComponent;
+      for (const entry of this.stacks[layer]) if (entry.component) { container.removeChild(entry.component); container.addChild(entry.component); }
+    }
+    if (changed) bus.emit(builtinEvents.orientationChange, {orientation: next});
   }
 
   // ---------- 资源：按需加载界面包（连同它依赖的包），记录有几个界面在用 ----------
@@ -154,10 +271,10 @@ export class UIManager {
     if (existing) return existing.ready; // 正在打开或已经打开：合并成一次
     const opener = this.entryOfInstance(currentActor());
     const layer = cls.layer;
-    const [pkg, name] = cls.component.split('/');
+    const [pkg] = cls.component.split('/');
     const view = new cls() as ViewInstance;
     const entry: Entry = {
-      cls, view, layer, fullScreen: cls.fullScreen === true, component: null, state: 'opening', active: false, covered: false,
+      cls, view, layer, fullScreen: cls.fullScreen === true, component: null, version: '', state: 'opening', active: false, covered: false,
       opener, onClose: options.onClose ?? null, packages: this.packagesOf(pkg), ready: Promise.resolve(view)
     };
     this.stacks[layer].push(entry);
@@ -181,7 +298,7 @@ export class UIManager {
         if ((entry.state as Entry['state']) === 'closed') throw cancelled('排队');
       }
       try {
-        this.show(entry, name, params);
+        this.show(entry, params);
       } catch (error) {
         this.remove(entry);
         entry.state = 'closed';
@@ -195,16 +312,15 @@ export class UIManager {
     return entry.ready;
   }
 
-  private show(entry: Entry, name: string, params?: object): void {
+  private show(entry: Entry, params?: object): void {
     const [pkg] = entry.cls.component.split('/');
-    const component = this.backend.create(pkg, name);
+    // 打开时先判方向，再加载对应的版本。
+    const version = this.versionOf(entry.cls);
+    const component = this.backend.create(pkg, version);
     entry.component = component;
+    entry.version = version;
     const container = this.containers.get(entry.layer) as UIComponent;
-    if (entry.fullScreen) component.rect = {x: 0, y: 0, width: this.visible.width, height: this.visible.height};
-    else if (entry.layer === 'popup' || entry.layer === 'modal' || entry.layer === 'toast') {
-      const r = component.rect;
-      component.rect = {x: Math.round((this.visible.width - r.width) / 2), y: Math.round((this.visible.height - r.height) / 2), width: r.width, height: r.height};
-    }
+    this.place(entry, component);
     container.addChild(component);
     entry.view.__mount(component, {isActive: () => entry.active && entry.state === 'open'});
     entry.state = 'open';

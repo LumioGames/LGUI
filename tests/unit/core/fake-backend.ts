@@ -72,6 +72,7 @@ export function createFakeBackend(): Backend {
       if (pkg !== 'Main') throw new LgRuntimeError('LGUI-RT-002', `没有界面包 ${pkg}。`, '先加载这个包。');
       return new FakeComponent(comp, `${pkg}/${comp}`) as unknown as UIComponent<Name>;
     },
+    has: () => false,
     createContainer: name => new FakeComponent(name, ''),
     platform
   };

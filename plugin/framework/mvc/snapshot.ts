@@ -7,9 +7,8 @@ import {LAYERS} from './ui/manager';
 import {currentLanguage} from './i18n';
 import {inputType} from './input/input-type';
 import {runtime} from './runtime';
+import {orientationState} from './ui/orientation-state';
 
-/** 当前方向（S2-E1 之前按屏幕宽高判断）。 */
-export const orientationState = {current: null as 'landscape' | 'portrait' | null};
 
 export function snapshot(ui: UIManager): Snapshot {
   const layers = Object.fromEntries(LAYERS.map(layer => [layer, ui.stacks[layer].filter(e => e.state === 'open').map(e => e.cls.name)])) as Record<Layer, string[]>;

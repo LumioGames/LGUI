@@ -35,6 +35,10 @@ export function createH5Backend(): Backend {
       setComponentName(native, `${packageName}/${componentName}`);
       return wrapComponent(native) as UIComponent<Name>;
     },
+    has(packageName: string, componentName: string): boolean {
+      const pkg = fgui.UIPackage.getByName(packageName);
+      return pkg !== undefined && pkg.getItemByName(componentName) !== undefined;
+    },
     createContainer(name: string): UIComponent {
       const native = new fgui.GComponent();
       native.name = name;
