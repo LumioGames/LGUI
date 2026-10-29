@@ -1,4 +1,0 @@
-
-> fairygui-editor-online@1.0.0 typecheck
-> tsc --noEmit -p tsconfig.json --pretty false
-

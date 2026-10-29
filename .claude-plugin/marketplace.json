@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "lumio-lgui",
   "owner": {
     "name": "LumioGames",
@@ -7,9 +8,24 @@
   "plugins": [
     {
       "name": "lgui",
-      "source": "./",
-      "version": "0.2.0",
-      "description": "Agent-authored, browser-first FairyGUI UI workflows with shared TypeScript and Unity/PuerTS migration."
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/LumioGames/LGUI.git",
+        "path": "plugin"
+      },
+      "version": "0.3.0",
+      "description": "Agent-authored, browser-first FairyGUI UI workflows with shared TypeScript and Unity/PuerTS migration.",
+      "homepage": "https://github.com/LumioGames/LGUI#readme",
+      "repository": "https://github.com/LumioGames/LGUI",
+      "license": "MIT",
+      "category": "development",
+      "keywords": [
+        "fairygui",
+        "ui",
+        "typescript",
+        "unity",
+        "puerts"
+      ]
     }
   ]
 }

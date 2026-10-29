@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-const cli=fileURLToPath(new URL('../tools/agent.mjs',import.meta.url));
+const cli=fileURLToPath(new URL('../plugin/tools/lib/agent.mjs',import.meta.url));
 const run=args=>new Promise(resolve=>{const child=spawn(process.execPath,[cli,...args],{windowsHide:true});let stdout='',stderr='';child.stdout.on('data',v=>stdout+=v);child.stderr.on('data',v=>stderr+=v);child.on('close',code=>resolve({code,stdout,stderr}));});
 test('client rejects a remote connection before sending the token',async()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'lgui-agent-')),file=path.join(dir,'connection.json');

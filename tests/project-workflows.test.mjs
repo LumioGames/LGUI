@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),cli=path.join(root,'tools/lgui.mjs');
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),cli=path.join(root,'plugin/tools/lgui.mjs');
 const run=(...args)=>spawnSync(process.execPath,[cli,...args],{cwd:os.tmpdir(),encoding:'utf8',windowsHide:true});
 const fresh=()=>path.join(fs.mkdtempSync(path.join(os.tmpdir(),'lgui-project-')),'workspace');
 function project(workspace,config){fs.mkdirSync(path.join(workspace,'.lgui'),{recursive:true});fs.writeFileSync(path.join(workspace,'.lgui/workspace.json'),JSON.stringify({version:'0.1.0',webPort:4273,editorPort:5307}));fs.writeFileSync(path.join(workspace,'.lgui/project.json'),JSON.stringify(config));}

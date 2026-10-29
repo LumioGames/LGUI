@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import {once} from 'node:events';
-import {serveProject} from '../tools/serve-project.mjs';
+import {serveProject} from '../plugin/tools/lib/serve-project.mjs';
 test('generic server serves the selected web root and refuses linked outside assets',async()=>{
  const workspace=fs.mkdtempSync(path.join(os.tmpdir(),'lgui-server-')),outside=fs.mkdtempSync(path.join(os.tmpdir(),'lgui-outside-'));
  fs.mkdirSync(path.join(workspace,'site'));fs.writeFileSync(path.join(workspace,'site/index.html'),'<title>Selected project</title>');fs.writeFileSync(path.join(outside,'private.txt'),'outside-file');

@@ -1,54 +1,11 @@
-# Dependencies restored by bootstrap. Keep manifests, lockfiles and patches.
-**/node_modules/
-/repos/
-/artifacts/
-/test-output/
-/.lgui/
-/unity-migration/packages/
+node_modules/
+!plugin/tools/vendor/node_modules/
+.lgui/build/
+*.log
 
-# Unity import/build caches and per-user state.
-**/[Ll]ibrary/
-**/[Tt]emp/
-**/[Oo]bj/
-**/[Ll]ogs/
-**/[Uu]ser[Ss]ettings/
-**/.vs/
-**/.idea/
-**/.DS_Store
-**/*.csproj
-**/*.sln
-**/*.slnx
-**/*.pidb
-**/*.user
-**/*.userprefs
-
-# Native players, distribution archives, downloads and installers.
-/unity-migration/build/
-/unity-migration/distribution/
-/unity-migration/downloads/
-/downloads/
-/installers/
-/交付/文档检查/
-**/*BackUpThisFolder_ButDontShipItWithYourGame*/
-
-# Local bridge credentials and browser state.
-**/.env
-**/.env.*
-!**/.env.example
-**/agent-connection*.local.json
-**/*connection.local.json
-**/*.token
-**/browser-profile*/
-**/chrome-profile*/
-**/edge-profile*/
-**/playwright-profile*/
-**/user-data-dir*/
-**/storage-state*.json
-
-# Active project coordination locks are not source assets.
-**/.project.openfairygui.backend.lock*
-**/*.fairy.lock*
-
-# Do not globally ignore dist, published, PNG, bytes, DLL or .meta:
-# business IIFEs, formal UI packages/atlases and required plugin metadata
-# are intentional source-controlled artifacts or restored dependencies.
+# 本机文件和凭据
+.DS_Store
+.env
+.env.*
+*.token
+*connection.local.json
