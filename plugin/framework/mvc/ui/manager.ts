@@ -87,7 +87,7 @@ export interface Entry {
   cached?: Cached;
   /** 排队中的 modal：轮到它时调用。 */
   show?: () => void;
-  /** 已经释放了包引用（排队中被关掉时）。 */
+  /** 包引用已经释放了（或者交给了界面缓存），不再重复释放。 */
   released?: boolean;
 }
 
@@ -176,8 +176,12 @@ export class UIManager {
   updateHints(): void {
     if (!this.hintBar) return;
     const active = this.all().find(x => x.active);
-    const canGoBack = Boolean(active) && !(active?.layer === 'page' && this.shown('page')[0] === active);
-    this.hintBar.update(active ? hintsFor(active.view.keys, canGoBack, this.backend.name, this.settings.keyMap ?? {}) : [], this.visible);
+    this.hintBar.update(active ? hintsFor(active.view.keys, this.canGoBack(active), this.backend.name, this.settings.keyMap ?? {}) : [], this.visible);
+  }
+
+  /** 返回键能不能关掉它：hud 层的界面、page 层最底下的主界面都关不掉。 */
+  private canGoBack(entry: Entry): boolean {
+    return entry.layer !== 'hud' && !(entry.layer === 'page' && this.shown('page')[0] === entry);
   }
 
   // ---------- 横竖屏 ----------
@@ -199,13 +203,27 @@ export class UIManager {
     return this.orientation === 'portrait' && this.backend.has(pkg, `${name}@portrait`) ? `${name}@portrait` : name;
   }
 
+  /** 安全区（去掉刘海、圆角、系统条的部分）在设计单位下的位置和大小。平台给的是屏幕像素的边距，按当前缩放比换算。 */
+  private safeRect(): Rect {
+    const {screen} = this.backend.platform;
+    const insets = screen.safeArea();
+    const scale = screen.size().width / this.visible.width;
+    const [top, right, bottom, left] = [insets.top, insets.right, insets.bottom, insets.left].map(v => v / scale);
+    return {x: left, y: top, width: this.visible.width - left - right, height: this.visible.height - top - bottom};
+  }
+
   /** 按层和是否全屏摆放界面。 */
   private place(entry: Entry, component: UIComponent): void {
-    if (entry.fullScreen) component.rect = {x: 0, y: 0, width: this.visible.width, height: this.visible.height};
-    else {
-      // 不是全屏的界面（哪一层都一样）放在可见区域正中。
+    const safe = this.safeRect();
+    if (entry.fullScreen) {
+      // 全屏界面铺满整个可见区域；名字叫 safe 的直接子控件摆进安全区（没有也可以）。
+      component.rect = {x: 0, y: 0, width: this.visible.width, height: this.visible.height};
+      const area = component.child('safe');
+      if (area) area.rect = safe;
+    } else {
+      // 不是全屏的界面（哪一层都一样）放在安全区正中。
       const r = component.rect;
-      component.rect = {x: Math.round((this.visible.width - r.width) / 2), y: Math.round((this.visible.height - r.height) / 2), width: r.width, height: r.height};
+      component.rect = {x: Math.round(safe.x + (safe.width - r.width) / 2), y: Math.round(safe.y + (safe.height - r.height) / 2), width: r.width, height: r.height};
     }
   }
 
@@ -274,9 +292,20 @@ export class UIManager {
     for (const pkg of packages) {
       if (this.backend.platform.resource.hasPackage(pkg)) continue;
       let pending = this.loading.get(pkg);
-      if (!pending) { pending = this.backend.loadPackage(pkg).finally(() => this.loading.delete(pkg)); this.loading.set(pkg, pending); }
+      if (!pending) {
+        // 加载完时已经没有界面在用（加载中界面被关掉了）：马上卸载，不留没人用的包。
+        pending = this.backend.loadPackage(pkg).then(() => { if (!this.refs.has(pkg) && !this.pinned.has(pkg)) this.backend.releasePackage(pkg); }).finally(() => this.loading.delete(pkg));
+        this.loading.set(pkg, pending);
+      }
       await pending;
     }
+  }
+
+  /** 释放一个界面占着的包引用，只释放一次。 */
+  private releaseEntry(entry: Entry): void {
+    if (entry.released) return;
+    entry.released = true;
+    this.release(entry.packages);
   }
 
   private release(packages: string[]): void {
@@ -355,7 +384,11 @@ export class UIManager {
   open(cls: ViewClass, params?: object, options: {onClose?: (result: unknown) => void} = {}): Promise<object> {
     validateViewClass(cls);
     const existing = this.entryOf(cls);
-    if (existing) return existing.ready; // 正在打开或已经打开：合并成一次
+    if (existing) {
+      // 正在打开或已经打开：合并成一次，这次的参数不用。又登记了 onClose 就报错：它不会被调用。
+      if (options.onClose) throw new LgRuntimeError('LGUI-RT-084', `${cls.name} 已经打开（或正在打开），这次 open 登记的 onClose 不会被调用。`, `先用 lgui.ui.isOpen(${cls.name}) 判断；要知道它什么时候关，在第一次打开时登记 onClose，或者收听 lgui.events.viewClosed。`);
+      return existing.ready;
+    }
     const opener = this.entryOfInstance(currentActor());
     const layer = cls.layer;
     const [pkg] = cls.component.split('/');
@@ -368,22 +401,27 @@ export class UIManager {
     const cachedIndex = this.cache.findIndex(c => c.cls === cls);
     if (cachedIndex >= 0) [entry.cached] = this.cache.splice(cachedIndex, 1);
     entry.ready = (async () => {
-      const cancelled = (how: string): LgRuntimeError => {
+      // 打开失败或被取消：不留半成品，资源只释放一次，排在后面的 modal 照常放出。
+      const abandon = (): void => {
+        if (entry.state !== 'closed') { this.remove(entry); entry.state = 'closed'; }
         entry.cached?.component.dispose();
         entry.cached = undefined;
-        if (!entry.released) this.release(entry.packages);
+        this.releaseEntry(entry);
+        this.nextModal();
+      };
+      const cancelled = (how: string): LgRuntimeError => {
+        abandon();
         return new LgRuntimeError('LGUI-RT-081', `${cls.name} 在${how}时被关闭了，这次打开已取消。`, '不需要处理；不想看到这个错误，就不要在打开完成之前关闭它。');
       };
       try {
         if (!entry.cached) await this.acquire(entry.packages); // 缓存里的组件还占着包引用
       } catch (error) {
-        this.remove(entry);
-        this.release(entry.packages);
+        abandon();
         throw new LgRuntimeError('LGUI-RT-080', `打开 ${cls.name} 失败：${error instanceof Error ? error.message : String(error)}`, '确认界面包已经生成（lgui dev 会自动生成），包名和组件名都对。');
       }
       if (entry.state === 'closed') throw cancelled('加载资源');
-      // modal 层同一时间只显示一个，后来的排队。
-      if (layer === 'modal' && !this.overlays.has(cls) && this.stacks.modal.some(e => e !== entry && !this.overlays.has(e.cls) && (e.state === 'open' || e.state === 'opening'))) {
+      // modal 层同一时间只显示一个，按打开的先后排队：已经有一个显示着，或者前面还有没轮到的，就排队。
+      if (this.mustQueue(entry)) {
         entry.state = 'queued';
         await new Promise<void>(resolve => { entry.show = resolve; });
         if ((entry.state as Entry['state']) === 'closed') throw cancelled('排队');
@@ -391,16 +429,33 @@ export class UIManager {
       try {
         this.show(entry, params);
       } catch (error) {
-        this.remove(entry);
-        entry.state = 'closed';
         entry.view.__dispose();
         entry.component?.dispose();
-        this.release(entry.packages);
+        abandon();
         throw new LgRuntimeError('LGUI-RT-080', `打开 ${cls.name} 失败：${error instanceof Error ? error.message : String(error)}`, '按报错改；不会显示打开了一半的界面。');
       }
       return view;
     })();
     return entry.ready;
+  }
+
+  /** modal 队列里的界面，按打开的先后。loading 这类 overlay 不参与排队。 */
+  private modalQueue(): Entry[] { return this.stacks.modal.filter(e => !this.overlays.has(e.cls) && e.state !== 'closed'); }
+
+  /** 资源准备好的 modal 要不要排队：已经有一个显示着，或者比它先打开的还没轮到。 */
+  private mustQueue(entry: Entry): boolean {
+    if (entry.layer !== 'modal' || this.overlays.has(entry.cls)) return false;
+    const queue = this.modalQueue();
+    return queue.some(e => e !== entry && (e.state === 'open' || queue.indexOf(e) < queue.indexOf(entry)));
+  }
+
+  /** 放出下一个排队的 modal：没有 modal 显示着、排在最前面的正在排队时，马上把它改成「正在打开」再放出。 */
+  private nextModal(): void {
+    const queue = this.modalQueue();
+    const head = queue[0];
+    if (!head || head.state !== 'queued' || queue.some(e => e.state === 'open')) return;
+    head.state = 'opening';
+    head.show?.();
   }
 
   private show(entry: Entry, params?: object): void {
@@ -435,12 +490,13 @@ export class UIManager {
     const keep = this.settings.uiCache?.keepClosedViews ?? 0;
     if (component && keep > 0) {
       (this.containers.get(entry.layer) as UIComponent).removeChild(component);
+      entry.released = true; // 包引用交给缓存
       this.cache.push({cls: entry.cls, version: entry.version, component, packages: entry.packages});
       while (this.cache.length > keep) this.evict(this.cache.shift() as Cached);
       return;
     }
     component?.dispose();
-    this.release(entry.packages);
+    this.releaseEntry(entry);
   }
 
   private evict(cached: Cached): void {
@@ -473,14 +529,20 @@ export class UIManager {
     this.closeEntry(entry, result);
   }
 
-  private closeEntry(entry: Entry, result?: unknown): void {
+  /** 关闭一个界面。batch：一次关好几个（popTo、closeAll），由调用方在最后统一放出排队的 modal、重新算激活。 */
+  private closeEntry(entry: Entry, result?: unknown, batch = false): void {
+    if (entry.state === 'closed') return; // 已经关过了（比如在别的界面的 onClose 里关掉的）
     const wasOpen = entry.state === 'open';
     const wasQueued = entry.state === 'queued';
     entry.state = 'closed';
     this.remove(entry);
-    // 排队中被关掉：马上释放资源（打开那边随后报 LGUI-RT-081，不再重复释放）。
-    if (wasQueued) { this.release(entry.packages); entry.released = true; entry.show?.(); }
-    if (!wasOpen) return; // 正在打开时被关闭：资源到了也不显示（打开那边会报 LGUI-RT-081 并释放资源）
+    if (!wasOpen) {
+      // 正在打开或排队时被关掉：马上释放资源，资源到了也不显示（打开那边随后报 LGUI-RT-081，不再重复释放）。
+      this.releaseEntry(entry);
+      if (wasQueued) entry.show?.();
+      if (!batch) this.nextModal();
+      return;
+    }
     if (entry.active) { entry.active = false; this.hook(entry, 'onDeactivate'); }
     this.hook(entry, 'onClose');
     entry.view.__dispose();
@@ -491,10 +553,8 @@ export class UIManager {
     entry.onClose = null;
     bus.emit(builtinEvents.viewClosed, {view: entry.cls});
     if (notify) notify(result);
-    // modal 排队：前一个关掉，下一个弹出来。
-    if (entry.layer === 'modal') {
-      this.stacks.modal.find(e => e.state === 'queued')?.show?.();
-    }
+    if (batch) return;
+    this.nextModal(); // modal 排队：前一个关掉，下一个弹出来
     this.refresh();
   }
 
@@ -505,29 +565,32 @@ export class UIManager {
     return this.open(cls, params);
   }
 
-  /** 和按返回键一样：关闭当前激活、可以返回的界面。page 层最底下的主界面关不掉。 */
+  /** 和按返回键一样：关闭当前激活、可以返回的界面。hud 层的界面和 page 层最底下的主界面关不掉；keys.back 写成函数时照常调用。 */
   back(): void {
     const active = this.all().find(e => e.active);
     if (!active) return;
     const back = active.view.keys.back ?? 'close';
     if (back === 'none') return;
     if (typeof back === 'function') { asActor(active.view, () => (back as () => void)()); return; }
-    if (active.layer === 'page' && this.shown('page')[0] === active) return;
-    this.closeEntry(active);
+    if (this.canGoBack(active)) this.closeEntry(active);
   }
 
-  /** 一直关到指定界面为止（它上面的界面全部关掉）。 */
+  /** 一直关到指定界面为止（它上面的界面全部关掉）。全部关完才重新算一次激活。 */
   popTo(cls: ViewClass): void {
     const target = this.entryOf(cls);
     if (!target) throw new LgRuntimeError('LGUI-RT-083', `${cls.name} 没有打开，不能 popTo。`, '先确认它已经打开（lgui.ui.isOpen）。');
     const ordered = (['hud', 'page', 'popup', 'modal'] as const).flatMap(layer => this.stacks[layer]);
     const index = ordered.indexOf(target);
-    for (const e of ordered.slice(index + 1).reverse()) if (e.layer !== 'hud' || target.layer === 'hud') this.closeEntry(e);
+    for (const e of ordered.slice(index + 1).reverse()) if (e.layer !== 'hud' || target.layer === 'hud') this.closeEntry(e, undefined, true);
+    this.nextModal();
+    this.refresh();
   }
 
-  /** 关闭某一层的全部界面。 */
+  /** 关闭某一层的全部界面。全部关完才重新算一次激活。 */
   closeAll(layer: Layer): void {
-    for (const e of [...this.stacks[layer]].reverse()) this.closeEntry(e);
+    for (const e of [...this.stacks[layer]].reverse()) this.closeEntry(e, undefined, true);
+    this.nextModal();
+    this.refresh();
   }
 
   /** 控件在设计尺寸下的位置和大小：路径写成「包/组件.控件路径」。找不到返回 null。 */

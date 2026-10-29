@@ -1,5 +1,5 @@
 // headless 后端：在 Node 里跑，只模拟控件树和属性，不算布局、不渲染。lgui test 用它。
-import type {Backend, BackendConfig, KeyInput, LogEntry, Platform, PointerInput, UIComponent, WheelInput} from '../../core/index';
+import type {Backend, BackendConfig, Insets, KeyInput, LogEntry, Platform, PointerInput, UIComponent, WheelInput} from '../../core/index';
 import {LgRuntimeError, notImplemented} from '../../core/index';
 import type {ComponentDescriptor, PackageDescriptor} from './descriptor';
 import {Handlers, HeadlessComponent, HeadlessLoader, buildComponent, buildImage} from './objects';
@@ -10,6 +10,8 @@ export interface HeadlessState {
   now: number;
   /** 屏幕尺寸。 */
   screen: {width: number; height: number};
+  /** 安全区的边距（屏幕像素），默认全是 0。 */
+  safeArea: Insets;
   /** 系统语言。 */
   languages: string[];
   /** 存储。 */
@@ -47,7 +49,7 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[], tr
     return found;
   };
   const state: HeadlessState = {
-    now: 0, screen: {width: 1920, height: 1080}, languages: ['zh-CN'], storage: new Map(), sounds: [], logs: [], inputMode: 'ui', loaded: new Set(),
+    now: 0, screen: {width: 1920, height: 1080}, safeArea: {top: 0, right: 0, bottom: 0, left: 0}, languages: ['zh-CN'], storage: new Map(), sounds: [], logs: [], inputMode: 'ui', loaded: new Set(),
     handlers: {frame: new Handlers(), visibility: new Handlers(), pointer: new Handlers(), key: new Handlers(), wheel: new Handlers(), resize: new Handlers()}
   };
   let prefix = '';
@@ -71,7 +73,7 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[], tr
     textInput: {isComposing: () => false},
     screen: {
       size: () => ({...state.screen}),
-      safeArea: () => ({top: 0, right: 0, bottom: 0, left: 0}),
+      safeArea: () => ({...state.safeArea}),
       onResize: f => h.resize.add(f),
       applyDesignSize(design) {
         const scale = Math.min(state.screen.width / design.width, state.screen.height / design.height);

@@ -182,7 +182,7 @@ export class BagView extends View<BagPanelUI> {
 - **动作类只调用 Controller 的方法**，一句话写完，View 里不写业务逻辑。
 - **点击和手势绑在能接收输入的控件上：** 按钮、组件、列表、有填充的图形。文字、富文本、图片自己收不到点击（FairyGUI 的各个运行时都这样），绑上去不会触发；`lgui test` 里点它们报 `LGUI-RT-032`。
 - **绑定表里不写死用户能看到的文字。** 固定文字放在 `ui/` 里，动态文字用 `lgui.t`。
-- **没写进绑定表的控件，代码里一律不碰。** 特殊情况用生命周期钩子（第 9 节），钩子里用 `this.ui.<控件名>`。
+- **没写进绑定表的控件，代码里一律不碰。** 特殊情况用生命周期钩子（第 9 节），钩子里用 `this.ui.<控件名>`：可以读控件、调用控件的方法，但不给控件的属性赋值。旋转、换语言时组件会重建，钩子里赋的值就丢了；要显示的东西都写进绑定表（`lgui check` 报 `LGUI-MVC-020`）。
 - **不写坐标和尺寸。**
 
 ### 6.5 `pick`
@@ -274,6 +274,10 @@ export class FakeBagService implements BagService {
 
 屏幕旋转、切换语言时，View 实例保留，只重建组件，不调用 `onOpen` 和 `onClose`。
 
+- 绑定表在新组件上重新绑一遍，显示的内容按当前数据和语言重新取。
+- View 里的 `PartView` 实例也保留，定时器和收听接着走；列表子项（`ItemView`）和子项里的部件跟着列表重建。
+- 钩子里给控件属性赋的值不会重新赋，所以钩子里不写控件属性（第 6.4 节）。
+
 ## 10. UIManager：`lgui.ui`
 
 | 写法 | 作用 |
@@ -288,10 +292,13 @@ export class FakeBagService implements BagService {
 | `lgui.ui.isOpen(V)`、`get(V)`、`top(层?)`、`list(层)` | 查询 |
 | `lgui.ui.find('Bag/BagPanel.sellButton')` | 控件在设计尺寸下的位置和大小，只读 |
 
-- 5 层从下到上：`hud`、`page`、`popup`、`modal`、`toast`。`hud`、`page`、`popup` 各是一个栈；`modal` 是队列，同一时间只显示一个；`toast` 不收输入。
+- 5 层从下到上：`hud`、`page`、`popup`、`modal`、`toast`。`hud`、`page`、`popup` 各是一个栈；`toast` 不收输入。
+- **`modal` 是队列：** 同一时间只显示一个，按打开的先后排。前一个关掉、打开失败、或者还没显示就被关掉，下一个照常弹出。`lgui.loading` 不进队列，直接盖在最上面。
 - 所有层合起来最上面那个界面是激活的，只有它收输入。
 - 打开全屏界面时，下面的界面都被盖住（隐藏、暂停定时器和动效）；关掉后自动露出来。
-- `page` 层最底下的主界面按返回键关不掉。
+- `hud` 层的界面和 `page` 层最底下的主界面按返回键关不掉；`keys.back` 写成函数时照常调用。
+- **再打开一个已经打开（或正在打开）的界面：** 返回同一个 Promise，这次的参数不用；这次又登记了 `onClose` 时报 `LGUI-RT-084`（这个回调不会被调用）。
+- `popTo`、`closeAll` 全部关完才重新算一次激活：要关掉的界面收不到 `onActivate`、`onRevealed`。
 - **`onClose`：** B 不管怎么关（自己关、返回键、`closeAll`、`replace`）都调用一次；没交回东西时参数是 `undefined`；打开 B 的界面先关了，回调自动取消；旋转、换语言不算关闭。
 - 一个模块不能去改另一个界面的控件；要改就改它监听的 Model。
 
@@ -312,7 +319,7 @@ keys: Keys = {
 | 写法 | 作用 |
 |---|---|
 | `lgui.toast('bag.sold', { count })` | 短提示，放在 `toast` 层 |
-| `await lgui.confirm({ title, message, ok?, cancel? })` | 确认框，返回 `true` / `false`；参数都是文本键 |
+| `await lgui.confirm({ title, message, ok?, cancel?, params? })` | 确认框，返回 `true` / `false`；参数都是文本键，`params` 填占位符。一次只显示一个，后来的排队；被代码关掉（`closeAll`、`popTo`、`close`）或取消时，它和排队中的都返回 `false` |
 | `lgui.loading.show()` / `hide()` | 加载中，按次数计数，最后一次 `hide` 才消失 |
 | `lgui.redDot.set('bag.newItem', true \| false \| 3)` | 红点；上层路径自动汇总，数字显示合计 |
 | `lgui.t('bag.sold', { count })` | 取文本，占位符写成 `{count}` |
