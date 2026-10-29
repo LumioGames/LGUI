@@ -41,6 +41,7 @@ export function describeComponent(component) {
       kind: child.kind,
       ref: child.tag === 'component' ? child.ref?.fullName ?? null : null,
       defaultItem: child.kind === 'list' ? child.ref?.fullName ?? null : null,
+      rect: [...(child.attrs.xy ?? '0,0').split(',').map(Number), ...(child.attrs.size ?? '0,0').split(',').map(Number)],
       props: props(child),
       // 按钮自带的 button 控制器、组件实例上覆写的控制器页面
       overrides: child.children.filter(node => node.tag === 'Button' || node.tag === 'ProgressBar').map(node => ({tag: node.tag, attrs: node.attrs}))
