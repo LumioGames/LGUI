@@ -24,7 +24,7 @@ const host = ts => ({getCanonicalFileName: f => f, getCurrentDirectory: () => pr
 // 把一个 TS 入口打包成 ESM 并 import 进来。alias 同工程里的写法。
 export async function importTs(entry, {alias = {}} = {}) {
   const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-ts-')), 'bundle.mjs');
-  await esbuild().build({entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', target: 'es2020', outfile: out, alias, logLevel: 'silent'});
+  await esbuild().build({entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', target: 'es2020', outfile: out, alias, logLevel: 'silent', keepNames: true});
   return import(pathToFileURL(out).href);
 }
 

@@ -98,6 +98,8 @@ export class UIManager {
   private visible: Rect;
   private cache: Cached[] = [];
   private hintBar: HintBar | null = null;
+  /** 不进 modal 队列、直接盖在最上面的界面（loading）。 */
+  readonly overlays = new Set<ViewClass>();
   /** 框架常驻用到的包，永远不释放。 */
   private pinned = new Set<string>();
 
@@ -365,7 +367,7 @@ export class UIManager {
       }
       if (entry.state === 'closed') throw cancelled('加载资源');
       // modal 层同一时间只显示一个，后来的排队。
-      if (layer === 'modal' && this.stacks.modal.some(e => e !== entry && (e.state === 'open' || e.state === 'opening'))) {
+      if (layer === 'modal' && !this.overlays.has(cls) && this.stacks.modal.some(e => e !== entry && !this.overlays.has(e.cls) && (e.state === 'open' || e.state === 'opening'))) {
         entry.state = 'queued';
         await new Promise<void>(resolve => { entry.show = resolve; });
         if ((entry.state as Entry['state']) === 'closed') throw cancelled('排队');
@@ -446,10 +448,10 @@ export class UIManager {
 
   // ---------- 关闭 ----------
 
-  close(cls: ViewClass, result?: unknown): void {
+  close(cls: ViewClass, result?: unknown, quiet = false): void {
     const entry = this.entryOf(cls);
     if (!entry) {
-      this.backend.platform.log.write('info', `LGUI-RT-082  ${cls.name} 没有打开，跳过关闭。`);
+      if (!quiet) this.backend.platform.log.write('info', `LGUI-RT-082  ${cls.name} 没有打开，跳过关闭。`);
       return;
     }
     this.closeEntry(entry, result);
