@@ -101,3 +101,5 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-140` | 切换到工程不支持的语言 | 在 `.lgui/project.json` 的 `languages` 里加上它，并新建 `i18n/<语言>.json` |
 | `LGUI-RT-141` | 后端读不到这种语言的翻译文件，或翻译 XML 无法解析 | 网页重新运行 `lgui dev`；Unity 重新导出并确认 `Resources/UI/i18n/` 下有对应语言的 XML |
 | `LGUI-RT-027` | 后端还没启动就开始用 | 先调用 `backend.init(config)`（框架启动时会自动调用） |
+| `LGUI-RT-160` | Unity 启动脚本或 Resources 文本缺失、PuerTS 启动失败、每帧驱动或退出清理失败 | 重新运行 `lgui unity export`，核对生成物和 PuerTS 3.0.3 本地包，按日志修正后重新启动场景 |
+| `LGUI-RT-161` | Unity 平台存储、HTTP、音频等服务失败 | 按日志检查存储权限、请求参数、资源地址或本地 PuerTS 环境 |

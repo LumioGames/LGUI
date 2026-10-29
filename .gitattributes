@@ -14,3 +14,6 @@ LICENSE text eol=lf
 
 # 随插件带的工具按原样保存，不改换行。
 plugin/tools/vendor/node_modules/** -text
+
+# 固定上游 Unity 源码和 .meta 保留原始字节，便于核对来源。
+plugin/framework/backends/unity/package/FairyGUI/** -text -whitespace
