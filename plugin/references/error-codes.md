@@ -6,8 +6,8 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 |---|---|---|
 | `LGUI-CLI-xxx` | 命令行 | 见下表 |
 | `LGUI-RT-xxx` | 运行时 | 见下表 |
-| `LGUI-UI-xxx` | UI 开发规范的检查规则 | 见 `ui-spec.md` 的检查规则表 |
-| `LGUI-MVC-xxx` | MVC 开发规范的检查规则 | 见 `mvc-spec.md` 的检查规则表 |
+| `LGUI-UI-xxx` | UI 开发规范的检查规则 | 见 [ui-spec.md](ui-spec.md) 第 13 节 |
+| `LGUI-MVC-xxx` | MVC 开发规范的检查规则 | 见 [mvc-spec.md](mvc-spec.md) 第 13 节 |
 
 ## LGUI-CLI-xxx
 

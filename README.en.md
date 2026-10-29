@@ -55,6 +55,6 @@ See "For AI agents" above. Only the repository's `plugin/` folder is shipped as 
 
 ## Links
 
-[Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [Project layout](plugin/references/project-layout.md) · [Unity (phase 3)](plugin/references/unity.md) · [Error codes](plugin/references/error-codes.md) · [Third-party notices](plugin/THIRD_PARTY_NOTICES.md)
+[Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [UI spec](plugin/references/ui-spec.md) · [MVC spec](plugin/references/mvc-spec.md) · [Project layout](plugin/references/project-layout.md) · [Unity (phase 3)](plugin/references/unity.md) · [Error codes](plugin/references/error-codes.md) · [Third-party notices](plugin/THIRD_PARTY_NOTICES.md)
 
 Original work is licensed under [MIT](LICENSE), Copyright © 2026 LumioGames.
