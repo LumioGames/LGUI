@@ -15,6 +15,16 @@ export const LAYERS: readonly Layer[] = ['hud', 'page', 'popup', 'modal', 'toast
 export interface OrientationSettings {
   designSize: {landscape: {width: number; height: number}; portrait: {width: number; height: number}};
   orientation: 'both' | 'landscape' | 'portrait';
+  /** 界面缓存：最近关掉的 N 个界面不销毁，再打开时直接复用组件。默认 0。 */
+  uiCache?: {keepClosedViews: number};
+}
+
+/** 缓存着的、关掉的界面组件（连同它占着的包引用）。 */
+interface Cached {
+  cls: ViewClass;
+  version: string;
+  component: UIComponent;
+  packages: string[];
 }
 
 /** 找出组件里所有列表（不进列表内部），记下滚动位置和选中项，按控件路径。 */
@@ -67,6 +77,8 @@ export interface Entry {
   onClose: ((result: unknown) => void) | null;
   packages: string[];
   ready: Promise<ViewInstance>;
+  /** 打开时从缓存里取到的组件。 */
+  cached?: Cached;
   /** 排队中的 modal：轮到它时调用。 */
   show?: () => void;
 }
@@ -78,6 +90,7 @@ export class UIManager {
   private refs = new Map<string, number>();
   private loading = new Map<string, Promise<void>>();
   private visible: Rect;
+  private cache: Cached[] = [];
 
   /** 当前方向。 */
   orientation: Orientation;
@@ -278,13 +291,17 @@ export class UIManager {
       opener, onClose: options.onClose ?? null, packages: this.packagesOf(pkg), ready: Promise.resolve(view)
     };
     this.stacks[layer].push(entry);
+    const cachedIndex = this.cache.findIndex(c => c.cls === cls);
+    if (cachedIndex >= 0) [entry.cached] = this.cache.splice(cachedIndex, 1);
     entry.ready = (async () => {
       const cancelled = (how: string): LgRuntimeError => {
+        entry.cached?.component.dispose();
+        entry.cached = undefined;
         this.release(entry.packages);
         return new LgRuntimeError('LGUI-RT-081', `${cls.name} 在${how}时被关闭了，这次打开已取消。`, '不需要处理；不想看到这个错误，就不要在打开完成之前关闭它。');
       };
       try {
-        await this.acquire(entry.packages);
+        if (!entry.cached) await this.acquire(entry.packages); // 缓存里的组件还占着包引用
       } catch (error) {
         this.remove(entry);
         this.release(entry.packages);
@@ -316,7 +333,15 @@ export class UIManager {
     const [pkg] = entry.cls.component.split('/');
     // 打开时先判方向，再加载对应的版本。
     const version = this.versionOf(entry.cls);
-    const component = this.backend.create(pkg, version);
+    let component: UIComponent;
+    if (entry.cached && entry.cached.version === version) {
+      component = entry.cached.component;
+      component.visible = true;
+    } else {
+      entry.cached?.component.dispose();
+      component = this.backend.create(pkg, version);
+    }
+    entry.cached = undefined;
     entry.component = component;
     entry.version = version;
     const container = this.containers.get(entry.layer) as UIComponent;
@@ -328,6 +353,34 @@ export class UIManager {
     bus.emit(builtinEvents.viewOpened, {view: entry.cls});
     this.refresh();
   }
+
+  /** 关闭后的组件：配置了界面缓存就留着（连同包引用），否则销毁并释放资源。 */
+  private discard(entry: Entry): void {
+    const component = entry.component;
+    entry.component = null;
+    const keep = this.settings.uiCache?.keepClosedViews ?? 0;
+    if (component && keep > 0) {
+      (this.containers.get(entry.layer) as UIComponent).removeChild(component);
+      this.cache.push({cls: entry.cls, version: entry.version, component, packages: entry.packages});
+      while (this.cache.length > keep) this.evict(this.cache.shift() as Cached);
+      return;
+    }
+    component?.dispose();
+    this.release(entry.packages);
+  }
+
+  private evict(cached: Cached): void {
+    cached.component.dispose();
+    this.release(cached.packages);
+  }
+
+  /** 清空界面缓存（切换语言时用：缓存的组件是旧语言的）。 */
+  clearCache(): void {
+    for (const cached of this.cache.splice(0)) this.evict(cached);
+  }
+
+  /** 缓存着几个关掉的界面。 */
+  cachedCount(): number { return this.cache.length; }
 
   private remove(entry: Entry): void {
     const stack = this.stacks[entry.layer];
@@ -356,9 +409,7 @@ export class UIManager {
     if (entry.active) { entry.active = false; this.hook(entry, 'onDeactivate'); }
     this.hook(entry, 'onClose');
     entry.view.__dispose();
-    entry.component?.dispose();
-    entry.component = null;
-    this.release(entry.packages);
+    this.discard(entry);
     // 打开者已经关了的界面不再通知；它打开的界面的回调全部取消。
     for (const other of this.all()) if (other.opener === entry) { other.opener = null; other.onClose = null; }
     const notify = entry.onClose;
