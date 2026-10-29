@@ -6,7 +6,7 @@ import {typescript, esbuild, sharp, playwright, openFairyGUI} from '../plugin/to
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // 新建工程模板里的界面工程。
-const templateUi = path.join(root, 'plugin/templates/project/project/UI.fairy');
+const templateUi = path.join(root, 'plugin/templates/project/ui/UI.fairy');
 
 export const checks = [
   ['TypeScript：转换一段代码', async () => {

@@ -1,0 +1,4 @@
+{
+  "main.hello": "Hello, LGUI",
+  "main.clicked": "Clicked {count} times"
+}

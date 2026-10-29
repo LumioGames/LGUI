@@ -8,8 +8,7 @@ import {generateWeb, generateUnity} from '../../plugin/tools/lib/generate/index.
 
 const repo = fileURLToPath(new URL('../..', import.meta.url));
 const projects = {
-  // 新建工程模板里的界面工程（S2-A3 改成 ui/ 之前还在 project/ 下）。
-  template: path.join(repo, 'plugin/templates/project/project/UI.fairy'),
+  template: path.join(repo, 'plugin/templates/project/ui/UI.fairy'),
   inventory: path.join(repo, 'examples/inventory/legacy/project/Inventory.fairy')
 };
 const temp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-gen-'));
@@ -55,7 +54,7 @@ test('每次都全部重新生成：旧输出里的多余文件会被清掉', as
 test('界面工程校验不过时报 LGUI-CLI-020', async () => {
   const dir = temp();
   fs.cpSync(path.dirname(projects.template), dir, {recursive: true});
-  const pkgXml = path.join(dir, 'assets/UI/package.xml');
+  const pkgXml = path.join(dir, 'assets/Main/package.xml');
   fs.writeFileSync(pkgXml, fs.readFileSync(pkgXml, 'utf8').replace('<resources>', '<resources><component id="missing1" name="Missing.xml" path="/"/>'));
   await assert.rejects(generateWeb(path.join(dir, 'UI.fairy'), temp()), error => (error.errors ?? [error]).every(item => item.code === 'LGUI-CLI-020'));
 });

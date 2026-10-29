@@ -5,13 +5,14 @@ import {readProject} from './project.mjs';
 import {assertSameVersion} from './version.mjs';
 import {emit, toErrors} from './output.mjs';
 import {uiList} from './commands/ui-list.mjs';
+import {init} from './commands/init.mjs';
 
 // project：'none' 不需要在工程里；'required' 必须在工程里。
 // versionCheck：运行前比对插件和工程的版本（init、doctor、upgrade 不比对）。
 // flags：这条命令认识的参数；'string' 后面要跟一个值，'boolean' 是开关。
 // run：实现；null 表示还没实现，报 LGUI-CLI-000。
 export const registry = [
-  {name: 'init', usage: 'init [目录] [--name 名称]', about: '新建工程', project: 'none', versionCheck: false, flags: {name: 'string'}, run: null},
+  {name: 'init', usage: 'init [目录] [--name 名称]', about: '新建工程', project: 'none', versionCheck: false, flags: {name: 'string'}, run: init},
   {name: 'doctor', usage: 'doctor [--paths]', about: '检查环境', project: 'none', versionCheck: false, flags: {paths: 'boolean'}, run: null},
   {name: 'dev', usage: 'dev [--port 端口] [--no-open]', about: '打开网页预览，改动后自动刷新', project: 'required', versionCheck: true, flags: {port: 'string', 'no-open': 'boolean'}, run: null},
   {name: 'editor', usage: 'editor', about: '打开编辑器', project: 'required', versionCheck: true, flags: {}, run: null},

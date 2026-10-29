@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="main0001">
+  <resources>
+    <component id="mainvw01" name="MainView.xml" path="/" exported="true"/>
+    <component id="mainvw02" name="MainView@portrait.xml" path="/" exported="true"/>
+  </resources>
+</packageDescription>

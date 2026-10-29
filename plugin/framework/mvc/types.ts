@@ -1,0 +1,266 @@
+// MVC 框架对外的类型：绑定表、按键表、View 的固定信息。写法以 references/mvc-spec.md 为准。
+import type {
+  UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UIProgress, UIGraph
+} from '../core/index';
+
+/** 5 层，从下到上。 */
+export type Layer = 'hud' | 'page' | 'popup' | 'modal' | 'toast';
+/** 游戏场景要不要同时接收输入。 */
+export type InputMode = 'ui' | 'game' | 'all';
+/** 当前的输入设备类型。 */
+export type InputType = 'keyboardMouse' | 'touch';
+/** 屏幕方向。 */
+export type Orientation = 'landscape' | 'portrait';
+
+/** 能被 pick 读的数据源：Model、请求对象，或者任何有 get 和 subscribe 的东西。 */
+export interface Readable<T> {
+  /** 当前值。 */
+  get(): T;
+  /** 值变了时调用，返回取消函数。 */
+  subscribe(listener: () => void): () => void;
+}
+
+/** pick 的结果：告诉框架监听哪个数据源、取哪个字段。 */
+export interface Picked<T> extends Readable<T> {
+  /** 内部标记。 */
+  readonly __picked: true;
+}
+
+/** 显示类的值：固定值或 pick。 */
+export type Value<T> = T | Picked<T>;
+
+/** 动作：调用一个 Controller 方法，可以返回 Promise（配合 lockWhilePending）。 */
+export type Action<Args extends unknown[] = []> = (...args: Args) => unknown;
+
+/** 拖拽手势。坐标和位移都是设计尺寸。 */
+export interface DragGesture {
+  /** 开始、移动、结束。 */
+  phase: 'start' | 'move' | 'end';
+  /** 当前 x。 */
+  x: number;
+  /** 当前 y。 */
+  y: number;
+  /** 从开始到现在的横向位移。 */
+  dx: number;
+  /** 从开始到现在的纵向位移。 */
+  dy: number;
+}
+
+/** 滑动手势（抬起时速度够快）。 */
+export interface SwipeGesture {
+  /** 横向位移。 */
+  dx: number;
+  /** 纵向位移。 */
+  dy: number;
+  /** 抬起时的横向速度（像素/毫秒）。 */
+  vx: number;
+  /** 抬起时的纵向速度（像素/毫秒）。 */
+  vy: number;
+}
+
+/** 双指缩放手势。 */
+export interface PinchGesture {
+  /** 开始、移动、结束。 */
+  phase: 'start' | 'move' | 'end';
+  /** 相对开始时两指距离的比例。 */
+  scale: number;
+}
+
+/** 滚轮。 */
+export interface WheelGesture {
+  /** 横向滚动量。 */
+  dx: number;
+  /** 纵向滚动量。 */
+  dy: number;
+}
+
+/** 所有控件都能用的词。 */
+export interface CommonBinding {
+  /** 是否显示。 */
+  visible?: Value<boolean>;
+  /** 是否可用；false 时变灰、不可点。 */
+  enabled?: Value<boolean>;
+  /** 只在这些输入类型下显示。 */
+  visibleOn?: readonly InputType[];
+  /** 红点路径（控件里要有 redDot 子控件）。 */
+  redDot?: string;
+  /** 点击。 */
+  click?: Action;
+  /** 双击。 */
+  doubleClick?: Action;
+  /** 长按满 ms 毫秒才执行。 */
+  hold?: {ms: number; action: Action};
+  /** 拖拽。 */
+  drag?: Action<[DragGesture]>;
+  /** 滑动。 */
+  swipe?: Action<[SwipeGesture]>;
+  /** 双指缩放。 */
+  pinch?: Action<[PinchGesture]>;
+  /** 滚轮。 */
+  wheel?: Action<[WheelGesture]>;
+  /** 鼠标移入（true）或移出（false），触屏没有。 */
+  hover?: Action<[boolean]>;
+  /** 动作返回的 Promise 结束前保持锁住。 */
+  lockWhilePending?: boolean;
+}
+
+/** 文字、富文本、输入框、ArtText。 */
+export interface TextBinding extends CommonBinding {
+  /** 显示的文字。 */
+  text?: Value<string>;
+}
+
+/** 按钮。 */
+export interface ButtonBinding extends CommonBinding {
+  /** 标题。 */
+  text?: Value<string>;
+  /** 图标地址。 */
+  icon?: Value<string>;
+}
+
+/** 加载器。 */
+export interface LoaderBinding extends CommonBinding {
+  /** 图片地址。 */
+  icon?: Value<string>;
+  /** 加载中和失败时显示的占位图，不写用工程配置的默认占位图。 */
+  placeholder?: string;
+}
+
+/** 进度条。 */
+export interface ProgressBinding extends CommonBinding {
+  /** 0–100。 */
+  progress?: Value<number>;
+}
+
+/** 列表子项的 key。 */
+export type ItemKey = string | number;
+
+/** 列表。 */
+export interface ListBinding extends CommonBinding {
+  /** 数据。 */
+  items?: Value<readonly unknown[]>;
+  /** 子项用的 ItemView。 */
+  item?: ItemViewClass;
+  /** 认出同一项。 */
+  key?: (item: never) => ItemKey;
+  /** 选中项的 key。 */
+  selected?: Value<ItemKey | null>;
+  /** 用户点选时调用，参数是 key。 */
+  select?: Action<[never]>;
+}
+
+/** 控制器。 */
+export interface ControllerBinding<Page extends string> {
+  /** 当前页。 */
+  page?: Value<Page>;
+  /** 用户切页时调用。 */
+  change?: Action<[Page]>;
+}
+
+/** 子组件。 */
+export interface ComponentBinding extends CommonBinding {
+  /** 交给一个部件 View。 */
+  view?: PartViewClass;
+  /** ArtText 的文字。 */
+  text?: Value<string>;
+}
+
+/** 按控件类型选绑定表里能用的词。 */
+export type BindingFor<X> =
+  X extends UIController<infer Page> ? ControllerBinding<Page> :
+  X extends UIList ? ListBinding :
+  X extends UIButton ? ButtonBinding :
+  X extends UIProgress ? ProgressBinding :
+  X extends UILoader ? LoaderBinding :
+  X extends UIImage ? CommonBinding :
+  X extends UIInput | UIRichText | UIText ? TextBinding :
+  X extends UIGraph ? CommonBinding :
+  X extends UIComponent ? ComponentBinding :
+  never;
+
+/** View 的绑定表：键是 ui/ 里真实存在的名字。 */
+export type Bind<UI> = {[K in Exclude<keyof UI, '__component'>]?: BindingFor<UI[K]>};
+
+/** ItemView 里的值：传入这一项的数据，返回要显示的内容。 */
+export type ItemValue<Data, T> = T | ((item: Data) => T);
+
+/** 把一种绑定里的 Value 换成 ItemValue。 */
+type ForItem<B, Data> = {[K in keyof B]: B[K] extends Value<infer T> | undefined ? (K extends 'visibleOn' | 'redDot' | 'placeholder' | 'lockWhilePending' | 'hold' ? B[K] : ItemValue<Data, T> | undefined) : B[K]};
+
+/** ItemView 的绑定表。 */
+export type ItemBind<UI, Data> = {[K in Exclude<keyof UI, '__component'>]?: ForItem<BindingFor<UI[K]>, Data>};
+
+/** 按键动作。 */
+export interface KeyAction {
+  /** 要做的事。 */
+  do: Action;
+  /** 操作提示栏里的提示文字（文本键）。 */
+  hint?: string;
+}
+
+/** 按键表。 */
+export interface Keys {
+  /** 返回键：'close' 关闭自己（默认）、'none' 不让返回，或者一个函数。 */
+  back?: 'close' | 'none' | Action;
+  /** 其他动作，比如 confirm。 */
+  [action: string]: KeyAction | 'close' | 'none' | Action | undefined;
+}
+
+/** 生命周期钩子。 */
+export interface ViewHooks<Params> {
+  /** 界面打开，资源准备好、绑定完成之后。 */
+  onOpen?(params: Params): void;
+  /** 变成激活的界面时。 */
+  onActivate?(): void;
+  /** 被别的界面压住时。 */
+  onDeactivate?(): void;
+  /** 被全屏界面盖住时。 */
+  onCovered?(): void;
+  /** 重新露出来时。 */
+  onRevealed?(): void;
+  /** 屏幕方向变了时（平时换版由框架处理）。 */
+  onOrientationChange?(orientation: Orientation): void;
+  /** 界面关闭前。 */
+  onClose?(): void;
+}
+
+/** View 类（构造函数加 7 项固定信息）。 */
+export interface ViewClass<Instance = object> {
+  /** 构造。 */
+  new (): Instance;
+  /** 对应的「包/组件」。 */
+  component: string;
+  /** 放在哪一层。 */
+  layer: Layer;
+  /** 是不是全屏。 */
+  fullScreen?: boolean;
+  /** 打开时能传的参数。 */
+  params?: object;
+  /** 关闭时可以交回的东西（只写类型）。 */
+  result?: unknown;
+  /** 游戏场景要不要同时接收输入。 */
+  inputMode?: InputMode;
+  /** 全屏又没有竖版时写 true。 */
+  bothOrientations?: boolean;
+}
+
+/** ItemView 类。 */
+export interface ItemViewClass {
+  /** 构造。 */
+  new (): object;
+  /** 对应的「包/组件」。 */
+  component: string;
+}
+
+/** PartView 类。 */
+export interface PartViewClass {
+  /** 构造。 */
+  new (): object;
+  /** 对应的「包/组件」。 */
+  component: string;
+}
+
+/** 打开某个 View 时能传的参数类型。 */
+export type ParamsOf<V> = V extends {params: infer P} ? P : undefined;
+/** 关闭某个 View 时能交回的东西的类型。 */
+export type ResultOf<V> = V extends {result: infer R} ? R : undefined;
