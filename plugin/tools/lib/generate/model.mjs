@@ -76,9 +76,11 @@ export function readUiModel(fairyPath) {
       const {root} = parseXml(resource.file);
       const displayList = root.children.find(child => child.tag === 'displayList')?.children ?? [];
       const extension = root.attrs.extention ?? root.attrs.extension ?? null;
+      // 按钮的模式（Common / Check / Radio）：只有 Check、Radio 能保持选中，列表的选中项靠它显示。
+      const buttonMode = extension === 'Button' ? (root.children.find(child => child.tag === 'Button')?.attrs.mode ?? 'Common') : null;
       pkg.components.push({
         pkg, resource, id: resource.id, name: resource.name, fullName: `${pkg.name}/${resource.name}`,
-        exported: resource.exported, file: resource.file, size: root.attrs.size ?? '0,0', extension,
+        exported: resource.exported, file: resource.file, size: root.attrs.size ?? '0,0', extension, buttonMode,
         controllers: root.children.filter(child => child.tag === 'controller').map(child => ({name: child.attrs.name, pages: parsePages(child.attrs.pages), selected: Number(child.attrs.selected ?? 0), line: lineIn(resource.file, `name="${child.attrs.name}"`)})),
         transitions: root.children.filter(child => child.tag === 'transition').map(child => child.attrs.name),
         children: displayList.map(node => ({...node, name: node.attrs.name, id: node.attrs.id})),

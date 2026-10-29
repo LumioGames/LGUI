@@ -389,13 +389,21 @@ test('选中道具后出售，金币增加', async () => {
 |---|---|
 | `open(View, 参数?)` | 打开界面 |
 | `click(路径)`、`hold(路径, 毫秒)`、`drag(路径, dx, dy)`、`swipe(路径, dx, dy)`、`pinch(路径, 比例)`、`wheel(路径, dy)`、`key(按键名)` | 模拟操作 |
-| `text(路径)`、`visible(路径)`、`enabled(路径)`、`page(路径)`、`items(路径)` | 读控件属性 |
+| `text(路径)`、`visible(路径)`、`enabled(路径)`、`page(路径)`、`items(路径)` | 读控件属性：文字（字符串）、显示 / 可用（布尔）、控制器当前页（页名）、列表项数（数字） |
 | `setScreen(宽, 高)`、`setLanguage(语言)`、`setInputType('touch' \| 'keyboardMouse')` | 模拟旋转、换语言、换输入设备 |
 | `advance(毫秒)` | 让假时钟往前走 |
 | `snapshot()` | 返回 `lgui.debug.snapshot()` |
 | `end()` | 关闭所有界面，检查监听和定时器都已清理 |
 
 路径写成 `<包>/<组件>.<控件路径>`；列表子项用 `list[序号]`。
+
+- **假时钟：** 点了按钮以后，打开新界面、请求返回都要等一帧，先 `await t.advance(16)` 再读；一串请求就多等几帧。
+- **Model 在测试之间不重置**（同一个测试文件里的测试共用一份）：给 Model 加一个 `reset()` 规则，在 `beforeEach` 里调用：
+
+```ts
+import { test, beforeEach } from 'node:test';
+beforeEach(() => bagModel.reset());
+```
 
 ## 13. 检查规则表
 

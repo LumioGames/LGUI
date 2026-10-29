@@ -91,7 +91,16 @@ class HeadlessInput extends HeadlessText implements UIInput {
 class HeadlessButton extends HeadlessComponent implements UIButton {
   title = '';
   icon = '';
-  selected = false;
+  mode = 'Common';
+  private isSelected = false;
+  // 和 FairyGUI 一样：Common 模式不保持选中；Check、Radio 选中时 button 控制器到 down 页，取消时回到 up 页。
+  get selected(): boolean { return this.isSelected; }
+  set selected(value: boolean) {
+    if (this.mode === 'Common') return;
+    this.isSelected = value;
+    const controller = this.controllers.get('button');
+    if (controller && controller.pages.includes('down') && controller.pages.includes('up')) controller.selectedPage = value ? 'down' : 'up';
+  }
 }
 
 class HeadlessImage extends HeadlessObject implements UIImage {
@@ -126,7 +135,13 @@ export class HeadlessList extends HeadlessComponent implements UIList {
   itemRenderer: ((index: number, item: UIComponent) => void) | null = null;
   virtual = false;
   scrollPosition = {x: 0, y: 0};
-  selectedIndex = -1;
+  private selected = -1;
+  /** 选中项：和 FairyGUI 一样同步到子项按钮（Check、Radio 模式的按钮才显示选中）。 */
+  get selectedIndex(): number { return this.selected; }
+  set selectedIndex(value: number) {
+    this.selected = value;
+    this.children.forEach((item, i) => { if (item instanceof HeadlessButton) item.selected = i === value; });
+  }
   readonly clicks = new Handlers<number>();
   private count = 0;
   constructor(name: string, private readonly itemName: string | null, private readonly lookup: Lookup, private readonly tr?: Translate) { super(name, '', 'list'); }
@@ -229,7 +244,7 @@ export function buildComponent(descriptor: ComponentDescriptor, lookup: Lookup, 
     const button = new HeadlessButton(name, descriptor.name, 'button');
     button.title = props?.title ?? '';
     button.icon = props?.icon ?? '';
-    button.selected = props?.selected ?? false;
+    button.mode = descriptor.buttonMode ?? 'Common';
     component = button;
   } else if (kind === 'progress' || descriptor.extension === 'ProgressBar') {
     const bar = new HeadlessProgress(name, descriptor.name, 'progress');
@@ -241,6 +256,7 @@ export function buildComponent(descriptor: ComponentDescriptor, lookup: Lookup, 
   }
   component.rect = {x: 0, y: 0, width: descriptor.size[0], height: descriptor.size[1]};
   for (const c of descriptor.controllers) component.controllers.set(c.name, new HeadlessController(c.name, c.pages, c.selected));
+  if (component instanceof HeadlessButton && props?.selected) component.selected = true;
   for (const t of descriptor.transitions) component.transitions.set(t, new HeadlessTransition(t));
   const owner = tr?.owners.get(descriptor.name);
   for (const child of descriptor.children) component.addChild(buildChild(child, lookup, owner, tr));

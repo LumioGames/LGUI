@@ -11,7 +11,7 @@ async function project() {
   return path.join(parent, 'game');
 }
 
-test('lgui i18n extract：提取固定文字到默认语言的文本表，已有的保留，新增的追加，ui/ 里没了的只报告', async () => {
+test('lgui i18n extract：提取固定文字到默认语言的文本表，默认语言原文跟着 ui/ 更新，新增的追加，ui/ 里没了的只报告', async () => {
   const root = await project();
   const zh = path.join(root, 'i18n/zh-CN.json');
   const first = JSON.parse((await run(['i18n', 'extract', '--json'], root)).stdout);
@@ -21,11 +21,15 @@ test('lgui i18n extract：提取固定文字到默认语言的文本表，已有
   assert.equal(table['Main/MainView/button'], '点我');
   assert.equal(table['Common/Confirm/ok'], '确定');
   assert.equal(table['main.hint'], '点下面的按钮试试', '代码里用的键不动');
-  // 改过的翻译保留，再提取一次不新增
+  // 默认语言的原文以 ui/ 为准：表里改了会被改回来；ui/ 里改了，表跟着改，并报告「原文改了」
   table['Main/MainView/title'] = '改过的';
   fs.writeFileSync(zh, JSON.stringify(table));
   const second = JSON.parse((await run(['i18n', 'extract', '--json'], root)).stdout);
-  assert.deepEqual([second.data.added, JSON.parse(fs.readFileSync(zh, 'utf8'))['Main/MainView/title']], [[], '改过的']);
+  assert.deepEqual([second.data.added, second.data.changed, JSON.parse(fs.readFileSync(zh, 'utf8'))['Main/MainView/title']], [[], ['Main/MainView/title'], '你好，LGUI']);
+  const mainXml = path.join(root, 'ui/assets/Main/MainView.xml');
+  fs.writeFileSync(mainXml, fs.readFileSync(mainXml, 'utf8').replace('text="你好，LGUI"', 'text="欢迎"'));
+  const renamed = JSON.parse((await run(['i18n', 'extract', '--json'], root)).stdout);
+  assert.deepEqual([renamed.data.changed, JSON.parse(fs.readFileSync(zh, 'utf8'))['Main/MainView/title']], [['Main/MainView/title'], '欢迎']);
   // 删掉标题控件：键只报告，不删
   for (const f of ['MainView.xml', 'MainView@portrait.xml']) {
     const xml = path.join(root, 'ui/assets/Main', f);

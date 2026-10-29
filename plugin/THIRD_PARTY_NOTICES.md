@@ -8,7 +8,7 @@ LGUI 的 MIT 许可（[LICENSE](LICENSE)）只覆盖 LumioGames 的原创代码�
 | --- | --- | --- | --- |
 | [FairyGUI-dom](https://github.com/fairygui/FairyGUI-dom/tree/fade49fc33bdcd5673351e04637d4cc08d2297f3) 运行时 | `framework/backends/h5/vendor/` | 提交 `fade49fc33bdcd5673351e04637d4cc08d2297f3` | MIT，Copyright (c) 2021 FairyGUI；许可原文同目录 `FairyGUI-LICENSE.txt`，并见文末 |
 | PuerTS 兼容补丁 | `framework/backends/unity/patches/puerts-3.0.3-unity-6.6-unbox.patch` | 针对 [PuerTS Unity_v3.0.3](https://github.com/Tencent/puerts/releases/tag/Unity_v3.0.3)（源码提交 `d8871238a3774fd10600995a5325e4b2ab4e39fb`） | 补丁内含 PuerTS 源码片段：BSD-3-Clause，Copyright (C) 2020 Tencent，许可原文见文末。补丁只把固定 C++ 模板里四处 `Object::Unbox` 改为公开的 `il2cpp_object_unbox`，用于 Unity 6000.6，不改变原许可 |
-| 技能 `skills/` | `skills/` | — | LumioGames 原创，MIT。其中 `lgui-author` 的 references 并入了团队提供的 fairygui-ui 设计技能：2026-10-16 维护者确认「团队原创，可随 LGUI 按 MIT 发布」，原包 SHA256 `e0ac8457ea7214d34a74f3297b570d5cff7096a87e06cb383a94b4504d25a858` |
+| 技能 `skills/` | `skills/` | — | LumioGames 原创，MIT。`lgui-ui` 的动效说明改写自 0.2.0 的 `lgui-author`（其 references 并入过团队提供的 fairygui-ui 设计技能：2026-10-16 维护者确认「团队原创，可随 LGUI 按 MIT 发布」，原包 SHA256 `e0ac8457ea7214d34a74f3297b570d5cff7096a87e06cb383a94b4504d25a858`） |
 | TypeScript | `tools/vendor/node_modules/typescript/` | 5.9.3 | Apache-2.0，Copyright (c) Microsoft Corporation；许可原文在包内 `LICENSE.txt` |
 | esbuild（含 `@esbuild/darwin-arm64`、`darwin-x64`、`linux-x64`、`win32-x64`） | `tools/vendor/node_modules/esbuild/`、`@esbuild/*` | 0.25.10 | MIT，Copyright (c) 2020 Evan Wallace；许可原文在 `esbuild/LICENSE.md`，四个平台包沿用同一许可 |
 | OpenFairyGUI core / functions / backend / cli | `tools/vendor/node_modules/@openfairygui/*` | 0.7.0 | MIT，Copyright (c) 2026 OpenFairyGUI Contributors；许可原文见文末和各包 `LICENSE` |
