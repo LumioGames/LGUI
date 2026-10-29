@@ -258,6 +258,8 @@ ui/
 | `Common/ArtText` | 美术字的空容器（第 11 节） | 无 |
 | `Common/placeholder`（图片） | 默认占位图 | — |
 
+**操作提示栏：** 框架把 `Common/ActionHintBar` 放在最上面的 toast 层（不收输入），贴着屏幕底部，宽度铺满。它列出激活界面里带 `hint` 的按键动作，每一项用 `Common/ActionHint` 显示按键名（`key`，比如 Esc、Enter）和提示文字（`label`）；返回键默认显示文本键 `lgui.back`（「返回」）。触屏上没有按键，输入类型是触摸时提示栏隐藏。
+
 **红点：** 要显示红点的控件（按钮、子组件）里放一个名字固定为 `redDot` 的子控件，通常就是 `Common/RedDot` 的实例。绑定表写了 `redDot` 的控件里缺这个子控件时，`lgui check` 报 `LGUI-UI-012`。
 
 ```xml

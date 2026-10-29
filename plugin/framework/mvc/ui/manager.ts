@@ -4,6 +4,10 @@ import {LgRuntimeError} from '../../core/index';
 import type {InputMode, Layer, Orientation, ViewClass} from '../types';
 import type {UIList, UIObject} from '../../core/index';
 import {orientationState} from './orientation-state';
+import {HintBar, canCreateHintBar, hintsFor} from './hint-bar';
+import {actionForKey} from '../input/keys';
+import {inputType} from '../input/input-type';
+import type {KeyInput} from '../../core/index';
 import {validateViewClass} from '../view';
 import {asActor, currentActor} from '../actor';
 import {bus, builtinEvents} from '../events';
@@ -17,6 +21,8 @@ export interface OrientationSettings {
   orientation: 'both' | 'landscape' | 'portrait';
   /** 界面缓存：最近关掉的 N 个界面不销毁，再打开时直接复用组件。默认 0。 */
   uiCache?: {keepClosedViews: number};
+  /** 按平台的「按键 → 动作」。 */
+  keyMap?: Record<string, Record<string, string>>;
 }
 
 /** 缓存着的、关掉的界面组件（连同它占着的包引用）。 */
@@ -91,6 +97,9 @@ export class UIManager {
   private loading = new Map<string, Promise<void>>();
   private visible: Rect;
   private cache: Cached[] = [];
+  private hintBar: HintBar | null = null;
+  /** 框架常驻用到的包，永远不释放。 */
+  private pinned = new Set<string>();
 
   /** 当前方向。 */
   orientation: Orientation;
@@ -100,6 +109,10 @@ export class UIManager {
     orientationState.current = this.orientation;
     this.visible = backend.platform.screen.applyDesignSize(this.design());
     // 屏幕尺寸一变：防抖 150 毫秒（拖动窗口时不来回切换）再判方向、换版。
+    // 输入路由：按键只送给激活的界面；输入类型按最近一次输入判断。
+    backend.platform.input.onKey(e => this.onKey(e));
+    backend.platform.input.onPointer(e => { if (e.type === 'down') inputType.set(e.pointerType === 'mouse' ? 'keyboardMouse' : 'touch'); });
+    inputType.subscribe(() => this.updateHints());
     let waiting = 0;
     let stopWaiting: (() => void) | null = null;
     backend.platform.screen.onResize(() => {
@@ -120,6 +133,47 @@ export class UIManager {
       backend.root.addChild(container);
       this.containers.set(layer, container);
     }
+  }
+
+  // ---------- 按键和操作提示栏 ----------
+
+  private onKey(e: KeyInput): void {
+    if (e.type !== 'down' || e.repeat || this.backend.platform.textInput.isComposing()) return;
+    inputType.set('keyboardMouse');
+    const action = actionForKey(e.key, this.backend.name, this.settings.keyMap ?? {});
+    if (!action || action === 'none') return;
+    if (action === 'back') { this.back(); return; }
+    const active = this.all().find(x => x.active);
+    if (!active) return;
+    const def = active.view.keys[action];
+    if (def === 'close') this.closeEntry(active);
+    else if (typeof def === 'function') asActor(active.view, () => (def as () => unknown)());
+    else if (def && typeof def === 'object' && typeof (def as {do?: unknown}).do === 'function') asActor(active.view, () => (def as {do: () => unknown}).do());
+  }
+
+  /** 内部用：建操作提示栏（Common 包里有 ActionHintBar 时）。启动时调用。 */
+  async startHintBar(): Promise<void> {
+    // 提示栏常驻：它用的包算框架自己的（pinned），不计入界面的引用数，也不会被释放。
+    try {
+      if (!this.backend.platform.resource.hasPackage('Common')) await this.backend.loadPackage('Common');
+    } catch {
+      return; // 工程里没有 Common 包：不建提示栏（lgui check 会报 LGUI-UI-014）
+    }
+    if (!canCreateHintBar(this.backend)) return;
+    this.pinned.add('Common');
+    const component = this.backend.create('Common', 'ActionHintBar');
+    component.touchable = false;
+    (this.containers.get('toast') as UIComponent).addChild(component);
+    this.hintBar = new HintBar(component);
+    this.updateHints();
+  }
+
+  /** 内部用：重新算操作提示栏的内容（激活界面、输入类型、语言变化时）。 */
+  updateHints(): void {
+    if (!this.hintBar) return;
+    const active = this.all().find(x => x.active);
+    const canGoBack = Boolean(active) && !(active?.layer === 'page' && this.shown('page')[0] === active);
+    this.hintBar.update(active ? hintsFor(active.view.keys, canGoBack, this.backend.name, this.settings.keyMap ?? {}) : [], this.visible);
   }
 
   // ---------- 横竖屏 ----------
@@ -185,6 +239,7 @@ export class UIManager {
       const container = this.containers.get(layer) as UIComponent;
       for (const entry of this.stacks[layer]) if (entry.component) { container.removeChild(entry.component); container.addChild(entry.component); }
     }
+    this.updateHints();
     if (changed) bus.emit(builtinEvents.orientationChange, {orientation: next});
   }
 
@@ -211,7 +266,7 @@ export class UIManager {
       const left = (this.refs.get(pkg) ?? 0) - 1;
       if (left > 0) { this.refs.set(pkg, left); continue; }
       this.refs.delete(pkg);
-      this.backend.releasePackage(pkg);
+      if (!this.pinned.has(pkg)) this.backend.releasePackage(pkg);
     }
   }
 
@@ -269,6 +324,7 @@ export class UIManager {
     });
     for (const e of deactivated) this.hook(e, 'onDeactivate');
     for (const e of activated) this.hook(e, 'onActivate');
+    this.updateHints();
     if (activated.length) {
       const mode: InputMode = active?.cls.inputMode ?? (active?.layer === 'hud' ? 'game' : 'ui');
       this.backend.platform.input.setInputMode(mode);

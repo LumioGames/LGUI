@@ -67,11 +67,24 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
   fs.writeFileSync(path.join(common, 'package.xml'), xml(`<packageDescription id="cmn00001">
   <resources>
     <component id="curbar01" name="CurrencyBar.xml" path="/" exported="true"/>
+    <component id="hintbar1" name="ActionHintBar.xml" path="/" exported="true"/>
+    <component id="hint0001" name="ActionHint.xml" path="/" exported="true"/>
   </resources>
 </packageDescription>`));
   fs.writeFileSync(path.join(common, 'CurrencyBar.xml'), xml(`<component size="600,80">
   <displayList>
     <text id="n0" name="gold" xy="0,0" size="200,40" fontSize="24" autoSize="shrink" singleLine="true" text="0"/>
+  </displayList>
+</component>`));
+  fs.writeFileSync(path.join(common, 'ActionHintBar.xml'), xml(`<component size="1920,64">
+  <displayList>
+    <list id="n0" name="list" xy="0,0" size="1920,64" layout="row" defaultItem="ui://cmn00001hint0001"/>
+  </displayList>
+</component>`));
+  fs.writeFileSync(path.join(common, 'ActionHint.xml'), xml(`<component size="220,56">
+  <displayList>
+    <text id="n0" name="key" xy="0,0" size="80,56" fontSize="24" autoSize="shrink" singleLine="true" text=""/>
+    <text id="n1" name="label" xy="88,0" size="132,56" fontSize="24" autoSize="ellipsis" singleLine="true" text=""/>
   </displayList>
 </component>`));
   return root;

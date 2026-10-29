@@ -1,4 +1,5 @@
 {
   "main.hint": "Try the button below",
-  "main.clicked": "Clicked {count} times"
+  "main.clicked": "Clicked {count} times",
+  "lgui.back": "Back"
 }

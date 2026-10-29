@@ -14,6 +14,7 @@ export async function boot(backend: Backend, app: AppDefinition, config: Runtime
   setServices({...(app.services ?? {}), ...(options.services ?? {})});
   const ui = new UIManager(backend, deps, config);
   runtime().ui = ui;
+  await ui.startHintBar();
   if (options.start !== false) await app.start();
   return ui;
 }
