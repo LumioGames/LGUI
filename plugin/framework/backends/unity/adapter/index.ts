@@ -48,7 +48,7 @@ export function createUnityBackend(bridge?: NativeBridge): Backend {
     name: 'unity',
     async init(options) {
       const found = bridge ?? globals.CS;
-      if (!found?.FairyGUI || !found.LGUI?.Platform || !found.LGUI.LGUIResourceLoader) {
+      if (!found?.FairyGUI || !found.UnityEngine?.Rect || !found.LGUI?.Platform || !found.LGUI.LGUIResourceLoader) {
         throw new LgRuntimeError('LGUI-RT-001', '当前运行环境没有 Unity、FairyGUI 和 LGUI 的 PuerTS 类型。', '在 Unity 6000.6 中安装 LGUI 与 PuerTS 3.0.3 本地包，用 LGUIBoot 场景启动。');
       }
       globals.__lguiDispose?.();
@@ -56,7 +56,8 @@ export function createUnityBackend(bridge?: NativeBridge): Backend {
       config = options;
       const fgui = found.FairyGUI;
       if (options.defaultFont) fgui.UIConfig.defaultFont = options.defaultFont;
-      objects = createObjectAdapter(fgui, () => found.LGUI.Platform.Now, (x, y) => ({x: x / scale.value, y: y / scale.value}));
+      objects = createObjectAdapter(fgui, () => found.LGUI.Platform.Now, (x, y) => ({x: x / scale.value, y: y / scale.value}),
+        (x, y, width, height) => new found.UnityEngine.Rect(x, y, width, height), component => { containers.delete(component); });
       nativePlatform = createUnityPlatform({
         projectName: options.projectName, uiBase: options.uiBase, host: found.LGUI.Platform,
         fgui, objects, createLoader: () => new found.LGUI.LGUIResourceLoader(), scale

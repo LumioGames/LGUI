@@ -19,7 +19,7 @@ export class ShopController extends Controller {
     if (!item) return;
     if (bagModel.get().coins < item.price) { lgui.toast('bag.error.notEnoughCoins'); return; }
     const name = lgui.t(`item.${kind}.name`);
-    if (!(await lgui.confirm({ title: 'shop.buyTitle', message: lgui.t('shop.buyAsk', { name, price: item.price }) }))) return;
+    if (!(await lgui.confirm({ title: 'shop.buyTitle', message: 'shop.buyAsk', params: { name, price: item.price } }))) return;
     const r = await this.buyRequest.run(kind);
     if (!r.ok) return;
     const paid = bagModel.spend(r.value.cost);

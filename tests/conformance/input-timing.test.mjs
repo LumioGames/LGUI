@@ -5,6 +5,45 @@ import path from 'node:path';
 import {launchBrowser} from '../helpers/browser.mjs';
 import {conformanceProject, runHeadless, runH5} from './runner.mjs';
 
+test('h5 一致性输入：click 保留 Harness 指定的真实触摸类型', async t => {
+  const browser = await launchBrowser();
+  if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
+  let context;
+  try {
+    context = await conformanceProject();
+    fs.writeFileSync(path.join(context.root, 'conformance/cases/touch-click.ts'), `
+import type {Case} from '../harness';
+import {ShopPanelView} from '../src/modules/shop/ShopPanelView';
+const c: Case = {
+  screen: {width: 1280, height: 720},
+  async run(t) {
+    await t.open(ShopPanelView);
+    t.setInputType('touch');
+    const before = t.snapshot().inputType;
+    await t.click('Shop/ShopPanel.secondTab');
+    return {before, after: t.snapshot().inputType};
+  }
+};
+export default c;
+`);
+    const expected = await runHeadless(context, 'touch-click');
+    assert.deepEqual(expected.data, {before: 'touch', after: 'touch'});
+    assert.equal(expected.snapshot.inputType, 'touch');
+    const actual = await runH5(context, 'touch-click', browser);
+    assert.deepEqual(actual, expected);
+    const pointers = context.h5Trace.dom.filter(event => event.type === 'pointerdown' || event.type === 'pointerup');
+    assert.deepEqual(pointers.map(event => [event.type, event.pointerType, event.trusted]), [
+      ['pointerdown', 'touch', true], ['pointerup', 'touch', true]
+    ], '必须由 Chromium 消费真实触摸，不能只改快照中的 inputType');
+    const command = context.h5Trace.protocol.find(entry => entry.method === 'Input.synthesizeTapGesture');
+    assert.equal(command?.params.gestureSourceType, 'touch');
+    assert.equal(command.params.duration, 50, '保留原有 click 时长');
+  } catch (error) {
+    console.error(`h5 input trace (touch-click): ${JSON.stringify(context?.h5Trace)}`);
+    throw error;
+  } finally { await browser.close(); }
+});
+
 test('h5 一致性输入：驱动响应迟到 400ms，不应把一次 50ms 点击变成长按', async t => {
   const browser = await launchBrowser();
   if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }

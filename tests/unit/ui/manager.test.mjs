@@ -27,6 +27,48 @@ async function setup() {
   return {...ctx, log, views: {MainView, BagView, HudView, DetailView, PickerView, Reward1, Reward2, ToastView}};
 }
 
+// A genuinely incomplete Bag acquisition ahead of a ready Common acquisition.
+// Promise gates control completion/error; no clock delay guesses queue readiness.
+async function delayedModalPair({throwOnOpen = false} = {}) {
+  const ctx = await setup();
+  const {fw, backend, sim} = ctx;
+  const {lgui, View} = fw;
+  const opened = [], status = {first: 'pending', second: 'pending'};
+  class SlowFirst extends View {
+    static component = 'Bag/ItemSlot'; static layer = 'modal';
+    onOpen() { opened.push('A'); if (throwOnOpen) throw new Error('controlled onOpen failure'); }
+  }
+  class ReadySecond extends View {
+    static component = 'Common/CurrencyBar'; static layer = 'modal';
+    onOpen() { opened.push('B'); }
+  }
+  assert.equal(backend.platform.resource.hasPackage('Bag'), false);
+  assert.equal(backend.platform.resource.hasPackage('Common'), true);
+  const originalLoad = backend.loadPackage;
+  let resolveLoad, rejectLoad, enteredLoad;
+  const gate = new Promise((resolve, reject) => { resolveLoad = resolve; rejectLoad = reject; });
+  const entered = new Promise(resolve => { enteredLoad = resolve; });
+  backend.loadPackage = async name => {
+    assert.equal(name, 'Bag');
+    enteredLoad();
+    await gate;
+    return originalLoad(name);
+  };
+  const track = (name, pending) => pending.then(view => { status[name] = 'resolved'; return view; }, error => { status[name] = 'rejected'; throw error; });
+  const first = track('first', lgui.ui.open(SlowFirst));
+  const second = track('second', lgui.ui.open(ReadySecond));
+  void first.catch(() => {}); void second.catch(() => {});
+  await entered;
+  await sim.advance(backend, 0);
+  return {...ctx, SlowFirst, ReadySecond, first, second, status, opened, resolveLoad, rejectLoad,
+    async cleanup() {
+      resolveLoad();
+      lgui.ui.closeAll('modal');
+      await Promise.allSettled([first, second]);
+      backend.loadPackage = originalLoad;
+    }};
+}
+
 test('5 个容器按 hud → page → popup → modal → toast 叠在根节点下', async () => {
   const {backend} = await setup();
   assert.deepEqual(backend.root.childNames(), ['hud', 'page', 'popup', 'modal', 'toast']);
@@ -82,6 +124,121 @@ test('modal 是队列：同时只显示一个，前一个关掉下一个才弹�
   lgui.ui.close(Reward1);
   const v2 = await second;
   assert.deepEqual([secondShown, lgui.ui.top()], [true, v2]);
+});
+
+test('同 tick 同包并发 modal 按 open 调用顺序 FIFO：先 A，关 A 后 B 的 ready 才完成', async () => {
+  const {fw, backend, sim} = await setup();
+  const {lgui, View} = fw;
+  const opened = [];
+  class ModalA extends View {
+    static component = 'Bag/ItemSlot'; static layer = 'modal';
+    onOpen() { opened.push('A'); }
+  }
+  class ModalB extends View {
+    static component = 'Bag/ItemSlot'; static layer = 'modal';
+    onOpen() { opened.push('B'); }
+  }
+  assert.equal(backend.platform.resource.hasPackage('Bag'), false);
+  const originalLoad = backend.loadPackage;
+  let releaseLoad, enteredLoad, loadCalls = 0;
+  const gate = new Promise(resolve => { releaseLoad = resolve; });
+  const loadingEntered = new Promise(resolve => { enteredLoad = resolve; });
+  backend.loadPackage = async name => {
+    assert.equal(name, 'Bag');
+    loadCalls++;
+    enteredLoad();
+    await gate;
+    return originalLoad(name);
+  };
+  let firstReady = false, secondReady = false;
+  // No await between these calls: both entries exist before the shared package
+  // load completes, just like the two reward dialogs from one claim action.
+  const first = lgui.ui.open(ModalA).then(view => { firstReady = true; return view; });
+  const second = lgui.ui.open(ModalB).then(view => { secondReady = true; return view; });
+  // Failed assertions also close queued dialogs; handle their normal cancellation.
+  void first.catch(() => {}); void second.catch(() => {});
+  try {
+    await loadingEntered;
+    assert.equal(loadCalls, 1, 'same-package opens share the actual core acquisition');
+    releaseLoad();
+    await sim.advance(backend, 0);
+    assert.deepEqual({active: lgui.debug.snapshot().active, opened, firstReady, secondReady},
+      {active: 'ModalA', opened: ['A'], firstReady: true, secondReady: false});
+    assert.equal(lgui.ui.isOpen(ModalB), false, 'B stays queued while A is active');
+    assert.strictEqual(lgui.ui.top(), await first);
+    lgui.ui.close(ModalA);
+    const shownSecond = await second;
+    assert.strictEqual(lgui.ui.top(), shownSecond);
+    assert.equal(lgui.debug.snapshot().active, 'ModalB');
+    assert.deepEqual(opened, ['A', 'B']);
+    assert.equal(secondReady, true);
+  } finally {
+    releaseLoad();
+    lgui.ui.closeAll('modal');
+    await Promise.allSettled([first, second]);
+    backend.loadPackage = originalLoad;
+  }
+});
+
+test('modal FIFO：后项 acquire 先完成也不能跳过仍在加载的前项', async () => {
+  const ctx = await delayedModalPair();
+  const {fw: {lgui}, backend, sim, status, opened, first, second, SlowFirst, resolveLoad} = ctx;
+  try {
+    assert.deepEqual({active: lgui.debug.snapshot().active, status: {...status}, opened: [...opened]},
+      {active: null, status: {first: 'pending', second: 'pending'}, opened: []});
+    resolveLoad();
+    await sim.advance(backend, 0);
+    assert.deepEqual({active: lgui.debug.snapshot().active, status: {...status}, opened: [...opened]},
+      {active: 'SlowFirst', status: {first: 'resolved', second: 'pending'}, opened: ['A']});
+    assert.strictEqual(lgui.ui.top(), await first);
+    lgui.ui.close(SlowFirst);
+    const shownSecond = await second;
+    assert.strictEqual(lgui.ui.top(), shownSecond);
+    assert.deepEqual(opened, ['A', 'B']);
+  } finally { await ctx.cleanup(); }
+});
+
+test('modal FIFO：前项 acquire 失败会立即解阻已就绪的后项', async () => {
+  const ctx = await delayedModalPair();
+  const {fw: {lgui}, backend, sim, status, opened, first, second, rejectLoad, ui} = ctx;
+  try {
+    rejectLoad(new Error('controlled package failure'));
+    await assert.rejects(first, error => error.code === 'LGUI-RT-080' && /controlled package failure/.test(error.message));
+    await sim.advance(backend, 0);
+    assert.deepEqual({active: lgui.debug.snapshot().active, status: {...status}, opened: [...opened]},
+      {active: 'ReadySecond', status: {first: 'rejected', second: 'resolved'}, opened: ['B']});
+    assert.strictEqual(lgui.ui.top(), await second);
+    assert.equal(ui.packageRefs().some(pkg => pkg.name === 'Bag'), false, 'failed first acquisition releases its package reference');
+  } finally { await ctx.cleanup(); }
+});
+
+test('modal FIFO：前项加载时取消会解阻后项，无需等前项资源完成', async () => {
+  const ctx = await delayedModalPair();
+  const {fw: {lgui}, backend, sim, status, opened, first, second, SlowFirst, resolveLoad, ui} = ctx;
+  try {
+    lgui.ui.close(SlowFirst);
+    await sim.advance(backend, 0);
+    assert.deepEqual({active: lgui.debug.snapshot().active, status: {...status}, opened: [...opened]},
+      {active: 'ReadySecond', status: {first: 'pending', second: 'resolved'}, opened: ['B']});
+    assert.strictEqual(lgui.ui.top(), await second);
+    resolveLoad();
+    await assert.rejects(first, error => error.code === 'LGUI-RT-081');
+    assert.equal(ui.packageRefs().some(pkg => pkg.name === 'Bag'), false, 'cancelled first acquisition releases exactly once when its load completes');
+  } finally { await ctx.cleanup(); }
+});
+
+test('modal FIFO：前项 onOpen 抛错也会解阻后项，不留半成品', async () => {
+  const ctx = await delayedModalPair({throwOnOpen: true});
+  const {fw: {lgui}, backend, sim, status, opened, first, second, resolveLoad, ui} = ctx;
+  try {
+    resolveLoad();
+    await assert.rejects(first, error => error.code === 'LGUI-RT-080' && /controlled onOpen failure/.test(error.message));
+    await sim.advance(backend, 0);
+    assert.deepEqual({active: lgui.debug.snapshot().active, status: {...status}, opened: [...opened]},
+      {active: 'ReadySecond', status: {first: 'rejected', second: 'resolved'}, opened: ['A', 'B']});
+    assert.strictEqual(lgui.ui.top(), await second);
+    assert.equal(ui.packageRefs().some(pkg => pkg.name === 'Bag'), false);
+  } finally { await ctx.cleanup(); }
 });
 
 test('排队中的 modal 被关掉：马上释放界面包（打开那边报 LGUI-RT-081），不会等下一帧', async () => {

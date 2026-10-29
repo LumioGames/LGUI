@@ -23,6 +23,7 @@ namespace LGUI
             public NTexture texture;
             public UnityWebRequest request;
             public int idleUntilFrame;
+            public int generation;
             public readonly List<Waiter> waiters = new List<Waiter>();
         }
 
@@ -44,7 +45,7 @@ namespace LGUI
                 return null;
             }
             bool start = entry == null;
-            if (start) { entry = new Entry {url = url}; entries.Add(url, entry); }
+            if (start) { entry = new Entry {url = url, generation = Platform.RequestGeneration}; entries.Add(url, entry); }
             var waiter = new Waiter {loaded = loaded, failed = failed};
             entry.waiters.Add(waiter);
             if (start) Platform.Run(Download(entry));
@@ -65,7 +66,11 @@ namespace LGUI
             entries.Remove(entry.url);
             var waiters = entry.waiters.ToArray();
             entry.waiters.Clear();
-            foreach (var waiter in waiters) waiter.failed();
+            foreach (var waiter in waiters)
+            {
+                if (!Platform.IsRequestCurrent(entry.generation)) break;
+                waiter.failed();
+            }
         }
 
         static IEnumerator Download(Entry entry)
@@ -75,7 +80,15 @@ namespace LGUI
             Platform.Track(request);
             try
             {
-                yield return request.SendWebRequest();
+                UnityWebRequestAsyncOperation operation;
+                Exception startupError;
+                if (!Platform.TryStartRequest(request, out operation, out startupError))
+                {
+                    Failed(entry);
+                    yield break;
+                }
+                yield return operation;
+                if (!Platform.IsRequestCurrent(entry.generation)) yield break;
                 if (request.result != UnityWebRequest.Result.Success) { Failed(entry); yield break; }
                 var image = DownloadHandlerTexture.GetContent(request);
                 if (!Current(entry)) { if (image != null) UnityEngine.Object.Destroy(image); yield break; }
@@ -86,7 +99,11 @@ namespace LGUI
                 texture.onRelease += unused => entry.idleUntilFrame = Time.frameCount + HandoffFrames;
                 var waiters = entry.waiters.ToArray();
                 entry.waiters.Clear();
-                foreach (var waiter in waiters) waiter.loaded(texture);
+                foreach (var waiter in waiters)
+                {
+                    if (!Platform.IsRequestCurrent(entry.generation)) break;
+                    waiter.loaded(texture);
+                }
             }
             finally
             {

@@ -1,9 +1,9 @@
 import { View, pick, lgui } from 'lgui';
 import type { Bind, Keys } from 'lgui';
 import type { RewardDialogUI } from 'lgui/ui';
-import { iconOf } from '../bag/CatalogModel';
 import { rewardModel } from './RewardModel';
 import { rewardController } from './RewardController';
+import { RewardIconPartView } from './RewardIconPartView';
 
 /** 领奖窗口：获得的道具（modal：同时只显示一个，后面的排队）。 */
 export class RewardDialogView extends View<RewardDialogUI> {
@@ -11,7 +11,7 @@ export class RewardDialogView extends View<RewardDialogUI> {
   static layer = 'modal' as const;
 
   bind: Bind<RewardDialogUI> = {
-    icon: { icon: pick(rewardModel, s => (s.lastClaim.items[0] ? iconOf(s.lastClaim.items[0].kind) : '')) },
+    icon: { view: RewardIconPartView },
     itemText: { text: pick(rewardModel, s => s.lastClaim.items, items => items.map(it => lgui.t('reward.item', { name: lgui.t(`item.${it.kind}.name`), quantity: it.quantity })).join('\n')) },
     okButton: { click: () => rewardController.closeItems() },
   };
