@@ -16,6 +16,17 @@ import {copyFramework} from '../commands/init.mjs';
 const shell = fs.readFileSync(fileURLToPath(new URL('./shell.html', import.meta.url)));
 const types = {'.js': 'text/javascript; charset=utf-8', '.map': 'application/json', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.xml': 'application/octet-stream'};
 
+/** 返回 .lgui/build/web/ 下的生成物（/ui/ 是界面包）；只读，不在里面就 404。 */
+export function serveBuilt(root, url, res) {
+  if (url === '/' || url === '/index.html') { res.writeHead(200, {'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store'}).end(shell); return; }
+  const base = path.join(root, '.lgui', 'build', 'web');
+  const file = url.startsWith('/ui/') ? path.join(webUiDir(root), url.slice(4)) : path.join(base, url.slice(1));
+  const inside = file.startsWith(base + path.sep);
+  if (!inside || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404).end('not found'); return; }
+  res.writeHead(200, {'content-type': types[path.extname(file)] ?? 'application/octet-stream', 'cache-control': 'no-store'});
+  res.end(fs.readFileSync(file));
+}
+
 /** 启动开发服务。返回 { url, close, rebuild }。 */
 export async function startDev(root, project, {port = project.devPort, log = () => {}} = {}) {
   const clients = new Set();
@@ -80,13 +91,7 @@ export async function startDev(root, project, {port = project.devPort, log = () 
     }
     if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405).end(); return; }
     if (url === '/favicon.ico') { res.writeHead(204).end(); return; }
-    if (url === '/' || url === '/index.html') { res.writeHead(200, {'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store'}).end(shell); return; }
-    const base = path.join(root, '.lgui', 'build', 'web');
-    const file = url.startsWith('/ui/') ? path.join(webUiDir(root), url.slice(4)) : path.join(base, url.slice(1));
-    const inside = file.startsWith(base + path.sep);
-    if (!inside || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404).end('not found'); return; }
-    res.writeHead(200, {'content-type': types[path.extname(file)] ?? 'application/octet-stream', 'cache-control': 'no-store'});
-    res.end(fs.readFileSync(file));
+    serveBuilt(root, url, res);
   });
   try {
     await new Promise((resolve, reject) => {
