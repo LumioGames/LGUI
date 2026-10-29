@@ -34,6 +34,8 @@ FairyGUI-dom 的 `src/tween/EaseManager.ts` 含 Daniele Giardini/DOTween 条款�
 
 **FairyGUI-unity（S3-01）。** 复制固定提交的 `Assets/Scripts`、原 LICENSE，以及同提交 `Assets/Resources/Shaders/` 下必需的 `FairyGUI-Image.shader`、`FairyGUI-Text.shader`、`FairyGUI-BMFont.shader` 和原 `.meta`/文件夹 metadata。三份 shader 沿用该提交的原 MIT 许可，没有复制 Unity 自带的 `UnityCG.cginc`。这是 Owner 确认后补齐的最小渲染资源范围。`Tween/EaseManager.cs` 含 DOTween 条款链接及 Robert Penner 的 BSD 声明。`Core/Text/RTLSupport.cs` 另有 Copyright (c) 2018 Tadpole Studio、All rights reserved 的声明，没有单独取得授权链证明；不能把它称为 LGUI 原创 MIT 代码。S3-01 在 Unity 6000.6.6f1 中实际移除该文件试编译，`TextField.cs:22` 报 `CS0246`（缺少 `RTLSupport` 类型）；因此保留原文件和原声明，不宣称第一版支持从右往左排版。
 
+**开发测试输入（不随插件下发）。** 仓库 `tests/fixtures/unity/puerts-3.0.3/` 附有官方 Core 3.0.3 的 `Puerts_il2cpp.cpp.txt` 原模板及原 `LICENSE.txt`，用于离线验证固定补丁与导出失败边界。来源、归档和文件摘要见该目录 README；它属于 Tencent 的 BSD-3-Clause 源码，不是 LGUI 原创代码，也不构成可编译的 PuerTS 安装。
+
 
 ## 许可原文
 

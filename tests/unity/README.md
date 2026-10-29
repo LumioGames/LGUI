@@ -21,3 +21,13 @@ node tests/unity/runner.mjs --editor <Unity可执行文件绝对路径> --projec
 `runUnityConformance({trace: true, ...})` 可启用最多 12,000 条输入与帧轨迹，供定位事件时序。默认关闭轨迹，避免把诊断字符串的存储计入 200 次开关的内存观察；原生 `RenderedFrame` 完成计数始终启用。
 
 默认验证 `binding-language`；Windows IL2CPP Player、全部一致性用例、200 次开关、内存、包体和人工视觉验收在 S3-04 单独记录。
+
+## 验证实际导出场景
+
+`export-play.mjs` 使用官方 Core/V8 压缩包准备新的空工程，从真实背包示例调用 `lgui unity export`，再打开导出的 `Assets/LGUI/LGUIBoot.unity` 进入 Play。它保留导出生成的 JS，通过原生 Stage 输入打开背包、选中列表项、切换分类并按 Escape 返回；同时记录截图、运行与退出错误。它不会下载软件或替换为一致性测试脚本。
+
+```text
+node tests/unity/export-play.mjs --editor <Unity可执行文件绝对路径> --project <不存在的新工程绝对路径> --core-archive <官方Core3.0.3压缩包绝对路径> --v8-archive <官方V8_3.0.3压缩包绝对路径> --evidence <新的证据目录绝对路径>
+```
+
+运行器会验证官方归档摘要、保留导出 JS 的摘要，并恢复示例的原始工程配置。截图仍需实际看像素；生成文件、编译或自动断言成功都不代替视觉检查。这是 Editor 验收工具，不能作为 IL2CPP Player 验收结果。

@@ -16,7 +16,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-000` | 这条命令还没实现（开发中的功能） | 换一条已经实现的命令，或者等新版本 |
 | `LGUI-CLI-001` | 没有这条命令 | 看报错里列出的全部命令，或者运行不带参数的 `lgui` |
 | `LGUI-CLI-002` | 当前目录往上都找不到 `.lgui/project.json`，不在 LGUI 工程里 | 先运行 `lgui init`，或者 cd 到工程目录里 |
-| `LGUI-CLI-003` | 工程里的框架版本（`lguiVersion`）和插件版本不一致 | 运行 `lgui upgrade` |
+| `LGUI-CLI-003` | 工程里的框架版本（`lguiVersion`）或 Unity 工程里的 LGUI 包版本和插件版本不一致 | 运行 `lgui upgrade`；框架已同版时也会更新旧的 Unity 包 |
 | `LGUI-CLI-004` | `.lgui/project.json` 读不了，或者字段缺了、类型不对、多了不认识的字段 | 按 `project-layout.md` 的字段表改 |
 | `LGUI-CLI-005` | 当前平台不受支持。随插件带的 esbuild 和 sharp 只有 macOS arm64、macOS x64、Linux x64（glibc）、Windows x64 这 4 个平台的版本；Linux musl、Linux arm64、Windows arm64 都不支持 | 换到上面 4 个平台之一运行 |
 | `LGUI-CLI-006` | 命令的参数不对：不认识的参数、开关带了值、要值的参数没给值 | 看报错里列出的能用的参数 |
@@ -30,6 +30,8 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-040` | `tests/` 里没有测试文件（`*.test.ts`） | 在 `tests/` 下写测试，写法见 mvc-spec.md 第 12 节 |
 | `LGUI-CLI-041` | 测试没通过（报错里附上测试结束时的界面状态快照） | 看测试输出，按断言改代码或测试 |
 | `LGUI-CLI-050` | `lgui check` 读不了 `tsconfig.json` | 用 `lgui init` 生成的 `tsconfig.json`，不要改它 |
+| `LGUI-CLI-051` | Unity 工程缺少 embedded 的 PuerTS Core/V8 3.0.3 本地包、使用了目录链接或包缓存，或者 C++ 补丁目标摘要不可信 | 将官方 Core/V8 压缩包解压到工程的 `Packages/com.tencent.puerts.core/` 和 `Packages/com.tencent.puerts.v8/`；保留自己的修改后恢复官方原文件再导出 |
+| `LGUI-CLI-052` | 导出目标不是 Unity 6000.6.x 工程、管理路径使用了文件/目录链接，或目标条目的文件/目录类型不对 | 使用 Unity 6000.6 创建的工程根目录；管理路径使用实际目录和文件，移走同名的错误类型条目 |
 | `TSxxxx` | `lgui check` 报的 TypeScript 类型错误（错误码是 TypeScript 自己的） | 按提示改；控件名和类型以 `lgui ui list` 为准 |
 | `LGUI-CLI-060` | `lgui verify` 没找到 Chrome 或 Edge | 装一个 Chrome 或 Edge |
 | `LGUI-CLI-061` | `--size` 写的验证尺寸不存在 | 用工程配置 `verifySizes` 里的名字 |

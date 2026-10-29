@@ -17,3 +17,6 @@ plugin/tools/vendor/node_modules/** -text
 
 # 固定上游 Unity 源码和 .meta 保留原始字节，便于核对来源。
 plugin/framework/backends/unity/package/FairyGUI/** -text -whitespace
+
+# PuerTS 补丁测试使用官方原字节（包含 UTF-8 BOM 和许可的 CRLF）。
+tests/fixtures/unity/puerts-3.0.3/** -text -whitespace
