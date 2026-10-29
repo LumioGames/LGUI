@@ -2,5 +2,11 @@
   "main.hint": "点下面的按钮试试",
   "main.clicked": "点了 {count} 次",
   "lgui.back": "返回",
-  "lgui.requestFailed": "请求失败（{code}）"
+  "lgui.requestFailed": "请求失败（{code}）",
+  "Common/Confirm/title": "提示",
+  "Common/Confirm/cancel": "取消",
+  "Common/Confirm/ok": "确定",
+  "Common/Loading/text": "加载中…",
+  "Main/MainView/title": "你好，LGUI",
+  "Main/MainView/button": "点我"
 }

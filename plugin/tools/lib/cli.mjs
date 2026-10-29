@@ -9,6 +9,7 @@ import {init} from './commands/init.mjs';
 import {dev} from './dev/index.mjs';
 import {test} from './commands/test.mjs';
 import {i18nExtract} from './commands/i18n-extract.mjs';
+import {check} from './commands/check.mjs';
 
 // project：'none' 不需要在工程里；'required' 必须在工程里。
 // versionCheck：运行前比对插件和工程的版本（init、doctor、upgrade 不比对）。
@@ -22,7 +23,7 @@ export const registry = [
   {name: 'editor props', usage: 'editor props <组件> <控件路径> <属性>=<值> ...', about: '编辑器开着时修改已有控件的属性', project: 'required', versionCheck: true, flags: {}, run: null},
   {name: 'new module', usage: 'new module <名字> [--pattern 模式]', about: '生成一个功能的 Model / View / Controller / 测试骨架', project: 'required', versionCheck: true, flags: {pattern: 'string'}, run: null},
   {name: 'new view', usage: 'new view <包>/<组件> --pattern <模式>', about: '按排布模式一次生成横竖两版的界面骨架', project: 'required', versionCheck: true, flags: {pattern: 'string'}, run: null},
-  {name: 'check', usage: 'check', about: '规范检查（包括多语言检查）', project: 'required', versionCheck: true, flags: {}, run: null},
+  {name: 'check', usage: 'check', about: '规范检查（包括多语言检查）', project: 'required', versionCheck: true, flags: {}, run: check},
   {name: 'test', usage: 'test', about: '用 headless 后端跑测试', project: 'required', versionCheck: true, flags: {}, run: test},
   {name: 'verify', usage: 'verify [--size 名字] [--view View 名] [--lang 语言]', about: '在浏览器里按横竖两种方向的标准尺寸截图验证', project: 'required', versionCheck: true, flags: {size: 'string', view: 'string', lang: 'string'}, run: null},
   {name: 'ui list', usage: 'ui list', about: '列出 ui/ 里的组件和控件', project: 'required', versionCheck: true, flags: {}, run: uiList},

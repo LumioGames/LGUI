@@ -2,5 +2,11 @@
   "main.hint": "Try the button below",
   "main.clicked": "Clicked {count} times",
   "lgui.back": "Back",
-  "lgui.requestFailed": "Request failed ({code})"
+  "lgui.requestFailed": "Request failed ({code})",
+  "Common/Confirm/title": "Notice",
+  "Common/Confirm/cancel": "Cancel",
+  "Common/Confirm/ok": "OK",
+  "Common/Loading/text": "Loading…",
+  "Main/MainView/title": "Hello, LGUI",
+  "Main/MainView/button": "Tap me"
 }

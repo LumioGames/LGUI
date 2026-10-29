@@ -238,6 +238,7 @@ ui/
 
 - 第一版不支持从右往左排版的语言。
 - **固定文字**写在 `ui/` 里，`lgui i18n extract` 把它们提取到默认语言的 `i18n/<语言>.json`，键名是 `<包>/<组件>/<控件路径>`，比如 `Bag/BagPanel/sellButton`、`Bag/BagPanel/header.count`。按钮的标题、输入框的提示文字也一样提取。
+- **默认语言的固定文字以 `ui/` 为准**：要改默认语言的文字，直接改 `ui/`；默认语言文本表里的这些键只是给翻译看的原文。
 - 其他语言的 `i18n/<语言>.json` 照同样的键翻译。只编辑这些 JSON，不碰生成的翻译 XML。
 - 占位符写成 `{count}`，各语言的占位符必须一致。
 - **带字的图片**按 `@<语言>` 命名提供各语言版本，比如 `title.png`（默认）和 `title@en.png`。必须有不带后缀的默认版本；后缀的语言必须在工程配置 `languages` 里。
@@ -324,7 +325,7 @@ ui/
 | `LGUI-UI-018` | `package.xml` 登记的文件都存在，包目录里的组件和图片都已登记 | 新图片登记进 `package.xml` | 放了图片没登记 |
 | `LGUI-UI-019` | 代码里用到的组件（View 的 `component`、列表子项）已导出 | `exported="true"` | 没写 `exported` |
 | `LGUI-UI-030` | 代码里 `lgui.t` 用到的键、绑定的固定文字，在每种语言的文本表里都有 | 各语言都有 `bag.sold` | `en.json` 里缺 `bag.sold` |
-| `LGUI-UI-031` | 文本表里没有用不到的键 | — | 删掉了按钮，`Bag/BagPanel/oldButton` 还在表里 |
+| `LGUI-UI-031`（警告） | 文本表里没有用不到的键（用变量拼键名的地方查不出来，所以只是警告） | — | 删掉了按钮，`Bag/BagPanel/oldButton` 还在表里 |
 | `LGUI-UI-032` | 同一个键在各语言里的占位符一致 | `已售出 {count} 件` / `Sold {count}` | `Sold {num}` |
 
 靠人看、机器查不出的：图里不放文字；同一个工程的图风格一致；文字在各尺寸下没有被截断（看 `lgui verify` 的截图）。

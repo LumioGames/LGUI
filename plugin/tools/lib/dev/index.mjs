@@ -33,7 +33,7 @@ export async function startDev(root, project, {port = project.devPort, log = () 
     await generateProjectTypes(root, {validated: true});
     translations();
   };
-  const translations = () => generateTranslations(root, readUiModel(uiProjectPath(root)), project.languages, path.join(root, '.lgui', 'build', 'web', 'i18n'));
+  const translations = () => generateTranslations(root, readUiModel(uiProjectPath(root)), project.languages, path.join(root, '.lgui', 'build', 'web', 'i18n'), project.defaultLanguage);
   let context = null;
   const bundle = async () => {
     translations();
