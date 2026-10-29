@@ -7,11 +7,16 @@ import {LgRuntimeError} from '../../../core/index';
 import {fitDesign, stage, toDesign} from '../scale';
 import {pointerEventTypes, toPointerInput} from '../pointer';
 
-// 一组回调，返回取消函数。
+// 一组回调，返回取消函数。传了 onError 时，一个回调出错交给 onError，其余回调照常调用。
 class Handlers<T> {
   private set = new Set<(value: T) => void>();
   add(handler: (value: T) => void): Unsubscribe { this.set.add(handler); return () => { this.set.delete(handler); }; }
-  emit(value: T): void { for (const handler of [...this.set]) handler(value); }
+  emit(value: T, onError?: (error: unknown) => void): void {
+    for (const handler of [...this.set]) {
+      if (!onError) { handler(value); continue; }
+      try { handler(value); } catch (error) { onError(error); }
+    }
+  }
 }
 
 // 统一按键名：安卓返回键当 Back。
@@ -44,9 +49,15 @@ export function createH5Platform(projectName: string, uiBase: string): Platform 
   let audio: AudioContext | null = null;
   const sounds = new Map<string, Promise<AudioBuffer>>();
 
-  // 每帧
+  // 每帧：先排好下一帧，再逐个调用回调。一个回调出错，错误照常报到页面上（未捕获的错误），
+  // 但不影响别的回调，也不会让以后的帧停掉（定时器、lgui.time.wait、请求超时、旋转换版都靠它）。
   let last = performance.now();
-  const tick = (now: number): void => { frame.emit(now - last); last = now; requestAnimationFrame(tick); };
+  const tick = (now: number): void => {
+    requestAnimationFrame(tick);
+    const dt = now - last;
+    last = now;
+    frame.emit(dt, reportError);
+  };
   requestAnimationFrame(tick);
   document.addEventListener('visibilitychange', () => visibility.emit(document.visibilityState === 'visible'));
 
