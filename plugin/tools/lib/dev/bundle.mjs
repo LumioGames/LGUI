@@ -82,7 +82,7 @@ export function bundleErrors(error, root) {
   const errors = error?.errors ?? [];
   if (!errors.length) return new LgCliErrors([new LgCliError('LGUI-CLI-032', `打包失败：${error?.message ?? error}`, {fix: '按提示改代码。'})]);
   return new LgCliErrors(errors.map(e => new LgCliError('LGUI-CLI-032', `打包失败：${e.text}`, {
-    file: e.location?.file ? path.relative(root, path.resolve(root, e.location.file)) : undefined,
+    file: e.location?.file ? path.relative(root, path.resolve(root, e.location.file)).split(path.sep).join('/') : undefined,
     line: e.location?.line,
     fix: '按提示改代码。'
   })));

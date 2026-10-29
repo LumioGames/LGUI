@@ -31,7 +31,9 @@ export function buildProgram(root) {
 
 /** src/ 和 tests/ 里的工程源文件（不含 .lgui/）。 */
 export function sourceFiles(root, program) {
-  return program.getSourceFiles().filter(sf => !sf.isDeclarationFile && !sf.fileName.includes('/.lgui/') && !sf.fileName.includes('/node_modules/') && sf.fileName.startsWith(root));
+  // TypeScript 的文件名总是用 /（Windows 上也是 D:/…），比较前统一成本机的写法。
+  const base = path.resolve(root) + path.sep;
+  return program.getSourceFiles().filter(sf => !sf.isDeclarationFile && !sf.fileName.includes('/.lgui/') && !sf.fileName.includes('/node_modules/') && path.resolve(sf.fileName).startsWith(base));
 }
 
 const BASES = ['View', 'ItemView', 'PartView'];

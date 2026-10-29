@@ -13,17 +13,29 @@ import {readUiModel, findComponent} from '../../plugin/tools/lib/generate/model.
 // 打开编辑器页面，等它从 ui/ 导入完。
 async function openEditor(context, server) {
   const page = await context.newPage();
+  const logs = [];
+  page.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') logs.push(`${m.type()}: ${m.text()}`.slice(0, 300)); });
+  page.on('pageerror', e => logs.push(`pageerror: ${e.message}`.slice(0, 300)));
   await page.goto(`${server.baseUrl}/?agent=1`);
   await page.waitForFunction(() => window.fairyEditorAgent, null, {timeout: 20000});
-  await page.waitForFunction(async () => {
-    const state = await window.fairyEditorAgent.request({method: 'state'});
-    return state.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession;
-  }, null, {timeout: 30000, polling: 500});
+  try {
+    // 每次查询最多等 2 秒：导入时编辑器会换一个新的会话，发给旧会话的查询可能永远不回，不能卡在它上面。
+    await page.waitForFunction(async () => {
+      const timeout = new Promise(resolve => setTimeout(() => resolve(null), 2000));
+      const state = await Promise.race([window.fairyEditorAgent.request({method: 'state'}), timeout]);
+      return Boolean(state?.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession);
+    }, null, {timeout: 120000, polling: 500}); // CI 的机器没有显卡，编辑器导入要慢得多
+  } catch (error) {
+    // 没导入成功：把编辑器自己的状态、状态栏和页面报错带出来，方便在 CI 上查原因。
+    const state = await page.evaluate(() => window.fairyEditorAgent.request({method: 'state'})).catch(e => String(e));
+    const status = await page.evaluate(() => [...document.querySelectorAll('[data-fairy-editor-status], [data-fairy-editor-workspace-import]')].map(e => e.outerHTML.slice(0, 200))).catch(() => []);
+    throw new Error(`编辑器没有从 ui/ 导入：${error.message}\nstate: ${JSON.stringify(state).slice(0, 2500)}\nattrs: ${JSON.stringify(status)}\nlogs: ${logs.slice(-20).join(' | ')}`);
+  }
   await page.waitForTimeout(1000);
   return page;
 }
 
-test('lgui editor：打开就是 ui/ 的内容；editor props 马上生效；改了 ui/ 再打开显示新内容', async t => {
+test('lgui editor：打开就是 ui/ 的内容；editor props 马上生效；改了 ui/ 再打开显示新内容', {timeout: 600000}, async t => {
   const browser = await launchBrowser();
   if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-editor-'));

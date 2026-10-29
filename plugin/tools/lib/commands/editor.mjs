@@ -26,7 +26,7 @@ export async function editor({projectRoot, flags}) {
   process.once('SIGTERM', stop);
   const opened = flags['no-open'] ? false : openInBrowser(url);
   return {
-    data: {url, opened, connection: path.relative(projectRoot, connectionPath(projectRoot))},
+    data: {url, opened, connection: path.relative(projectRoot, connectionPath(projectRoot)).split(path.sep).join('/')},
     summary: [
       `编辑器地址：${url}`,
       opened ? '已经用 Chrome / Edge 打开。' : (flags['no-open'] ? '没有自动打开浏览器（--no-open）。' : '没找到 Chrome 或 Edge，请手动打开上面的地址。'),
