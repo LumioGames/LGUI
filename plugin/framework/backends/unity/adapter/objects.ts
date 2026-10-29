@@ -1,7 +1,7 @@
 // FairyGUI-unity 对象 → 引擎无关接口。缓存包装对象，所有原生事件均有成对的 Add/Remove。
 import type {PointerInput, Rect, UIObject, UIComponent, UIText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, Unsubscribe} from '../../../core/index';
 import {LgRuntimeError} from '../../../core/index';
-import type {NativeColor, NativeComponent, NativeController, NativeEventContext, NativeEventHandler, NativeEventListener, NativeFairyGUI, NativeGraph, NativeImage, NativeInputEvent, NativeList, NativeLoader, NativeObject, NativeProgress, NativeText, NativeTextInput, NativeButton, NativeTransition} from './native-ui';
+import type {NativeColor, NativeComponent, NativeController, NativeEventContext, NativeEventHandler, NativeEventListener, NativeFairyGUI, NativeGraph, NativeImage, NativeInputEvent, NativeList, NativeLoader, NativeObject, NativeProgress, NativeRect, NativeText, NativeTextInput, NativeButton, NativeTransition} from './native-ui';
 
 const fillMethods = ['none', 'horizontal', 'vertical', 'radial90', 'radial180', 'radial360'] as const;
 const byte = (value: number): string => Math.round(Math.max(0, Math.min(1, value)) * 255).toString(16).padStart(2, '0');
@@ -9,7 +9,7 @@ const rgb = (color: NativeColor): string => byte(color.r) + byte(color.g) + byte
 const colorText = (color: NativeColor, alpha = false): string => '#' + (alpha && color.a < 1 ? byte(color.a) : '') + rgb(color);
 
 /** 为一个 Unity 后端创建独立的对象和事件缓存，不能混用另一个后端的对象。 */
-export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toPoint: (x: number, y: number) => {x: number; y: number}) {
+export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toPoint: (x: number, y: number) => {x: number; y: number}, toRect: (x: number, y: number, width: number, height: number) => NativeRect, onComponentReleased?: (component: UIComponent) => void) {
   const cache = new WeakMap<NativeObject, UnityObject>();
   const natives = new WeakMap<UIObject, NativeObject>();
   const names = new WeakMap<NativeObject, string>();
@@ -204,7 +204,7 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
       this.native.SetVirtual(); this.isVirtual = true;
     }
     get scrollPosition(): {x: number; y: number} { const pane = this.native.scrollPane; return {x: pane?.posX ?? 0, y: pane?.posY ?? 0}; }
-    set scrollPosition(value: {x: number; y: number}) { const pane = this.native.scrollPane; if (pane) { pane.SetPosX(value.x, false); pane.SetPosY(value.y, false); } }
+    set scrollPosition(value: {x: number; y: number}) { this.native.scrollPane?.ScrollToView(toRect(value.x, value.y, 0, 0), false, true); }
     get selectedIndex(): number { return this.selected; }
     set selectedIndex(value: number) { this.selected = value; this.native.selectedIndex = value; }
     onClickItem(handler: (index: number) => void): Unsubscribe {
@@ -260,7 +260,11 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
   }
 
   function releaseTree(native: NativeObject): void {
-    cache.get(native)?.release();
+    const object = cache.get(native);
+    object?.release();
+    // Native GComponent.Dispose destroys descendants without invoking their
+    // wrappers. Drop backend ownership for every released component in the tree.
+    if (object instanceof UnityComponent) onComponentReleased?.(object);
     if (native instanceof fgui.GComponent) for (let index = 0; index < native.numChildren; index++) releaseTree(native.GetChildAt(index));
   }
   function setComponentName(native: NativeObject, name: string): void { names.set(native, name); }

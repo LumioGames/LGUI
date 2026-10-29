@@ -5,6 +5,7 @@ import app from '../src/main';
 import { FakeInventoryService } from '../src/modules/bag/InventoryService';
 import { bagModel } from '../src/modules/bag/BagModel';
 import { rewardModel } from '../src/modules/reward/RewardModel';
+import { RewardDialogView } from '../src/modules/reward/RewardDialogView';
 
 const start = () => lgui.testing.start(app, { services: { inventory: () => new FakeInventoryService() } });
 beforeEach(() => { bagModel.reset(); rewardModel.reset(); });
@@ -17,6 +18,10 @@ test('领奖：两个窗口在 modal 层排队，先道具后金币；道具和�
   // 同一时间只显示一个：金币窗口在后面排队
   assert.equal(t.snapshot().active, 'RewardDialogView');
   assert.deepEqual(t.snapshot().layers.modal, ['RewardDialogView']);
+  assert.ok(t.snapshot().packages.some(pkg => pkg.name === 'Bag'), '营地直接领奖也加载图标所属的 Bag 包');
+  const rewardIcon = lgui.ui.get(RewardDialogView)?.__component?.child('icon.image');
+  assert.ok(rewardIcon && 'url' in rewardIcon);
+  assert.equal(rewardIcon.url, 'ui://Bag/elixir', '真实可见的复用图标部件显示首个奖励');
   assert.equal(t.text('Reward/RewardDialog.itemText'), '星露灵药 ×1\n霜蓝水晶 ×3\n星辉法杖 ×1');
   await t.click('Reward/RewardDialog.okButton');
   await t.advance(16);

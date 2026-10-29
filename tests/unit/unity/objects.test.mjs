@@ -9,7 +9,12 @@ let implementation;
 async function adapter(...args) {
   try { implementation ??= await importTs(entry); }
   catch (error) { assert.fail(`Unity UI object adapter is unavailable: ${error.message}`); }
-  return implementation.createObjectAdapter(...args);
+  const [fgui, now, toPoint, onComponentReleased] = args;
+  return implementation.createObjectAdapter(fgui, now, toPoint, (x, y, width, height) => new NativeRect(x, y, width, height), onComponentReleased);
+}
+
+class NativeRect {
+  constructor(x, y, width, height) { Object.assign(this, {x, y, width, height}); }
 }
 
 class Listener {
@@ -51,7 +56,8 @@ class Graph extends Obj { color = {r: 1, g: 1, b: 1, a: 1}; }
 class Progress extends Component { value = 0; max = 100; }
 class List extends Component {
   numItems = 0; itemRenderer = null; selectedIndex = -1; onClickItem = new Listener(); first = 0;
-  scrollPane = {posX: 0, posY: 0, SetPosX(x) { this.posX = x; }, SetPosY(y) { this.posY = y; }};
+  scrollPane = {posX: 0, posY: 0, SetPosX(x) { this.posX = x; }, SetPosY(y) { this.posY = y; },
+    ScrollToView(rect) { this.SetPosX(rect.x); this.SetPosY(rect.y); }};
   SetVirtual() { this.virtualCalls = (this.virtualCalls ?? 0) + 1; }
   ItemIndexToChildIndex(index) { return index - this.first; }
   ChildIndexToItemIndex(index) { return index + this.first; }
@@ -68,6 +74,37 @@ const fgui = {
   }}}
 };
 const context = (x, y, touchId = -1) => ({inputEvent: {x, y, touchId, button: 0}, data: null, CaptureTouch() { this.captured = true; }});
+
+let backendImplementation;
+async function containerBackend() {
+  backendImplementation ??= await importTs(fileURLToPath(new URL('../../../plugin/framework/backends/unity/adapter/index.ts', import.meta.url)));
+  class NativeComponent extends Component {
+    disposeCalls = 0;
+    Dispose() {
+      this.disposeCalls++;
+      // FairyGUI GComponent.Dispose recursively disposes its native children;
+      // those child calls do not invoke their TypeScript wrapper.dispose().
+      for (const child of [...this.children]) child.Dispose();
+      this.children.length = 0;
+      super.Dispose();
+    }
+  }
+  const captures = new Map();
+  const stage = {
+    AddCapture(name, handler) { if (!captures.has(name)) captures.set(name, new Set()); captures.get(name).add(handler); },
+    RemoveCapture(name, handler) { captures.get(name)?.delete(handler); }
+  };
+  const bridge = {
+    UnityEngine: {Rect: NativeRect},
+    FairyGUI: {...fgui, GComponent: NativeComponent, GRoot: {inst: new NativeComponent()},
+      Stage: {touchScreen: false, inst: stage}, UIConfig: {defaultFont: ''},
+      UIPackage: {...fgui.UIPackage, GetByName() { return {}; }, CreateObject() { return new NativeComponent(); }}},
+    LGUI: {Platform: {Now: 0, ScreenWidth: 1280, ScreenHeight: 720}, LGUIResourceLoader: Loader}
+  };
+  const backend = backendImplementation.createUnityBackend(bridge);
+  await backend.init({projectName: 'containers', defaultFont: null, uiBase: 'UI'});
+  return {backend, dispose: () => globalThis.__lguiDispose?.()};
+}
 
 test('Unity wrappers preserve object identity, nested lookup and native ownership', async () => {
   const a = await adapter(fgui, () => 100, (x, y) => ({x: x / 2, y: y / 2}));
@@ -127,6 +164,30 @@ test('Unity list maps virtual child indices, keeps non-button selection and disp
   list.numItems = 2; assert.equal(list.selectedIndex, -1);
   off(); native.onClickItem.Call(item); assert.deepEqual(clicks, [4]);
   list.itemRenderer = null; assert.equal(native.itemRenderer, null);
+});
+
+test('Unity list position uses the native Rect public synchronous scroll commit before the next inertia frame', async () => {
+  const a = await adapter(fgui, () => 0, (x, y) => ({x, y}));
+  const native = new List();
+  // Model the documented native boundary: SetPos only queues a refresh, while
+  // ScrollToView(..., false, true) commits a different target and ends the tween.
+  const pane = {posX: 0, posY: 68, renderedX: 0, renderedY: 68, tweening: true, publicCommits: 0,
+    SetPosX(x) { this.posX = x; }, SetPosY(y) { this.posY = y; },
+    ScrollToView(rect, animate, setFirst) {
+      assert.ok(rect instanceof NativeRect, 'a CLR Rect factory value must cross the typed boundary');
+      assert.deepEqual({x: rect.x, y: rect.y, width: rect.width, height: rect.height, animate, setFirst},
+        {x: 0, y: 40, width: 0, height: 0, animate: false, setFirst: true});
+      this.posX = this.renderedX = rect.x; this.posY = this.renderedY = rect.y;
+      this.tweening = false; this.publicCommits++;
+    },
+    nextFrame() { if (this.tweening) this.posY = this.renderedY = 68; }};
+  native.scrollPane = pane;
+  const list = a.wrap(native);
+  list.scrollPosition = {x: 0, y: 40};
+  assert.equal(pane.renderedY, 40, 'assignment must commit the rendered position before returning');
+  pane.nextFrame();
+  assert.deepEqual(list.scrollPosition, {x: 0, y: 40});
+  assert.equal(pane.publicCommits, 1);
 });
 
 test('Unity loader forwards native completion and failure without publishing stale URLs', async () => {
@@ -258,4 +319,44 @@ test('Unity object adapter disposal releases active native subscriptions even wi
   a.dispose(); a.dispose();
   assert.equal(native.onTouchBegin.handlers.size, 0); assert.equal(native.onTouchMove.handlers.size, 0); assert.equal(native.onTouchEnd.handlers.size, 0);
   assert.equal(list.itemRenderer, null);
+});
+
+test('Unity removes a directly disposed container from backend ownership before teardown', async () => {
+  const {backend, dispose} = await containerBackend();
+  try {
+    const owner = backend.createContainer('glyph-owner');
+    const native = owner.native;
+    owner.dispose();
+    assert.equal(native.disposeCalls, 1);
+    dispose();
+    assert.equal(native.disposeCalls, 1, 'backend must not retain and revisit a disposed container');
+  } finally { dispose(); }
+});
+
+test('Unity removes a container disposed recursively through an unregistered native ancestor', async () => {
+  const {backend, dispose} = await containerBackend();
+  try {
+    const ancestor = backend.create('Bag', 'Panel');
+    const owner = backend.createContainer('glyph-owner');
+    const native = owner.native;
+    ancestor.addChild(owner);
+    ancestor.dispose();
+    assert.equal(native.disposeCalls, 1, 'native ancestor disposal owns the child destruction');
+    dispose();
+    assert.equal(native.disposeCalls, 1, 'recursive release must unregister a child whose wrapper.dispose was not called');
+  } finally { dispose(); }
+});
+
+test('Unity container teardown disposes a registered parent tree and remaining live containers once', async () => {
+  const {backend, dispose} = await containerBackend();
+  try {
+    const parent = backend.createContainer('parent');
+    const child = backend.createContainer('glyph-owner');
+    const sibling = backend.createContainer('other-layer');
+    parent.addChild(child);
+    dispose();
+    assert.equal(parent.native.disposeCalls, 1);
+    assert.equal(child.native.disposeCalls, 1, 'registered child must not be disposed a second time after native recursion');
+    assert.equal(sibling.native.disposeCalls, 1, 'removing parent/child ownership must not skip another live container');
+  } finally { dispose(); }
 });

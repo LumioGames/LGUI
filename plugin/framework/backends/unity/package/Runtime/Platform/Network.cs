@@ -42,12 +42,43 @@ namespace LGUI
             }
         }
 
+        internal static int RequestGeneration { get { return generation; } }
+        internal static bool IsRequestCurrent(int startedGeneration) { return startedGeneration == generation && owner != null; }
+
+        internal static bool TryStartRequest(UnityWebRequest request, out UnityWebRequestAsyncOperation operation, out Exception startupError)
+        {
+            try
+            {
+                operation = request.SendWebRequest();
+                startupError = null;
+                return true;
+            }
+            catch (Exception error)
+            {
+                operation = null;
+                startupError = error;
+                return false;
+            }
+        }
+
         static IEnumerator Send(UnityWebRequest request, Action<string> complete, int startedGeneration)
         {
             Track(request);
             try
             {
-                yield return request.SendWebRequest();
+                UnityWebRequestAsyncOperation operation;
+                Exception startupError;
+                if (!TryStartRequest(request, out operation, out startupError))
+                {
+                    if (startedGeneration != generation || owner == null) yield break;
+                    complete(JsonUtility.ToJson(new Response {
+                        status = 0,
+                        text = "",
+                        error = Failure("HTTP 请求无法启动：" + startupError, startupError).ToString()
+                    }));
+                    yield break;
+                }
+                yield return operation;
                 if (startedGeneration != generation || owner == null) yield break;
                 var failed = request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.DataProcessingError;
                 complete(JsonUtility.ToJson(new Response {
@@ -98,7 +129,15 @@ namespace LGUI
             AudioClip clip = null;
             try
             {
-                yield return request.SendWebRequest();
+                UnityWebRequestAsyncOperation operation;
+                Exception startupError;
+                if (!TryStartRequest(request, out operation, out startupError))
+                {
+                    if (startedGeneration != generation || owner == null) yield break;
+                    Log("error", Failure("音效请求无法启动：" + url + "；" + startupError.Message, startupError).ToString());
+                    yield break;
+                }
+                yield return operation;
                 if (startedGeneration != generation || owner == null) yield break;
                 if (request.result != UnityWebRequest.Result.Success)
                 {

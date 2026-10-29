@@ -149,7 +149,7 @@ class H5List extends H5Object implements UIList {
     this.native.setVirtual();
   }
   get scrollPosition(): {x: number; y: number} { const pane = this.native.scrollPane; return {x: pane?.posX ?? 0, y: pane?.posY ?? 0}; }
-  set scrollPosition(value: {x: number; y: number}) { const pane = this.native.scrollPane; if (pane) { pane.setPosX(value.x, false); pane.setPosY(value.y, false); } }
+  set scrollPosition(value: {x: number; y: number}) { this.native.scrollPane?.scrollToView(new fgui.Rect(value.x, value.y, 0, 0), false, true); }
   // 选中项自己记一份：FairyGUI 只把按钮类型的子项当成可选中的，非按钮子项的选中会丢；这样和 headless 后端行为一致。
   private selected = -1;
   get selectedIndex(): number { return this.selected; }

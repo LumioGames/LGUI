@@ -113,7 +113,7 @@ export async function runH5(ctx, name, browser) {
 import {createH5Backend} from ${fw(ctx, 'backends/h5/index.ts')};
 import {stage} from ${fw(ctx, 'backends/h5/scale.ts')};
 type Obj = {native: {element: HTMLElement}};
-type Pw = (op: string, ...args: number[] | string[]) => Promise<void>;
+type Pw = (op: string, ...args: (number | string)[]) => Promise<void>;
 const pw = (window as unknown as {__pw: Pw}).__pw;
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 // 只收集诊断；不重写事件、时间、坐标或任何手势判定。
@@ -129,7 +129,7 @@ for (const type of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel'])
 const center = (o: unknown) => { const r = (o as Obj).native.element.getBoundingClientRect(); return {x: r.x + r.width / 2, y: r.y + r.height / 2}; };
 const touchDrag = async (o: unknown, dx: number, dy: number, ms: number, steps: number) => { const p = center(o); await pw('touchDrag', p.x, p.y, dx * stage.scale, dy * stage.scale, ms, steps); await wait(50); };
 const sim = {
-  async click(_b: unknown, o: unknown, holdMs = 50) { const p = center(o); await pw('press', p.x, p.y, holdMs); await wait(50); },
+  async click(_b: unknown, o: unknown, holdMs = 50, pointerType = 'mouse') { const p = center(o); await pw('press', p.x, p.y, holdMs, pointerType); await wait(50); },
   async doubleClick(b: unknown, o: unknown) { await sim.click(b, o); await sim.click(b, o); },
   async hold(_b: unknown, o: unknown, ms: number) { const p = center(o); await pw('press', p.x, p.y, ms); await wait(50); },
   drag: (_b: unknown, o: unknown, dx: number, dy: number) => touchDrag(o, dx, dy, 400, 10),
@@ -159,7 +159,7 @@ const createBackend = () => {
 };
 `);
   await esbuild().build({...webBuildOptions(ctx.root, entry), outfile: path.join(web, 'conf.js')});
-  const html = '<!doctype html><meta charset="utf-8"><style>html,body{margin:0;height:100%;overflow:hidden;background:#000}</style><body><script type="module" src="/conf.js"></script>';
+  const html = '<!doctype html><meta charset="utf-8"><link rel="icon" href="data:,"><style>html,body{margin:0;height:100%;overflow:hidden;background:#000}</style><body><script type="module" src="/conf.js"></script>';
   const server = http.createServer((req, res) => {
     const url = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (url === '/conf.html') res.writeHead(200, {'content-type': 'text/html; charset=utf-8'}).end(html);
@@ -179,7 +179,9 @@ const createBackend = () => {
   };
   try {
     const errors = [];
+    trace.consoleErrors = errors;
     page.on('pageerror', e => errors.push(String(e.message ?? e)));
+    page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     const cdp = await page.context().newCDPSession(page);
     const inputCommand = async (method, params) => {
       const entry = {method, params, sendEpoch: performance.timeOrigin + performance.now()};
@@ -192,7 +194,7 @@ const createBackend = () => {
       // timer lets a late driver response turn a 50ms click into a >300ms hold.
       if (op === 'press') {
         await page.mouse.move(a[0], a[1]);
-        await inputCommand('Input.synthesizeTapGesture', {x: a[0], y: a[1], duration: a[2], gestureSourceType: 'mouse'});
+        await inputCommand('Input.synthesizeTapGesture', {x: a[0], y: a[1], duration: a[2], gestureSourceType: a[3] === 'touch' ? 'touch' : 'mouse'});
       }
       else if (op === 'wheel') { await page.mouse.move(a[0], a[1]); await page.mouse.wheel(0, a[2]); }
       else if (op === 'key') await page.keyboard.press(a[0]);

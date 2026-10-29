@@ -1,6 +1,7 @@
 // FairyGUI-unity 8cc8f2 的 C# 边界。仅后端引用；游戏代码不接触引擎对象。
 export interface NativeColor {r: number; g: number; b: number; a: number}
 export interface NativeVector2 {x: number; y: number}
+export interface NativeRect {x: number; y: number; width: number; height: number}
 export interface NativeInputEvent {
   x: number; y: number; touchId: number; button: number;
   keyCode: number; character: string | number; mouseWheelDelta: number;
@@ -63,6 +64,7 @@ export interface NativeScrollPane {
   readonly posX: number; readonly posY: number;
   SetPosX(value: number, animate: boolean): void;
   SetPosY(value: number, animate: boolean): void;
+  ScrollToView(target: NativeRect, animate: boolean, setFirst: boolean): void;
 }
 export interface NativeList extends NativeComponent {
   numItems: number;

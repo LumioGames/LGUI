@@ -63,7 +63,7 @@ export class BagController extends Controller {
     const check = bagModel.canSell(item.id, 1);
     if (!check.ok) { this.report(check, () => undefined); return; }
     const name = lgui.t(`item.${item.kind}.name`);
-    if (!(await lgui.confirm({ title: 'bag.sellTitle', message: lgui.t('bag.sellAsk', { name, price: item.price }) }))) return;
+    if (!(await lgui.confirm({ title: 'bag.sellTitle', message: 'bag.sellAsk', params: { name, price: item.price } }))) return;
     const r = await this.sellRequest.run(item.kind, 1);
     if (!r.ok) return; // 失败时框架弹出统一的错误提示（工程配置 requestErrorToast）
     bagModel.sold(item.id, 1, r.value.earned);

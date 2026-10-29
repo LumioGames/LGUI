@@ -79,11 +79,17 @@ export class GLoader extends GObject {
   fillAmount: number;
 }
 
+export class Rect {
+  constructor(x: number, y: number, width: number, height: number);
+  x: number; y: number; width: number; height: number;
+}
+
 export class ScrollPane {
   posX: number;
   posY: number;
   setPosX(value: number, ani?: boolean): void;
   setPosY(value: number, ani?: boolean): void;
+  scrollToView(target: Rect, ani?: boolean, setFirst?: boolean): void;
 }
 
 export class GList extends GComponent {

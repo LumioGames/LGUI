@@ -383,7 +383,7 @@ export class UIManager {
       }
       if (entry.state === 'closed') throw cancelled('加载资源');
       // modal 层同一时间只显示一个，后来的排队。
-      if (layer === 'modal' && !this.overlays.has(cls) && this.stacks.modal.some(e => e !== entry && !this.overlays.has(e.cls) && (e.state === 'open' || e.state === 'opening'))) {
+      if (layer === 'modal' && !this.overlays.has(cls) && this.stacks.modal.slice(0, this.stacks.modal.indexOf(entry)).some(e => !this.overlays.has(e.cls) && e.state !== 'closed')) {
         entry.state = 'queued';
         await new Promise<void>(resolve => { entry.show = resolve; });
         if ((entry.state as Entry['state']) === 'closed') throw cancelled('排队');
@@ -459,7 +459,16 @@ export class UIManager {
   private remove(entry: Entry): void {
     const stack = this.stacks[entry.layer];
     const index = stack.indexOf(entry);
-    if (index >= 0) stack.splice(index, 1);
+    if (index >= 0) {
+      stack.splice(index, 1);
+      if (entry.layer === 'modal') this.wakeQueuedModal();
+    }
+  }
+
+  /** 关闭、加载失败或打开失败都可能移走队首；较早请求仍在加载时不能越过它。 */
+  private wakeQueuedModal(): void {
+    const next = this.stacks.modal.find(entry => !this.overlays.has(entry.cls) && entry.state !== 'closed');
+    if (next?.state === 'queued') next.show?.();
   }
 
   // ---------- 关闭 ----------
@@ -491,10 +500,6 @@ export class UIManager {
     entry.onClose = null;
     bus.emit(builtinEvents.viewClosed, {view: entry.cls});
     if (notify) notify(result);
-    // modal 排队：前一个关掉，下一个弹出来。
-    if (entry.layer === 'modal') {
-      this.stacks.modal.find(e => e.state === 'queued')?.show?.();
-    }
     this.refresh();
   }
 
