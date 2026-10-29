@@ -1,5 +1,6 @@
 {
   "main.hint": "Try the button below",
   "main.clicked": "Clicked {count} times",
-  "lgui.back": "Back"
+  "lgui.back": "Back",
+  "lgui.requestFailed": "Request failed ({code})"
 }

@@ -10,6 +10,7 @@ import {currentLanguage, t} from './i18n';
 import {createRequest} from './request';
 import {service} from './service';
 import {snapshot} from './snapshot';
+import * as common from './common-views';
 import type {Entry} from './ui/manager';
 import {runtime, wallNow} from './runtime';
 import type {Model} from './model';
@@ -174,15 +175,15 @@ export const lgui = {
   },
 
   /** 短提示（文本键）。 */
-  toast(key: string, params?: Record<string, string | number>): void { void key; void params; todo('lgui.toast'); },
+  toast(key: string, params?: Record<string, string | number>): void { common.toast(key, params); },
   /** 确认框，参数都是文本键。 */
-  confirm(options: {title: string; message: string; ok?: string; cancel?: string; params?: Record<string, string | number>}): Promise<boolean> { void options; return todo('lgui.confirm'); },
+  confirm(options: {title: string; message: string; ok?: string; cancel?: string; params?: Record<string, string | number>}): Promise<boolean> { return common.confirm(options); },
   /** 加载中，按次数计数。 */
   loading: {
     /** 显示。 */
-    show(): void { todo('lgui.loading.show'); },
+    show(): void { common.loading.show(); },
     /** 隐藏（最后一次才真正隐藏）。 */
-    hide(): void { todo('lgui.loading.hide'); }
+    hide(): void { common.loading.hide(); }
   },
   /** 红点。 */
   redDot: {

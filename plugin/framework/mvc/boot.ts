@@ -4,6 +4,7 @@ import type {AppDefinition} from './lgui';
 import {runtime, setRuntime} from './runtime';
 import type {RuntimeConfig} from './runtime';
 import {UIManager} from './ui/manager';
+import {setupCommonViews} from './common-views';
 import {pickLanguage, setTexts} from './i18n';
 import {setServices} from './service';
 import type {TextTable} from './i18n';
@@ -14,6 +15,7 @@ export async function boot(backend: Backend, app: AppDefinition, config: Runtime
   setServices({...(app.services ?? {}), ...(options.services ?? {})});
   const ui = new UIManager(backend, deps, config);
   runtime().ui = ui;
+  setupCommonViews(ui);
   await ui.startHintBar();
   if (options.start !== false) await app.start();
   return ui;

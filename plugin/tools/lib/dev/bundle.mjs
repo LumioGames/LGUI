@@ -86,6 +86,7 @@ export function webBuildOptions(root, entry) {
     outfile: path.join(root, '.lgui', 'build', 'web', 'app.js'),
     alias: {lgui: frameworkEntry(root)},
     define: {LGUI_DEV: 'true'},
+    keepNames: true, // 界面类名会出现在调试快照和报错里，不能被改名
     absWorkingDir: root,
     logLevel: 'silent'
   };

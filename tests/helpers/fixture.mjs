@@ -69,11 +69,39 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
     <component id="curbar01" name="CurrencyBar.xml" path="/" exported="true"/>
     <component id="hintbar1" name="ActionHintBar.xml" path="/" exported="true"/>
     <component id="hint0001" name="ActionHint.xml" path="/" exported="true"/>
+    <component id="toast001" name="Toast.xml" path="/" exported="true"/>
+    <component id="confirm1" name="Confirm.xml" path="/" exported="true"/>
+    <component id="loading1" name="Loading.xml" path="/" exported="true"/>
+    <component id="cbtn0001" name="Button.xml" path="/" exported="true"/>
   </resources>
 </packageDescription>`));
   fs.writeFileSync(path.join(common, 'CurrencyBar.xml'), xml(`<component size="600,80">
   <displayList>
     <text id="n0" name="gold" xy="0,0" size="200,40" fontSize="24" autoSize="shrink" singleLine="true" text="0"/>
+  </displayList>
+</component>`));
+  fs.writeFileSync(path.join(common, 'Toast.xml'), xml(`<component size="720,96">
+  <displayList>
+    <text id="n0" name="text" xy="0,0" size="720,96" fontSize="28" autoSize="shrink" singleLine="true" text=""/>
+  </displayList>
+</component>`));
+  fs.writeFileSync(path.join(common, 'Button.xml'), xml(`<component size="240,72" extention="Button">
+  <displayList>
+    <text id="n0" name="title" xy="0,0" size="240,72" fontSize="28" autoSize="shrink" singleLine="true" text=""/>
+  </displayList>
+  <Button/>
+</component>`));
+  fs.writeFileSync(path.join(common, 'Confirm.xml'), xml(`<component size="800,480">
+  <displayList>
+    <text id="n0" name="title" xy="40,32" size="720,56" fontSize="36" autoSize="shrink" singleLine="true" text="提示"/>
+    <text id="n1" name="message" xy="40,112" size="720,200" fontSize="28" autoSize="height" text=""/>
+    <component id="n2" name="cancel" src="cbtn0001" xy="120,360" size="240,72"><Button title="取消"/></component>
+    <component id="n3" name="ok" src="cbtn0001" xy="440,360" size="240,72"><Button title="确定"/></component>
+  </displayList>
+</component>`));
+  fs.writeFileSync(path.join(common, 'Loading.xml'), xml(`<component size="1920,1080">
+  <displayList>
+    <text id="n0" name="text" xy="660,500" size="600,80" fontSize="32" autoSize="shrink" singleLine="true" text="加载中…"/>
   </displayList>
 </component>`));
   fs.writeFileSync(path.join(common, 'ActionHintBar.xml'), xml(`<component size="1920,64">

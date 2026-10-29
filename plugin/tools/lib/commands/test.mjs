@@ -77,7 +77,7 @@ export async function runProjectTests(root, project) {
     try {
       await esbuild().build({
         entryPoints: [file], bundle: true, platform: 'node', format: 'esm', target: 'es2020', outfile,
-        alias: {lgui: frameworkEntry(root)}, inject: [env], define: {LGUI_DEV: 'true'}, absWorkingDir: root, logLevel: 'silent', sourcemap: 'inline'
+        alias: {lgui: frameworkEntry(root)}, inject: [env], define: {LGUI_DEV: 'true'}, keepNames: true, absWorkingDir: root, logLevel: 'silent', sourcemap: 'inline'
       });
     } catch (error) {
       throw bundleErrors(error, root);
