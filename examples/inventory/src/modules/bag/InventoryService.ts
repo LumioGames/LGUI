@@ -39,15 +39,22 @@ export class LocalInventoryService implements InventoryService {
   }
 }
 
-/** 测试用：马上返回；failNext 让下一次请求失败。 */
+/** 测试用：马上返回；failNext 让下一次请求失败；holdNext 让下一次出售等到 release() 才返回（测「出售中」）。 */
 export class FakeInventoryService implements InventoryService {
   failNext = false;
+  holdNext = false;
   calls: string[] = [];
+  private waiting: (() => void)[] = [];
   private check(call: string) {
     this.calls.push(call);
     if (this.failNext) { this.failNext = false; throw new Error('fake failure'); }
   }
-  async sell(kind: string, quantity: number) { this.check(`sell ${kind} ${quantity}`); return { earned: definition(kind).price * quantity }; }
+  release() { for (const resume of this.waiting.splice(0)) resume(); }
+  async sell(kind: string, quantity: number) {
+    this.check(`sell ${kind} ${quantity}`);
+    if (this.holdNext) { this.holdNext = false; await new Promise<void>(resolve => this.waiting.push(resolve)); }
+    return { earned: definition(kind).price * quantity };
+  }
   async buy(kind: string) { this.check(`buy ${kind}`); return { cost: definition(kind).price * 2 }; }
   async claim(rewardId: string) { this.check(`claim ${rewardId}`); return REWARDS[rewardId]; }
 }

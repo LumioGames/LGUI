@@ -187,3 +187,32 @@ test('新道具红点：放进 2 件新道具，营地的背包入口显示 2；
   assert.equal(t.text('Main/MainView.bagEntry.redDot.count'), '2');
   t.end();
 });
+
+test('出售中：请求没返回时显示「出售中…」，出售按钮锁住；返回后恢复', async () => {
+  const t = await start();
+  await t.open(BagView);
+  await t.click(`${P}.list[0]`);
+  service.holdNext = true;
+  await t.click(`${P}.sellButton`);
+  await t.click('Common/Confirm.ok');
+  await t.advance(16);
+  assert.equal(t.visible(`${P}.sellingTip`), true);
+  assert.equal(t.enabled(`${P}.sellButton`), false, 'lockWhilePending');
+  service.release();
+  await t.advance(16);
+  assert.equal(t.visible(`${P}.sellingTip`), false);
+  await t.click(`${P}.list[0]`); // 卖掉的那把剑没了，选中第二把：锁已经解开
+  assert.equal(t.enabled(`${P}.sellButton`), true);
+  t.end();
+});
+
+test('触屏提示：只在触屏上显示（visibleOn）', async () => {
+  const t = await start();
+  await t.open(BagView);
+  assert.equal(t.visible(`${P}.touchHint`), false);
+  t.setInputType('touch');
+  assert.equal(t.visible(`${P}.touchHint`), true);
+  t.setInputType('keyboardMouse');
+  assert.equal(t.visible(`${P}.touchHint`), false);
+  t.end();
+});
