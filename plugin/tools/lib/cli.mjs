@@ -11,6 +11,7 @@ import {test} from './commands/test.mjs';
 import {i18nExtract} from './commands/i18n-extract.mjs';
 import {check} from './commands/check.mjs';
 import {verify} from './commands/verify.mjs';
+import {doctor} from './commands/doctor.mjs';
 
 // project：'none' 不需要在工程里；'required' 必须在工程里。
 // versionCheck：运行前比对插件和工程的版本（init、doctor、upgrade 不比对）。
@@ -18,7 +19,7 @@ import {verify} from './commands/verify.mjs';
 // run：实现；null 表示还没实现，报 LGUI-CLI-000。
 export const registry = [
   {name: 'init', usage: 'init [目录] [--name 名称]', about: '新建工程', project: 'none', versionCheck: false, flags: {name: 'string'}, run: init},
-  {name: 'doctor', usage: 'doctor [--paths]', about: '检查环境', project: 'none', versionCheck: false, flags: {paths: 'boolean'}, run: null},
+  {name: 'doctor', usage: 'doctor [--paths]', about: '检查环境', project: 'none', versionCheck: false, flags: {paths: 'boolean'}, run: doctor},
   {name: 'dev', usage: 'dev [--port 端口] [--no-open]', about: '打开网页预览，改动后自动刷新', project: 'required', versionCheck: true, flags: {port: 'string', 'no-open': 'boolean'}, run: dev},
   {name: 'editor', usage: 'editor', about: '打开编辑器', project: 'required', versionCheck: true, flags: {}, run: null},
   {name: 'editor props', usage: 'editor props <组件> <控件路径> <属性>=<值> ...', about: '编辑器开着时修改已有控件的属性', project: 'required', versionCheck: true, flags: {}, run: null},
