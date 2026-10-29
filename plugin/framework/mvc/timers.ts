@@ -26,15 +26,21 @@ export class ViewTimers {
     }
   }
 
+  // 一个定时器出错不耽误同一界面的其他定时器：这一帧都跑完，再把第一个错误抛出去。
   private frame(deltaMs: number): void {
     if (this.paused) return;
-    for (const timer of [...this.timers]) if (!timer.step(deltaMs)) this.timers.delete(timer);
+    let failure: {error: unknown} | null = null;
+    for (const timer of [...this.timers]) {
+      try { if (!timer.step(deltaMs)) this.timers.delete(timer); } catch (error) { if (!failure) failure = {error}; }
+    }
+    if (failure) throw failure.error;
   }
 
-  /** 延时 ms 毫秒执行一次。时间只在界面没被盖住时才走。 */
+  /** 延时 ms 毫秒执行一次。时间只在界面没被盖住时才走。回调出错也只执行这一次。 */
   after(ms: number, handler: () => void): void {
     let elapsed = 0;
-    this.add({step: dt => { elapsed += dt; if (elapsed < ms) return true; handler(); return false; }});
+    let fired = false;
+    this.add({step: dt => { if (fired) return false; elapsed += dt; if (elapsed < ms) return true; fired = true; handler(); return false; }});
   }
 
   /** 每隔 ms 毫秒执行一次。一帧里跨过好几个间隔（比如切回前台）只执行一次，不补发。 */
@@ -43,14 +49,17 @@ export class ViewTimers {
     this.add({step: dt => { elapsed += dt; if (elapsed >= ms) { elapsed %= ms; handler(); } return true; }});
   }
 
-  /** 倒计时：每次都按「结束时间 − 现在」算。开始时和剩余秒数变化时调用 tick，到点调用 done。 */
+  /** 倒计时：每次都按「结束时间 − 现在」算。开始时和剩余秒数变化时调用 tick，到点调用 done（出错也只调用这一次）。 */
   countdown(endsAt: number, tick: (leftMs: number) => void, done: () => void): void {
     let shown = -1;
+    let finished = false;
     const check = (): boolean => {
+      if (finished) return false;
       const left = Math.max(0, endsAt - wallNow());
       const seconds = Math.ceil(left / 1000);
       if (seconds !== shown) { shown = seconds; tick(left); }
       if (left > 0) return true;
+      finished = true;
       done();
       return false;
     };
