@@ -1,0 +1,33 @@
+// 接口层的后端：每个引擎实现一份（h5、headless、unity）。
+import type {Platform} from './platform';
+import type {UIComponent} from './ui';
+
+/** 后端启动参数，来自工程配置。 */
+export interface BackendConfig {
+  /** 工程名（存储键名的前缀）。 */
+  projectName: string;
+  /** 默认字体，null 表示用 FairyGUI 的默认字体。 */
+  defaultFont: string | null;
+  /** 界面包所在的地址或目录（h5 是 .lgui/build/web/ui/ 对应的网址）。 */
+  uiBase: string;
+}
+
+/** 一个后端。 */
+export interface Backend {
+  /** 后端名。 */
+  readonly name: 'h5' | 'headless' | 'unity';
+  /** 启动：建好根节点和平台服务。 */
+  init(config: BackendConfig): Promise<void>;
+  /** 根节点，UIManager 在它下面放 5 个层。 */
+  readonly root: UIComponent;
+  /** 加载一个界面包（按包名）。 */
+  loadPackage(name: string): Promise<void>;
+  /** 释放一个界面包。 */
+  releasePackage(name: string): void;
+  /** 创建一个组件实例；包没加载或组件不存在时报 LGUI-RT 错误。 */
+  create<Name extends string>(packageName: string, componentName: string): UIComponent<Name>;
+  /** 创建一个空容器（UIManager 的层用它）。 */
+  createContainer(name: string): UIComponent;
+  /** 平台服务。 */
+  readonly platform: Platform;
+}

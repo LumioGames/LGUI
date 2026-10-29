@@ -1,0 +1,205 @@
+// 接口层的 UI 对象：各后端的 FairyGUI 运行时统一成这一套写法。
+// 只在框架内部用；游戏代码通过绑定表和钩子里的 this.ui 用到这些类型。
+
+/** 取消订阅。所有事件订阅都返回它。 */
+export type Unsubscribe = () => void;
+
+/** 一个矩形，单位是设计尺寸里的像素。 */
+export interface Rect {
+  /** 左上角 x。 */
+  x: number;
+  /** 左上角 y。 */
+  y: number;
+  /** 宽。 */
+  width: number;
+  /** 高。 */
+  height: number;
+}
+
+/** 一次原始指针事件（鼠标和触摸统一），坐标是设计尺寸里的坐标。 */
+export interface PointerInput {
+  /** 按下、移动、抬起、取消。 */
+  type: 'down' | 'move' | 'up' | 'cancel';
+  /** 指针编号，多点触摸时区分手指。 */
+  pointerId: number;
+  /** 指针类型。 */
+  pointerType: 'mouse' | 'touch' | 'pen';
+  /** x 坐标。 */
+  x: number;
+  /** y 坐标。 */
+  y: number;
+  /** 事件时间（毫秒，和 Platform.time.now 同一个时钟）。 */
+  time: number;
+}
+
+/** 所有 UI 对象的公共部分。 */
+export interface UIObject {
+  /** 在 ui/ 里的控件名。 */
+  readonly name: string;
+  /** 是否显示。 */
+  visible: boolean;
+  /** 是否可用；false 时变灰并且不可点。 */
+  enabled: boolean;
+  /** 是否接收指针输入。 */
+  touchable: boolean;
+  /** 内部用：位置和尺寸（设计尺寸）。游戏代码不写坐标和尺寸。 */
+  rect: Rect;
+  /** 订阅落在这个对象上的原始指针事件，手势由框架识别。 */
+  onPointer(handler: (event: PointerInput) => void): Unsubscribe;
+}
+
+/** 组件：可以按路径找子控件、控制器和动效。Name 是组件在 ui/ 里的「包/组件」名。 */
+export interface UIComponent<Name extends string = string> extends UIObject {
+  /** 组件的「包/组件」名。 */
+  readonly componentName: Name;
+  /** 内部用：按「.」连起来的路径找子控件，找不到返回 null。 */
+  child(path: string): UIObject | null;
+  /** 内部用：按名字找控制器，找不到返回 null。 */
+  controller(name: string): UIController | null;
+  /** 内部用：按名字找动效，找不到返回 null。 */
+  transition(name: string): UITransition | null;
+  /** 内部用：直接子控件的名字，按显示顺序。 */
+  childNames(): readonly string[];
+  /** 内部用：把一个对象加到最上面（UIManager 往层里放界面时用）。 */
+  addChild(child: UIObject): void;
+  /** 内部用：移除一个子对象（不销毁）。 */
+  removeChild(child: UIObject): void;
+  /** 内部用：销毁组件和它的全部子对象。 */
+  dispose(): void;
+}
+
+/** 文字。 */
+export interface UIText extends UIObject {
+  /** 显示的文字。 */
+  text: string;
+  /** 文字颜色，#rrggbb。 */
+  color: string;
+}
+
+/** 富文本（UBB 语法）。 */
+export interface UIRichText extends UIText {}
+
+/** 输入框。 */
+export interface UIInput extends UIText {
+  /** 没有输入时显示的提示文字。 */
+  promptText: string;
+  /** 用户改了文字时调用，参数是新文字。 */
+  onChange(handler: (text: string) => void): Unsubscribe;
+}
+
+/** 按钮。 */
+export interface UIButton extends UIComponent {
+  /** 标题文字。 */
+  title: string;
+  /** 图标地址（ui:// 或网络地址）。 */
+  icon: string;
+  /** 是否选中（单选、多选按钮）。 */
+  selected: boolean;
+}
+
+/** 图片。fill 用于进度显示（比如长按进度、冷却）。 */
+export interface UIImage extends UIObject {
+  /** 填充方式。 */
+  fillMethod: 'none' | 'horizontal' | 'vertical' | 'radial90' | 'radial180' | 'radial360';
+  /** 填充起点（含义随 fillMethod 变化，和 FairyGUI 一致）。 */
+  fillOrigin: number;
+  /** 径向填充是否顺时针。 */
+  fillClockwise: boolean;
+  /** 填充比例 0–1。 */
+  fillAmount: number;
+}
+
+/** 加载器：显示动态图片。 */
+export interface UILoader extends UIObject {
+  /** 图片地址；空字符串表示不显示。 */
+  url: string;
+  /** 图片加载完成时调用。 */
+  onLoad(handler: () => void): Unsubscribe;
+  /** 图片加载失败时调用，参数是失败的地址。 */
+  onError(handler: (url: string) => void): Unsubscribe;
+}
+
+/** 列表。 */
+export interface UIList extends UIObject {
+  /** 子项数量；改了就重新渲染。 */
+  numItems: number;
+  /** 渲染第 index 项时调用；item 是从对象池取出的子项组件。 */
+  itemRenderer: ((index: number, item: UIComponent) => void) | null;
+  /** 是否虚拟列表（只创建看得见的子项）。 */
+  virtual: boolean;
+  /** 滚动位置（像素，设计尺寸）。 */
+  scrollPosition: { x: number; y: number };
+  /** 选中项的序号，没有选中时是 -1。 */
+  selectedIndex: number;
+  /** 用户点了第 index 项时调用。 */
+  onClickItem(handler: (index: number) => void): Unsubscribe;
+  /** 内部用：第 index 项当前对应的子项组件，没创建（虚拟列表里看不见）时返回 null。 */
+  itemAt(index: number): UIComponent | null;
+  /** 滚动到让第 index 项可见。 */
+  scrollToView(index: number): void;
+}
+
+/** 控制器。Page 是页名的联合类型。 */
+export interface UIController<Page extends string = string> {
+  /** 控制器名。 */
+  readonly name: string;
+  /** 当前页名。 */
+  selectedPage: Page;
+  /** 全部页名，按顺序。 */
+  readonly pages: readonly Page[];
+  /** 当前页变了时调用（用户操作和代码设置都会触发），参数是新页名。 */
+  onChange(handler: (page: Page) => void): Unsubscribe;
+}
+
+/** 动效。 */
+export interface UITransition {
+  /** 动效名。 */
+  readonly name: string;
+  /** 播放；放完时 Promise 完成。times 是播放次数，-1 表示一直循环。 */
+  play(options?: { times?: number; delay?: number }): Promise<void>;
+  /** 停止，停在最后一帧。 */
+  stop(): void;
+  /** 暂停或恢复（界面被盖住时由框架调用）。 */
+  setPaused(paused: boolean): void;
+}
+
+/** 进度条。 */
+export interface UIProgress extends UIComponent {
+  /** 当前值。 */
+  value: number;
+  /** 最大值。 */
+  max: number;
+}
+
+/** 图形（矩形、圆等）。 */
+export interface UIGraph extends UIObject {
+  /** 填充颜色，#rrggbb 或 #aarrggbb。 */
+  color: string;
+}
+
+/** 控件类型名到接口类型的对应，生成的控件类型和 headless 描述都用这套名字。 */
+export interface UIKinds {
+  /** 组件。 */
+  component: UIComponent;
+  /** 文字。 */
+  text: UIText;
+  /** 富文本。 */
+  richtext: UIRichText;
+  /** 输入框。 */
+  input: UIInput;
+  /** 按钮。 */
+  button: UIButton;
+  /** 图片。 */
+  image: UIImage;
+  /** 加载器。 */
+  loader: UILoader;
+  /** 列表。 */
+  list: UIList;
+  /** 进度条。 */
+  progress: UIProgress;
+  /** 图形。 */
+  graph: UIGraph;
+}
+
+/** 控件类型名。 */
+export type UIKind = keyof UIKinds;

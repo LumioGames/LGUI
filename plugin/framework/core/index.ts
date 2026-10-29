@@ -1,0 +1,12 @@
+// 接口层（相当于 RHI）：只导出类型和错误类。
+export type {
+  Unsubscribe, Rect, PointerInput, UIObject, UIComponent, UIText, UIRichText, UIInput, UIButton,
+  UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, UIKinds, UIKind
+} from './ui';
+export type {
+  Platform, TimeService, StorageService, ResourceService, InputService, KeyInput, WheelInput,
+  TextInputService, ScreenService, Insets, AudioService, LocaleService, LogService, LogEntry,
+  NetService, NetResponse, NetSocket
+} from './platform';
+export type {Backend, BackendConfig} from './backend';
+export {LgRuntimeError, notImplemented} from './errors';
