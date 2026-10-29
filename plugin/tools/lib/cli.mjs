@@ -15,6 +15,7 @@ import {doctor} from './commands/doctor.mjs';
 import {upgrade} from './commands/upgrade.mjs';
 import {artSplit} from './commands/art-split.mjs';
 import {newModule, newView} from './commands/new.mjs';
+import {editor, editorProps} from './commands/editor.mjs';
 
 // project：'none' 不需要在工程里；'required' 必须在工程里。
 // versionCheck：运行前比对插件和工程的版本（init、doctor、upgrade 不比对）。
@@ -24,8 +25,8 @@ export const registry = [
   {name: 'init', usage: 'init [目录] [--name 名称]', about: '新建工程', project: 'none', versionCheck: false, flags: {name: 'string'}, run: init},
   {name: 'doctor', usage: 'doctor [--paths]', about: '检查环境', project: 'none', versionCheck: false, flags: {paths: 'boolean'}, run: doctor},
   {name: 'dev', usage: 'dev [--port 端口] [--no-open]', about: '打开网页预览，改动后自动刷新', project: 'required', versionCheck: true, flags: {port: 'string', 'no-open': 'boolean'}, run: dev},
-  {name: 'editor', usage: 'editor', about: '打开编辑器', project: 'required', versionCheck: true, flags: {}, run: null},
-  {name: 'editor props', usage: 'editor props <组件> <控件路径> <属性>=<值> ...', about: '编辑器开着时修改已有控件的属性', project: 'required', versionCheck: true, flags: {}, run: null},
+  {name: 'editor', usage: 'editor [--no-open]', about: '打开编辑器', project: 'required', versionCheck: true, flags: {'no-open': 'boolean'}, run: editor},
+  {name: 'editor props', usage: 'editor props <组件> <控件路径> <属性>=<值> ...', about: '编辑器开着时修改已有控件的属性', project: 'required', versionCheck: true, flags: {}, run: editorProps},
   {name: 'new module', usage: 'new module <名字> [--pattern 模式]', about: '生成一个功能的 Model / View / Controller / 测试骨架', project: 'required', versionCheck: true, flags: {pattern: 'string'}, run: newModule},
   {name: 'new view', usage: 'new view <包>/<组件> --pattern <模式>', about: '按排布模式一次生成横竖两版的界面骨架', project: 'required', versionCheck: true, flags: {pattern: 'string'}, run: newView},
   {name: 'check', usage: 'check', about: '规范检查（包括多语言检查）', project: 'required', versionCheck: true, flags: {}, run: check},
