@@ -110,7 +110,7 @@ test('click、doubleClick、hold（驱动 holdProgress）、drag、swipe、pinch
   class BagView extends View {
     static component = 'Bag/BagPanel'; static layer = 'page';
     bind = {
-      gold: {doubleClick: () => log.push('double')},
+      topBar: {doubleClick: () => log.push('double')},
       sellButton: {click: () => log.push('click'), hold: {ms: 500, action: () => log.push('hold')}},
       list: {drag: g => { if (g.phase === 'end') log.push(`drag ${g.dx}`); }, swipe: g => log.push(`swipe ${Math.round(g.dx)}`), pinch: g => { if (g.phase === 'end') log.push(`pinch ${g.scale.toFixed(1)}`); }, wheel: e => log.push(`wheel ${e.dy}`)},
       header: {hover: inside => log.push(`hover ${inside}`)}
@@ -122,7 +122,7 @@ test('click、doubleClick、hold（驱动 holdProgress）、drag、swipe、pinch
   await sim.click(backend, panel.child('sellButton'));
   await sim.hold(backend, panel.child('sellButton'), 600);
   assert.ok(Math.max(...progress) > bar.max * 0.9 && bar.value === 0, '按住时进度涨到接近满，松手归零');
-  await sim.doubleClick(backend, panel.child('gold'));
+  await sim.doubleClick(backend, panel.child('topBar'));
   await sim.drag(backend, panel.child('list'), 100, 0);
   await sim.swipe(backend, panel.child('list'), -200, 0);
   await sim.pinch(backend, panel.child('list'), 1.5);
