@@ -62,4 +62,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-082` | 关闭一个没有打开的界面（只记日志，不算错误） | 不需要处理 |
 | `LGUI-RT-083` | `popTo` 的目标界面没有打开 | 先确认它已经打开 |
 | `LGUI-RT-090` | 文本表里没有这个键（界面上显示键名） | 在每种语言的 `i18n/<语言>.json` 里加上它 |
+| `LGUI-RT-100` | `lgui.request` 超时（工程配置 `requestTimeoutMs`，默认 10 秒） | 检查网络；需要更长时间就改配置 |
+| `LGUI-RT-101` | `lgui.request` 里的请求失败了（报错里带原因） | 看 Service 返回的错误 |
+| `LGUI-RT-102` | 用了没有注册的服务 | 在 `main.ts` 的 `lgui.app({ services })` 里注册；测试里用 `lgui.testing.start(app, { services })` |
 | `LGUI-RT-027` | 后端还没启动就开始用 | 先调用 `backend.init(config)`（框架启动时会自动调用） |

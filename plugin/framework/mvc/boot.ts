@@ -5,11 +5,13 @@ import {runtime, setRuntime} from './runtime';
 import type {RuntimeConfig} from './runtime';
 import {UIManager} from './ui/manager';
 import {pickLanguage, setTexts} from './i18n';
+import {setServices} from './service';
 import type {TextTable} from './i18n';
 
-export async function boot(backend: Backend, app: AppDefinition, config: RuntimeConfig, deps: Record<string, string[]>, options: {wallBase?: number; start?: boolean; texts?: Record<string, TextTable>; language?: string} = {}): Promise<UIManager> {
+export async function boot(backend: Backend, app: AppDefinition, config: RuntimeConfig, deps: Record<string, string[]>, options: {wallBase?: number; start?: boolean; texts?: Record<string, TextTable>; language?: string; services?: Record<string, () => object>} = {}): Promise<UIManager> {
   setRuntime(backend, config, options.wallBase ?? Date.now(), deps);
   setTexts(options.texts ?? {}, options.language ?? pickLanguage(backend.platform.locale.systemLanguages(), config.languages, config.defaultLanguage));
+  setServices({...(app.services ?? {}), ...(options.services ?? {})});
   const ui = new UIManager(backend, deps, config.designSize.landscape);
   runtime().ui = ui;
   if (options.start !== false) await app.start();

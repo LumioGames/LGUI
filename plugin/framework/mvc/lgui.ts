@@ -7,6 +7,8 @@ import {createModel} from './model';
 import {bus, builtinEvents, defineEvent} from './events';
 import {UIManager} from './ui/manager';
 import {currentLanguage, t} from './i18n';
+import {createRequest} from './request';
+import {service} from './service';
 import type {Entry} from './ui/manager';
 import {runtime, wallNow} from './runtime';
 import type {Model} from './model';
@@ -139,10 +141,10 @@ export const lgui = {
   },
 
   /** 把一个请求包一层，自带状态。 */
-  request<Args extends unknown[], T>(run: (...args: Args) => Promise<T>): Request<Args, T> { void run; return todo('lgui.request'); },
+  request<Args extends unknown[], T>(run: (...args: Args) => Promise<T>): Request<Args, T> { return createRequest(run); },
 
   /** 拿一个在 main.ts（或测试）里注册的服务。 */
-  service<T>(name: string): T { void name; return todo('lgui.service'); },
+  service<T>(name: string): T { return service<T>(name); },
 
   /** UIManager。 */
   ui: {
