@@ -30,7 +30,16 @@ export function readTexts(root, languages) {
 }
 
 /** 写网页端的启动入口 .lgui/build/web/boot.ts。 */
-export function writeWebBootstrap(root, project) {
+// src/modules/ 下所有 *View.ts（给 lgui verify --view 按名字打开界面用）。
+function viewFiles(root) {
+  const dir = path.join(root, 'src', 'modules');
+  if (!fs.existsSync(dir)) return [];
+  const walk = d => fs.readdirSync(d, {withFileTypes: true}).flatMap(e => e.isDirectory() ? walk(path.join(d, e.name)) : e.name.endsWith('View.ts') ? [path.join(d, e.name)] : []);
+  return walk(dir);
+}
+
+/** texts：不写就读 i18n/ 下的文本表（lgui verify 的伪翻译会传进来）。 */
+export function writeWebBootstrap(root, project, {texts} = {}) {
   const fw = rel => JSON.stringify(path.join(root, '.lgui', 'framework', rel).split(path.sep).join('/'));
   const file = path.join(root, '.lgui', 'build', 'web', 'boot.ts');
   fs.mkdirSync(path.dirname(file), {recursive: true});
@@ -39,16 +48,19 @@ import app from ${JSON.stringify(path.join(root, 'src', 'main.ts').split(path.se
 import {createH5Backend} from ${fw('backends/h5/index.ts')};
 import {boot} from ${fw('mvc/boot.ts')};
 import {lgui} from ${fw('index.ts')};
+${viewFiles(root).map((f, i) => `import * as views${i} from ${JSON.stringify(f.split(path.sep).join('/'))};`).join('\n')}
+const views: Record<string, unknown> = {};
+for (const mod of [${viewFiles(root).map((_, i) => `views${i}`).join(', ')}] as Record<string, unknown>[]) for (const [name, value] of Object.entries(mod)) if (typeof value === 'function' && 'layer' in value) views[name] = value;
 
 const config = ${JSON.stringify(runtimeConfig(project))};
 const deps = ${JSON.stringify(readDeps(root))};
-const texts = ${JSON.stringify(readTexts(root, project.languages))};
+const texts = ${JSON.stringify(texts ?? readTexts(root, project.languages))};
 
 (async () => {
   const backend = createH5Backend();
   await backend.init({projectName: config.name, defaultFont: ${JSON.stringify(project.defaultFont)}, uiBase: '/ui', i18nBase: '/i18n'});
   // 开发模式下给调试面板和端到端测试用。
-  (window as unknown as {__lgui: unknown}).__lgui = {snapshot: () => lgui.debug.snapshot(), lgui};
+  (window as unknown as {__lgui: unknown}).__lgui = {snapshot: () => lgui.debug.snapshot(), lgui, views};
   await boot(backend, app, config, deps, {texts});
   (window as unknown as {__lguiReady: boolean}).__lguiReady = true;
 })().catch(error => {

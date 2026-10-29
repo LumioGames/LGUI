@@ -31,6 +31,11 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-041` | 测试没通过（报错里附上测试结束时的界面状态快照） | 看测试输出，按断言改代码或测试 |
 | `LGUI-CLI-050` | `lgui check` 读不了 `tsconfig.json` | 用 `lgui init` 生成的 `tsconfig.json`，不要改它 |
 | `TSxxxx` | `lgui check` 报的 TypeScript 类型错误（错误码是 TypeScript 自己的） | 按提示改；控件名和类型以 `lgui ui list` 为准 |
+| `LGUI-CLI-060` | `lgui verify` 没找到 Chrome 或 Edge | 装一个 Chrome 或 Edge |
+| `LGUI-CLI-061` | `--size` 写的验证尺寸不存在 | 用工程配置 `verifySizes` 里的名字 |
+| `LGUI-CLI-062` | `--lang` 写的语言工程不支持 | 用 `languages` 里的语言，或者 `pseudo` |
+| `LGUI-CLI-063` | `--view` 写的 View 在 `src/modules/` 里没有导出 | 写 View 的类名 |
+| `LGUI-CLI-064` | 截图时页面报错 | 按报错改代码；`lgui dev` 里能看到同样的错误 |
 | `LGUI-CLI-999` | 命令行内部错误（LGUI 自己的缺陷） | 把输出报告给维护者 |
 
 ## LGUI-RT-xxx

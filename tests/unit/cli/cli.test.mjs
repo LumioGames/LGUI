@@ -37,7 +37,7 @@ test('不在工程里时报 LGUI-CLI-002，提示先运行 lgui init', async () 
 test('在工程的子目录里也能找到工程', async () => {
   const root = tempProject();
   fs.mkdirSync(path.join(root, 'src', 'modules'), {recursive: true});
-  const json = parse((await run(['verify', '--json'], path.join(root, 'src', 'modules'))).stdout);
+  const json = parse((await run(['upgrade', '--json'], path.join(root, 'src', 'modules'))).stdout);
   assert.equal(json.errors[0].code, 'LGUI-CLI-000');
 });
 
