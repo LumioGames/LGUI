@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using FairyGUI;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Scripting;
 
 namespace LGUI
@@ -15,7 +13,7 @@ namespace LGUI
         public readonly EventListener onLoaded;
         public readonly EventListener onLoadError;
         readonly HashSet<NTexture> externalTextures = new HashSet<NTexture>();
-        UnityWebRequest pending;
+        Action cancelPending;
         int loadGeneration;
 
         public LGUIResourceLoader()
@@ -28,41 +26,38 @@ namespace LGUI
         {
             var requested = url;
             var startedGeneration = ++loadGeneration;
-            if (pending != null) pending.Abort();
+            if (cancelPending != null) { cancelPending(); cancelPending = null; }
             Uri uri;
             if (Uri.TryCreate(requested, UriKind.Absolute, out uri))
             {
                 if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
-                    Platform.Run(Download(requested, startedGeneration));
+                {
+                    var cancel = ExternalImageCache.Load(requested, texture =>
+                    {
+                        if (isDisposed || url != requested || startedGeneration != loadGeneration) return;
+                        cancelPending = null;
+                        onExternalLoadSuccess(texture);
+                        onLoaded.Call(requested);
+                    }, () =>
+                    {
+                        if (isDisposed || url != requested || startedGeneration != loadGeneration) return;
+                        cancelPending = null;
+                        Failed(requested);
+                    });
+                    // A ready cache entry invokes onLoaded before Load returns. That
+                    // callback may start another URL; publish only this generation's handle.
+                    if (isDisposed || url != requested || startedGeneration != loadGeneration)
+                    {
+                        if (cancel != null) cancel();
+                    }
+                    else cancelPending = cancel;
+                }
                 else Failed(requested);
                 return;
             }
             var image = Resources.Load<Texture2D>(requested);
             if (image == null) { Failed(requested); return; }
             Loaded(requested, image, false);
-        }
-
-        IEnumerator Download(string requested, int startedGeneration)
-        {
-            var request = UnityWebRequestTexture.GetTexture(requested);
-            pending = request;
-            Platform.Track(request);
-            try
-            {
-                yield return request.SendWebRequest();
-                var current = !isDisposed && url == requested && startedGeneration == loadGeneration;
-                if (request.result != UnityWebRequest.Result.Success) { if (current) Failed(requested); yield break; }
-                var image = DownloadHandlerTexture.GetContent(request);
-                if (!current) { if (image != null) UnityEngine.Object.Destroy(image); yield break; }
-                if (image == null) { Failed(requested); yield break; }
-                Loaded(requested, image, true);
-            }
-            finally
-            {
-                if (ReferenceEquals(pending, request)) pending = null;
-                Platform.Untrack(request);
-                request.Dispose();
-            }
         }
 
         void Loaded(string requested, Texture2D image, bool ownsImage)
@@ -87,13 +82,15 @@ namespace LGUI
 
         protected override void FreeExternal(NTexture texture)
         {
+            // Downloaded textures are shared. NGraphics.ReleaseRef/onRelease retires
+            // those through ExternalImageCache; only this loader's local wrappers live here.
             if (externalTextures.Remove(texture)) texture.Dispose();
         }
 
         public override void Dispose()
         {
             loadGeneration++;
-            if (pending != null) { pending.Abort(); pending = null; }
+            if (cancelPending != null) { cancelPending(); cancelPending = null; }
             base.Dispose();
             foreach (var texture in externalTextures) texture.Dispose();
             externalTextures.Clear();

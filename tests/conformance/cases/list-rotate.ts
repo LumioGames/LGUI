@@ -9,7 +9,7 @@ const c: Case = {
     await t.open(BagPanelView);
     await t.click('Bag/BagPanel.list[1]');
     await t.click('Bag/BagPanel.list[3]');
-    await t.setScreen(720, 1280);
+    await t.setScreen(450, 800);
     await t.click('Bag/BagPanel.list[0]');
     return { selectedId: bagModel.get().selectedId };
   },

@@ -1,7 +1,7 @@
 // ArtText 美术字：按字符找对应的小图，一个个摆出来。各后端都只用最基础的图片，网页和 Unity 一定一致。
 // 在 ui/ 里放一个 Common/ArtText 的实例，用 customData 写配置：font=<包>/<字体名>;align=left|center|right;spacing=<像素>。
 // 字符图片放在 <包> 的 artfont/<字体名>/ 下，名字是 <字体名>_<字符名>（字符名见 UI 开发规范第 11 节）。
-import type {UIComponent, UIObject} from '../core/index';
+import type {UIComponent} from '../core/index';
 import {LgRuntimeError} from '../core/index';
 import {runtime} from './runtime';
 import {fault} from './log';
@@ -20,7 +20,7 @@ export function parseArtText(customData: string, where: string): {pkg: string; f
   return {pkg: font[1], font: font[2], align: align as 'left' | 'center' | 'right', spacing};
 }
 
-const shown = new WeakMap<UIComponent, {text: string; glyphs: UIObject[]}>();
+const shown = new WeakMap<UIComponent, {text: string; owner: UIComponent | null}>();
 
 /** 当前显示的文字（测试读控件文字时用）。 */
 export function artTextOf(component: UIComponent): string | undefined {
@@ -45,17 +45,26 @@ export function renderArtText(component: UIComponent, text: string, where: strin
     else fault(new LgRuntimeError('LGUI-RT-130', `${where} 的 ArtText 缺字符「${char}」的图片 ${url}。`, `在 ${pkg} 包的 artfont/${font}/ 下加上 ${name}.png，登记进 package.xml 并导出。`), {where, char, url}, url);
   }
   const previous = shown.get(component);
-  for (const glyph of previous?.glyphs ?? []) component.removeChild(glyph);
+  previous?.owner?.dispose();
+  if (!glyphs.length) {
+    shown.set(component, {text, owner: null});
+    return;
+  }
   const total = glyphs.reduce((sum, g) => sum + g.size.width, 0) + spacing * Math.max(0, glyphs.length - 1);
   const box = component.rect;
+  // UIObject has no dispose contract. One component owns each batch so that
+  // replacing text and disposing an ancestor release its native images alike.
+  const owner = backend.createContainer('lgui-art-text');
+  owner.rect = {x: 0, y: 0, width: box.width, height: box.height};
+  owner.touchable = false;
   let x = align === 'center' ? (box.width - total) / 2 : align === 'right' ? box.width - total : 0;
-  const objects = glyphs.map(g => {
+  for (const g of glyphs) {
     const image = backend.createImage(g.url);
     image.touchable = false;
     image.rect = {x: Math.round(x), y: Math.round((box.height - g.size.height) / 2), width: g.size.width, height: g.size.height};
     x += g.size.width + spacing;
-    component.addChild(image);
-    return image;
-  });
-  shown.set(component, {text, glyphs: objects});
+    owner.addChild(image);
+  }
+  component.addChild(owner);
+  shown.set(component, {text, owner});
 }

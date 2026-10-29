@@ -11,11 +11,12 @@ import {launchBrowser} from '../helpers/browser.mjs';
 import {startEditor} from '../../plugin/tools/lib/commands/editor.mjs';
 import {readUiModel, findComponent} from '../../plugin/tools/lib/generate/model.mjs';
 
-// 每次请求最多等 2 秒：导入时编辑器会换一个新的会话，发给旧会话的请求可能永远不回，不能卡在它上面。
-const ask = (page, request) => page.evaluate(async r => {
-  const timeout = new Promise(resolve => setTimeout(() => resolve(null), 2000));
+// 每次请求有个上限：导入时编辑器会换一个新的会话，发给旧会话的请求可能永远不回，不能卡在它上面。
+// state 很快，最多等 2 秒；query 要把组件整个读出来，CI 的机器没有显卡时一次就可能超过 2 秒，最多等 20 秒。
+const ask = (page, request, ms) => page.evaluate(async ({r, ms}) => {
+  const timeout = new Promise(resolve => setTimeout(() => resolve(null), ms));
   return Promise.race([window.fairyEditorAgent.request(r), timeout]);
-}, request).catch(() => null);
+}, {r: request, ms}).catch(() => null);
 
 // 打开编辑器页面，等它从 ui/ 导入完，并且 Main/MainView 的 title 显示的是 expected（浏览器里存着上次的副本时，
 // 「已经导入」的条件可能马上就满足，所以一直等到新内容真的出现）。
@@ -30,16 +31,18 @@ async function openEditor(context, server, component, expected) {
     const selector = {packageId: component.pkg.id, componentResourceId: component.id, displayNodeId: component.children.find(c => c.name === 'title').id};
     const deadline = Date.now() + 120000; // CI 的机器没有显卡，编辑器导入要慢得多
     for (let last = null; ; await sleep(500)) {
-      const state = await ask(page, {method: 'state'});
+      const state = await ask(page, {method: 'state'}, 2000);
       const ready = state?.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession;
-      last = ready ? (await ask(page, {method: 'query', selector}))?.data?.entity?.text : null;
+      last = ready ? (await ask(page, {method: 'query', selector}, 20000))?.data?.entity?.text : null;
       if (last === expected) break;
       if (Date.now() > deadline) throw new Error(`等了 120 秒，title 还是 ${JSON.stringify(last)}，不是 ${JSON.stringify(expected)}`);
     }
   } catch (error) {
     // 没导入成功：把编辑器自己的状态、状态栏和页面报错带出来，方便在 CI 上查原因。
     const state = await page.evaluate(() => window.fairyEditorAgent.request({method: 'state'})).catch(e => String(e));
-    const status = await page.evaluate(() => [...document.querySelectorAll('[data-fairy-editor-status], [data-fairy-editor-workspace-import]')].map(e => e.outerHTML.slice(0, 200))).catch(() => []);
+    // 只带导入和状态栏的属性（导入被取消时编辑器写 data-fairy-editor-workspace-import），不带整个 body 的开头。
+    const status = await page.evaluate(() => [...document.querySelectorAll('[data-fairy-editor-status], [data-fairy-editor-workspace-import]')]
+      .map(e => [...e.attributes].filter(a => /import|status/.test(a.name)).map(a => `${a.name}=${a.value}`).join(' '))).catch(() => []);
     throw new Error(`编辑器没有从 ui/ 导入：${error.message}\nstate: ${JSON.stringify(state).slice(0, 2500)}\nattrs: ${JSON.stringify(status)}\nlogs: ${logs.slice(-20).join(' | ')}`);
   }
   return page;

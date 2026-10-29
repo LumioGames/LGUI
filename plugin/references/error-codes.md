@@ -16,7 +16,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-000` | 这条命令还没实现（开发中的功能） | 换一条已经实现的命令，或者等新版本 |
 | `LGUI-CLI-001` | 没有这条命令 | 看报错里列出的全部命令，或者运行不带参数的 `lgui` |
 | `LGUI-CLI-002` | 当前目录往上都找不到 `.lgui/project.json`，不在 LGUI 工程里 | 先运行 `lgui init`，或者 cd 到工程目录里 |
-| `LGUI-CLI-003` | 工程里的框架版本（`lguiVersion`）和插件版本不一致 | 运行 `lgui upgrade` |
+| `LGUI-CLI-003` | 工程里的框架版本（`lguiVersion`）或 Unity 工程里的 LGUI 包版本和插件版本不一致 | 运行 `lgui upgrade`；框架已同版时也会更新旧的 Unity 包 |
 | `LGUI-CLI-004` | `.lgui/project.json` 读不了，或者字段缺了、类型不对、多了不认识的字段 | 按 `project-layout.md` 的字段表改 |
 | `LGUI-CLI-005` | 当前平台不受支持。随插件带的 esbuild 和 sharp 只有 macOS arm64、macOS x64、Linux x64（glibc）、Windows x64 这 4 个平台的版本；Linux musl、Linux arm64、Windows arm64 都不支持 | 换到上面 4 个平台之一运行 |
 | `LGUI-CLI-006` | 命令的参数不对：不认识的参数、开关带了值、要值的参数没给值 | 看报错里列出的能用的参数 |
@@ -30,6 +30,8 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-040` | `tests/` 里没有测试文件（`*.test.ts`） | 在 `tests/` 下写测试，写法见 mvc-spec.md 第 12 节 |
 | `LGUI-CLI-041` | 测试没通过（报错里附上测试结束时的界面状态快照） | 看测试输出，按断言改代码或测试 |
 | `LGUI-CLI-050` | `lgui check` 读不了 `tsconfig.json` | 用 `lgui init` 生成的 `tsconfig.json`，不要改它 |
+| `LGUI-CLI-051` | Unity 工程缺少 embedded 的 PuerTS Core/V8 3.0.3 本地包、使用了目录链接或包缓存，或者 C++ 补丁目标摘要不可信 | 将官方 Core/V8 压缩包解压到工程的 `Packages/com.tencent.puerts.core/` 和 `Packages/com.tencent.puerts.v8/`；保留自己的修改后恢复官方原文件再导出 |
+| `LGUI-CLI-052` | 导出目标不是 Unity 6000.6.x 工程、管理路径使用了文件/目录链接，或目标条目的文件/目录类型不对 | 使用 Unity 6000.6 创建的工程根目录；管理路径使用实际目录和文件，移走同名的错误类型条目 |
 | `TSxxxx` | `lgui check` 报的 TypeScript 类型错误（错误码是 TypeScript 自己的） | 按提示改；控件名和类型以 `lgui ui list` 为准 |
 | `LGUI-CLI-060` | `lgui verify` 没找到 Chrome 或 Edge | 装一个 Chrome 或 Edge |
 | `LGUI-CLI-061` | `--size` 写的验证尺寸不存在 | 用工程配置 `verifySizes` 里的名字 |
@@ -67,7 +69,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-002` | 创建界面时它所在的界面包还没加载 | 先加载这个包（UIManager 打开界面时会自动加载） |
 | `LGUI-RT-003` | 界面包里没有这个组件 | 用 `lgui ui list` 查看有哪些组件 |
 | `LGUI-RT-010` | 网页端的散图映射 `manifest.json` 格式不对，或者里面没有某个包、某张图片 | 重新运行 `lgui dev` 生成界面包 |
-| `LGUI-RT-011` | 网页端加载界面包失败（地址不对或文件不存在） | 确认包名对，并重新运行 `lgui dev` |
+| `LGUI-RT-011` | 后端加载界面包失败（地址不对或文件不存在） | 确认包名对；网页重新运行 `lgui dev`，Unity 重新导出并确认 `Resources/UI/` 的文件存在 |
 | `LGUI-RT-020` | 颜色的格式不对 | 写成 `#rrggbb` |
 | `LGUI-RT-021` | 列表设成虚拟列表以后又想改回去 | 在第一次给数据之前决定要不要虚拟列表 |
 | `LGUI-RT-022` | 控制器没有这个页名 | 看报错里列出的页名 |
@@ -103,7 +105,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-120` | 红点路径写法不对 | 写成用「.」分隔的英文名，比如 `bag.newItem` |
 | `LGUI-RT-130` | ArtText 要显示的字符没有对应的图片（报错里写明是哪个字符）；正式构建里跳过这个字符 | 在字体目录下加上这个字符的图片，登记进 `package.xml` 并导出 |
 | `LGUI-RT-140` | 切换到工程不支持的语言 | 在 `.lgui/project.json` 的 `languages` 里加上它，并新建 `i18n/<语言>.json` |
-| `LGUI-RT-141` | 网页端读不到这种语言的翻译文件 | 重新运行 `lgui dev` 生成翻译文件 |
+| `LGUI-RT-141` | 后端读不到这种语言的翻译文件，或翻译 XML 无法解析 | 网页重新运行 `lgui dev`；Unity 重新导出并确认 `Resources/UI/i18n/` 下有对应语言的 XML |
 | `LGUI-RT-150` | 测试里的改值操作用错了控件：`t.type` 只能用在输入框上，`t.setValue` 只能用在滑动条上，`t.choose` 只能用在下拉框上 | 换成对应控件的路径（`lgui ui list` 里能看到控件类型） |
 | `LGUI-RT-151` | `t.choose` 的序号超出了下拉框的项数 | 序号从 0 开始；先确认下拉框的 `items` 已经给好 |
 | `LGUI-RT-152` | 树的绑定没写 `key`，或者树里有两个节点的 key 一样 | 写上 `key`（比如 `key: (n: TreeNode) => n.id`），key 在整棵树里要唯一 |
@@ -112,7 +114,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-220` | 写了 `dragData` 的控件不是加载器或按钮，又没写 `dragIcon`，拖起时没有图标 | 加上 `dragIcon`，或者把 `dragData` 写在加载器、按钮上 |
 | `LGUI-RT-221` | 写了 `dragIcon` 但没写 `dragData` | 加上 `dragData`，或者去掉 `dragIcon` |
 | `LGUI-RT-027` | 后端还没启动就开始用 | 先调用 `backend.init(config)`（框架启动时会自动调用） |
-| `LGUI-RT-160` | Unity 启动脚本或 Resources 文本缺失、PuerTS 启动失败、每帧驱动或退出清理失败 | 重新运行 `lgui unity export`，核对生成物和 PuerTS 3.0.3 本地包，按日志修正后重新启动场景 |
+| `LGUI-RT-160` | Unity 启动脚本或 Resources 文本缺失、PuerTS 启动失败、每帧回调或宿主驱动、退出清理失败 | 每帧回调出错时按堆栈修正该回调，其他回调和后续帧继续运行；宿主启动失败时核对导出文件、PuerTS 3.0.3 本地包后重新启动场景 |
 | `LGUI-RT-161` | Unity 平台存储、HTTP、音频等服务失败 | 按日志检查存储权限、请求参数、资源地址或本地 PuerTS 环境 |
 | `LGUI-RT-170` | 声音地址 `ui://…` 没有登记在 `ui/` 的包里 | 把 mp3 放进包目录，在 `package.xml` 里登记成 `<sound … exported="true"/>`，地址写成 `ui://包名/声音名` |
 | `LGUI-RT-171` | ArtText 用的字体所在的包没有加载 | 把 ArtText 放在字体所在包的组件里，或者让界面用到那个包的组件 |

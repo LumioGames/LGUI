@@ -38,7 +38,7 @@ test('在工程的子目录里也能找到工程', async () => {
   const root = tempProject();
   fs.mkdirSync(path.join(root, 'src', 'modules'), {recursive: true});
   const json = parse((await run(['unity', 'export', '--json'], path.join(root, 'src', 'modules'))).stdout);
-  assert.equal(json.errors[0].code, 'LGUI-CLI-000');
+  assert.equal(json.errors[0].code, 'LGUI-CLI-006');
 });
 
 test('版本不一致时报 LGUI-CLI-003，原话提示运行 lgui upgrade', async () => {

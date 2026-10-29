@@ -51,6 +51,7 @@ namespace LGUI
         {
             if (owner != instance) return;
             generation++;
+            ExternalImageCache.Clear();
             if (owner != null) owner.StopAllCoroutines();
             foreach (var request in new List<UnityWebRequest>(requests))
             {
@@ -60,6 +61,7 @@ namespace LGUI
             requests.Clear();
             foreach (var clip in downloadedSounds) if (clip != null) UnityEngine.Object.Destroy(clip);
             downloadedSounds.Clear();
+            StopAudio();
             owner = null;
             inputMode = "all";
         }

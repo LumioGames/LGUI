@@ -42,12 +42,43 @@ namespace LGUI
             }
         }
 
+        internal static int RequestGeneration { get { return generation; } }
+        internal static bool IsRequestCurrent(int startedGeneration) { return startedGeneration == generation && owner != null; }
+
+        internal static bool TryStartRequest(UnityWebRequest request, out UnityWebRequestAsyncOperation operation, out Exception startupError)
+        {
+            try
+            {
+                operation = request.SendWebRequest();
+                startupError = null;
+                return true;
+            }
+            catch (Exception error)
+            {
+                operation = null;
+                startupError = error;
+                return false;
+            }
+        }
+
         static IEnumerator Send(UnityWebRequest request, Action<string> complete, int startedGeneration)
         {
             Track(request);
             try
             {
-                yield return request.SendWebRequest();
+                UnityWebRequestAsyncOperation operation;
+                Exception startupError;
+                if (!TryStartRequest(request, out operation, out startupError))
+                {
+                    if (startedGeneration != generation || owner == null) yield break;
+                    complete(JsonUtility.ToJson(new Response {
+                        status = 0,
+                        text = "",
+                        error = Failure("HTTP 请求无法启动：" + startupError, startupError).ToString()
+                    }));
+                    yield break;
+                }
+                yield return operation;
                 if (startedGeneration != generation || owner == null) yield break;
                 var failed = request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.DataProcessingError;
                 complete(JsonUtility.ToJson(new Response {
@@ -74,21 +105,24 @@ namespace LGUI
             {
                 var clip = UIPackage.GetItemAssetByURL(url) as NAudioClip;
                 if (clip == null || clip.nativeClip == null) throw Failure("界面音效不存在：" + url);
-                GRoot.inst.PlayOneShotSound(clip.nativeClip, Mathf.Clamp01(volume));
+                PlaySfx(clip.nativeClip, Mathf.Clamp01(volume));
                 return;
             }
             RequireHttp(url);
+            Run(DownloadSound(url, NetworkAudioType(url), Mathf.Clamp01(volume), generation));
+        }
+
+        static AudioType NetworkAudioType(string url)
+        {
             var extension = System.IO.Path.GetExtension(new Uri(url).AbsolutePath).ToLowerInvariant();
-            AudioType type;
             switch (extension)
             {
-                case ".wav": type = AudioType.WAV; break;
-                case ".ogg": type = AudioType.OGGVORBIS; break;
-                case ".mp3": type = AudioType.MPEG; break;
-                case ".aif": case ".aiff": type = AudioType.AIFF; break;
-                default: throw new NotSupportedException("LGUI-RT-001  Unity 后端尚不支持这种网络音效格式：" + extension + "。 → 使用 WAV、OGG、MP3 或 AIFF。");
+                case ".wav": return AudioType.WAV;
+                case ".ogg": return AudioType.OGGVORBIS;
+                case ".mp3": return AudioType.MPEG;
+                case ".aif": case ".aiff": return AudioType.AIFF;
+                default: throw new NotSupportedException("LGUI-RT-001  Unity 后端尚不支持这种网络声音格式：" + extension + "。 → 使用 WAV、OGG、MP3 或 AIFF。");
             }
-            Run(DownloadSound(url, type, Mathf.Clamp01(volume), generation));
         }
 
         static IEnumerator DownloadSound(string url, AudioType type, float volume, int startedGeneration)
@@ -98,7 +132,15 @@ namespace LGUI
             AudioClip clip = null;
             try
             {
-                yield return request.SendWebRequest();
+                UnityWebRequestAsyncOperation operation;
+                Exception startupError;
+                if (!TryStartRequest(request, out operation, out startupError))
+                {
+                    if (startedGeneration != generation || owner == null) yield break;
+                    Log("error", Failure("音效请求无法启动：" + url + "；" + startupError.Message, startupError).ToString());
+                    yield break;
+                }
+                yield return operation;
                 if (startedGeneration != generation || owner == null) yield break;
                 if (request.result != UnityWebRequest.Result.Success)
                 {
@@ -112,7 +154,7 @@ namespace LGUI
                     yield break;
                 }
                 downloadedSounds.Add(clip);
-                GRoot.inst.PlayOneShotSound(clip, volume);
+                PlaySfx(clip, volume);
             }
             finally { Untrack(request); request.Dispose(); }
             if (clip != null)

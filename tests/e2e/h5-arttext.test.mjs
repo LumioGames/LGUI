@@ -45,9 +45,13 @@ class FxView extends View<any> { static component = 'Bag/Fx'; static layer = 'po
       await page.waitForLoadState('networkidle');
       const glyphs = await page.evaluate(() => {
         const damage = window.view.__component.child('damage');
-        return damage.native.numChildren;
+        const owner = damage.native.getChildAt(0);
+        return {batches: damage.native.numChildren, glyphs: Array.from({length: owner.numChildren}, (_, i) => {
+          const glyph = owner.getChildAt(i);
+          return [glyph.url.replace('ui://Bag/', ''), glyph.x + owner.x, glyph.y + owner.y, glyph.width];
+        })};
       });
-      assert.equal(glyphs, 4);
+      assert.deepEqual(glyphs, {batches: 1, glyphs: [['dmg_plus', 76, 12, 10], ['dmg_1', 88, 12, 8], ['dmg_2', 98, 12, 12], ['dmg_0', 112, 12, 12]]});
       assert.deepEqual(failed, []);
       if (process.env.LGUI_ARTTEXT_SCREENSHOT) await page.screenshot({path: process.env.LGUI_ARTTEXT_SCREENSHOT, clip: {x: 860, y: 460, width: 400, height: 160}});
     } finally {

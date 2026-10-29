@@ -121,14 +121,23 @@ type Obj = {native: {element: HTMLElement}};
 type Input = {native: {element: {htmlInput: HTMLInputElement}}};
 type Slider = {native: {value: number; min: number; max: number; _barMaxWidth: number; _gripObject: {element: HTMLElement}}};
 type Combo = {native: {dropdown: {getChild(name: string): {getChildAt(index: number): {element: HTMLElement}}}}};
-type Pw = (op: string, ...args: number[] | string[]) => Promise<void>;
+type Pw = (op: string, ...args: (number | string)[]) => Promise<void>;
 const pw = (window as unknown as {__pw: Pw}).__pw;
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// 只收集诊断；不重写事件、时间、坐标或任何手势判定。
+const inputTrace: {browserTimeOrigin: number; dom: unknown[]; normalized: unknown[]} = {browserTimeOrigin: performance.timeOrigin, dom: [], normalized: []};
+(window as unknown as {__h5InputTrace: unknown}).__h5InputTrace = inputTrace;
+for (const type of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel']) window.addEventListener(type, event => {
+  const pointer = event as PointerEvent;
+  inputTrace.dom.push({type, pointerId: pointer.pointerId, pointerType: pointer.pointerType, x: pointer.clientX, y: pointer.clientY,
+    timestamp: pointer.timeStamp, timestampEpoch: performance.timeOrigin + pointer.timeStamp,
+    handledEpoch: performance.timeOrigin + performance.now(), trusted: pointer.isTrusted});
+}, true);
 // 控件中心在页面上的坐标。
 const center = (o: unknown) => { const r = (o as Obj).native.element.getBoundingClientRect(); return {x: r.x + r.width / 2, y: r.y + r.height / 2}; };
 const touchDrag = async (o: unknown, dx: number, dy: number, ms: number, steps: number) => { const p = center(o); await pw('touchDrag', p.x, p.y, dx * stage.scale, dy * stage.scale, ms, steps); await wait(50); };
 const sim = {
-  async click(_b: unknown, o: unknown, holdMs = 50) { const p = center(o); await pw('press', p.x, p.y, holdMs); await wait(50); },
+  async click(_b: unknown, o: unknown, holdMs = 50, pointerType = 'mouse') { const p = center(o); await pw('press', p.x, p.y, holdMs, pointerType); await wait(50); },
   async doubleClick(b: unknown, o: unknown) { await sim.click(b, o); await sim.click(b, o); },
   async hold(_b: unknown, o: unknown, ms: number) { const p = center(o); await pw('press', p.x, p.y, ms); await wait(50); },
   drag: (_b: unknown, o: unknown, dx: number, dy: number) => touchDrag(o, dx, dy, 400, 10),
@@ -164,7 +173,11 @@ const sim = {
 const createBackend = () => {
   const backend = createH5Backend();
   const init = backend.init.bind(backend);
-  backend.init = options => init({...options, uiBase: '/ui', i18nBase: '/i18n'});
+  backend.init = async options => {
+    await init({...options, uiBase: '/ui', i18nBase: '/i18n'});
+    backend.platform.input.onPointer(event => inputTrace.normalized.push({...event, epoch: performance.timeOrigin + event.time,
+      observedEpoch: performance.timeOrigin + performance.now(), scale: stage.scale}));
+  };
   return backend;
 };
 (globalThis as unknown as {__lguiTest: unknown}).__lguiTest = {createBackend, sim, deps, config, texts, current: null};
@@ -176,7 +189,7 @@ const createBackend = () => {
 };
 `);
   await esbuild().build({...webBuildOptions(ctx.root, entry), outfile: path.join(web, 'conf.js')});
-  const html = '<!doctype html><meta charset="utf-8"><style>html,body{margin:0;height:100%;overflow:hidden;background:#000}</style><body><script type="module" src="/conf.js"></script>';
+  const html = '<!doctype html><meta charset="utf-8"><link rel="icon" href="data:,"><style>html,body{margin:0;height:100%;overflow:hidden;background:#000}</style><body><script type="module" src="/conf.js"></script>';
   const server = http.createServer((req, res) => {
     const url = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (url === '/conf.html') res.writeHead(200, {'content-type': 'text/html; charset=utf-8'}).end(html);
@@ -185,13 +198,34 @@ const createBackend = () => {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const {screen} = await caseScreen(ctx, name);
   const page = await browser.newPage({viewport: screen, hasTouch: true});
+  const trace = {name, nodeTimeOrigin: performance.timeOrigin, protocol: []};
+  ctx.h5Trace = trace;
+  let captured = false;
+  const captureTrace = async () => {
+    const browserTrace = await page.evaluate(() => window.__h5InputTrace);
+    if (browserTrace) Object.assign(trace, browserTrace);
+    else trace.captureError = 'h5 input trace was not initialized';
+    captured = true;
+  };
   try {
     const errors = [];
+    trace.consoleErrors = errors;
     page.on('pageerror', e => errors.push(String(e.message ?? e)));
+    page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     const cdp = await page.context().newCDPSession(page);
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const inputCommand = async (method, params) => {
+      const entry = {method, params, sendEpoch: performance.timeOrigin + performance.now()};
+      trace.protocol.push(entry);
+      try { return await cdp.send(method, params); }
+      finally { entry.replyEpoch = performance.timeOrigin + performance.now(); }
+    };
     await page.exposeFunction('__pw', async (op, ...a) => {
-      if (op === 'press') { await page.mouse.move(a[0], a[1]); await page.mouse.down(); await sleep(a[2]); await page.mouse.up(); }
+      // Chromium owns the requested press duration. Separating down/up with a Node
+      // timer lets a late driver response turn a 50ms click into a >300ms hold.
+      if (op === 'press') {
+        await page.mouse.move(a[0], a[1]);
+        await inputCommand('Input.synthesizeTapGesture', {x: a[0], y: a[1], duration: a[2], gestureSourceType: a[3] === 'touch' ? 'touch' : 'mouse'});
+      }
       else if (op === 'wheel') { await page.mouse.move(a[0], a[1]); await page.mouse.wheel(0, a[2]); }
       else if (op === 'key') await page.keyboard.press(a[0]);
       else if (op === 'type') await page.keyboard.type(a[0]);
@@ -199,17 +233,114 @@ const createBackend = () => {
       else if (op === 'viewport') { await page.setViewportSize({width: a[0], height: a[1]}); }
       else if (op === 'touchDrag') {
         const [x, y, dx, dy, ms, steps] = a;
-        const touch = (type, px, py) => cdp.send('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x: px, y: py, id: 1}]});
-        await touch('touchStart', x, y);
-        for (let i = 1; i <= steps; i++) { await sleep(ms / steps); await touch('touchMove', x + (dx * i) / steps, y + (dy * i) / steps); }
-        await touch('touchEnd');
+        const before = await page.evaluate(() => ({normalized: window.__h5InputTrace.normalized.length, dom: window.__h5InputTrace.dom.length}));
+        const at = (delay, send) => new Promise(resolve => setTimeout(resolve, delay)).then(send);
+        let replied = false, consumed = false, deadline, stopped = false, firstError;
+        const progress = {ms, steps, point: 'down', consumedMoves: 0, replies: 0};
+        (trace.touchOperations ??= []).push(progress);
+        let rejectCommand;
+        const commandFailure = new Promise((_, reject) => { rejectCommand = reject; });
+        commandFailure.catch(() => {});
+        const fail = error => {
+          firstError ??= error;
+          progress.error ??= String(firstError);
+          stopped = true;
+          rejectCommand(firstError);
+        };
+        const ensureRunning = () => { if (stopped) throw firstError ?? new Error('LGUI-RT-001 h5 touch operation has stopped.'); };
+        const touch = (type, px, py) => {
+          ensureRunning();
+          const reply = inputCommand('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x: px, y: py, id: 1}]});
+          // Observe rejection immediately, even while waiting for DOM consumption.
+          // Fulfilled receipts never control the cadence; all are checked at the end.
+          reply.then(() => { progress.replies++; }, fail);
+          return reply;
+        };
+        const expired = new Promise((_, reject) => {
+          deadline = setTimeout(() => {
+            firstError ??= new Error(`h5 触摸输入超时（5000ms）：CDP 应答${replied ? '已完成' : '尚未完成'}；DOM/框架抬起${consumed ? '已消费' : '尚未消费'}；point=${progress.point}。`);
+            stopped = true;
+            progress.error ??= String(firstError);
+            reject(firstError);
+          }, 5000);
+        });
+        const bounded = pending => Promise.race([expired, commandFailure, pending]);
+        const pointConsumed = async (type, previous, pointerId = null) => {
+          const handle = await bounded(page.waitForFunction(({type, previous, pointerId}) => {
+            const input = window.__h5InputTrace;
+            for (let dom = previous.dom; dom < input.dom.length; dom++) {
+              const event = input.dom[dom];
+              if (!event.trusted || event.pointerType !== 'touch' || (pointerId !== null && event.pointerId !== pointerId)) continue;
+              if (event.type === 'pointercancel') throw new Error('LGUI-RT-001 h5 slow touch was cancelled.');
+              if (event.type !== 'pointer' + type) continue;
+              const normalized = input.normalized.findIndex((value, index) => index >= previous.normalized &&
+                value.type === type && value.pointerType === 'touch' && value.pointerId === event.pointerId && value.time === event.timestamp);
+              if (normalized >= 0) return {dom: dom + 1, normalized: normalized + 1, pointerId: event.pointerId};
+            }
+            return false;
+          }, {type, previous, pointerId}, {timeout: 0, polling: 10}));
+          try { return await bounded(handle.jsonValue()); }
+          finally { await handle.dispose(); }
+        };
+        const dispatch = async () => {
+          if (ms === 400 && steps === 10) {
+            const replies = [touch('touchStart', x, y)];
+            let previous = await pointConsumed('down', before);
+            progress.pointerId = previous.pointerId;
+            for (let i = 0; i < steps; i++) {
+              progress.point = i + 1;
+              // Late scheduler work may extend this slow drag, but cannot compress
+              // the next interval or let a later point coalesce an unconsumed one.
+              const notBefore = performance.now() + ms / steps;
+              while (performance.now() < notBefore) {
+                await bounded(at(Math.ceil(notBefore - performance.now()), () => {}));
+                ensureRunning();
+              }
+              replies.push(touch('touchMove', x + dx * (i + 1) / steps, y + dy * (i + 1) / steps));
+              previous = await pointConsumed('move', previous, previous.pointerId);
+              progress.consumedMoves++;
+            }
+            progress.point = 'up';
+            replies.push(touch('touchEnd'));
+            await Promise.all(replies);
+          } else {
+            // Fast swipes keep the absolute concurrent schedule. A late CDP
+            // receipt must not stretch an 80ms swipe into a slow gesture.
+            await Promise.all([
+              touch('touchStart', x, y),
+              ...Array.from({length: steps}, (_, i) => at(ms * (i + 1) / steps,
+                () => touch('touchMove', x + dx * (i + 1) / steps, y + dy * (i + 1) / steps))),
+              at(ms, () => touch('touchEnd'))
+            ]);
+          }
+          replied = true;
+        };
+        try {
+          await bounded(Promise.all([
+            dispatch(),
+            page.waitForFunction(previous => {
+              const input = window.__h5InputTrace;
+              const events = input.normalized.slice(previous.normalized);
+              const down = events.find(event => event.type === 'down' && event.pointerType === 'touch');
+              return down && events.some(event => event.type === 'up' && event.pointerId === down.pointerId)
+                && input.dom.slice(previous.dom).some(event => event.type === 'pointerup' && event.pointerId === down.pointerId && event.trusted);
+            }, before, {timeout: 0}).then(() => { consumed = true; })
+          ]));
+        } finally { stopped = true; clearTimeout(deadline); }
       } else throw new Error(`未知操作 ${op}`);
     });
     await page.goto(`http://127.0.0.1:${server.address().port}/conf.html`);
     await page.waitForFunction(() => window.__run, null, {timeout: 15000});
     const result = await page.evaluate(() => window.__run());
+    await captureTrace();
     if (errors.length) throw new Error(`h5 页面报错：${errors.join('；')}`);
     return result;
+  } catch (error) {
+    if (!captured) {
+      try { await captureTrace(); }
+      catch (captureError) { trace.captureError = String(captureError); }
+    }
+    throw error;
   } finally {
     await page.close();
     server.closeAllConnections();

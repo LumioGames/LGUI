@@ -93,7 +93,8 @@ test('写错了（正式构建）：缺文本键只记 error、显示键名；Ar
   const model = lgui.Model({damage: '1x2'});
   class FxView extends View { static component = 'Bag/Fx'; static layer = 'popup'; bind = {damage: {text: pick(model, s => s.damage)}}; }
   const view = await lgui.ui.open(FxView);
-  assert.deepEqual(view.__component.child('damage').children.map(g => g.url), ['ui://Bag/dmg_1', 'ui://Bag/dmg_2']);
+  // 字符图片放在 ArtText 里的一个容器里（换字、关界面时整个释放）。
+  assert.deepEqual(view.__component.child('damage').children[0].children.map(g => g.url), ['ui://Bag/dmg_1', 'ui://Bag/dmg_2']);
   assert.match(lastOf(backend, 'lgui_rt_130').data.message, /缺字符「x」/);
 });
 

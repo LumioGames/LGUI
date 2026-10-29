@@ -23,6 +23,18 @@ test('lgui dev：显示主界面，改 XML / 代码 / 文本表自动刷新，�
   const server = await startDev(root, readProject(root), {port: 0, log: line => logs.push(line)});
   try {
     const page = await browser.newPage({viewport: {width: 1280, height: 720}, locale: 'zh-CN'});
+    await page.addInitScript(() => {
+      const add = EventSource.prototype.addEventListener;
+      EventSource.prototype.addEventListener = function(type, listener, options) {
+        if (type !== 'reload' || typeof listener !== 'function') return add.call(this, type, listener, options);
+        return add.call(this, type, event => {
+          if (window.__delayNextReload) {
+            window.__delayNextReload = false;
+            setTimeout(() => listener.call(this, event), 600);
+          } else listener.call(this, event);
+        }, options);
+      };
+    });
     const pageErrors = [];
     page.on('pageerror', e => pageErrors.push(String(e)));
     await page.goto(server.url);
@@ -46,10 +58,13 @@ test('lgui dev：显示主界面，改 XML / 代码 / 文本表自动刷新，�
     // 改 src/ 里的代码
     const controller = path.join(root, 'src/modules/main/MainController.ts');
     const original = fs.readFileSync(controller, 'utf8');
+    // A slow reload notification leaves the old document ready for longer than
+    // 300ms. Waiting for a ready flag alone must not click its stale controller.
+    await page.evaluate(() => { window.__delayNextReload = true; });
+    const reloaded = page.waitForEvent('framenavigated', {predicate: frame => frame === page.mainFrame(), timeout: 5000});
     fs.writeFileSync(controller, original.replace('click() { mainModel.addClick(); }', 'click() { mainModel.addClick(); mainModel.addClick(); }'));
+    await reloaded;
     await page.waitForFunction(() => window.__lguiReady, null, {timeout: 5000});
-    await new Promise(r => setTimeout(r, 300));
-    await page.waitForFunction(() => window.__lguiReady);
     const button = await page.evaluate(() => {
       const el = [...document.querySelectorAll('*')].find(e => e.textContent === '点我' && e.children.length === 0);
       const r = el.getBoundingClientRect();
