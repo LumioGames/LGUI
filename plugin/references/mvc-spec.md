@@ -319,6 +319,17 @@ keys: Keys = {
 | `lgui.setLanguage('en')` | 切换语言，已打开的界面自动重建 |
 | `lgui.time.now()`、`lgui.time.setServerOffset(毫秒)` | 当前时间（和服务器对齐） |
 
+**文本表 `i18n/<语言>.json`：** 扁平的「键 → 文字」，键名是可读的点号键。要按数量变化的文字，值写成按复数形式分开的对象，用参数 `count` 选（形式名和 `Intl.PluralRules` 一致；中文、日文、韩文只写 `other`）：
+
+```json
+{
+  "bag.sold": "已售出 {count} 件",
+  "bag.items": { "one": "{count} item", "other": "{count} items" }
+}
+```
+
+找不到键时，界面上显示键名，并记一条 `LGUI-RT-090` 日志。启动时的语言：系统语言里第一个工程支持的，都不支持就用 `defaultLanguage`。
+
 **定时器**（写在 View 里用 `this.`，跟着界面走：被盖住时暂停，关闭时取消）：
 
 ```ts

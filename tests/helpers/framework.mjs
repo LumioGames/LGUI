@@ -26,7 +26,8 @@ export async function loadFramework() {
     `export {inputType} from ${f('mvc/input/input-type.ts')};`,
     `export {listenerCount} from ${f('mvc/model.ts')};`,
     `export {HeadlessLoader} from ${f('backends/headless/objects.ts')};`,
-    `export {boot} from ${f('mvc/boot.ts')};`
+    `export {boot} from ${f('mvc/boot.ts')};`,
+    `export {setTexts, pickLanguage} from ${f('mvc/i18n.ts')};`
   ].join('\n'));
   cached = await importTs(entry);
   return cached;
