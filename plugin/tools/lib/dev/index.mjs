@@ -14,7 +14,7 @@ import {openInBrowser} from '../browser.mjs';
 import {copyFramework} from '../commands/init.mjs';
 
 const shell = fs.readFileSync(fileURLToPath(new URL('./shell.html', import.meta.url)));
-const types = {'.js': 'text/javascript; charset=utf-8', '.map': 'application/json', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.xml': 'application/octet-stream'};
+const types = {'.js': 'text/javascript; charset=utf-8', '.map': 'application/json', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.xml': 'application/octet-stream', '.mp3': 'audio/mpeg'};
 
 /** 返回 .lgui/build/web/ 下的生成物（/ui/ 是界面包）；只读，不在里面就 404。 */
 export function serveBuilt(root, url, res) {

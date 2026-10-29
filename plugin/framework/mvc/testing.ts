@@ -1,7 +1,7 @@
 // lgui.testing：只在 lgui test 里能用。用 headless 后端和假时钟启动 app，提供模拟操作和读控件属性。
 // 路径写成「包/组件.控件路径」，列表子项用 list[序号]。
 import type {Backend, Insets, UIComponent, UIController, UIList, UIObject, UIText, UIButton, UISlider, UIComboBox, UIMovieClip} from '../core/index';
-import {LgRuntimeError} from '../core/index';
+import {LgRuntimeError, notImplemented} from '../core/index';
 import type {AppDefinition, Snapshot, TestHarness} from './lgui';
 import type {InputType, ParamsOf, ViewClass} from './types';
 import type {RuntimeConfig} from './runtime';
@@ -12,15 +12,23 @@ import type {UIManager} from './ui/manager';
 import {snapshot} from './snapshot';
 import {artTextOf} from './art-text';
 
+/** headless 后端里测试要读的状态（一致性测试在 h5 上跑同一套测试对象时没有它）。 */
+interface TestState {
+  screen: {width: number; height: number};
+  sounds: {url: string; volume: number}[];
+  music: {url: string; volume: number} | null;
+  logs: {level: string; event: string; data?: unknown; error?: unknown}[];
+}
+
 /** lgui test 注入的测试环境（由生成的 .lgui/build/test/env.ts 设置）。 */
 interface TestEnv {
-  createBackend(): Backend & {state: {screen: {width: number; height: number}}};
+  createBackend(): Backend & {state?: TestState};
   sim: Record<string, (...args: never[]) => Promise<void> | void>;
   deps: Record<string, string[]>;
   config: RuntimeConfig;
   texts: Record<string, TextTable>;
-  /** 每个测试结束后记下当前快照（失败时 lgui test 附上它）。 */
-  current: {snapshot(): Snapshot} | null;
+  /** 每个测试结束后记下当前快照（失败时 lgui test 附上它），并检查有没有 error 级的日志。 */
+  current: {snapshot(): Snapshot; checkLogs(): void} | null;
 }
 
 type Sim = {
@@ -48,7 +56,33 @@ const env = (): TestEnv => {
 };
 
 class Harness implements TestHarness {
-  constructor(private readonly backend: Backend, private readonly ui: UIManager, private readonly sim: Sim) {}
+  /** 已经检查过的日志条数。 */
+  private checked = 0;
+
+  constructor(private readonly backend: Backend & {state?: TestState}, private readonly ui: UIManager, private readonly sim: Sim) {}
+
+  private get state(): TestState {
+    if (!this.backend.state) throw notImplemented('t.sounds()、t.music()（只有 headless 记下声音）', this.backend.name);
+    return this.backend.state;
+  }
+
+  /** 记了 error 级的日志（代码或界面写错了，或者游戏代码自己记了 error），这个测试就失败（LGUI-RT-176）。每次模拟操作之后和测试结束时检查。 */
+  checkLogs(): void {
+    const logs = this.backend.state?.logs ?? []; // h5 上的日志在浏览器控制台里，不检查
+    const found = logs.slice(this.checked).find(r => r.level === 'error');
+    this.checked = logs.length;
+    if (!found) return;
+    const data = found.data as {code?: string; message?: string} | undefined;
+    const reason = data?.message ? `${data.code ?? ''}  ${data.message}` : found.error instanceof Error ? found.error.message : JSON.stringify(found.data ?? null);
+    throw new LgRuntimeError('LGUI-RT-176', `测试里记了 error 级的日志 ${found.event}：${reason}`, '按日志改代码或界面；外部失败（请求、网络图片、声音加载）记 warn，不会让测试失败。');
+  }
+
+  // 模拟操作：做完以后检查日志。
+  private async step<T>(run: () => Promise<T>): Promise<T> {
+    const value = await run();
+    this.checkLogs();
+    return value;
+  }
 
   /** 按路径找控件：「包/组件.控件路径」，列表子项写 list[序号]。 */
   private resolve(path: string): {object: UIObject | null; parent: UIComponent | null; last: string} {
@@ -84,21 +118,23 @@ class Harness implements TestHarness {
     return object;
   }
 
-  async open<V extends ViewClass>(view: V, params?: ParamsOf<V>): Promise<InstanceType<V>> {
-    const { lgui } = await import('./lgui');
-    return lgui.ui.open(view, params);
+  open<V extends ViewClass>(view: V, params?: ParamsOf<V>): Promise<InstanceType<V>> {
+    return this.step(async () => {
+      const {lgui} = await import('./lgui');
+      return lgui.ui.open(view, params);
+    });
   }
-  click(path: string): Promise<void> { return this.sim.click(this.backend, this.object(path), 50, inputType.get() === 'touch' ? 'touch' : 'mouse'); }
-  hold(path: string, ms: number): Promise<void> { return this.sim.hold(this.backend, this.object(path), ms); }
-  drag(path: string, dx: number, dy: number): Promise<void> { return this.sim.drag(this.backend, this.object(path), dx, dy); }
-  dragTo(from: string, to: string): Promise<void> { return this.sim.dragTo(this.backend, this.object(from), this.object(to)); }
-  swipe(path: string, dx: number, dy: number): Promise<void> { return this.sim.swipe(this.backend, this.object(path), dx, dy); }
-  pinch(path: string, scale: number): Promise<void> { return this.sim.pinch(this.backend, this.object(path), scale); }
-  wheel(path: string, dy: number): Promise<void> { return this.sim.wheel(this.backend, this.object(path), dy); }
-  key(name: string): Promise<void> { return this.sim.key(this.backend, name); }
-  type(path: string, text: string): Promise<void> { return this.sim.type(this.backend, this.object(path), text); }
-  setValue(path: string, value: number): Promise<void> { return this.sim.setValue(this.backend, this.object(path), value); }
-  choose(path: string, index: number): Promise<void> { return this.sim.choose(this.backend, this.object(path), index); }
+  click(path: string): Promise<void> { return this.step(() => this.sim.click(this.backend, this.object(path), 50, inputType.get() === 'touch' ? 'touch' : 'mouse')); }
+  hold(path: string, ms: number): Promise<void> { return this.step(() => this.sim.hold(this.backend, this.object(path), ms)); }
+  drag(path: string, dx: number, dy: number): Promise<void> { return this.step(() => this.sim.drag(this.backend, this.object(path), dx, dy)); }
+  dragTo(from: string, to: string): Promise<void> { return this.step(() => this.sim.dragTo(this.backend, this.object(from), this.object(to))); }
+  swipe(path: string, dx: number, dy: number): Promise<void> { return this.step(() => this.sim.swipe(this.backend, this.object(path), dx, dy)); }
+  pinch(path: string, scale: number): Promise<void> { return this.step(() => this.sim.pinch(this.backend, this.object(path), scale)); }
+  wheel(path: string, dy: number): Promise<void> { return this.step(() => this.sim.wheel(this.backend, this.object(path), dy)); }
+  key(name: string): Promise<void> { return this.step(() => this.sim.key(this.backend, name)); }
+  type(path: string, text: string): Promise<void> { return this.step(() => this.sim.type(this.backend, this.object(path), text)); }
+  setValue(path: string, value: number): Promise<void> { return this.step(() => this.sim.setValue(this.backend, this.object(path), value)); }
+  choose(path: string, index: number): Promise<void> { return this.step(() => this.sim.choose(this.backend, this.object(path), index)); }
   text(path: string): string {
     const o = this.object(path);
     if ('title' in o) return (o as UIButton).title;
@@ -132,21 +168,26 @@ class Harness implements TestHarness {
     return (o as UIList).numItems;
   }
   /** 换屏幕尺寸，等防抖（150 毫秒）结束、换版完成后返回。 */
-  async setScreen(width: number, height: number): Promise<void> { await this.sim.setScreen(this.backend, width, height); await this.sim.advance(this.backend, 200); }
+  setScreen(width: number, height: number): Promise<void> { return this.step(async () => { await this.sim.setScreen(this.backend, width, height); await this.sim.advance(this.backend, 200); }); }
   /** 换安全区（屏幕像素的边距），等重新摆放完成后返回。 */
-  async setSafeArea(insets: Insets): Promise<void> { await this.sim.setSafeArea(this.backend, insets); await this.sim.advance(this.backend, 200); }
-  async setLanguage(language: string): Promise<void> {
-    const {lgui} = await import('./lgui');
-    await lgui.setLanguage(language);
+  setSafeArea(insets: Insets): Promise<void> { return this.step(async () => { await this.sim.setSafeArea(this.backend, insets); await this.sim.advance(this.backend, 200); }); }
+  setLanguage(language: string): Promise<void> {
+    return this.step(async () => {
+      const {lgui} = await import('./lgui');
+      await lgui.setLanguage(language);
+    });
   }
   setInputType(type: InputType): void { inputType.set(type); }
-  advance(ms: number): Promise<void> { return this.sim.advance(this.backend, ms); }
+  advance(ms: number): Promise<void> { return this.step(() => this.sim.advance(this.backend, ms)); }
+  sounds(): {url: string; volume: number}[] { return this.state.sounds.map(s => ({...s})); }
+  music(): string | null { return this.state.music?.url ?? null; }
   snapshot(): Snapshot { return snapshot(this.ui); }
   end(): void {
     // 关闭时钩子里又打开的界面（比如 onClose 里弹 toast）也关掉：一直关到没有界面为止，最多 10 轮。
     for (let round = 0; round < 10 && this.ui.all().length; round++) {
       for (const layer of ['toast', 'modal', 'popup', 'page', 'hud'] as const) this.ui.closeAll(layer);
     }
+    this.checkLogs();
     const left = this.snapshot();
     const leaked = left.views.length || left.packages.length;
     if (leaked) throw new LgRuntimeError('LGUI-RT-112', `关闭所有界面后还有没清理的东西：${JSON.stringify({views: left.views, packages: left.packages})}。`, '检查是不是有界面没走 lgui.ui 关闭，或者在框架外面加了监听。');
@@ -158,9 +199,13 @@ export async function startTest(app: AppDefinition, options: {services?: Record<
   const e = env();
   const backend = e.createBackend();
   await backend.init({projectName: e.config.name, defaultFont: null, uiBase: ''});
-  if (options.screen) backend.state.screen = {...options.screen};
+  if (options.screen) {
+    if (!backend.state) throw notImplemented('lgui.testing.start 的 screen 选项（只有 headless 能直接设屏幕尺寸）', backend.name);
+    backend.state.screen = {...options.screen};
+  }
   inputType.set('keyboardMouse');
-  const ui = await boot(backend, app, e.config, e.deps, {texts: e.texts, language: options.language ?? e.config.defaultLanguage, services: options.services, wallBase: Date.UTC(2026, 0, 1)});
+  // 日志和声音总是记进 headless（app.platform 不生效），测试才能读 t.sounds()、t.music()，error 级的日志才能让测试失败。
+  const ui = await boot(backend, app, e.config, e.deps, {texts: e.texts, language: options.language ?? e.config.defaultLanguage, services: options.services, wallBase: Date.UTC(2026, 0, 1), platform: {}});
   const harness = new Harness(backend, ui, e.sim as unknown as Sim);
   e.current = harness;
   return harness;

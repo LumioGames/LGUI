@@ -19,6 +19,7 @@ import {applyIcon} from './icon';
 import {pick} from '../pick';
 import {redDots, redDotState} from '../red-dot';
 import {renderArtText} from '../art-text';
+import {clickSound} from '../sound';
 
 /** 绑定时要知道的事。 */
 export interface BindContext {
@@ -150,8 +151,7 @@ function bindObject(component: UIComponent, key: string, target: UIObject, bindi
   const lock = binding.lockWhilePending === true;
   const run = (action: unknown, ...args: unknown[]): void => {
     if (!ctx.isActive() || pending || !target.enabled) return;
-    const sound = runtime().config.sounds.click;
-    if (sound && action === binding.click) runtime().backend.platform.audio.play(sound);
+    if (action === binding.click) clickSound(target);
     const result = asActor(ctx.owner, () => (action as (...a: unknown[]) => unknown)(...args));
     if (lock && result instanceof Promise) {
       pending = true;

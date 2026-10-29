@@ -5,7 +5,7 @@ export type {
 } from './ui';
 export type {
   Platform, TimeService, StorageService, ResourceService, InputService, KeyInput, WheelInput,
-  TextInputService, ScreenService, Insets, AudioService, LocaleService, LogService, LogEntry,
+  TextInputService, ScreenService, Insets, AudioService, LocaleService, Logger, LogLevel,
   NetService, NetResponse, NetSocket
 } from './platform';
 export type {Backend, BackendConfig} from './backend';

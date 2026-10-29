@@ -36,7 +36,7 @@ class BagView extends View<any> {
 (async () => {
   const backend = createH5Backend();
   await backend.init({projectName: 'demo', defaultFont: null, uiBase: '/ui'});
-  await boot(backend, {backend: 'h5', start() {}}, defaultConfig, ${JSON.stringify(deps)});
+  await boot(backend, {backend: 'h5', start() {}}, defaultConfig, ${JSON.stringify(deps)}, {language: 'zh-CN', texts: {'zh-CN': {'lgui.back': '返回', 'lgui.requestFailed': '请求失败（{code}）'}}});
   const view = await lgui.ui.open(BagView);
   Object.assign(window, {lgui, view, log, ready: true});
 })().catch(e => { (window as any).failure = String(e); });`);

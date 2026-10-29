@@ -6,11 +6,9 @@ import {HeadlessComboBox, HeadlessInput, HeadlessList, HeadlessObject, HeadlessS
 
 const FRAME = 16;
 
-// 等这一帧里排队的 Promise 全部跑完（像真实的两帧之间一样）：Node 里等一次 setImmediate；没有时退回一次微任务。
-const settle = (): Promise<void> => {
-  const g = globalThis as {setImmediate?: (callback: () => void) => void};
-  return g.setImmediate ? new Promise(resolve => g.setImmediate?.(resolve)) : Promise.resolve();
-};
+// 等这一帧里排队的 Promise 全部跑完（像真实的两帧之间一样）：等一次 setImmediate（headless 只在 Node 里跑）。
+const {setImmediate} = globalThis as unknown as {setImmediate: (callback: () => void) => void};
+const settle = (): Promise<void> => new Promise(resolve => setImmediate(resolve));
 
 /** 让假时钟往前走，按每帧 16 毫秒触发每帧回调；每帧之后等排队的 Promise 跑完。 */
 export async function advance(backend: HeadlessBackend, ms: number): Promise<void> {

@@ -74,6 +74,7 @@ ui/
     <component id="bagpnl02" name="BagPanel@portrait.xml" path="/" exported="true"/>
     <image id="sword001" name="sword.png" path="/icons/" exported="true"/>
     <image id="frame001" name="frame.png" path="/" scale="9grid" scale9grid="12,12,40,40"/>
+    <sound id="coin0001" name="coin.mp3" path="/sfx/" exported="true"/>
   </resources>
 </packageDescription>
 ```
@@ -81,6 +82,7 @@ ui/
 - 每个组件 XML 和图片都要登记；登记的文件必须存在，存在的文件也都要登记。
 - **九宫格：** 在图片上写 `scale="9grid"` 和 `scale9grid="左,上,宽,高"`（中间可拉伸区域），区域不能超出图片。边距按图片真实的边框像素取，不要统一取边长的四分之一。
 - **图集不用手管：** 生成时按包自动打图集。
+- **声音：** mp3，登记成 `<sound>` 并导出（`exported="true"`）。代码和 View 的 `static music` 里写 `ui://<包名>/<声音名>`（`ui://Bag/coin`）；按钮的 `sound` 属性和别的资源引用一样写 `ui://<包ID><资源ID>`（`ui://bag00001coin0001`）。用法见 MVC 开发规范第 15 节。
 - `lgui art split` 拆出来的小图会自动登记。
 
 ## 6. 最小写法模板
@@ -114,7 +116,7 @@ ui/
 
 <!-- 按钮：引用一个 extention="Button" 的组件（按钮组件本身可以写 <Button mode="Check"/> 或 "Radio"，让它保持选中，见第 12 节） -->
 <component id="n4" name="sellButton" src="btn00001" xy="20,250" size="160,56">
-  <Button title="出售"/>
+  <Button title="出售" sound="ui://bag00001coin0001" volume="80"/>   <!-- 点击音效和音量（百分比），都可以不写 -->
 </component>
 
 <!-- 子组件 -->
@@ -220,6 +222,8 @@ ui/
   </displayList>
 </component>
 ```
+
+**按钮音效：** 按钮实例上的 `sound`、`volume` 优先，其次是按钮组件自己 `<Button sound="…" volume="…"/>` 写的；都没写就用工程配置 `sounds.click`。**`volume="0"` 表示这个按钮不出声**（写在按钮组件上就是这个组件的所有按钮）。编辑器里在按钮的「音效」「音量」里设。
 
 **控制器、齿轮：** `pages` 是「页ID,页名」成对排列；齿轮的 `pages` 写页 ID，不是页名。
 

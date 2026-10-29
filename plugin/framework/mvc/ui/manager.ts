@@ -11,6 +11,7 @@ import type {KeyInput} from '../../core/index';
 import {validateViewClass} from '../view';
 import {asActor, currentActor} from '../actor';
 import {bus, builtinEvents} from '../events';
+import {fault, notice} from '../log';
 
 /** 从下到上的 5 层。 */
 export const LAYERS: readonly Layer[] = ['hud', 'page', 'popup', 'modal', 'toast'];
@@ -157,15 +158,17 @@ export class UIManager {
     else if (def && typeof def === 'object' && typeof (def as {do?: unknown}).do === 'function') asActor(active.view, () => (def as {do: () => unknown}).do());
   }
 
-  /** 内部用：建操作提示栏（Common 包里有 ActionHintBar 时）。启动时调用。 */
+  /** 内部用：建操作提示栏（Common/ActionHintBar）。启动时调用。没有 Common 包或这个组件是写错了（LGUI-RT-172）：正式构建里只记 error、不建提示栏。 */
   async startHintBar(): Promise<void> {
     // 提示栏常驻：它用的包算框架自己的（pinned），不计入界面的引用数，也不会被释放。
+    let reason = '';
     try {
       if (!this.backend.platform.resource.hasPackage('Common')) await this.backend.loadPackage('Common');
-    } catch {
-      return; // 工程里没有 Common 包：不建提示栏（lgui check 会报 LGUI-UI-014）
+      if (!canCreateHintBar(this.backend)) reason = 'Common 包里没有 ActionHintBar 组件';
+    } catch (error) {
+      reason = `Common 包加载不了（${error instanceof Error ? error.message : String(error)}）`;
     }
-    if (!canCreateHintBar(this.backend)) return;
+    if (reason) { fault(new LgRuntimeError('LGUI-RT-172', `${reason}，建不了操作提示栏。`, '用 lgui init 自带的 Common 包，不要删掉 Common/ActionHintBar（lgui check 报 LGUI-UI-014）。')); return; }
     this.pinned.add('Common');
     const component = this.backend.create('Common', 'ActionHintBar');
     component.touchable = false;
@@ -514,10 +517,14 @@ export class UIManager {
   /** 缓存着几个关掉的界面。 */
   cachedCount(): number { return this.cache.length; }
 
+  /** 内部用：有界面离开界面栈时调用（关闭、打开失败、打开中被取消）；背景音乐靠它重新选曲。 */
+  onRemoved: () => void = () => {};
+
   private remove(entry: Entry): void {
     const stack = this.stacks[entry.layer];
     const index = stack.indexOf(entry);
     if (index >= 0) stack.splice(index, 1);
+    this.onRemoved();
   }
 
   // ---------- 关闭 ----------
@@ -525,7 +532,7 @@ export class UIManager {
   close(cls: ViewClass, result?: unknown, quiet = false): void {
     const entry = this.entryOf(cls);
     if (!entry) {
-      if (!quiet) this.backend.platform.log.write('info', `LGUI-RT-082  ${cls.name} 没有打开，跳过关闭。`);
+      if (!quiet) notice('LGUI-RT-082', `${cls.name} 没有打开，跳过关闭。`, {view: cls.name});
       return;
     }
     this.closeEntry(entry, result);

@@ -19,6 +19,13 @@ export function png(width, height, [r, g, b] = [255, 200, 0]) {
   return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', ihdr), chunk('IDAT', zlib.deflateSync(raw)), chunk('IEND', Buffer.alloc(0))]);
 }
 
+// 一段静音 MP3：MPEG-1 Layer III、128 kbps、44.1 kHz 的帧（417 字节，帧头之后全是 0），frames 帧。
+export function mp3(frames = 20) {
+  const frame = Buffer.alloc(417);
+  frame.set([0xff, 0xfb, 0x90, 0x44]);
+  return Buffer.concat(Array.from({length: frames}, () => frame));
+}
+
 // 美术字 dmg 的字符：0–9 宽 12（1 宽 8），+ 宽 10，高都是 16。
 const glyphs = [...'0123456789'.split('').map(c => [c, c === '1' ? 8 : 12]), ['plus', 10]];
 
@@ -38,7 +45,8 @@ export function bagPanel({size = '1920,1080', goldName = 'gold', extra = ''} = {
 </component>`);
 }
 
-export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-ui-')), {portrait = bagPanel({size: '1080,1920'}), landscape = bagPanel()} = {}) {
+// sounds：Common 包里再登记三个声音（click 音效、bgm 和 battle 两首背景音乐）。
+export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-ui-')), {portrait = bagPanel({size: '1080,1920'}), landscape = bagPanel(), sounds = false} = {}) {
   const ui = path.join(root, 'ui');
   const bag = path.join(ui, 'assets', 'Bag');
   const common = path.join(ui, 'assets', 'Common');
@@ -113,9 +121,18 @@ ${glyphs.map(([c, w], i) => `    <image id="dmg${String(i).padStart(5, '0')}" na
     <component id="toast001" name="Toast.xml" path="/" exported="true"/>
     <component id="confirm1" name="Confirm.xml" path="/" exported="true"/>
     <component id="loading1" name="Loading.xml" path="/" exported="true"/>
-    <component id="cbtn0001" name="Button.xml" path="/" exported="true"/>
+    <component id="cbtn0001" name="Button.xml" path="/" exported="true"/>${sounds ? `
+    <sound id="click001" name="click.mp3" path="/sfx/" exported="true"/>
+    <sound id="bgm00001" name="bgm.mp3" path="/" exported="true"/>
+    <sound id="bgm00002" name="battle.mp3" path="/" exported="true"/>` : ''}
   </resources>
 </packageDescription>`));
+  if (sounds) {
+    fs.mkdirSync(path.join(common, 'sfx'), {recursive: true});
+    fs.writeFileSync(path.join(common, 'sfx', 'click.mp3'), mp3());
+    fs.writeFileSync(path.join(common, 'bgm.mp3'), mp3(40));
+    fs.writeFileSync(path.join(common, 'battle.mp3'), mp3(40));
+  }
   fs.writeFileSync(path.join(common, 'CurrencyBar.xml'), xml(`<component size="600,80">
   <displayList>
     <text id="n0" name="gold" xy="0,0" size="200,40" fontSize="24" autoSize="shrink" singleLine="true" text="0"/>

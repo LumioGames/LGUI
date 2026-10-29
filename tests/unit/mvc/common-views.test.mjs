@@ -4,7 +4,7 @@ import {started} from '../../helpers/framework.mjs';
 
 async function setup(config) {
   const ctx = await started({config});
-  ctx.fw.setTexts({'zh-CN': {'bag.sold': '已售出 {count} 件', 'bag.sellTitle': '出售', 'bag.sellAsk': '确定出售？', 'lgui.requestFailed': '请求失败（{code}）'}}, 'zh-CN');
+  ctx.fw.setTexts({'zh-CN': {'bag.sold': '已售出 {count} 件', 'bag.sellTitle': '出售', 'bag.sellAsk': '确定出售？', 'lgui.requestFailed': '请求失败（{code}）', 'lgui.back': '返回'}}, 'zh-CN');
   const {View} = ctx.fw;
   let clicks = 0;
   class MainView extends View { static component = 'Bag/BagPanel'; static layer = 'page'; static fullScreen = true; bind = {sellButton: {click: () => { clicks++; }}}; }
@@ -67,8 +67,8 @@ test('loading：多次 show 之后要全部 hide 才消失；不进 modal 队列
 });
 
 const texts = {
-  'zh-CN': {'bag.sold': '已售出 {count} 件', 'bag.sellTitle': '出售', 'bag.sellAsk': '确定出售 {name}？', 'bag.yes': '卖', 'shop.ask': '确定购买？'},
-  en: {'bag.sold': 'Sold {count}', 'bag.sellTitle': 'Sell', 'bag.sellAsk': 'Sell {name}?', 'bag.yes': 'Sell it', 'shop.ask': 'Buy it?'}
+  'zh-CN': {'bag.sold': '已售出 {count} 件', 'bag.sellTitle': '出售', 'bag.sellAsk': '确定出售 {name}？', 'bag.yes': '卖', 'shop.ask': '确定购买？', 'lgui.back': '返回'},
+  en: {'bag.sold': 'Sold {count}', 'bag.sellTitle': 'Sell', 'bag.sellAsk': 'Sell {name}?', 'bag.yes': 'Sell it', 'shop.ask': 'Buy it?', 'lgui.back': 'Back'}
 };
 const confirmView = fw => fw.lgui.ui.list('modal').find(v => v.constructor.name === 'ConfirmView');
 const track = promise => { const state = {done: false, value: undefined}; promise.then(v => { state.done = true; state.value = v; }); return state; };

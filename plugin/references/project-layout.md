@@ -43,7 +43,7 @@ MyGame/
 | `requestErrorToast` | 布尔值 | `true` | `lgui.request` 失败时，统一弹出提示 |
 | `requestTimeoutMs` | 正整数（毫秒） | `10000` | `lgui.request` 的超时时间 |
 | `placeholder` | `ui://` 开头的图片地址 | `"ui://Common/placeholder"` | 默认占位图 |
-| `sounds` | `{ click: 音效地址 \| null }` | `{ click: null }` | 按钮点击音效，`null` 表示不播 |
+| `sounds` | `{ click: 音效地址 \| null }` | `{ click: null }` | 按钮的默认点击音效（`ui://<包>/<声音名>`）：`ui/` 里按钮没写音效时用；`null` 表示不放 |
 | `defaultFont` | 字体名 \| `null` | `null` | 默认字体，`null` 表示用 FairyGUI 的默认字体 |
 | `devPort` | 端口号 1–65535 | `4173` | `lgui dev` 的端口 |
 | `editorPort` | 端口号 1–65535 | `4174` | `lgui editor` 的端口。浏览器按地址（含端口）记住授权过的 `ui/` 文件夹，所以端口固定；改了端口要在编辑器里重新授权。被占用时报 `LGUI-CLI-110` |

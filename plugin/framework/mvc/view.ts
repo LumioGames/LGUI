@@ -105,6 +105,8 @@ export abstract class View<UI> extends ViewBase<UI> {
   static inputMode?: InputMode;
   /** 全屏又没有竖版时写 true。 */
   static bothOrientations?: boolean;
+  /** 背景音乐（ui://包名/声音名）：栈里最上面写了 music 的已打开界面决定放哪首。 */
+  static music?: string;
   /** 绑定表。 */
   bind: Bind<UI> = {};
   /** 按键表。 */
@@ -132,12 +134,12 @@ export abstract class PartView<UI> extends ViewBase<UI> {
   bind: Bind<UI> = {};
 }
 
-const viewStatics = ['component', 'layer', 'fullScreen', 'params', 'result', 'inputMode', 'bothOrientations'];
+const viewStatics = ['component', 'layer', 'fullScreen', 'params', 'result', 'inputMode', 'bothOrientations', 'music'];
 const layers: readonly Layer[] = ['hud', 'page', 'popup', 'modal', 'toast'];
 const ownStatics = (cls: object): string[] => Object.getOwnPropertyNames(cls).filter(name => !['length', 'name', 'prototype'].includes(name));
 
-/** 内部用：打开界面前检查 View 的 7 项固定信息（lgui check 会提前查出来）。 */
-export function validateViewClass(cls: object & {name: string; prototype: object; component?: unknown; layer?: unknown; inputMode?: unknown}): void {
+/** 内部用：打开界面前检查 View 的 8 项固定信息（lgui check 会提前查出来）。 */
+export function validateViewClass(cls: object & {name: string; prototype: object; component?: unknown; layer?: unknown; inputMode?: unknown; music?: unknown}): void {
   const isItemOrPart = cls.prototype instanceof ItemView || cls.prototype instanceof PartView;
   const allowed = isItemOrPart ? ['component'] : viewStatics;
   for (const name of ownStatics(cls)) {
@@ -149,5 +151,6 @@ export function validateViewClass(cls: object & {name: string; prototype: object
   if (!isItemOrPart) {
     if (!layers.includes(cls.layer as Layer)) throw new LgRuntimeError('LGUI-RT-060', `${cls.name} 缺少必填的 static layer，或者不是 5 层之一。`, `写成 static layer = 'page' as const;（能用：${layers.join('、')}）`);
     if (cls.inputMode !== undefined && !['ui', 'game', 'all'].includes(cls.inputMode as string)) throw new LgRuntimeError('LGUI-RT-060', `${cls.name} 的 static inputMode 只能是 ui、game、all。`, '改成其中一个，或者不写。');
+    if (cls.music !== undefined && (typeof cls.music !== 'string' || !/^ui:\/\/[A-Z][A-Za-z0-9]*\/[^/\s]+$/.test(cls.music))) throw new LgRuntimeError('LGUI-RT-060', `${cls.name} 的 static music 写法不对（${String(cls.music)}）。`, "写成 static music = 'ui://Common/bgm';（ui/ 包里登记的声音），或者不写。");
   }
 }

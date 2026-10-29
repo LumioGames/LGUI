@@ -40,7 +40,7 @@ export interface ChildDescriptor {
   /** 初始属性。 */
   props: {
     visible: boolean; enabled: boolean; touchable: boolean; customData?: string; text?: string; promptText?: string; url?: string; title?: string; icon?: string;
-    selected?: boolean; selectedIndex?: number; value?: number; max?: number; min?: number; color?: string; items?: string[]; playing?: boolean; frame?: number; clickToExpand?: number;
+    selected?: boolean; selectedIndex?: number; value?: number; max?: number; min?: number; color?: string; items?: string[]; playing?: boolean; frame?: number; clickToExpand?: number; sound?: string; soundVolume?: number;
   };
   /** 所在的组（组的元素 ID）。 */
   group?: string | null;
@@ -62,6 +62,10 @@ export interface ComponentDescriptor {
   buttonMode?: string | null;
   /** 滑动条：用户拖动时是否取整。 */
   wholeNumbers?: boolean;
+  /** 按钮组件自己设的点击音效（ui://包名/声音名）。 */
+  sound?: string;
+  /** 按钮组件自己设的音效音量（0–1，0 是不出声）。 */
+  soundVolume?: number;
   /** [宽, 高]。 */
   size: [number, number];
   /** 控制器。 */
@@ -86,4 +90,6 @@ export interface PackageDescriptor {
   components: ComponentDescriptor[];
   /** 图片：名字和尺寸（ArtText 拼字时要用）。 */
   images: {name: string; width: number; height: number}[];
+  /** 声音：资源 ID 和名字。 */
+  sounds?: {id: string; name: string}[];
 }
