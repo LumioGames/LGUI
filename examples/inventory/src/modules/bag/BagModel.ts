@@ -1,4 +1,4 @@
-// 背包的数据和规则（业务规则从旧示例 legacy/ts/model.ts 迁过来）。只放数据和规则，不碰界面、服务、平台。
+// 背包的数据和规则（业务规则从旧示例（tag v0.2.0-final 的 examples/inventory/legacy/ts/model.ts）迁过来）。只放数据和规则，不碰界面、服务、平台。
 import { lgui } from 'lgui';
 import { CATALOG, EQUIPMENT_SLOTS, RARITIES, STAT_NAMES, definition, iconOf, maxStack } from './CatalogModel';
 import type { EquipmentSlot, ItemType, Rarity, StatName } from './CatalogModel';

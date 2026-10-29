@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="shop0001">
+  <resources>
+    <component id="shoppnl1" name="ShopPanel.xml" path="/" exported="true"/>
+    <component id="shoppnl2" name="ShopPanel@portrait.xml" path="/" exported="true"/>
+  </resources>
+</packageDescription>

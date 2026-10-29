@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1080,1920">
   <displayList>
-    <graph id="n0" name="bg" xy="0,0" size="1080,1920" type="rect" lineSize="0" fillColor="#070b12">
-      <relation target="" sidePair="width-width,height-height"/>
-    </graph>
-    <loader id="n1" name="backdrop" xy="0,0" size="1080,1920" url="ui://main0001bkdrop01" align="center" vAlign="middle" fill="scaleNoBorder">
-      <relation target="" sidePair="width-width,height-height"/>
-    </loader>
-    <text id="n2" name="title" xy="90,420" size="900,110" fontSize="72" color="#f3ead6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="旅者营地">
+    <text id="n0" name="title" xy="90,420" size="900,110" fontSize="72" color="#f3ead6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="旅者营地">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <text id="n3" name="subtitle" xy="90,540" size="900,50" fontSize="30" color="#a9b6c6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="整理行囊，再出发">
+    <text id="n1" name="subtitle" xy="90,540" size="900,50" fontSize="30" color="#a9b6c6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="整理行囊，再出发">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <component id="n4" name="bagEntry" src="entry001" xy="360,760" size="360,96">
+    <component id="n2" name="bagEntry" src="entry001" xy="360,760" size="360,96">
       <relation target="" sidePair="center-center,middle-middle"/>
     
       <Button title="背包"/>
     </component>
-    <component id="n5" name="shopEntry" src="entry001" xy="360,890" size="360,96">
+    <component id="n3" name="shopEntry" src="entry001" xy="360,890" size="360,96">
       <relation target="" sidePair="center-center,middle-middle"/>
     
       <Button title="商店"/>
     </component>
-    <component id="n6" name="rewardEntry" src="entry001" xy="360,1020" size="360,96">
+    <component id="n4" name="rewardEntry" src="entry001" xy="360,1020" size="360,96">
       <relation target="" sidePair="center-center,middle-middle"/>
     
       <Button title="奖励"/>

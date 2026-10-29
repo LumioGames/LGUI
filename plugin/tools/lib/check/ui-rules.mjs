@@ -85,6 +85,9 @@ export function uiRules({root, model, languages, redDots = []}) {
         if (child.tag === 'component' && child.ref && child.ref.pkg !== pkg && !child.ref.exported) add('LGUI-UI-009', `组件 ${component.fullName} 引用了别的包里没导出的组件 ${child.ref.fullName}。`, '在对方的 package.xml 里给它写 exported="true"。', component.file, child.line);
         if (child.tag === 'image' && child.attrs.src) {
           const target = model.byId.get(child.attrs.pkg ?? pkg.id);
+          const image = target?.resources.find(r => r.id === child.attrs.src);
+          // UI-017 带字图片放在图片控件里，不会随语言换
+          if (image && target.resources.some(r => r.type === 'image' && r.name.startsWith(image.name + '@'))) add('LGUI-UI-017', `组件 ${component.fullName} 的图片控件 ${child.name} 用的 ${image.name} 有各语言版本，但图片控件不会随语言换。`, `换成装载器，在绑定表里写 icon: 'ui://${target.name}/${image.name}'。`, component.file, child.line);
           if (!target?.resources.some(r => r.id === child.attrs.src)) add('LGUI-UI-009', `组件 ${component.fullName} 的图片 ${child.name} 引用的资源 ${child.attrs.src} 不存在。`, '指向一个存在的图片资源。', component.file, child.line);
         }
         // UI-020 编辑器保存不了的跨包写法（警告）

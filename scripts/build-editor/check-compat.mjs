@@ -1,5 +1,5 @@
 // 编辑器版本兼容实测（S2-I3）：编辑器（OpenFairyGUI 0.2.4）打开并保存一个 FairyGUI 工程 → 用随插件带的 0.7.0 生成网页界面包 → 浏览器能加载。
-// 用法：node scripts/build-editor/check-compat.mjs [工程目录 ...]。不写时测两个：lgui init 的模板工程、examples/inventory/legacy/project。
+// 用法：node scripts/build-editor/check-compat.mjs [工程目录 ...]。不写时测两个：lgui init 的模板工程、背包示例 examples/inventory/ui。
 // 每个工程：复制到临时目录 → lgui editor 的服务打开它 → 把一个文字控件右移 1 像素并保存（不改文字，免得牵动文本表） → 导出工作区 ZIP → 和原文件比较 → 0.7.0 生成 → 浏览器里加载每个包、创建每个导出的组件。
 // 模板工程再多一步：把保存后的文件放回工程，跑 lgui check 和 lgui verify --size desktop。需要 Chrome 或 Edge。
 import fs from 'node:fs';
@@ -165,7 +165,7 @@ try {
   const targets = args.length ? args.map(a => [a, path.resolve(a), false]) : await (async () => {
     const parent = tmp('template');
     await lgui(['init', 'g'], parent);
-    return [['lgui init 模板工程', path.join(parent, 'g', 'ui'), true], ['examples/inventory/legacy/project', path.join(root, 'examples', 'inventory', 'legacy', 'project'), false]];
+    return [['lgui init 模板工程', path.join(parent, 'g', 'ui'), true], ['examples/inventory/ui', path.join(root, 'examples', 'inventory', 'ui'), false]];
   })();
   for (const [label, dir, isTemplate] of targets) console.log(JSON.stringify(await check(browser, label, dir, {isTemplate}), null, 2));
 } finally {

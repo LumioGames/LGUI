@@ -7,6 +7,7 @@ import { bagFxModel } from './BagFxModel';
 import { bagController, coinsChanged } from './BagController';
 import { ItemSlotView } from './ItemSlotView';
 import { CurrencyBarView } from '../common/CurrencyBarView';
+import { ShopView } from '../shop/ShopView';
 
 const sellable = (it: BagItem | null): boolean => it !== null && !it.equipped && it.type !== 'quest';
 
@@ -17,6 +18,7 @@ export class BagView extends View<BagPanelUI> {
   static fullScreen = true;
 
   bind: Bind<BagPanelUI> = {
+    titleImage: { icon: 'ui://Bag/title' }, // 带字图片：英文时自动换成 title@en
     topBar: { view: CurrencyBarView },
     closeButton: { click: () => bagController.close() },
     coinFx: { text: pick(bagFxModel, s => s.coinFx), visible: pick(bagFxModel, s => s.coinFx !== '') },
@@ -55,12 +57,15 @@ export class BagView extends View<BagPanelUI> {
     },
     capacityText: { text: pick(bagModel, s => `${format.number(s.items.length)} / ${format.number(s.capacity)}`) },
     capacityBar: { progress: pick(bagModel, s => Math.round((s.items.length / s.capacity) * 100)) },
+    shopButton: { click: () => bagController.openShop() },
     sortButton: { text: pick(bagModel, s => s.sort, sort => lgui.t(`bag.sort.${sort}`)), click: () => bagController.nextSort() },
     touchHint: { visibleOn: ['touch'] },
   };
   keys: Keys = { back: 'close', confirm: { do: () => bagController.sell(), hint: 'bag.sell' } };
 
   onOpen() {
+    // 从商店回来：选中刚买的道具。
+    this.on(lgui.events.viewClosed, e => { if (e.view === ShopView) bagController.reload(); });
     // 金币变了：飘出数字，1.2 秒后消失。
     this.on(coinsChanged, e => {
       bagController.showCoinFx(e.delta);

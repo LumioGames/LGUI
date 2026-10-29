@@ -1,4 +1,4 @@
-// 道具表（从旧示例 legacy/ts/catalog.ts 迁过来）。名字和说明在文本表里：item.<kind>.name、item.<kind>.desc。
+// 道具表（从旧示例（tag v0.2.0-final 的 examples/inventory/legacy/ts/catalog.ts）迁过来）。名字和说明在文本表里：item.<kind>.name、item.<kind>.desc。
 export type ItemType = 'equipment' | 'consumable' | 'material' | 'quest';
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 export type EquipmentSlot = 'weapon' | 'offhand' | 'head' | 'body' | 'feet' | 'ring' | 'neck';

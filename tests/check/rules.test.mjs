@@ -92,6 +92,23 @@ for (const [code, c] of Object.entries(cases)) {
   });
 }
 
+test('LGUI-UI-017：带字图片放在图片控件里（不会随语言换）报错', async () => {
+  const root = await fresh();
+  fs.copyFileSync(path.join(root, 'ui/assets/Common/placeholder.png'), path.join(root, 'ui/assets/Common/placeholder@en.png'));
+  edit(root, 'ui/assets/Common/package.xml', '</resources>', '  <image id="placehd2" name="placeholder@en.png" path="/" exported="true"/>\n  </resources>');
+  assert.ok(!(await codes(root)).includes('LGUI-UI-017'), '只有图片、没有用到时不报');
+  edit(root, 'ui/assets/Common/Toast.xml', '</displayList>', '  <image id="n9" name="pic" src="placehd1" xy="0,0" size="32,32"/>\n  </displayList>');
+  assert.ok((await codes(root)).includes('LGUI-UI-017'));
+});
+
+test('LGUI-UI-031：用模板字符串或条件表达式拼的键算用到了', async () => {
+  const root = await fresh();
+  for (const lang of ['zh-CN', 'en']) edit(root, `i18n/${lang}.json`, '{', '{\n  "main.tip.a": "A",\n  "main.tip.b": "B",\n  "main.yes": "Y",\n  "main.no": "N",');
+  edit(root, CTRL, 'click() { mainModel.addClick(); }', "click() { mainModel.addClick(); lgui.toast(`main.tip.${mainModel.get().clicks % 2 ? 'a' : 'b'}`); lgui.toast(mainModel.get().clicks ? 'main.yes' : 'main.no'); }");
+  edit(root, CTRL, "import { Controller } from 'lgui';", "import { Controller, lgui } from 'lgui';");
+  assert.deepEqual(await codes(root), []);
+});
+
 test('报错格式：文件:行:列  错误码  说明  → 怎么改；有错误时退出码 1', async () => {
   const root = await fresh();
   cases['LGUI-MVC-001'].fail(root);

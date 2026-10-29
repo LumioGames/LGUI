@@ -18,8 +18,14 @@ export function applyIcon(target: UILoader | UIButton, url: string, placeholder:
   const loader = target;
   const token = (tokens.get(loader) ?? 0) + 1;
   tokens.set(loader, token);
-  if (!url || url.startsWith('ui://')) { loader.url = localized(url); return; }
   const {backend, config} = runtime();
+  if (!url || url.startsWith('ui://')) {
+    // 别的包里的图片：那个包要已经加载（是这个界面依赖的包），否则显示不出来——明确报出来，不默默留空。
+    const pkg = /^ui:\/\/([^/]+)\//.exec(url)?.[1];
+    if (pkg && !backend.platform.resource.hasPackage(pkg)) backend.platform.log.write('error', `LGUI-RT-071  ${ctx.where} 的图片 ${url} 所在的包 ${pkg} 没有加载，显示不出来。  → 让这个界面依赖 ${pkg} 包：在组件里引用一次 ${pkg} 包的组件（比如列表的 defaultItem 用 ${pkg} 包里的组件）。`);
+    loader.url = localized(url);
+    return;
+  }
   loader.url = placeholder ?? config.placeholder;
   backend.platform.resource.loadImage(url).then(
     () => { if (tokens.get(loader) === token && !ctx.scope.isClosed) loader.url = url; },

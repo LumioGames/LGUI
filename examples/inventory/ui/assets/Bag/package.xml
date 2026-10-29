@@ -9,6 +9,7 @@
     <component id="itemdet1" name="ItemDetail.xml" path="/" exported="true"/>
     <component id="picker01" name="ItemPicker.xml" path="/" exported="true"/>
     <component id="pick0001" name="PickerItem.xml" path="/" exported="true"/>
+    <component id="shopitm1" name="ShopItem.xml" path="/" exported="true"/>
     <image id="title001" name="title.png" path="/" exported="true"/>
     <image id="title002" name="title@en.png" path="/" exported="true"/>
     <image id="art00000" name="sword.png" path="/" exported="true" width="128" height="128"/>

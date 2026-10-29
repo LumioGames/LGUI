@@ -6,8 +6,11 @@ import { bagFxModel } from './BagFxModel';
 import { definition } from './CatalogModel';
 import type { InventoryService } from './InventoryService';
 import { BagView } from './BagView';
+import { ShopView } from '../shop/ShopView';
 import { ItemDetailView } from './ItemDetailView';
 import { ItemPickerView } from './ItemPickerView';
+import { rewardClaimed } from '../reward/RewardController';
+import { shopModel } from '../shop/ShopModel';
 
 const service = lgui.service<InventoryService>('inventory');
 const SAVE_KEY = 'bag';
@@ -17,6 +20,18 @@ export const coinsChanged = lgui.defineEvent<{ delta: number }>('coinsChanged');
 
 export class BagController extends Controller {
   sellRequest = lgui.request((kind: string, quantity: number) => service.sell(kind, quantity));
+
+  constructor() {
+    super();
+    // 领到奖励：道具和金币放进背包（广播站，跟着整个游戏走）。
+    this.on(rewardClaimed, e => {
+      const added = bagModel.add(e.kind, e.quantity);
+      if (!added.ok) lgui.toast('bag.error.bagFull');
+      if (e.coins) { bagModel.addCoins(e.coins); lgui.emit(coinsChanged, { delta: e.coins }); }
+      this.syncRedDots();
+      this.persist();
+    });
+  }
 
   open() { return lgui.ui.open(BagView); }
   close() { lgui.ui.close(BagView); }
@@ -63,6 +78,17 @@ export class BagController extends Controller {
     if (!item || item.equipped) return;
     const r = bagModel.salvage(item.id);
     this.report(r, () => lgui.toast('bag.salvaged', { name: lgui.t(`item.${item.kind}.name`) }));
+  }
+
+  openShop() { void lgui.ui.open(ShopView); }
+  /** 从商店回来：切到全部，选中刚买的道具。 */
+  reload() {
+    const kind = shopModel.get().lastBought;
+    if (!kind) return;
+    shopModel.clearLastBought();
+    bagModel.setCategory('all');
+    const id = [...bagModel.get().newIds].reverse().find(x => bagModel.get().items.some(it => it.id === x && it.kind === kind));
+    if (id) this.select(id);
   }
 
   openDetail() { if (bagModel.get().selectedId) void lgui.ui.open(ItemDetailView); }

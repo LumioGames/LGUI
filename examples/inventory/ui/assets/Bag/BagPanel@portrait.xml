@@ -5,7 +5,7 @@
     <graph id="n0" name="bg" xy="0,0" size="1080,1920" type="rect" lineSize="0" fillColor="#0b1220">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <image id="n1" name="titleImage" src="title001" xy="40,24" size="300,96"/>
+    <loader id="n1" name="titleImage" xy="40,24" size="300,96" align="center" vAlign="middle" fill="scale"/>
     <component id="n2" name="topBar" pkg="cmn00001" src="curbar01" xy="600,40" size="300,64">
       <relation target="" sidePair="right-right"/>
     </component>
@@ -76,6 +76,9 @@
     <component id="n31" name="sortButton" pkg="cmn00001" src="button01" xy="780,1716" size="260,64">
       <Button title=""/>
     </component>
-    <text id="n32" name="touchHint" xy="40,1790" size="720,40" fontSize="22" color="#a9b6c6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="点右上角「关闭」回到营地"/>
+    <component id="n32" name="shopButton" pkg="cmn00001" src="button01" xy="820,1786" size="220,64">
+      <Button title="去商店"/>
+    </component>
+    <text id="n33" name="touchHint" xy="40,1790" size="720,40" fontSize="22" color="#a9b6c6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="点右上角「关闭」回到营地"/>
   </displayList>
 </component>

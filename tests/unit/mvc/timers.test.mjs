@@ -70,3 +70,25 @@ test('lgui.time.setServerOffset 对齐服务器时间；框架没启动时报 LG
   clearRuntime();
   assert.throws(() => lgui.time.now(), e => e.code === 'LGUI-RT-050');
 });
+
+test('lgui.time.wait 按帧累计：没到时间不结束，到了才结束（假时钟能推进）；0 毫秒马上结束', async () => {
+  const {fw, backend} = await headless();
+  const {lgui, sim} = fw;
+  let done = false;
+  const waiting = lgui.time.wait(100).then(() => { done = true; });
+  await sim.advance(backend, 80);
+  assert.equal(done, false);
+  await sim.advance(backend, 32);
+  await waiting;
+  assert.equal(done, true);
+  await lgui.time.wait(0);
+});
+
+test('假时钟每帧之后等排队的 Promise 跑完：一次 advance 里能走完一串 await', async () => {
+  const {fw, backend} = await headless();
+  const {lgui, sim} = fw;
+  const steps = [];
+  (async () => { for (let i = 0; i < 5; i++) { await lgui.time.wait(16); await Promise.resolve(); await Promise.resolve(); steps.push(i); } })();
+  await sim.advance(backend, 200);
+  assert.deepEqual(steps, [0, 1, 2, 3, 4]);
+});

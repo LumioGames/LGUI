@@ -9,7 +9,7 @@ import {generateWeb, generateUnity} from '../../plugin/tools/lib/generate/index.
 const repo = fileURLToPath(new URL('../..', import.meta.url));
 const projects = {
   template: path.join(repo, 'plugin/templates/project/ui/UI.fairy'),
-  inventory: path.join(repo, 'examples/inventory/legacy/project/Inventory.fairy')
+  inventory: path.join(repo, 'examples/inventory/ui/UI.fairy')
 };
 const temp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-gen-'));
 
@@ -37,9 +37,10 @@ for (const [label, fairy] of Object.entries(projects)) {
   });
 }
 
-test('背包示例：119 张散图全部输出，Unity 端打成图集', async () => {
+test('背包示例：41 张散图全部输出（Bag 26、Common 14、Main 1），Unity 端打成图集', async () => {
   const web = await generateWeb(projects.inventory, temp());
-  assert.equal(Object.values(web.manifest.packages)[0].images ? Object.keys(Object.values(web.manifest.packages)[0].images).length : 0, 119);
+  const counts = Object.fromEntries(Object.entries(web.manifest.packages).map(([id, p]) => [id, Object.keys(p.images ?? {}).length]));
+  assert.deepEqual([counts.bag00001, counts.cmn00001, counts.main0001], [26, 14, 1]);
   const unity = await generateUnity(projects.inventory, temp());
   assert.ok(unity.files.some(file => /_atlas0\.png$/.test(file)));
 });
