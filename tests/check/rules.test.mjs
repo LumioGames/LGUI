@@ -109,6 +109,14 @@ test('LGUI-UI-031：用模板字符串或条件表达式拼的键算用到了', 
   assert.deepEqual(await codes(root), []);
 });
 
+test('LGUI-MVC-001：window、CS（Unity 的 C# 入口）、globalThis、fetch、setTimeout 也拦得住', async () => {
+  for (const use of ['window.alert(1);', 'void CS.UnityEngine.Debug;', 'void globalThis.x;', "void fetch('/x');", 'setTimeout(() => {}, 1);']) {
+    const root = await fresh();
+    edit(root, CTRL, 'click() { mainModel.addClick(); }', `click() { mainModel.addClick(); ${use} }`);
+    assert.ok((await codes(root)).includes('LGUI-MVC-001'), use);
+  }
+});
+
 test('报错格式：文件:行:列  错误码  说明  → 怎么改；有错误时退出码 1', async () => {
   const root = await fresh();
   cases['LGUI-MVC-001'].fail(root);
