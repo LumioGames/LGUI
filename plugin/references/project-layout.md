@@ -25,7 +25,41 @@ MyGame/
 └── .gitignore                 # 忽略 .lgui/build/、node_modules/
 ```
 
-**`.lgui/project.json` 的字段：** 工程名称、LGUI 版本号、设计尺寸、方向（`orientation`）、标准验证尺寸、语言列表、按平台的「按键 → 动作」映射、界面缓存策略、统一错误提示、默认占位图、默认后端、Unity 工程路径（可选）。
+## `.lgui/project.json` 的字段
+
+只有 `name` 和 `lguiVersion` 必填，其余不写就用默认值。写了表里没有的字段、或者类型不对，命令会报 `LGUI-CLI-004`，一次列出全部问题。
+
+| 字段 | 类型 | 默认值 | 用途 |
+|---|---|---|---|
+| `name` | 非空字符串 | 必填 | 工程名称 |
+| `lguiVersion` | 版本号 | 必填 | 工程用的 LGUI 版本；和插件不一致时命令报 `LGUI-CLI-003`，先运行 `lgui upgrade` |
+| `designSize` | `{ landscape: {width,height}, portrait: {width,height} }` | 横 1920×1080，竖 1080×1920 | 设计尺寸 |
+| `orientation` | `"both"` \| `"landscape"` \| `"portrait"` | `"both"` | 跟随设备旋转，或者锁定一种方向 |
+| `verifySizes` | `[{ name, width, height, safeArea? }]` | 6 组，见下 | `lgui verify` 的标准验证尺寸，每组横竖各截一张 |
+| `languages` | 语言代码数组 | `["zh-CN", "en"]` | 支持的语言 |
+| `defaultLanguage` | 语言代码 | `"zh-CN"` | 默认语言，必须在 `languages` 里 |
+| `keyMap` | `{ <平台>: { <按键名>: <动作名> } }` | `{}` | 按平台改写「按键 → 动作」映射 |
+| `uiCache` | `{ keepClosedViews: 非负整数 }` | `{ keepClosedViews: 0 }` | 最近关掉的几个界面不销毁，再打开时直接复用 |
+| `requestErrorToast` | 布尔值 | `true` | `lgui.request` 失败时，统一弹出提示 |
+| `requestTimeoutMs` | 正整数（毫秒） | `10000` | `lgui.request` 的超时时间 |
+| `placeholder` | `ui://` 开头的图片地址 | `"ui://Common/placeholder"` | 默认占位图 |
+| `sounds` | `{ click: 音效地址 \| null }` | `{ click: null }` | 按钮点击音效，`null` 表示不播 |
+| `defaultFont` | 字体名 \| `null` | `null` | 默认字体，`null` 表示用 FairyGUI 的默认字体 |
+| `devPort` | 端口号 1–65535 | `4173` | `lgui dev` 的端口 |
+| `backend` | `"h5"` | `"h5"` | 默认后端 |
+| `unityProject` | 路径 \| `null` | `null` | 导出过的 Unity 工程路径，由 `lgui unity export` 写入 |
+
+默认的 6 组验证尺寸（单位：CSS 像素）：
+
+| `name` | 尺寸 | 安全区（上 右 下 左） | 场景 |
+|---|---|---|---|
+| `desktop` | 1920×1080 | — | 电脑 16:9 |
+| `ultrawide` | 2560×1080 | — | 超宽屏 |
+| `phone-landscape` | 844×390 | 0 47 21 47 | 手机横屏（带刘海） |
+| `tablet` | 1024×768 | — | 平板 4:3 |
+| `phone-portrait` | 390×844 | 47 0 34 0 | 手机竖屏 |
+| `tablet-portrait` | 768×1024 | — | 平板竖屏 |
+
 
 **说明**
 
