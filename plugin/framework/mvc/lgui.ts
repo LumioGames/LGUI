@@ -9,6 +9,7 @@ import {UIManager} from './ui/manager';
 import {currentLanguage, t} from './i18n';
 import {createRequest} from './request';
 import {service} from './service';
+import {snapshot} from './snapshot';
 import type {Entry} from './ui/manager';
 import {runtime, wallNow} from './runtime';
 import type {Model} from './model';
@@ -169,7 +170,7 @@ export const lgui = {
     /** 某一层的全部界面，按栈的顺序。 */
     list(layer: Layer): object[] { return manager().shown(layer).map(e => e.view); },
     /** 控件在设计尺寸下的位置和大小，只读。 */
-    find(path: string): Rect | null { void path; return todo('lgui.ui.find'); }
+    find(path: string): Rect | null { return manager().find(path); }
   },
 
   /** 短提示（文本键）。 */
@@ -219,7 +220,7 @@ export const lgui = {
   /** 调试。 */
   debug: {
     /** 当前的界面栈、监听、定时器、已加载的包。 */
-    snapshot(): Snapshot { return todo('lgui.debug.snapshot'); }
+    snapshot(): Snapshot { return snapshot(manager()); }
   },
   /** 测试（只在 lgui test 里能用）。 */
   testing: {
