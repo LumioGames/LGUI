@@ -61,22 +61,23 @@ export function translationXml(entries, table) {
   return lines.join('\n');
 }
 
-/** 每种语言：翻译文件里的名字 → 文字（给 headless 后端用）。 */
-export function translationMaps(entries, tables) {
-  return Object.fromEntries(Object.entries(tables).map(([language, table]) => [language, Object.fromEntries(
+/** 每种语言：翻译文件里的名字 → 文字（给 headless 后端用）。默认语言的固定文字以 ui/ 为准，不翻译。 */
+export function translationMaps(entries, tables, defaultLanguage) {
+  return Object.fromEntries(Object.entries(tables).map(([language, table]) => [language, language === defaultLanguage ? {} : Object.fromEntries(
     entries.flatMap(entry => typeof table[entry.key] === 'string' ? entry.targets.map(t => [t.name, table[entry.key]]) : [])
   )]));
 }
 
-/** 生成全部语言的翻译文件到 outDir/<语言>.xml，并写对照表 .lgui/build/i18n/map.json。 */
-export function generateTranslations(root, model, languages, outDir) {
+/** 生成全部语言的翻译文件到 outDir/<语言>.xml，并写对照表 .lgui/build/i18n/map.json。
+ *  默认语言的固定文字以 ui/ 为准：它的翻译文件是空的（切回默认语言时显示 ui/ 里的原文），改 ui/ 马上生效。 */
+export function generateTranslations(root, model, languages, outDir, defaultLanguage) {
   const entries = extractTexts(model);
   fs.rmSync(outDir, {recursive: true, force: true});
   fs.mkdirSync(outDir, {recursive: true});
   const tables = {};
   for (const language of languages) {
     tables[language] = readTable(root, language);
-    fs.writeFileSync(path.join(outDir, `${language}.xml`), translationXml(entries, tables[language]));
+    fs.writeFileSync(path.join(outDir, `${language}.xml`), translationXml(entries, language === defaultLanguage ? {} : tables[language]));
   }
   const mapFile = path.join(root, '.lgui', 'build', 'i18n', 'map.json');
   fs.mkdirSync(path.dirname(mapFile), {recursive: true});

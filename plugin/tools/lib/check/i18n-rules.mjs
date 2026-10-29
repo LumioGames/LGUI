@@ -1,0 +1,40 @@
+// 多语言检查（LGUI-UI-030～032）：缺失的键、没用到的键、各语言的占位符是否一致。
+import {finding} from './program.mjs';
+import {extractTexts} from '../generate/i18n.mjs';
+
+// 框架自己用到的文本键。
+const FRAMEWORK_KEYS = ['lgui.back', 'lgui.requestFailed'];
+
+const placeholders = value => {
+  const texts = typeof value === 'string' ? [value] : Object.values(value ?? {}).filter(v => typeof v === 'string');
+  return [...new Set(texts.flatMap(t => [...t.matchAll(/\{(\w+)\}/g)].map(m => m[1])))].sort().join(',');
+};
+
+export function i18nRules({model, tables, defaultLanguage, usedKeys}) {
+  const out = [];
+  const uiKeys = extractTexts(model).map(e => e.key);
+  const codeKeys = new Map();
+  for (const u of usedKeys) if (!codeKeys.has(u.key)) codeKeys.set(u.key, u.loc);
+  const required = new Set([...uiKeys, ...codeKeys.keys(), ...FRAMEWORK_KEYS]);
+  for (const [language, table] of Object.entries(tables)) {
+    const file = `i18n/${language}.json`;
+    for (const key of required) {
+      if (key in table) continue;
+      const loc = codeKeys.get(key);
+      out.push(finding('LGUI-UI-030', `${file} 里缺少键 ${key}${loc ? `（${loc.file}:${loc.line} 用到了）` : uiKeys.includes(key) ? '（ui/ 里的固定文字）' : '（框架用到）'}。`, `在 ${file} 里加上 ${key}；ui/ 里的固定文字先运行 lgui i18n extract。`, {file, line: 1, col: 1}));
+    }
+    for (const key of Object.keys(table)) {
+      if (!required.has(key)) out.push(finding('LGUI-UI-031', `${file} 里的键 ${key} 没有用到。`, '确认不要了就删掉；用变量拼键名的地方 lgui check 查不出来，可以忽略这条。', {file, line: 1, col: 1, level: 'warning'}));
+    }
+  }
+  const base = tables[defaultLanguage] ?? {};
+  for (const [language, table] of Object.entries(tables)) {
+    if (language === defaultLanguage) continue;
+    for (const [key, value] of Object.entries(table)) {
+      if (!(key in base)) continue;
+      const a = placeholders(base[key]), b = placeholders(value);
+      if (a !== b) out.push(finding('LGUI-UI-032', `键 ${key} 的占位符不一致：${defaultLanguage} 是 {${a}}，${language} 是 {${b}}。`, '各语言用同样的占位符名字。', {file: `i18n/${language}.json`, line: 1, col: 1}));
+    }
+  }
+  return out;
+}

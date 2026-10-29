@@ -26,7 +26,7 @@ function writeEnv(root, project, out) {
   const packages = fs.readdirSync(headlessDir(root)).map(file => JSON.parse(fs.readFileSync(path.join(headlessDir(root), file), 'utf8')));
   const deps = JSON.parse(fs.readFileSync(path.join(root, '.lgui', 'build', 'deps.json'), 'utf8'));
   const texts = readTexts(root, project.languages);
-  const translations = translationMaps(extractTexts(readUiModel(uiProjectPath(root))), texts);
+  const translations = translationMaps(extractTexts(readUiModel(uiProjectPath(root))), texts, project.defaultLanguage);
   const file = path.join(out, 'env.ts');
   fs.writeFileSync(file, `// 由 lgui test 生成，不要手改。
 import {afterEach} from 'node:test';
