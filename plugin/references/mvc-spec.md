@@ -319,6 +319,7 @@ keys: Keys = {
 | `format.number(n)`、`format.date(d)`、`format.currency(n, 'CNY')` | 按当前语言格式化 |
 | `lgui.setLanguage('en')` | 切换语言，已打开的界面自动重建 |
 | `lgui.time.now()`、`lgui.time.setServerOffset(毫秒)` | 当前时间（和服务器对齐） |
+| `await lgui.time.wait(毫秒)` | 等一段时间（Service 模拟延迟、重试间隔用；界面上的定时器用 View 的 `this.after`） |
 
 **文本表 `i18n/<语言>.json`：** 扁平的「键 → 文字」，键名是可读的点号键。要按数量变化的文字，值写成按复数形式分开的对象，用参数 `count` 选（形式名和 `Intl.PluralRules` 一致；中文、日文、韩文只写 `other`）：
 

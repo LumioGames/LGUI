@@ -87,6 +87,8 @@ export interface Entry {
   cached?: Cached;
   /** 排队中的 modal：轮到它时调用。 */
   show?: () => void;
+  /** 已经释放了包引用（排队中被关掉时）。 */
+  released?: boolean;
 }
 
 export class UIManager {
@@ -200,7 +202,8 @@ export class UIManager {
   /** 按层和是否全屏摆放界面。 */
   private place(entry: Entry, component: UIComponent): void {
     if (entry.fullScreen) component.rect = {x: 0, y: 0, width: this.visible.width, height: this.visible.height};
-    else if (entry.layer === 'popup' || entry.layer === 'modal' || entry.layer === 'toast') {
+    else {
+      // 不是全屏的界面（哪一层都一样）放在可见区域正中。
       const r = component.rect;
       component.rect = {x: Math.round((this.visible.width - r.width) / 2), y: Math.round((this.visible.height - r.height) / 2), width: r.width, height: r.height};
     }
@@ -368,7 +371,7 @@ export class UIManager {
       const cancelled = (how: string): LgRuntimeError => {
         entry.cached?.component.dispose();
         entry.cached = undefined;
-        this.release(entry.packages);
+        if (!entry.released) this.release(entry.packages);
         return new LgRuntimeError('LGUI-RT-081', `${cls.name} 在${how}时被关闭了，这次打开已取消。`, '不需要处理；不想看到这个错误，就不要在打开完成之前关闭它。');
       };
       try {
@@ -475,7 +478,8 @@ export class UIManager {
     const wasQueued = entry.state === 'queued';
     entry.state = 'closed';
     this.remove(entry);
-    if (wasQueued) entry.show?.();
+    // 排队中被关掉：马上释放资源（打开那边随后报 LGUI-RT-081，不再重复释放）。
+    if (wasQueued) { this.release(entry.packages); entry.released = true; entry.show?.(); }
     if (!wasOpen) return; // 正在打开时被关闭：资源到了也不显示（打开那边会报 LGUI-RT-081 并释放资源）
     if (entry.active) { entry.active = false; this.hook(entry, 'onDeactivate'); }
     this.hook(entry, 'onClose');

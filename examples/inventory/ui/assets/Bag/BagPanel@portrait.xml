@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <controller name="category" pages="0,all,1,equipment,2,consumable,3,material,4,quest" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="1080,1920" type="rect" lineSize="0" fillColor="#0b1220">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <loader id="n1" name="titleImage" xy="40,24" size="300,96" align="center" vAlign="middle" fill="scale"/>
+    <component id="n2" name="topBar" pkg="cmn00001" src="curbar01" xy="600,40" size="300,64">
+      <relation target="" sidePair="right-right"/>
+    </component>
+    <component id="n3" name="closeButton" pkg="cmn00001" src="button01" xy="920,36" size="120,72">
+      <relation target="" sidePair="right-right"/>
+    
+      <Button title="关闭"/>
+    </component>
+    <component id="n4" name="coinFx" pkg="cmn00001" src="arttext1" xy="600,104" size="300,48" customData="font=Common/coin;align=right;spacing=1">
+      <relation target="" sidePair="right-right"/>
+    </component>
+    <component id="n5" name="tabAll" pkg="cmn00001" src="button01" xy="34,150" size="196,64">
+      <Button title="全部"/>
+    </component>
+    <graph id="n6" name="tabAllMark" xy="34,214" size="196,6" type="rect" lineSize="0" fillColor="#e8c27a">
+      <gearDisplay controller="category" pages="0"/>
+    </graph>
+    <component id="n7" name="tabEquipment" pkg="cmn00001" src="button01" xy="238,150" size="196,64">
+      <Button title="装备"/>
+    </component>
+    <graph id="n8" name="tabEquipmentMark" xy="238,214" size="196,6" type="rect" lineSize="0" fillColor="#e8c27a">
+      <gearDisplay controller="category" pages="1"/>
+    </graph>
+    <component id="n9" name="tabConsumable" pkg="cmn00001" src="button01" xy="442,150" size="196,64">
+      <Button title="消耗品"/>
+    </component>
+    <graph id="n10" name="tabConsumableMark" xy="442,214" size="196,6" type="rect" lineSize="0" fillColor="#e8c27a">
+      <gearDisplay controller="category" pages="2"/>
+    </graph>
+    <component id="n11" name="tabMaterial" pkg="cmn00001" src="button01" xy="646,150" size="196,64">
+      <Button title="材料"/>
+    </component>
+    <graph id="n12" name="tabMaterialMark" xy="646,214" size="196,6" type="rect" lineSize="0" fillColor="#e8c27a">
+      <gearDisplay controller="category" pages="3"/>
+    </graph>
+    <component id="n13" name="tabQuest" pkg="cmn00001" src="button01" xy="850,150" size="196,64">
+      <Button title="任务"/>
+    </component>
+    <graph id="n14" name="tabQuestMark" xy="850,214" size="196,6" type="rect" lineSize="0" fillColor="#e8c27a">
+      <gearDisplay controller="category" pages="4"/>
+    </graph>
+    <list id="n15" name="list" xy="40,240" size="1000,660" layout="flow_hz" lineGap="16" colGap="16" defaultItem="ui://bag00001slot0001" overflow="scroll" scrollBar="hidden">
+      <relation target="" sidePair="width-width"/>
+    </list>
+    <text id="n16" name="emptyTip" xy="40,500" size="1000,80" fontSize="32" color="#a9b6c6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="这里还没有道具"/>
+    <graph id="n17" name="panel" xy="40,920" size="1000,780" type="rect" lineSize="2" lineColor="#8a6d3b" fillColor="#cc111a28"/>
+    <loader id="n18" name="detailIcon" xy="70,950" size="200,200" align="center" vAlign="middle" fill="scale"/>
+    <text id="n19" name="itemName" xy="300,960" size="740,56" fontSize="40" color="#f3ead6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+    <text id="n20" name="rarityText" xy="300,1022" size="740,56" fontSize="26" color="#7fb2ff" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+    <text id="n21" name="statsText" xy="70,1170" size="940,100" fontSize="26" color="#e8c27a" align="left" vAlign="top" autoSize="height" text=""/>
+    <text id="n22" name="descText" xy="70,1280" size="940,110" fontSize="24" color="#a9b6c6" align="left" vAlign="top" autoSize="height" text=""/>
+    <component id="n23" name="actionButton" pkg="cmn00001" src="button01" xy="70,1410" size="450,72">
+      <Button title=""/>
+    </component>
+    <component id="n24" name="sellButton" pkg="cmn00001" src="button01" xy="560,1410" size="450,72">
+      <Button title="出售"/>
+    </component>
+    <text id="n25" name="sellingTip" xy="560,1380" size="450,28" fontSize="20" color="#a9b6c6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="出售中…"/>
+    <component id="n26" name="salvageButton" src="holdbtn1" xy="70,1500" size="450,72">
+      <Button title="长按分解"/>
+    </component>
+    <component id="n27" name="detailButton" pkg="cmn00001" src="button01" xy="560,1500" size="450,72">
+      <Button title="详情"/>
+    </component>
+    <component id="n28" name="weaponSlot" src="slotbtn1" xy="70,1600" size="940,64"/>
+    <text id="n29" name="capacityText" xy="40,1720" size="180,56" fontSize="28" color="#f3ead6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+    <component id="n30" name="capacityBar" pkg="cmn00001" src="holdprg1" xy="230,1742" size="360,12"/>
+    <component id="n31" name="sortButton" pkg="cmn00001" src="button01" xy="780,1716" size="260,64">
+      <Button title=""/>
+    </component>
+    <component id="n32" name="shopButton" pkg="cmn00001" src="button01" xy="820,1786" size="220,64">
+      <Button title="去商店"/>
+    </component>
+    <text id="n33" name="touchHint" xy="40,1790" size="720,40" fontSize="22" color="#a9b6c6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="点右上角「关闭」回到营地"/>
+  </displayList>
+</component>

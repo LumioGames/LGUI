@@ -7,7 +7,13 @@ import type {HeadlessObject} from './objects';
 
 const FRAME = 16;
 
-/** 让假时钟往前走，按每帧 16 毫秒触发每帧回调；每帧之间让出微任务。 */
+// 等这一帧里排队的 Promise 全部跑完（像真实的两帧之间一样）：Node 里等一次 setImmediate；没有时退回一次微任务。
+const settle = (): Promise<void> => {
+  const g = globalThis as {setImmediate?: (callback: () => void) => void};
+  return g.setImmediate ? new Promise(resolve => g.setImmediate?.(resolve)) : Promise.resolve();
+};
+
+/** 让假时钟往前走，按每帧 16 毫秒触发每帧回调；每帧之后等排队的 Promise 跑完。 */
 export async function advance(backend: HeadlessBackend, ms: number): Promise<void> {
   let left = ms;
   while (left > 0) {
@@ -15,9 +21,9 @@ export async function advance(backend: HeadlessBackend, ms: number): Promise<voi
     backend.state.now += step;
     backend.state.handlers.frame.emit(step);
     left -= step;
-    await Promise.resolve();
+    await settle();
   }
-  await Promise.resolve();
+  await settle();
 }
 
 // 指针事件：和浏览器一样，先从目标往上冒泡给每一级的 onPointer，最后到舞台（原始输入）。

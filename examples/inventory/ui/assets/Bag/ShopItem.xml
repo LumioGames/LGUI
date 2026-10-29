@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="880,120" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="880,120" type="rect" lineSize="2" lineColor="#8a6d3b" fillColor="#1a2333">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <loader id="n1" name="icon" xy="16,8" size="104,104" align="center" vAlign="middle" fill="scale"/>
+    <text id="n2" name="label" xy="140,0" size="440,120" fontSize="32" color="#f3ead6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+    <text id="n3" name="price" xy="600,0" size="260,120" fontSize="32" color="#e8c27a" align="right" vAlign="middle" autoSize="shrink" singleLine="true" text="">
+      <relation target="" sidePair="right-right"/>
+    </text>
+  </displayList>
+  <Button/>
+</component>

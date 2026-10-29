@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="320,72" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="320,72" type="rect" lineSize="2" lineColor="#d06a4f" fillColor="#22344d">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="0,0" size="320,64" fontSize="28" color="#f3ead6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="">
+      <relation target="" sidePair="width-width"/>
+    </text>
+    <component id="n2" name="holdProgress" pkg="cmn00001" src="holdprg1" xy="16,60" size="288,8">
+      <relation target="" sidePair="width-width"/>
+    
+      <ProgressBar value="0" max="100"/>
+    </component>
+  </displayList>
+  <Button/>
+</component>

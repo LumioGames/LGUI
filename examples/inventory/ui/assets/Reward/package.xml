@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="rwd00001">
+  <resources>
+    <component id="rwddlg01" name="RewardDialog.xml" path="/" exported="true"/>
+    <component id="coindlg1" name="CoinDialog.xml" path="/" exported="true"/>
+  </resources>
+</packageDescription>

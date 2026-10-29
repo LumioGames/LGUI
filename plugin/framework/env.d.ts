@@ -7,6 +7,9 @@ declare module 'node:test' {
   export function describe(name: string, run: () => void): void;
   /** 定义一个测试（同 test）。 */
   export function it(name: string, run: () => void | Promise<void>): void;
+  /** 每个测试开始前、结束后各跑一次。 */
+  export function beforeEach(run: () => void | Promise<void>): void;
+  export function afterEach(run: () => void | Promise<void>): void;
 }
 
 declare module 'node:assert/strict' {

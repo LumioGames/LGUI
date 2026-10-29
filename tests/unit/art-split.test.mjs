@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {run} from './cli/helpers.mjs';
 import {generateWeb} from '../../plugin/tools/lib/generate/index.mjs';
 
-const atlas = fileURLToPath(new URL('../../examples/inventory/legacy/art/items-atlas.png', import.meta.url));
+const atlas = fileURLToPath(new URL('../../examples/inventory/ui/art-src/Bag/items-atlas.png', import.meta.url));
 const names = Array.from({length: 24}, (_, i) => `item${i}`);
 
 test('lgui art split：旧示例的 items-atlas.png（1536×1024，6×4）拆成 24 张 128×128，登记进 package.xml，lgui check 通过，网页界面包里有它们', async () => {

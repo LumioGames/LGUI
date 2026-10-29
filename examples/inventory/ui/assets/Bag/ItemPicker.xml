@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <displayList>
+    <graph id="n0" name="mask" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#99000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n1" name="panel" xy="610,140" size="700,800" type="rect" lineSize="2" lineColor="#8a6d3b" fillColor="#f0111a28">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <text id="n2" name="title" xy="650,170" size="620,60" fontSize="36" color="#f3ead6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="选择武器">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <list id="n3" name="list" xy="650,250" size="620,560" layout="column" lineGap="12" defaultItem="ui://bag00001pick0001" overflow="scroll" scrollBar="hidden">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </list>
+    <text id="n4" name="emptyTip" xy="650,480" size="620,60" fontSize="28" color="#a9b6c6" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="背包里没有能换的武器">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n5" name="closeButton" pkg="cmn00001" src="button01" xy="840,840" size="240,72">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    
+      <Button title="取消"/>
+    </component>
+  </displayList>
+</component>

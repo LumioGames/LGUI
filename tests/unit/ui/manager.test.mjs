@@ -84,6 +84,20 @@ test('modal 是队列：同时只显示一个，前一个关掉下一个才弹�
   assert.deepEqual([secondShown, lgui.ui.top()], [true, v2]);
 });
 
+test('排队中的 modal 被关掉：马上释放界面包（打开那边报 LGUI-RT-081），不会等下一帧', async () => {
+  const {fw, views: {Reward1, Reward2}} = await setup();
+  const {lgui} = fw;
+  await lgui.ui.open(Reward1);
+  const second = lgui.ui.open(Reward2);
+  await new Promise(r => setTimeout(r, 0));
+  const refs = () => Object.fromEntries(lgui.debug.snapshot().packages.map(p => [p.name, p.refs]));
+  assert.equal(refs().Bag, 1, '排队的 Reward2 占着 Bag 包');
+  lgui.ui.closeAll('modal');
+  assert.equal(refs().Bag, undefined, '关掉的同时就释放了');
+  await assert.rejects(second, e => e.code === 'LGUI-RT-081');
+  assert.equal(refs().Bag, undefined, '不重复释放');
+});
+
 test('page 层最底下的主界面按返回键关不掉；back 关闭当前激活的界面', async () => {
   const {fw, views: {MainView, DetailView}} = await setup();
   const {lgui} = fw;

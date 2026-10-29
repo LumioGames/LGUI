@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="1080,1920" type="rect" lineSize="0" fillColor="#0b1220">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="40,28" size="560,96" fontSize="56" color="#e8c27a" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="旅者商店"/>
+    <component id="n2" name="topBar" pkg="cmn00001" src="curbar01" xy="600,40" size="300,64">
+      <relation target="" sidePair="right-right"/>
+    </component>
+    <component id="n3" name="closeButton" pkg="cmn00001" src="button01" xy="920,36" size="120,72">
+      <relation target="" sidePair="right-right"/>
+    
+      <Button title="关闭"/>
+    </component>
+    <text id="n4" name="hint" xy="40,150" size="880,48" fontSize="26" color="#a9b6c6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="点一件商品购买，价格是出售价的两倍"/>
+    <list id="n5" name="list" xy="100,220" size="880,1500" layout="column" lineGap="16" defaultItem="ui://bag00001shopitm1" overflow="scroll" scrollBar="hidden"/>
+    <text id="n6" name="buyingTip" xy="100,1740" size="880,40" fontSize="24" color="#a9b6c6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="购买中…"/>
+  </displayList>
+</component>

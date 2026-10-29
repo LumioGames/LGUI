@@ -242,7 +242,7 @@ ui/
 - **默认语言的固定文字以 `ui/` 为准**：要改默认语言的文字，直接改 `ui/`；默认语言文本表里的这些键只是给翻译看的原文。
 - 其他语言的 `i18n/<语言>.json` 照同样的键翻译。只编辑这些 JSON，不碰生成的翻译 XML。
 - 占位符写成 `{count}`，各语言的占位符必须一致。
-- **带字的图片**按 `@<语言>` 命名提供各语言版本，比如 `title.png`（默认）和 `title@en.png`。必须有不带后缀的默认版本；后缀的语言必须在工程配置 `languages` 里。
+- **带字的图片**按 `@<语言>` 命名提供各语言版本，比如 `title.png`（默认）和 `title@en.png`。必须有不带后缀的默认版本；后缀的语言必须在工程配置 `languages` 里。界面里用**装载器**放它，在绑定表里写 `icon: 'ui://<包>/<图片名>'`（不带后缀），框架按当前语言换成对应版本；图片控件（`<image>`）不会随语言换，`lgui check` 报 `LGUI-UI-017`。
 - 布局要给翻译留空间：英文、德文通常比中文长 40% 以上。用 `lgui verify --lang pseudo` 检查（文字加长 40%）。
 
 ## 10. Common 包（`lgui init` 自带）
@@ -322,7 +322,7 @@ ui/
 | `LGUI-UI-014` | Common 包里的固定组件和必有控件都在 | `Common/Confirm` 里有 `ok`、`cancel` | 删了 `Common/Toast`，或 `Confirm` 里没有 `ok` |
 | `LGUI-UI-015` | 九宫格：`scale="9grid"` 和 `scale9grid` 成对出现，区域不超出图片 | `scale="9grid" scale9grid="12,12,40,40"` | 只写了 `scale="9grid"` |
 | `LGUI-UI-016` | 列表的 `defaultItem` 指向一个存在、已导出的组件 | `defaultItem="ui://bag00001slot0001"` | 不写 `defaultItem` |
-| `LGUI-UI-017` | `@<语言>` 图片有默认版本，语言在 `languages` 里 | `title.png` + `title@en.png` | 只有 `title@en.png`，或 `title@xx.png` |
+| `LGUI-UI-017` | `@<语言>` 图片有默认版本，语言在 `languages` 里；带字图片用装载器放（图片控件不随语言换） | `title.png` + `title@en.png`，装载器 + `icon: 'ui://Bag/title'` | 只有 `title@en.png`，或 `title@xx.png`；`<image src="title 的 ID">` |
 | `LGUI-UI-018` | `package.xml` 登记的文件都存在，包目录里的组件和图片都已登记 | 新图片登记进 `package.xml` | 放了图片没登记 |
 | `LGUI-UI-019` | 代码里用到的组件（View 的 `component`、列表子项）已导出 | `exported="true"` | 没写 `exported` |
 | `LGUI-UI-020`（警告） | 跨包引用写成编辑器能保存的样子：子组件跨包只写 `pkg` + `src`，不写 `fileName`；图片不跨包引用 | `pkg="cmn00001" src="button01"` | `fileName="Button.xml" pkg="cmn00001"`；`<image … pkg="cmn00001">` |

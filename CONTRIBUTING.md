@@ -47,7 +47,7 @@ node scripts/build-editor/build.mjs
 
 用 `node scripts/build-editor/check-compat.mjs` 测的，编辑器是 FairyGUI-Editor-Online `45f0bef`（OpenFairyGUI 0.2.4）。
 
-1. **版本兼容：** 模板工程和旧背包示例（`examples/inventory/legacy/project`）在编辑器里保存后，0.7.0 都能生成，浏览器里每个包都能加载、每个导出的组件都能创建；模板工程保存后 `lgui check` 没有错误和警告，`lgui verify` 正常。编辑器保存时会重写 XML（属性顺序变了、`package.xml` 多一个空的 `<publish>`、多出 `settings/*.json`），内容不变。
+1. **版本兼容：** 模板工程和旧背包示例（当时的 `examples/inventory/legacy/project`，现在在 tag `v0.2.0-final` 里）在编辑器里保存后，0.7.0 都能生成，浏览器里每个包都能加载、每个导出的组件都能创建；模板工程保存后 `lgui check` 没有错误和警告，`lgui verify` 正常。编辑器保存时会重写 XML（属性顺序变了、`package.xml` 多一个空的 `<publish>`、多出 `settings/*.json`），内容不变。
    - **不兼容的地方（已处理）：** 编辑器读工程时会丢掉跨包子组件的 `fileName` 和跨包图片的 `pkg`，于是判定工程「不能无损保存」（`uam_fidelity_unsupported`），整个工程都存不了——官方 FairyGUI 编辑器做的工程（跨包引用都带 `fileName`）也一样。处理：模板和排布模式里的跨包引用去掉 `fileName`；UI 开发规范写明「跨包只写 `pkg` + `src`，图片不跨包」；`lgui check` 加了警告 `LGUI-UI-020`。
 2. **重新打开会不会读到旧内容：** 会。编辑器的工作副本存在浏览器里，重新打开时恢复的是浏览器里的副本，不会重新读 `ui/`（绑定的文件夹只在保存时比较、写回）。Agent 改了 `ui/` 以后再打开，显示的是旧内容。处理：`lgui editor` 提供只读的 `/__lgui_editor/project`，编辑器（`project-reload.patch`）由 `lgui editor` 打开时每次都从它重新导入；绑定过的文件夹保留，保存仍写回 `ui/`。代价：编辑器里没保存到 `ui/` 的改动，下次打开就没了。
 

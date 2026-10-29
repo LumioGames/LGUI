@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <displayList>
+    <graph id="n0" name="mask" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#aa000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n1" name="panel" xy="660,200" size="600,680" type="rect" lineSize="2" lineColor="#e8c27a" fillColor="#f0111a28">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <text id="n2" name="title" xy="700,230" size="520,70" fontSize="44" color="#e8c27a" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="获得道具">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <loader id="n3" name="icon" xy="860,320" size="200,200" align="center" vAlign="middle" fill="scale">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <text id="n4" name="itemText" xy="700,540" size="520,200" fontSize="30" color="#f3ead6" align="center" vAlign="top" autoSize="height" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n5" name="okButton" pkg="cmn00001" src="button01" xy="840,780" size="240,72">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    
+      <Button title="收下"/>
+    </component>
+  </displayList>
+</component>

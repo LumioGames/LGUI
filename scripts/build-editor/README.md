@@ -48,7 +48,7 @@ node scripts/build-editor/build.mjs
 node scripts/build-editor/check-compat.mjs [工程目录 ...]
 ```
 
-编辑器打开并保存工程（把一个文字控件右移 1 像素）→ 导出 → 和原文件比较 → 随插件带的 OpenFairyGUI 0.7.0 生成网页界面包 → 浏览器里加载每个包、创建每个导出的组件。不写参数时测 `lgui init` 的模板工程（再多跑 `lgui check` 和 `lgui verify --size desktop`）和 `examples/inventory/legacy/project`。升级上游编辑器后跑一遍。
+编辑器打开并保存工程（把一个文字控件右移 1 像素）→ 导出 → 和原文件比较 → 随插件带的 OpenFairyGUI 0.7.0 生成网页界面包 → 浏览器里加载每个包、创建每个导出的组件。不写参数时测 `lgui init` 的模板工程（再多跑 `lgui check` 和 `lgui verify --size desktop`）和背包示例 `examples/inventory/ui`。升级上游编辑器后跑一遍。
 
 ## 验证
 

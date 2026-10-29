@@ -91,8 +91,8 @@ test('lgui ui list 列出包、组件和控件，标出导出和竖版', async (
 
 test('背包示例的界面能生成类型和 headless 描述', async () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-inv-'));
-  fs.cpSync(path.join(repo, 'examples/inventory/legacy/project'), path.join(root, 'ui'), {recursive: true});
-  fs.renameSync(path.join(root, 'ui/Inventory.fairy'), path.join(root, 'ui/UI.fairy'));
+  fs.cpSync(path.join(repo, 'examples/inventory/ui'), path.join(root, 'ui'), {recursive: true});
   const {types} = await generateProjectTypes(root);
-  assert.ok(types.components.includes('Inventory/ComplexMain'));
+  assert.ok(types.components.includes('Bag/BagPanel'));
+  assert.ok(types.components.includes('Reward/CoinDialog'));
 });

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="main0001">
+  <resources>
+    <component id="hud00001" name="Hud.xml" path="/" exported="true"/>
+    <component id="hud00002" name="Hud@portrait.xml" path="/" exported="true"/>
+    <component id="mainvw01" name="MainView.xml" path="/" exported="true"/>
+    <component id="mainvw02" name="MainView@portrait.xml" path="/" exported="true"/>
+    <component id="entry001" name="EntryButton.xml" path="/" exported="true"/>
+    <image id="bkdrop01" name="backdrop.png" path="/" exported="true"/>
+  </resources>
+</packageDescription>

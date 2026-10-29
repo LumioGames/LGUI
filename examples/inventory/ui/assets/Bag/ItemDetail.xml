@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <displayList>
+    <graph id="n0" name="mask" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#99000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n1" name="panel" xy="560,190" size="800,700" type="rect" lineSize="2" lineColor="#8a6d3b" fillColor="#f0111a28">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <loader id="n2" name="icon" xy="600,230" size="240,240" align="center" vAlign="middle" fill="scale">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <text id="n3" name="itemName" xy="870,240" size="450,60" fontSize="44" color="#f3ead6" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n4" name="rarityText" xy="870,310" size="450,40" fontSize="28" color="#7fb2ff" align="left" vAlign="middle" autoSize="shrink" singleLine="true" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n5" name="statsText" xy="870,370" size="450,120" fontSize="26" color="#e8c27a" align="left" vAlign="top" autoSize="height" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n6" name="descText" xy="600,500" size="720,250" fontSize="28" color="#a9b6c6" align="left" vAlign="top" autoSize="height" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n7" name="closeButton" pkg="cmn00001" src="button01" xy="840,790" size="240,72">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    
+      <Button title="关闭"/>
+    </component>
+  </displayList>
+</component>
