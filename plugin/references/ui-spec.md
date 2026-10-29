@@ -112,7 +112,7 @@ ui/
 <!-- 输入框 -->
 <inputtext id="n3" name="search" xy="20,200" size="360,40" fontSize="22" color="#ffffff" autoSize="none" singleLine="true" prompt="搜索"/>
 
-<!-- 按钮：引用一个 extention="Button" 的组件 -->
+<!-- 按钮：引用一个 extention="Button" 的组件（按钮组件本身可以写 <Button mode="Check"/> 或 "Radio"，让它保持选中，见第 12 节） -->
 <component id="n4" name="sellButton" src="btn00001" xy="20,250" size="160,56">
   <Button title="出售"/>
 </component>
@@ -189,12 +189,13 @@ ui/
 
 - 横屏 1920×1080，竖屏 1080×1920。两者短边相同，按钮、图标、字号在两种方向下一样大，美术资源直接共用。
 - 全屏界面的根组件尺寸写设计尺寸：横版 `size="1920,1080"`，竖版 `size="1080,1920"`。
-- 框架保证整个设计区域完整显示，多出来的空间交给关联。
+- 框架保证整个设计区域完整显示：缩放比 = min(屏幕宽 / 设计宽, 屏幕高 / 设计高)，所以一个方向刚好铺满，另一个方向多出空间。全屏界面的根组件被拉到整个可见区域（设计单位下比设计尺寸大），多出来的空间交给关联；不是全屏的界面（弹窗等）放在可见区域正中。
 
 ### 7.2 横竖两版组件
 
 - 需要两种排法的界面做两个组件：横版 `BagPanel` 和竖版 `BagPanel@portrait`，都要导出。
 - **两版的控件名和类型必须完全一致**（包括控制器和页名），代码只写一份。不一致时 `lgui check` 报 `LGUI-UI-007`。
+- **两版的固定文字也要一样**：两版共用一个文本键（`<包>/<组件>/<控件>`），`lgui i18n extract` 和翻译都以横版的文字为准，竖版写了不同的字会被丢掉。两版要说不一样的话，就用代码里的 `lgui.t`。
 - 按钮、道具格子这类子组件两版共用。
 - 弹窗这类没有竖版的组件，两种方向通用，只靠关联适配。
 - **全屏界面必须有竖版**；确实两种方向都用同一版的，在 View 里写 `static bothOrientations = true`（见 MVC 开发规范）。
@@ -202,7 +203,17 @@ ui/
 
 ### 7.3 同一方向内的适配
 
-- **关联：** 贴边、居中、跟着拉伸。全屏背景铺满屏幕（宽高都关联父组件）；可交互的内容由框架放进安全区，单个界面不用管。
+- **关联：** 写在控件里 `<relation target="" sidePair="…"/>`（`target=""` 表示父组件），多条用逗号连起来。常用的：
+
+| 写法 | 效果 |
+|---|---|
+| `width-width`、`height-height` | 跟着父组件拉伸宽 / 高（全屏背景两个都写） |
+| `left-left`、`right-right` | 贴左边 / 贴右边，离边的距离不变 |
+| `top-top`、`bottom-bottom` | 贴上边 / 贴下边 |
+| `center-center`、`middle-middle` | 水平居中 / 垂直居中 |
+
+  一个方向只写一条（比如右上角的关闭按钮写 `right-right,top-top`）。其他取值照 FairyGUI 的关联规则。
+- **底部留空：** 操作提示栏（第 10 节）占屏幕底部 64 设计像素，全屏界面底部的按钮和内容要留出这段高度。
 - **列表：** 用列表的自动排布（`layout="flow_hz"`），按宽度决定每行几个，不在代码里算列数。
 - **代码里不写坐标和尺寸**，布局只在 `ui/` 里定义。
 
@@ -260,7 +271,7 @@ ui/
 | `Common/ArtText` | 美术字的空容器（第 11 节） | 无 |
 | `Common/placeholder`（图片） | 默认占位图 | — |
 
-**操作提示栏：** 框架把 `Common/ActionHintBar` 放在最上面的 toast 层（不收输入），贴着屏幕底部，宽度铺满。它列出激活界面里带 `hint` 的按键动作，每一项用 `Common/ActionHint` 显示按键名（`key`，比如 Esc、Enter）和提示文字（`label`）；返回键默认显示文本键 `lgui.back`（「返回」）。触屏上没有按键，输入类型是触摸时提示栏隐藏。
+**操作提示栏：** 框架把 `Common/ActionHintBar` 放在最上面的 toast 层（不收输入），贴着屏幕底部，宽度铺满。它列出激活界面里带 `hint` 的按键动作，每一项用 `Common/ActionHint` 显示按键名（`key`，比如 Esc、Enter）和提示文字（`label`）；返回键默认显示文本键 `lgui.back`（「返回」）。触屏上没有按键，输入类型是触摸时提示栏隐藏。提示栏高 64 设计像素，全屏界面底部要给它留位置（第 7.3 节）。
 
 **红点：** 要显示红点的控件（按钮、子组件）里放一个名字固定为 `redDot` 的子控件，通常就是 `Common/RedDot` 的实例。绑定表写了 `redDot` 的控件里缺这个子控件时，`lgui check` 报 `LGUI-UI-012`。
 
@@ -299,6 +310,7 @@ ui/
 - `defaultItem` 指向子项组件（导出），代码里用 `ItemView` 绑定。
 - 自动排布：`layout="column"`（竖排一列）、`layout="row"`（横排一行）、`layout="flow_hz"`（横向排满换行，网格用这个）、`layout="flow_vt"`。
 - 框架默认开虚拟列表，只创建看得见的子项，数据多也不卡。所以子项组件的尺寸要固定。
+- **显示选中项：** 子项组件做成按钮（`extention="Button"`，带 `button` 控制器），根节点下写 `<Button mode="Radio"/>`；选中时 `button` 控制器在 `down` 页（鼠标悬停时是 `selectedOver`），用 `<gearDisplay controller="button" pages="1,3"/>` 挂一个选中框。普通模式（不写 `mode`）的按钮不保持选中，列表选了也看不出来。`lgui new view --pattern split|grid` 生成的子项已经这样写好了。
 - 列表里不要放手写的子项，子项都由代码给数据生成。
 
 ## 13. 检查规则表
@@ -327,7 +339,7 @@ ui/
 | `LGUI-UI-019` | 代码里用到的组件（View 的 `component`、列表子项）已导出 | `exported="true"` | 没写 `exported` |
 | `LGUI-UI-020`（警告） | 跨包引用写成编辑器能保存的样子：子组件跨包只写 `pkg` + `src`，不写 `fileName`；图片不跨包引用 | `pkg="cmn00001" src="button01"` | `fileName="Button.xml" pkg="cmn00001"`；`<image … pkg="cmn00001">` |
 | `LGUI-UI-030` | 代码里 `lgui.t` 用到的键、绑定的固定文字，在每种语言的文本表里都有 | 各语言都有 `bag.sold` | `en.json` 里缺 `bag.sold` |
-| `LGUI-UI-031`（警告） | 文本表里没有用不到的键（用变量拼键名的地方查不出来，所以只是警告） | — | 删掉了按钮，`Bag/BagPanel/oldButton` 还在表里 |
+| `LGUI-UI-031`（警告） | 文本表里没有用不到的键（用模板字符串拼的键 `` lgui.t(`item.${kind}.name`) ``、条件表达式两边的键都算用到了；用变量传进来的键查不出来，所以只是警告） | — | 删掉了按钮，`Bag/BagPanel/oldButton` 还在表里 |
 | `LGUI-UI-032` | 同一个键在各语言里的占位符一致 | `已售出 {count} 件` / `Sold {count}` | `Sold {num}` |
 
 靠人看、机器查不出的：图里不放文字；同一个工程的图风格一致；文字在各尺寸下没有被截断（看 `lgui verify` 的截图）。

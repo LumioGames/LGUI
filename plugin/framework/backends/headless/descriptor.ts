@@ -29,6 +29,8 @@ export interface ComponentDescriptor {
   exported: boolean;
   /** 扩展类型（Button、ProgressBar 等）。 */
   extension: string | null;
+  /** 按钮的模式：Common 不保持选中；Check、Radio 保持（列表的选中项靠它显示）。 */
+  buttonMode?: string | null;
   /** [宽, 高]。 */
   size: [number, number];
   /** 控制器。 */
