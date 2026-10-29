@@ -1,6 +1,6 @@
 // MVC 框架对外的类型：绑定表、按键表、View 的固定信息。写法以 references/mvc-spec.md 为准。
 import type {
-  UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UIProgress, UIGraph
+  UIComponent, UIText, UIRichText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph
 } from '../core/index';
 
 /** 5 层，从下到上。 */
@@ -44,6 +44,8 @@ export interface DragGesture {
   dx: number;
   /** 从开始到现在的纵向位移。 */
   dy: number;
+  /** 结束时：是不是被取消的（比如来电、指针被系统收走），不是用户松手。 */
+  cancelled?: boolean;
 }
 
 /** 滑动手势（抬起时速度够快）。 */
@@ -102,6 +104,12 @@ export interface CommonBinding {
   hover?: Action<[boolean]>;
   /** 动作返回的 Promise 结束前保持锁住。 */
   lockWhilePending?: boolean;
+  /** 拖放：能拖起来，值是松手时交给 drop 的数据；null 表示这时拖不起来（比如空格子）。 */
+  dragData?: Value<unknown>;
+  /** 拖起时跟手的图标（图片地址），不写时用加载器自己的图片或按钮的图标。 */
+  dragIcon?: Value<string>;
+  /** 拖放：别的控件拖到这里松手时调用，参数是那边的 dragData；写在 ItemView 里时第二个参数是这一项的数据。 */
+  drop?: (data: never, item: never) => unknown;
 }
 
 /** 文字、富文本、输入框、ArtText。 */
@@ -149,6 +157,16 @@ export interface ListBinding extends CommonBinding {
   select?: Action<[never]>;
 }
 
+/** 动效（键是动效名）。 */
+export interface TransitionBinding {
+  /** 为真就播（按 ui/ 里的播放次数，-1 一直循环），为假就停。 */
+  playing?: Value<boolean>;
+  /** 值每变一次就播一次（打开时的值不播），比如一个递增的计数。不能和 playing 一起写，不能写在 ItemView 里。 */
+  play?: Value<unknown>;
+  /** 一次播放正常放完时调用（被停掉、重播、界面关闭时不调用）。 */
+  done?: Action;
+}
+
 /** 控制器。 */
 export interface ControllerBinding<Page extends string> {
   /** 当前页。 */
@@ -168,6 +186,7 @@ export interface ComponentBinding extends CommonBinding {
 /** 按控件类型选绑定表里能用的词。 */
 export type BindingFor<X> =
   X extends UIController<infer Page> ? ControllerBinding<Page> :
+  X extends UITransition ? TransitionBinding :
   X extends UIList ? ListBinding :
   X extends UIButton ? ButtonBinding :
   X extends UIProgress ? ProgressBinding :
@@ -185,7 +204,7 @@ export type Bind<UI> = {[K in Exclude<keyof UI, '__component'>]?: BindingFor<UI[
 export type ItemValue<Data, T> = T | ((item: Data) => T);
 
 /** 把一种绑定里的 Value 换成 ItemValue。 */
-type ForItem<B, Data> = {[K in keyof B]: B[K] extends Value<infer T> | undefined ? (K extends 'visibleOn' | 'redDot' | 'placeholder' | 'lockWhilePending' | 'hold' ? B[K] : ItemValue<Data, T> | undefined) : B[K]};
+type ForItem<B, Data> = {[K in keyof B]: B[K] extends Value<infer T> | undefined ? (K extends 'visibleOn' | 'redDot' | 'placeholder' | 'lockWhilePending' | 'hold' | 'drop' ? B[K] : ItemValue<Data, T> | undefined) : B[K]};
 
 /** ItemView 的绑定表。 */
 export type ItemBind<UI, Data> = {[K in Exclude<keyof UI, '__component'>]?: ForItem<BindingFor<UI[K]>, Data>};

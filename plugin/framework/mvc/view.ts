@@ -7,6 +7,7 @@ import {bus} from './events';
 import {Scope} from './scope';
 import {ViewTimers} from './timers';
 import {applyBindings} from './binding/index';
+import {ViewMotion, motionOf} from './binding/transition';
 
 type Table = Record<string, Record<string, unknown> | undefined>;
 
@@ -16,6 +17,8 @@ abstract class ViewBase<UI> {
   readonly __scope = new Scope();
   /** 内部用：这个界面的定时器。 */
   readonly __timers = new ViewTimers(this.__scope);
+  /** 内部用：这个界面的动效（被盖住时暂停，关闭时停掉）。 */
+  readonly __motion = new ViewMotion();
   /** 内部用：当前绑定的组件。 */
   __component: UIComponent | null = null;
   /** 内部用：当前这一次绑定的清理清单（换版重新绑定时只清这一份）。 */
@@ -28,7 +31,7 @@ abstract class ViewBase<UI> {
     const component = this.__component;
     if (!component) throw new LgRuntimeError('LGUI-RT-065', `${this.constructor.name} 还没打开或已经关闭，不能用 this.ui。`, '只在生命周期钩子里用 this.ui。');
     return new Proxy({}, {
-      get: (_, key) => typeof key === 'string' ? component.child(key) ?? component.controller(key) ?? undefined : undefined
+      get: (_, key) => typeof key === 'string' ? component.child(key) ?? component.controller(key) ?? component.transition(key) ?? undefined : undefined
     }) as UI;
   }
 
@@ -38,7 +41,11 @@ abstract class ViewBase<UI> {
     this.__component = component;
     const scope = new Scope();
     this.__bindScope = scope;
-    applyBindings(component, this.bind as Table, {owner: options.owner ?? this, scope, isActive: options.isActive ?? (() => true), item: options.item, where: this.constructor.name});
+    const owner = options.owner ?? this;
+    applyBindings(component, this.bind as Table, {owner, scope, isActive: options.isActive ?? (() => true), item: options.item, where: this.constructor.name});
+    // 所在的界面正被盖住（换版、列表新出现的子项）：新组件里自动播放的动效也先停着。
+    const motion = motionOf(owner);
+    if (motion?.isPaused) motion.pause(component);
   }
 
   /** 内部用：解绑。 */
@@ -48,10 +55,23 @@ abstract class ViewBase<UI> {
     this.__component = null;
   }
 
-  /** 内部用：彻底清理（解绑、取消定时器和收听）。 */
+  /** 内部用：彻底清理（解绑、停掉动效、取消定时器和收听）。 */
   __dispose(): void {
     this.__unmount();
+    this.__motion.stop();
     this.__scope.dispose();
+  }
+
+  /** 内部用：被盖住时暂停定时器和动效。 */
+  __pause(): void {
+    this.__timers.pause();
+    this.__motion.pause(this.__component);
+  }
+
+  /** 内部用：露出来时恢复定时器和动效。 */
+  __resume(): void {
+    this.__motion.resume();
+    this.__timers.resume();
   }
 
   /** 内部用：绑定和清理清单里一共登记了多少项（给调试快照用）。 */

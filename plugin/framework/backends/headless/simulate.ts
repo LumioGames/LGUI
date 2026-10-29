@@ -1,9 +1,8 @@
-// headless 后端的模拟操作（给 lgui test 用）：点击、长按、拖拽、滑动、双指缩放、滚轮、按键、换屏幕尺寸、假时钟。
+// headless 后端的模拟操作（给 lgui test 用）：点击、长按、拖拽、拖放、滑动、双指缩放、滚轮、按键、换屏幕尺寸、假时钟。
 import type {PointerInput, UIObject} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
 import type {HeadlessBackend} from './index';
-import {HeadlessList, asHeadless} from './objects';
-import type {HeadlessObject} from './objects';
+import {HeadlessList, HeadlessObject, asHeadless} from './objects';
 
 const FRAME = 16;
 
@@ -29,6 +28,7 @@ export async function advance(backend: HeadlessBackend, ms: number): Promise<voi
 // 指针事件：和浏览器一样，先从目标往上冒泡给每一级的 onPointer，最后到舞台（原始输入）。
 function send(backend: HeadlessBackend, target: HeadlessObject, type: PointerInput['type'], pointerId: number, x: number, y: number, pointerType: PointerInput['pointerType']): void {
   const event: PointerInput = {type, pointerId, pointerType, x, y, time: backend.state.now};
+  HeadlessObject.pointerTarget = target;
   for (let o: HeadlessObject | null = target; o; o = o.parent) o.pointer.emit(event);
   backend.state.handlers.pointer.emit(event);
 }
@@ -96,6 +96,24 @@ export async function drag(backend: HeadlessBackend, object: UIObject, dx: numbe
     send(backend, o, 'move', 1, x + (dx * i) / steps, y + (dy * i) / steps, 'touch');
   }
   send(backend, o, 'up', 1, x + dx, y + dy, 'touch');
+  await advance(backend, 0);
+}
+
+/** 拖放：在 from 上按住，移到 to 的中心松手（用 durationMs 毫秒，分 steps 步）。
+ * 和触屏一样，移动途中的事件发给 from，最后一步和松手发给 to（「指针下面是谁」就是 to）。
+ * headless 不算布局（列表子项都叠在列表左上角），所以第一步先往右移 20 像素，保证拖得起来。 */
+export async function dragTo(backend: HeadlessBackend, from: UIObject, to: UIObject, durationMs = 400, steps = 10): Promise<void> {
+  const a = target(from);
+  const b = target(to);
+  send(backend, a.o, 'down', 1, a.x, a.y, 'touch');
+  await advance(backend, durationMs / steps);
+  send(backend, a.o, 'move', 1, a.x + 20, a.y, 'touch');
+  for (let i = 2; i <= steps; i++) {
+    await advance(backend, durationMs / steps);
+    const k = (i - 1) / (steps - 1);
+    send(backend, i === steps ? b.o : a.o, 'move', 1, a.x + 20 + (b.x - a.x - 20) * k, a.y + (b.y - a.y) * k, 'touch');
+  }
+  send(backend, b.o, 'up', 1, b.x, b.y, 'touch');
   await advance(backend, 0);
 }
 

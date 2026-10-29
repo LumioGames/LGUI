@@ -22,6 +22,7 @@ class FakeObject implements UIObject {
   readonly pointer = new Emitter<PointerInput>();
   constructor(readonly name: string) {}
   onPointer(handler: (event: PointerInput) => void): Unsubscribe { return this.pointer.on(handler); }
+  hitDepth(): number { return -1; }
 }
 
 export class FakeController implements UIController<'a' | 'b'> {
@@ -41,6 +42,7 @@ export class FakeComponent extends FakeObject implements UIComponent {
   child(path: string): UIObject | null { return this.children.find(c => c.name === path) ?? null; }
   controller(name: string): UIController | null { return name === 'tabs' ? this.tabs : null; }
   transition(): null { return null; }
+  allTransitions(): readonly [] { return []; }
   childNames(): readonly string[] { return this.children.map(c => c.name); }
   addChild(child: UIObject): void { this.children.push(child); }
   removeChild(child: UIObject): void { this.children.splice(this.children.indexOf(child), 1); }

@@ -28,6 +28,7 @@ type Sim = {
   doubleClick(b: Backend, o: UIObject): Promise<void>;
   hold(b: Backend, o: UIObject, ms: number): Promise<void>;
   drag(b: Backend, o: UIObject, dx: number, dy: number): Promise<void>;
+  dragTo(b: Backend, from: UIObject, to: UIObject): Promise<void>;
   swipe(b: Backend, o: UIObject, dx: number, dy: number): Promise<void>;
   pinch(b: Backend, o: UIObject, scale: number): Promise<void>;
   wheel(b: Backend, o: UIObject, dy: number): Promise<void>;
@@ -86,6 +87,7 @@ class Harness implements TestHarness {
   click(path: string): Promise<void> { return this.sim.click(this.backend, this.object(path), 50, inputType.get() === 'touch' ? 'touch' : 'mouse'); }
   hold(path: string, ms: number): Promise<void> { return this.sim.hold(this.backend, this.object(path), ms); }
   drag(path: string, dx: number, dy: number): Promise<void> { return this.sim.drag(this.backend, this.object(path), dx, dy); }
+  dragTo(from: string, to: string): Promise<void> { return this.sim.dragTo(this.backend, this.object(from), this.object(to)); }
   swipe(path: string, dx: number, dy: number): Promise<void> { return this.sim.swipe(this.backend, this.object(path), dx, dy); }
   pinch(path: string, scale: number): Promise<void> { return this.sim.pinch(this.backend, this.object(path), scale); }
   wheel(path: string, dy: number): Promise<void> { return this.sim.wheel(this.backend, this.object(path), dy); }

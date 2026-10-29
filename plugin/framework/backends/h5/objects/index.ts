@@ -5,6 +5,7 @@ import type {
 } from '../../../core/index';
 import {LgRuntimeError} from '../../../core/index';
 import {pointerEventTypes, toPointerInput} from '../pointer';
+import {stage} from '../scale';
 
 const toHex = (value: number): string => '#' + (value & 0xffffff).toString(16).padStart(6, '0');
 const fromHex = (value: string): number => {
@@ -38,6 +39,12 @@ class H5Object implements UIObject {
     for (const type of pointerEventTypes) element.addEventListener(type, listener as EventListener);
     return () => { for (const type of pointerEventTypes) element.removeEventListener(type, listener as EventListener); };
   }
+  // 浏览器自己做命中测试：根节点贴在页面左上角，设计坐标乘缩放比就是页面坐标；不接收输入的元素（pointer-events: none）不算。
+  hitDepth(x: number, y: number): number {
+    let depth = 0;
+    for (let el = document.elementFromPoint(x * stage.scale, y * stage.scale); el; el = el.parentElement, depth++) if (el === this.native.element) return depth;
+    return -1;
+  }
 }
 
 class H5Component extends H5Object implements UIComponent {
@@ -59,6 +66,7 @@ class H5Component extends H5Object implements UIComponent {
     const native = this.native.getTransition(name);
     return native ? wrapTransition(native) : null;
   }
+  allTransitions(): readonly UITransition[] { return this.native._transitions.map(wrapTransition); }
   childNames(): readonly string[] {
     const names: string[] = [];
     for (let i = 0; i < this.native.numChildren; i++) names.push(this.native.getChildAt(i).name);
@@ -208,8 +216,12 @@ class H5Controller implements UIController {
 class H5Transition implements UITransition {
   constructor(readonly native: fgui.Transition) {}
   get name(): string { return this.native.name; }
-  play(options: {times?: number; delay?: number} = {}): Promise<void> {
-    return new Promise(resolve => this.native.play(resolve, options.times ?? 1, options.delay ?? 0));
+  get settings(): UITransition['settings'] { return {autoPlay: this.native._autoPlay === true, times: this.native._autoPlayTimes ?? 1, delay: Math.round((this.native._autoPlayDelay ?? 0) * 1000)}; }
+  get playing(): boolean { return this.native.playing; }
+  play(options: {times?: number; delay?: number} = {}, onComplete?: () => void): void {
+    // FairyGUI 重播时会把上一次当作放完（调用它的回调）；先不带回调停掉，只有正常放完才通知。
+    this.native.stop(true, false);
+    this.native.play(onComplete, options.times ?? 1, (options.delay ?? 0) / 1000);
   }
   stop(): void { this.native.stop(true, false); }
   setPaused(paused: boolean): void { this.native.setPaused(paused); }

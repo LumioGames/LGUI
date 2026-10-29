@@ -28,6 +28,24 @@ function props(child) {
   return p;
 }
 
+// 动效放一遍的时长：每一项的「开始帧 + 时长 × (重复次数 + 1)」取最大，按帧率（不写是每秒 24 帧）换成毫秒。
+// headless 后端按它走假时钟，放完才算完，和网页一致。有一项一直重复（repeat=-1）时永远放不完，记成 -1。
+function describeTransition(node) {
+  const a = node.attrs;
+  const fps = Number(a.frameRate ?? 24) || 24;
+  let frames = 0;
+  for (const item of node.children.filter(child => child.tag === 'item')) {
+    const i = item.attrs;
+    const repeat = Number(i.repeat ?? 0);
+    const end = i.tween === 'true' ? (repeat < 0 ? Infinity : Number(i.time ?? 0) + Number(i.duration ?? 0) * (repeat + 1)) : Number(i.time ?? 0);
+    frames = Math.max(frames, end);
+  }
+  return {
+    name: a.name, ms: frames === Infinity ? -1 : Math.round((frames / fps) * 1000), autoPlay: a.autoPlay === 'true',
+    times: Number(a.autoPlayRepeat ?? a.autoPlayTimes ?? 1), delay: Math.round(Number(a.autoPlayDelay ?? 0) * 1000)
+  };
+}
+
 export function describeComponent(component) {
   return {
     name: component.fullName,
@@ -37,7 +55,7 @@ export function describeComponent(component) {
     buttonMode: component.buttonMode,
     size: component.size.split(',').map(Number),
     controllers: component.controllers.map(c => ({name: c.name, pages: c.pages.map(page => page.name), selected: c.pages[c.selected]?.name ?? c.pages[0]?.name ?? null})),
-    transitions: component.transitions,
+    transitions: component.root.children.filter(child => child.tag === 'transition').map(describeTransition),
     children: component.children.filter(child => child.kind && child.name).map(child => ({
       name: child.name,
       elementId: child.id,

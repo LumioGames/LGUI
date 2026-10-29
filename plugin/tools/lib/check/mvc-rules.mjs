@@ -6,8 +6,9 @@ import {findComponent} from '../generate/model.mjs';
 
 const VIEW_STATICS = ['component', 'layer', 'fullScreen', 'params', 'result', 'inputMode', 'bothOrientations'];
 const LAYERS = ['hud', 'page', 'popup', 'modal', 'toast'];
-const DISPLAY = ['text', 'visible', 'enabled', 'icon', 'progress', 'page', 'redDot'];
-const ACTIONS = ['click', 'doubleClick', 'hold', 'drag', 'swipe', 'pinch', 'wheel', 'hover', 'change', 'select'];
+const DISPLAY = ['text', 'visible', 'enabled', 'icon', 'progress', 'page', 'redDot', 'playing', 'play', 'dragData', 'dragIcon'];
+const ACTIONS = ['click', 'doubleClick', 'hold', 'drag', 'swipe', 'pinch', 'wheel', 'hover', 'change', 'select', 'done', 'drop'];
+const TRANSITION_WORDS = ['playing', 'play', 'done'];
 const LIST = ['items', 'item', 'key', 'selected'];
 const OTHER = ['view', 'lockWhilePending', 'visibleOn', 'placeholder'];
 const WORDS = [...DISPLAY, ...ACTIONS, ...LIST, ...OTHER];
@@ -122,7 +123,7 @@ export function mvcRules({ts, root, files, model, ui}) {
       const memberMap = component ? members(component).result : new Map();
       for (const entry of binds) {
         // MVC-005 键在组件里存在
-        if (component && !memberMap.has(entry.key)) add('LGUI-MVC-005', entry.node, `${view.name} 的绑定表里写了 ${entry.key}，但 ${componentName} 里没有这个控件或控制器。`, '用 lgui ui list 查看真实的名字。');
+        if (component && !memberMap.has(entry.key)) add('LGUI-MVC-005', entry.node, `${view.name} 的绑定表里写了 ${entry.key}，但 ${componentName} 里没有这个控件、控制器或动效。`, '用 lgui ui list 查看真实的名字。');
         const member = memberMap.get(entry.key);
         const words = objectProps(ts, entry.value);
         if (!words) continue;
@@ -130,6 +131,8 @@ export function mvcRules({ts, root, files, model, ui}) {
           // MVC-006 词表
           if (!WORDS.includes(w.key)) { add('LGUI-MVC-006', w.node, `${view.name} 的 ${entry.key} 用了词表以外的词 ${w.key}。`, '能用的词见 mvc-spec.md 第 6.4 节。'); continue; }
           if (member?.kind === 'controller' && !['page', 'change'].includes(w.key)) add('LGUI-MVC-006', w.node, `${entry.key} 是控制器，只能用 page 和 change，不能用 ${w.key}。`, '控制器只写 page 和 change。');
+          if (member?.kind === 'transition' && !TRANSITION_WORDS.includes(w.key)) add('LGUI-MVC-006', w.node, `${entry.key} 是动效，只能用 playing、play、done，不能用 ${w.key}。`, '动效只写 playing、play、done。');
+          if (member && member.kind !== 'transition' && TRANSITION_WORDS.includes(w.key)) add('LGUI-MVC-006', w.node, `${entry.key} 不是动效，不能用 ${w.key}。`, 'playing、play、done 只写在动效名（ui/ 里的 transition）上。');
           // MVC-007 显示类的值
           if (DISPLAY.includes(w.key) && w.key !== 'redDot' && w.value) {
             const v = w.value;

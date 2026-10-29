@@ -26,6 +26,13 @@ export class HeadlessObject implements UIObject {
   readonly pointer = new Handlers<PointerInput>();
   constructor(readonly name: string, readonly kind: UIKind | 'container') {}
   onPointer(handler: (event: PointerInput) => void): Unsubscribe { return this.pointer.add(handler); }
+  /** 模拟操作最后一次把指针事件发给了哪个控件（headless 不算布局，「指针下面是谁」就是它）。 */
+  static pointerTarget: HeadlessObject | null = null;
+  hitDepth(): number {
+    let depth = 0;
+    for (let o = HeadlessObject.pointerTarget; o; o = o.parent, depth++) if (o === this) return depth;
+    return -1;
+  }
   /** 内部用：设计尺寸下在屏幕上的位置（各级父组件的位置相加）。 */
   globalRect(): Rect {
     let {x, y} = this.rect;
@@ -56,6 +63,7 @@ export class HeadlessComponent extends HeadlessObject implements UIComponent {
   }
   controller(name: string): UIController | null { return this.controllers.get(name) ?? null; }
   transition(name: string): UITransition | null { return this.transitions.get(name) ?? null; }
+  allTransitions(): readonly UITransition[] { return [...this.transitions.values()]; }
   childNames(): readonly string[] { return this.children.map(c => c.name); }
   addChild(child: UIObject): void {
     const object = asHeadless(child);
@@ -71,6 +79,7 @@ export class HeadlessComponent extends HeadlessObject implements UIComponent {
   }
   dispose(): void {
     this.disposed = true;
+    for (const t of this.transitions.values()) t.stop();
     this.parent?.removeChild(this);
     for (const c of [...this.children]) if (c instanceof HeadlessComponent) c.dispose();
     this.children.length = 0;
@@ -186,14 +195,43 @@ export class HeadlessController implements UIController {
   onChange(handler: (page: string) => void): Unsubscribe { return this.changes.add(handler); }
 }
 
+// 动效：按 headless 描述里的时长走假时钟（每帧回调），暂停时不走；放完才调用 onComplete，和网页一致。
 export class HeadlessTransition implements UITransition {
+  /** 每帧回调的来源（headless 后端创建时设置）。 */
+  static frames: Handlers<number> | null = null;
   playing = false;
   paused = false;
+  /** 播放过几次（测试断言用）。 */
   plays = 0;
-  constructor(readonly name: string) {}
-  play(): Promise<void> { this.plays++; this.playing = true; return Promise.resolve().then(() => { this.playing = false; }); }
-  stop(): void { this.playing = false; }
-  setPaused(paused: boolean): void { this.paused = paused; }
+  private stopFrames: Unsubscribe | null = null;
+  constructor(readonly name: string, private readonly ms: number, readonly settings: UITransition['settings']) {}
+  play(options: {times?: number; delay?: number} = {}, onComplete?: () => void): void {
+    this.halt();
+    this.plays++;
+    this.playing = true;
+    const times = options.times ?? 1;
+    // 和 FairyGUI 一样：时长是 0 的动效当场放完；一直循环或有一项一直重复的永远放不完。
+    const total = times < 0 || this.ms < 0 ? Infinity : (options.delay ?? 0) + this.ms * times;
+    if (total <= 0) { this.halt(); onComplete?.(); return; }
+    const frames = HeadlessTransition.frames;
+    if (!frames) throw new LgRuntimeError('LGUI-RT-027', 'headless 后端还没有创建，动效没有时钟。', '先调用 createHeadlessBackend。');
+    let elapsed = 0;
+    this.stopFrames = frames.add(dt => {
+      if (this.paused) return;
+      elapsed += dt;
+      if (elapsed < total) return;
+      this.halt();
+      onComplete?.();
+    });
+  }
+  stop(): void { this.halt(); }
+  setPaused(paused: boolean): void { if (this.playing) this.paused = paused; }
+  private halt(): void {
+    this.stopFrames?.();
+    this.stopFrames = null;
+    this.playing = false;
+    this.paused = false;
+  }
 }
 
 export function asHeadless(object: UIObject): HeadlessObject {
@@ -257,7 +295,12 @@ export function buildComponent(descriptor: ComponentDescriptor, lookup: Lookup, 
   component.rect = {x: 0, y: 0, width: descriptor.size[0], height: descriptor.size[1]};
   for (const c of descriptor.controllers) component.controllers.set(c.name, new HeadlessController(c.name, c.pages, c.selected));
   if (component instanceof HeadlessButton && props?.selected) component.selected = true;
-  for (const t of descriptor.transitions) component.transitions.set(t, new HeadlessTransition(t));
+  for (const t of descriptor.transitions) {
+    const transition = new HeadlessTransition(t.name, t.ms, {autoPlay: t.autoPlay, times: t.times, delay: t.delay});
+    component.transitions.set(t.name, transition);
+    // 自动播放：网页上组件放进界面时开始放，这里在创建时开始（UIManager 创建完马上就放进界面）。
+    if (t.autoPlay) transition.play({times: t.times, delay: t.delay});
+  }
   const owner = tr?.owners.get(descriptor.name);
   for (const child of descriptor.children) component.addChild(buildChild(child, lookup, owner, tr));
   return component;

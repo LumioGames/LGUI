@@ -42,12 +42,12 @@ ui/
 | 包名 | 大写开头的驼峰 | `Bag`、`Common` |
 | 组件名 | 大写开头的驼峰 | `BagPanel`、`ItemSlot` |
 | 竖版组件 | 横版名加 `@portrait` | `BagPanel@portrait` |
-| 控件名、控制器名 | 小写开头的驼峰，只用字母和数字 | `sellButton`、`tabs` |
+| 控件名、控制器名、动效名 | 小写开头的驼峰，只用字母和数字 | `sellButton`、`tabs`、`enter` |
 | 带字图片的各语言版本 | 图片名加 `@<语言>` | `title.png`、`title@en.png` |
 | 图片名 | 小写开头的驼峰或带数字 | `sword`、`btnBg` |
 
 - **控件名就是绑定表的键名。** 每个要在代码里用到的控件都要起名；只做装饰的控件也要起名（`deco1` 这类），因为名字要在组件内唯一。
-- 同一个组件里，控件名不能重复，控件和控制器也不能重名。
+- 同一个组件里，控件名不能重复，控件、控制器、动效也不能重名（动效名也是绑定表的键）。
 - **要生成类型的组件标「导出」**：在 `package.xml` 里写 `exported="true"`。代码里用 `View`、`ItemView`、`PartView` 对应的组件都必须导出；只在别的组件里当子组件、代码不直接绑的，可以不导出。
 
 ## 4. ID 规则
@@ -176,10 +176,19 @@ ui/
 **动效：**
 
 ```xml
-<transition name="enter">
+<transition name="enter" autoPlay="true">
   <item time="0" type="Alpha" target="n0" duration="12" tween="true" startValue="0" endValue="1"/>
 </transition>
+<transition name="glow" autoPlayRepeat="-1">
+  <item time="0" type="Alpha" target="n1" duration="12" tween="true" startValue="1" endValue="0.6" repeat="1" yoyo="true"/>
+</transition>
 ```
+
+- `time`、`duration` 的单位是帧，帧率是 `frameRate`（不写是每秒 24 帧）；`repeat` 是这一项再重复几次（`-1` 一直重复）。
+- `autoPlay="true"`：界面创建时自动播放（旋转、换语言重建组件时会再播一次）；`autoPlayDelay` 是自动播放前等几秒。
+- `autoPlayRepeat`：播放次数，`-1` 一直循环；绑定表里的 `playing` 也按它放。
+- 代码里按条件播放、重播、放完通知，用动效名当绑定表的键（MVC 开发规范第 6.4 节）。
+- `lgui test` 的 headless 后端按这里写的时长走假时钟，放完才算完，和网页一样。
 
 动效的设计方法见技能 `lgui-ui`。
 
@@ -312,6 +321,7 @@ ui/
 - 框架默认开虚拟列表，只创建看得见的子项，数据多也不卡。所以子项组件的尺寸要固定。
 - **显示选中项：** 子项组件做成按钮（`extention="Button"`，带 `button` 控制器），根节点下写 `<Button mode="Radio"/>`；选中时 `button` 控制器在 `down` 页（鼠标悬停时是 `selectedOver`），用 `<gearDisplay controller="button" pages="1,3"/>` 挂一个选中框。普通模式（不写 `mode`）的按钮不保持选中，列表选了也看不出来。`lgui new view --pattern split|grid` 生成的子项已经这样写好了。
 - 列表里不要放手写的子项，子项都由代码给数据生成。
+- **拖放的格子：** 拖起时跟手的图标默认用被拖控件自己的图片，所以子项里放一个加载器（比如叫 `icon`），代码把 `dragData`、`drop` 写在它上面；格子本身不动，拖放以后由数据重新生成。
 
 ## 13. 检查规则表
 
@@ -323,7 +333,7 @@ ui/
 | `LGUI-UI-002` | 资源 ID 是 8 位小写字母和数字，包内唯一 | `id="sword001"` | `id="sword"`、两个资源都叫 `sword001` |
 | `LGUI-UI-003` | 元素 ID 在组件内唯一 | `n0`、`n1` | 两个控件都是 `n3` |
 | `LGUI-UI-004` | 控件名、控制器名是小写开头的驼峰，组件内唯一 | `sellButton` | `SellButton`、`sell_button`、两个 `title` |
-| `LGUI-UI-005` | 控件和控制器不能重名 | 控制器 `tabs`，控件 `tabBar` | 控制器 `tabs`，控件也叫 `tabs` |
+| `LGUI-UI-005` | 控件、控制器、动效不能重名 | 控制器 `tabs`，控件 `tabBar` | 控制器 `tabs`，控件也叫 `tabs`；动效叫 `title`，控件也叫 `title` |
 | `LGUI-UI-006` | 包名、组件名是大写开头的驼峰；后缀只能是 `@portrait`（组件）或 `@<语言>`（图片） | `BagPanel@portrait.xml` | `bagPanel.xml`、`BagPanel_portrait.xml` |
 | `LGUI-UI-007` | 横竖两版的控件名、类型、控制器和页名完全一致 | 两版都有 `sellButton`（按钮） | 竖版少了 `sellButton`，或者竖版里它是文字 |
 | `LGUI-UI-009` | 引用的资源存在；跨包引用的资源已导出 | `src="sword001"`（存在） | 引用了已删掉的资源 |
