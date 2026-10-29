@@ -22,7 +22,7 @@ async function openEditor(context, server) {
     await page.waitForFunction(async () => {
       const state = await window.fairyEditorAgent.request({method: 'state'});
       return state.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession;
-    }, null, {timeout: 30000, polling: 500});
+    }, null, {timeout: 120000, polling: 500}); // CI 的机器没有显卡，编辑器导入要慢得多
   } catch (error) {
     // 没导入成功：把编辑器自己的状态、状态栏和页面报错带出来，方便在 CI 上查原因。
     const state = await page.evaluate(() => window.fairyEditorAgent.request({method: 'state'})).catch(e => String(e));
@@ -33,7 +33,7 @@ async function openEditor(context, server) {
   return page;
 }
 
-test('lgui editor：打开就是 ui/ 的内容；editor props 马上生效；改了 ui/ 再打开显示新内容', async t => {
+test('lgui editor：打开就是 ui/ 的内容；editor props 马上生效；改了 ui/ 再打开显示新内容', {timeout: 600000}, async t => {
   const browser = await launchBrowser();
   if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-editor-'));
