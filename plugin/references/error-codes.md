@@ -24,6 +24,9 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-011` | 插件里缺少要复制进工程的框架文件 | 插件不完整，重新安装 LGUI 插件 |
 | `LGUI-CLI-020` | `ui/UI.fairy` 找不到，或者 OpenFairyGUI 校验界面工程没通过（报错里逐条列出 OpenFairyGUI 给的问题） | 按提示改 `ui/` 里对应的文件 |
 | `LGUI-CLI-021` | 生成界面包时缺文件：OpenFairyGUI 没生成某个包，或者 `package.xml` 里登记的图片文件不存在 | 把图片放回 `package.xml` 写的位置，或者删掉这条资源 |
+| `LGUI-CLI-030` | `lgui dev` 的端口已经被占用 | 在 `.lgui/project.json` 里改 `devPort`，或者加 `--port <端口>` |
+| `LGUI-CLI-031` | 缺少某种语言的文本表，或者文本表不是合法的 JSON | 新建或修好 `i18n/<语言>.json` |
+| `LGUI-CLI-032` | 打包 `src/` 失败（语法错误、找不到 import 的文件等），带文件和行号 | 按提示改代码 |
 | `LGUI-CLI-999` | 命令行内部错误（LGUI 自己的缺陷） | 把输出报告给维护者 |
 
 ## LGUI-RT-xxx

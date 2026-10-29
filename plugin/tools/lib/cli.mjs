@@ -6,6 +6,7 @@ import {assertSameVersion} from './version.mjs';
 import {emit, toErrors} from './output.mjs';
 import {uiList} from './commands/ui-list.mjs';
 import {init} from './commands/init.mjs';
+import {dev} from './dev/index.mjs';
 
 // project：'none' 不需要在工程里；'required' 必须在工程里。
 // versionCheck：运行前比对插件和工程的版本（init、doctor、upgrade 不比对）。
@@ -14,7 +15,7 @@ import {init} from './commands/init.mjs';
 export const registry = [
   {name: 'init', usage: 'init [目录] [--name 名称]', about: '新建工程', project: 'none', versionCheck: false, flags: {name: 'string'}, run: init},
   {name: 'doctor', usage: 'doctor [--paths]', about: '检查环境', project: 'none', versionCheck: false, flags: {paths: 'boolean'}, run: null},
-  {name: 'dev', usage: 'dev [--port 端口] [--no-open]', about: '打开网页预览，改动后自动刷新', project: 'required', versionCheck: true, flags: {port: 'string', 'no-open': 'boolean'}, run: null},
+  {name: 'dev', usage: 'dev [--port 端口] [--no-open]', about: '打开网页预览，改动后自动刷新', project: 'required', versionCheck: true, flags: {port: 'string', 'no-open': 'boolean'}, run: dev},
   {name: 'editor', usage: 'editor', about: '打开编辑器', project: 'required', versionCheck: true, flags: {}, run: null},
   {name: 'editor props', usage: 'editor props <组件> <控件路径> <属性>=<值> ...', about: '编辑器开着时修改已有控件的属性', project: 'required', versionCheck: true, flags: {}, run: null},
   {name: 'new module', usage: 'new module <名字> [--pattern 模式]', about: '生成一个功能的 Model / View / Controller / 测试骨架', project: 'required', versionCheck: true, flags: {pattern: 'string'}, run: null},

@@ -94,7 +94,7 @@ export function createH5Platform(projectName: string, uiBase: string): Platform 
     resource: {
       loadPackage: async name => { if (!fgui.UIPackage.getByName(name)) await fgui.UIPackage.loadPackage(`${uiBase}/${name}`); },
       releasePackage: name => { if (fgui.UIPackage.getByName(name)) fgui.UIPackage.removePackage(name); },
-      hasPackage: name => fgui.UIPackage.getByName(name) !== null,
+      hasPackage: name => fgui.UIPackage.getByName(name) !== undefined,
       loadImage: url => new Promise((resolve, reject) => {
         const image = new Image();
         image.onload = () => resolve();

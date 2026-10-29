@@ -82,6 +82,7 @@ test('h5 后端：缩放、对象包装、控制器和列表事件', async t => 
       list.numItems = 5;
       out.list = [list.numItems, list.itemAt(2).child('count').text, rendered[0]];
       const sell = panel.child('sellButton'); sell.title = '卖'; sell.enabled = false;
+      sell.rect = {x: 10, y: 20, width: 300, height: 80}; out.rect = sell.rect;
       out.button = [sell.title, sell.enabled];
       return out;
     });
@@ -94,6 +95,7 @@ test('h5 后端：缩放、对象包装、控制器和列表事件', async t => 
     assert.equal(result.badPage, 'LGUI-RT-022');
     assert.deepEqual(result.list, [5, '3', 'Bag/ItemSlot']);
     assert.deepEqual(result.button, ['卖', false]);
+    assert.deepEqual(result.rect, {x: 10, y: 20, width: 300, height: 80});
   } finally {
     await close();
   }

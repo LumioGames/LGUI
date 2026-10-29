@@ -10,7 +10,7 @@ export class MainView extends View<MainViewUI> {
   static fullScreen = true;
 
   bind: Bind<MainViewUI> = {
-    title:  { text: pick(mainModel, s => s.clicks, n => (n === 0 ? lgui.t('main.hello') : lgui.t('main.clicked', { count: n }))) },
+    status: { text: pick(mainModel, s => s.clicks, n => (n === 0 ? lgui.t('main.hint') : lgui.t('main.clicked', { count: n }))) },
     button: { click: () => mainController.click() },
   };
   keys: Keys = { back: 'none' };

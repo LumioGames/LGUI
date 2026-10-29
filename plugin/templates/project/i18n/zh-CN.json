@@ -1,4 +1,4 @@
 {
-  "main.hello": "你好，LGUI",
+  "main.hint": "点下面的按钮试试",
   "main.clicked": "点了 {count} 次"
 }

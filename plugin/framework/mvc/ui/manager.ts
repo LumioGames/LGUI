@@ -50,8 +50,8 @@ export class UIManager {
   constructor(private readonly backend: Backend, private readonly deps: Record<string, string[]>, design: {width: number; height: number}) {
     this.visible = backend.platform.screen.applyDesignSize(design);
     for (const layer of LAYERS) {
+      // 层容器不设尺寸：只是容器，不能挡住下面层的点击（浏览器里一个铺满屏幕的空容器会吃掉所有指针事件）。
       const container = backend.createContainer(layer);
-      container.rect = {...this.visible};
       if (layer === 'toast') container.touchable = false;
       backend.root.addChild(container);
       this.containers.set(layer, container);
