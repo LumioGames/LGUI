@@ -6,7 +6,7 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const cli = path.join(root, 'tools/lgui.mjs');
+const cli = path.join(root, 'plugin/tools/lgui.mjs');
 const run = (...args) => spawnSync(process.execPath, [cli, ...args], {cwd: os.tmpdir(), encoding:'utf8'});
 test('initialization works from unrelated cwd, repeats safely, and preserves user changes', () => {
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-test-'));

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="132,40" extention="Button">
-  <displayList>
-    <graph id="btnbg" name="btnbg" type="rect" lineSize="0" fillColor="#2868a6" xy="0,0" size="132,40" touchable="false"/>
-    <text id="title" name="title" text="操作" fontSize="18" color="#ffffff" align="center" autoSize="none" xy="0,6" size="132,28" touchable="false"/>
-  </displayList>
-  <Button/>
-</component>

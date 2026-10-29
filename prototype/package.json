@@ -1,1 +1,0 @@
-{"name":"fairygui-route-verification","version":"0.0.1","private":true,"type":"module","scripts":{"test":"node --test model.test.ts","build":"node ../scripts/build.mjs","serve":"node ../scripts/serve.mjs"},"license":"MIT"}

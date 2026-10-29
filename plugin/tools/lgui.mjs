@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {contained, resolved, within, readJson, sha256} from './paths.mjs';
-import {run,loadProject,executeWorkflow,runUnity} from './workflows.mjs';
-import {serveProject} from './serve-project.mjs';
+import {contained, resolved, within, readJson, sha256} from './lib/paths.mjs';
+import {run,loadProject,executeWorkflow,runUnity} from './lib/workflows.mjs';
+import {serveProject} from './lib/serve-project.mjs';
 const pluginRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const command = args.shift();
@@ -75,9 +75,9 @@ async function main() {
   if (command === 'agent') {
     const output=args[0]==='call'?args[3]:undefined;
     if(output&&(!path.isAbsolute(output)||!within(workspace,resolved(output)))) throw Error('Export must be an absolute path inside the selected workspace.');
-    return run(process.execPath,[path.join(pluginRoot,'tools/agent.mjs'),'--connection',local('闭环验证/agent-connection.local.json'),...args],workspace);
+    return run(process.execPath,[path.join(pluginRoot,'tools/lib/agent.mjs'),'--connection',local('闭环验证/agent-connection.local.json'),...args],workspace);
   }
-  if (command === 'publish') return run(process.execPath,[path.join(pluginRoot,'tools/publish.mjs'),'--workspace',workspace,...args],workspace);
+  if (command === 'publish') return run(process.execPath,[path.join(pluginRoot,'tools/lib/publish.mjs'),'--workspace',workspace,...args],workspace);
   const project=loadProject(workspace);
   if(command==='serve'&&!project.commands.serve){if(args.length)throw Error('Unexpected serve arguments. Configure web.root and workspace webPort.');return serveProject(workspace,project,webPort);}
   if(command==='unity'&&!project.commands.unity)return runUnity(workspace,project,args);

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import {contained,within} from '../tools/paths.mjs';
+import {contained,within} from '../plugin/tools/lib/paths.mjs';
 test('resource paths reject escaping, drive paths, symlinks and prefix-confusable roots',()=>{
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'lgui-path-'));
  assert.equal(contained(root,'skills/setup/SKILL.md'),path.join(root,'skills/setup/SKILL.md'));

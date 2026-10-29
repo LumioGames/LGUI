@@ -5,7 +5,7 @@ license: MIT
 compatibility: "Windows, Unity 6000.6.6f1 with IL2CPP and C++ tools, valid local license; PuerTS 3.0.3."
 ---
 
-Inputs: workspace, Unity executable and desired prepare/build/runtime action. Read [project configuration](../../docs/projects.md) and [native procedure](references/native.md). Resolve [CLI](../../tools/lgui.mjs) from this installed skill and always pass the user's workspace. Inspect `.lgui/project.json` before choosing commands.
+Inputs: workspace, Unity executable and desired prepare/build/runtime action. Read project configuration and [native procedure](references/native.md). Resolve [CLI](../../tools/lgui.mjs) from this installed skill and always pass the user's workspace. Inspect `.lgui/project.json` before choosing commands.
 
 Run `bootstrap --workspace <workspace> --install --unity`; build shared business and formally publish, then run the project's `unity-setup`. For configured native methods use `unity --workspace <workspace> -- --action prepare|generate|build --editor <absolute-Unity.exe>` in order; build optionally accepts `--cli <absolute-official-unity-CLI>`. The project supplies its Unity project, C# methods and resource adapter. If it explicitly declares a custom `commands.unity`, its documented arguments apply instead (the inventory recipe uses `-Action`). Never select the inventory project for an unconfigured UI. Keep loading, events, measured font fitting, storage and disposal in the native adapter.
 
