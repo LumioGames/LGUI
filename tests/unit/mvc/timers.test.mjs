@@ -92,3 +92,40 @@ test('假时钟每帧之后等排队的 Promise 跑完：一次 advance 里能�
   await sim.advance(backend, 200);
   assert.deepEqual(steps, [0, 1, 2, 3, 4]);
 });
+
+test('定时器回调出错：错误照常抛出；after 和倒计时的结束回调只执行一次，不会每帧重来', async () => {
+  const {fw, backend} = await headless();
+  const {lgui, View, sim} = fw;
+  let after = 0;
+  let done = 0;
+  class V extends View {
+    start() {
+      this.after(100, () => { after++; throw new Error('after 出错'); });
+      this.countdown(lgui.time.now() + 200, () => {}, () => { done++; throw new Error('倒计时出错'); });
+      this.every(100, () => {});
+    }
+  }
+  const view = new V();
+  view.start();
+  const errors = [];
+  for (let i = 0; i < 10; i++) {
+    try { await sim.advance(backend, 50); } catch (error) { errors.push(error.message); }
+  }
+  assert.deepEqual(errors, ['after 出错', '倒计时出错']);
+  assert.deepEqual([after, done], [1, 1]);
+  assert.equal(view.__timers.size, 1, '只剩 every');
+});
+
+test('同一界面里一个每帧都出错的定时器，不会让其他定时器轮不到', async () => {
+  const {fw, backend} = await headless();
+  const {View, sim} = fw;
+  let fired = 0;
+  class V extends View { start() { this.onUpdate(() => { throw new Error('每帧出错'); }); this.after(100, () => fired++); } }
+  new V().start();
+  let errors = 0;
+  for (let i = 0; i < 12; i++) {
+    try { await sim.advance(backend, 16); } catch { errors++; }
+  }
+  assert.equal(errors, 12, '每帧都报错');
+  assert.equal(fired, 1);
+});

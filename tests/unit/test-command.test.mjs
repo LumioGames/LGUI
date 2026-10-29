@@ -53,3 +53,15 @@ test('路径写错', async () => { const t = await lgui.testing.start(app); t.te
   const empty = JSON.parse((await run(['test', '--json'], root)).stdout);
   assert.equal(empty.errors[0].code, 'LGUI-CLI-040');
 });
+
+test('lgui test：测试文件一加载就出错（顶层抛错）也算失败，退出码 1，失败项是这个文件', async () => {
+  const root = await project();
+  fs.writeFileSync(path.join(root, 'tests/crash.test.ts'), `throw new Error('加载时出错');\n`);
+  const result = await run(['test', '--json'], root);
+  const json = JSON.parse(result.stdout);
+  assert.equal(result.code, 1);
+  assert.equal(json.ok, false);
+  assert.equal(json.data.passed, 1);
+  assert.deepEqual(json.data.failed.map(f => f.name), ['tests/crash.test.ts']);
+  assert.equal(json.errors[0].code, 'LGUI-CLI-041');
+});

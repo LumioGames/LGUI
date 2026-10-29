@@ -56,12 +56,16 @@ process.on('exit', () => { if (process.env.LGUI_TEST_SNAPSHOTS) writeFileSync(pr
   return file;
 }
 
-// 从 TAP 输出里读出每个测试的结果。
-function parseTap(text) {
+// 从 TAP 输出里读出每个测试的结果。整个文件没跑起来（加载时出错、测试结束后还有没处理的错误）时，
+// node --test 报的是「not ok - <打包出来的 .mjs>」：算这个测试文件失败，名字换成 tests/ 里的源文件。
+function parseTap(text, sourceOf) {
   const results = [];
   for (const line of text.split('\n')) {
     const m = /^\s*(not ok|ok) \d+ - (.*?)(?: # (SKIP|TODO).*)?$/.exec(line);
-    if (m && !/\.mjs$/.test(m[2])) results.push({name: m[2], ok: m[1] === 'ok', skipped: Boolean(m[3])});
+    if (!m) continue;
+    const ok = m[1] === 'ok';
+    if (!/\.mjs$/.test(m[2])) results.push({name: m[2], ok, skipped: Boolean(m[3])});
+    else if (!ok) results.push({name: sourceOf(m[2]), ok, skipped: false});
   }
   return results;
 }
@@ -98,7 +102,10 @@ export async function runProjectTests(root, project) {
     cwd: root, encoding: 'utf8', env: childEnv, maxBuffer: 64 * 1024 * 1024
   });
   const output = tap.stdout + tap.stderr;
-  const results = parseTap(tap.stdout);
+  const sources = new Map(bundles.map((bundle, i) => [path.resolve(bundle), path.relative(root, files[i]).split(path.sep).join('/')]));
+  const results = parseTap(tap.stdout, name => sources.get(path.resolve(name)) ?? name);
+  // 子进程没正常结束、又没读出失败的测试（崩溃、被杀掉）：也算失败，不能当成通过。
+  if (tap.status !== 0 && !results.some(r => !r.ok)) results.push({name: `测试进程异常退出（${tap.error?.message ?? `退出码 ${tap.status ?? tap.signal}`}）`, ok: false, skipped: false});
   const snapshots = Object.assign({}, ...fs.readdirSync(snapshotDir).map(f => JSON.parse(fs.readFileSync(path.join(snapshotDir, f), 'utf8'))));
   return {files, results, snapshots, output};
 }
