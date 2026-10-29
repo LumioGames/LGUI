@@ -194,10 +194,3 @@ test('换版重新绑定：同一个实例、同一张绑定表绑到新组件�
   view.__dispose();
   assert.equal(listenerCount(bag), 0);
 });
-
-test('redDot 在 S2-G2 之前报 LGUI-RT-001', async () => {
-  const {fw, panel} = await setup();
-  const {View} = fw;
-  class BagView extends View { static component = 'Bag/BagPanel'; static layer = 'page'; bind = {sellButton: {redDot: 'bag'}}; }
-  assert.throws(() => new BagView().__mount(panel), e => e.code === 'LGUI-RT-001');
-});
