@@ -187,7 +187,6 @@ const createBackend = () => {
       try { return await cdp.send(method, params); }
       finally { entry.replyEpoch = performance.timeOrigin + performance.now(); }
     };
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await page.exposeFunction('__pw', async (op, ...a) => {
       // Chromium owns the requested press duration. Separating down/up with a Node
       // timer lets a late driver response turn a 50ms click into a >300ms hold.
@@ -200,10 +199,32 @@ const createBackend = () => {
       else if (op === 'viewport') { await page.setViewportSize({width: a[0], height: a[1]}); }
       else if (op === 'touchDrag') {
         const [x, y, dx, dy, ms, steps] = a;
+        const before = await page.evaluate(() => ({normalized: window.__h5InputTrace.normalized.length, dom: window.__h5InputTrace.dom.length}));
         const touch = (type, px, py) => inputCommand('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x: px, y: py, id: 1}]});
-        await touch('touchStart', x, y);
-        for (let i = 1; i <= steps; i++) { await sleep(ms / steps); await touch('touchMove', x + (dx * i) / steps, y + (dy * i) / steps); }
-        await touch('touchEnd');
+        const at = (delay, send) => new Promise(resolve => setTimeout(resolve, delay)).then(send);
+        // Dispatch exact coordinates at the requested real intervals. CDP replies
+        // may precede DOM delivery or arrive late; neither schedules the next point.
+        let replied = false, consumed = false, deadline;
+        const expired = new Promise((_, reject) => {
+          deadline = setTimeout(() => reject(new Error(`h5 触摸输入超时（5000ms）：CDP 应答${replied ? '已完成' : '尚未完成'}；DOM/框架抬起${consumed ? '已消费' : '尚未消费'}。`)), 5000);
+        });
+        try {
+          await Promise.race([expired, Promise.all([
+            Promise.all([
+              touch('touchStart', x, y),
+              ...Array.from({length: steps}, (_, i) => at(ms * (i + 1) / steps,
+                () => touch('touchMove', x + dx * (i + 1) / steps, y + dy * (i + 1) / steps))),
+              at(ms, () => touch('touchEnd'))
+            ]).then(() => { replied = true; }),
+            page.waitForFunction(previous => {
+              const input = window.__h5InputTrace;
+              const events = input.normalized.slice(previous.normalized);
+              const down = events.find(event => event.type === 'down' && event.pointerType === 'touch');
+              return down && events.some(event => event.type === 'up' && event.pointerId === down.pointerId)
+                && input.dom.slice(previous.dom).some(event => event.type === 'pointerup' && event.pointerId === down.pointerId && event.trusted);
+            }, before, {timeout: 0}).then(() => { consumed = true; })
+          ])]);
+        } finally { clearTimeout(deadline); }
       } else throw new Error(`未知操作 ${op}`);
     });
     await page.goto(`http://127.0.0.1:${server.address().port}/conf.html`);
