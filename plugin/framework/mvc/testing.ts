@@ -108,7 +108,8 @@ class Harness implements TestHarness {
     if (!('numItems' in o)) throw new LgRuntimeError('LGUI-RT-111', `${path} 不是列表。`, '换一个列表的路径。');
     return (o as UIList).numItems;
   }
-  setScreen(width: number, height: number): Promise<void> { return this.sim.setScreen(this.backend, width, height); }
+  /** 换屏幕尺寸，等防抖（150 毫秒）结束、换版完成后返回。 */
+  async setScreen(width: number, height: number): Promise<void> { await this.sim.setScreen(this.backend, width, height); await this.sim.advance(this.backend, 200); }
   async setLanguage(language: string): Promise<void> {
     const {lgui} = await import('./lgui');
     await lgui.setLanguage(language);

@@ -92,6 +92,7 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[]): H
       if (!state.loaded.has(packageName)) throw new LgRuntimeError('LGUI-RT-002', `界面包 ${packageName} 还没加载。`, '先加载这个包（UIManager 打开界面时会自动加载）。');
       return buildComponent(lookup(`${packageName}/${componentName}`), lookup) as unknown as UIComponent<Name>;
     },
+    has: (packageName, componentName) => state.loaded.has(packageName) && components.has(`${packageName}/${componentName}`),
     createContainer: name => new HeadlessComponent(name, '', 'container')
   };
 }

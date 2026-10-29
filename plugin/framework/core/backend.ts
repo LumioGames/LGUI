@@ -26,6 +26,8 @@ export interface Backend {
   releasePackage(name: string): void;
   /** 创建一个组件实例；包没加载或组件不存在时报 LGUI-RT 错误。 */
   create<Name extends string>(packageName: string, componentName: string): UIComponent<Name>;
+  /** 包里有没有这个组件（包要先加载）。换横竖版时用。 */
+  has(packageName: string, componentName: string): boolean;
   /** 创建一个空容器（UIManager 的层用它）。 */
   createContainer(name: string): UIComponent;
   /** 平台服务。 */

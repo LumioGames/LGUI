@@ -134,7 +134,7 @@ class H5List extends H5Object implements UIList {
   private isVirtual = false;
   constructor(readonly native: fgui.GList) { super(native); }
   get numItems(): number { return this.native.numItems; }
-  set numItems(value: number) { this.native.numItems = value; }
+  set numItems(value: number) { this.native.numItems = value; if (this.selected >= value) this.selected = -1; }
   get itemRenderer(): ((index: number, item: UIComponent) => void) | null { return this.renderer; }
   set itemRenderer(value: ((index: number, item: UIComponent) => void) | null) {
     this.renderer = value;
@@ -149,12 +149,16 @@ class H5List extends H5Object implements UIList {
   }
   get scrollPosition(): {x: number; y: number} { const pane = this.native.scrollPane; return {x: pane?.posX ?? 0, y: pane?.posY ?? 0}; }
   set scrollPosition(value: {x: number; y: number}) { const pane = this.native.scrollPane; if (pane) { pane.setPosX(value.x, false); pane.setPosY(value.y, false); } }
-  get selectedIndex(): number { return this.native.selectedIndex; }
-  set selectedIndex(value: number) { this.native.selectedIndex = value; }
+  // 选中项自己记一份：FairyGUI 只把按钮类型的子项当成可选中的，非按钮子项的选中会丢；这样和 headless 后端行为一致。
+  private selected = -1;
+  get selectedIndex(): number { return this.selected; }
+  set selectedIndex(value: number) { this.selected = value; this.native.selectedIndex = value; }
   onClickItem(handler: (index: number) => void): Unsubscribe {
     return listen(this.native, 'click_item', event => {
       const item = event.data as fgui.GObject;
-      handler(this.native.childIndexToItemIndex(childIndex(this.native, item)));
+      const index = this.native.childIndexToItemIndex(childIndex(this.native, item));
+      this.selected = index;
+      handler(index);
     });
   }
   itemAt(index: number): UIComponent | null {

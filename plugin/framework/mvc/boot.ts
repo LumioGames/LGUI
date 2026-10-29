@@ -12,7 +12,7 @@ export async function boot(backend: Backend, app: AppDefinition, config: Runtime
   setRuntime(backend, config, options.wallBase ?? Date.now(), deps);
   setTexts(options.texts ?? {}, options.language ?? pickLanguage(backend.platform.locale.systemLanguages(), config.languages, config.defaultLanguage));
   setServices({...(app.services ?? {}), ...(options.services ?? {})});
-  const ui = new UIManager(backend, deps, config.designSize.landscape);
+  const ui = new UIManager(backend, deps, config);
   runtime().ui = ui;
   if (options.start !== false) await app.start();
   return ui;

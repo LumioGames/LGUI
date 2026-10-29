@@ -139,6 +139,7 @@ export class UIPackage {
   static setImageManifest(manifest: unknown): void;
   static loadImageManifest(url: string): Promise<void>;
   getItemById(itemId: string): PackageItem | null;
+  getItemByName(resName: string): PackageItem | undefined;
 }
 
 export class UIConfig {
