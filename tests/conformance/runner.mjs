@@ -202,22 +202,90 @@ const createBackend = () => {
       else if (op === 'touchDrag') {
         const [x, y, dx, dy, ms, steps] = a;
         const before = await page.evaluate(() => ({normalized: window.__h5InputTrace.normalized.length, dom: window.__h5InputTrace.dom.length}));
-        const touch = (type, px, py) => inputCommand('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x: px, y: py, id: 1}]});
         const at = (delay, send) => new Promise(resolve => setTimeout(resolve, delay)).then(send);
-        // Dispatch exact coordinates at the requested real intervals. CDP replies
-        // may precede DOM delivery or arrive late; neither schedules the next point.
-        let replied = false, consumed = false, deadline;
+        let replied = false, consumed = false, deadline, stopped = false, firstError;
+        const progress = {ms, steps, point: 'down', consumedMoves: 0, replies: 0};
+        (trace.touchOperations ??= []).push(progress);
+        let rejectCommand;
+        const commandFailure = new Promise((_, reject) => { rejectCommand = reject; });
+        commandFailure.catch(() => {});
+        const fail = error => {
+          firstError ??= error;
+          progress.error ??= String(firstError);
+          stopped = true;
+          rejectCommand(firstError);
+        };
+        const ensureRunning = () => { if (stopped) throw firstError ?? new Error('LGUI-RT-001 h5 touch operation has stopped.'); };
+        const touch = (type, px, py) => {
+          ensureRunning();
+          const reply = inputCommand('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x: px, y: py, id: 1}]});
+          // Observe rejection immediately, even while waiting for DOM consumption.
+          // Fulfilled receipts never control the cadence; all are checked at the end.
+          reply.then(() => { progress.replies++; }, fail);
+          return reply;
+        };
         const expired = new Promise((_, reject) => {
-          deadline = setTimeout(() => reject(new Error(`h5 触摸输入超时（5000ms）：CDP 应答${replied ? '已完成' : '尚未完成'}；DOM/框架抬起${consumed ? '已消费' : '尚未消费'}。`)), 5000);
+          deadline = setTimeout(() => {
+            firstError ??= new Error(`h5 触摸输入超时（5000ms）：CDP 应答${replied ? '已完成' : '尚未完成'}；DOM/框架抬起${consumed ? '已消费' : '尚未消费'}；point=${progress.point}。`);
+            stopped = true;
+            progress.error ??= String(firstError);
+            reject(firstError);
+          }, 5000);
         });
-        try {
-          await Promise.race([expired, Promise.all([
-            Promise.all([
+        const bounded = pending => Promise.race([expired, commandFailure, pending]);
+        const pointConsumed = async (type, previous, pointerId = null) => {
+          const handle = await bounded(page.waitForFunction(({type, previous, pointerId}) => {
+            const input = window.__h5InputTrace;
+            for (let dom = previous.dom; dom < input.dom.length; dom++) {
+              const event = input.dom[dom];
+              if (!event.trusted || event.pointerType !== 'touch' || (pointerId !== null && event.pointerId !== pointerId)) continue;
+              if (event.type === 'pointercancel') throw new Error('LGUI-RT-001 h5 slow touch was cancelled.');
+              if (event.type !== 'pointer' + type) continue;
+              const normalized = input.normalized.findIndex((value, index) => index >= previous.normalized &&
+                value.type === type && value.pointerType === 'touch' && value.pointerId === event.pointerId && value.time === event.timestamp);
+              if (normalized >= 0) return {dom: dom + 1, normalized: normalized + 1, pointerId: event.pointerId};
+            }
+            return false;
+          }, {type, previous, pointerId}, {timeout: 0, polling: 10}));
+          try { return await bounded(handle.jsonValue()); }
+          finally { await handle.dispose(); }
+        };
+        const dispatch = async () => {
+          if (ms === 400 && steps === 10) {
+            const replies = [touch('touchStart', x, y)];
+            let previous = await pointConsumed('down', before);
+            progress.pointerId = previous.pointerId;
+            for (let i = 0; i < steps; i++) {
+              progress.point = i + 1;
+              // Late scheduler work may extend this slow drag, but cannot compress
+              // the next interval or let a later point coalesce an unconsumed one.
+              const notBefore = performance.now() + ms / steps;
+              while (performance.now() < notBefore) {
+                await bounded(at(Math.ceil(notBefore - performance.now()), () => {}));
+                ensureRunning();
+              }
+              replies.push(touch('touchMove', x + dx * (i + 1) / steps, y + dy * (i + 1) / steps));
+              previous = await pointConsumed('move', previous, previous.pointerId);
+              progress.consumedMoves++;
+            }
+            progress.point = 'up';
+            replies.push(touch('touchEnd'));
+            await Promise.all(replies);
+          } else {
+            // Fast swipes keep the absolute concurrent schedule. A late CDP
+            // receipt must not stretch an 80ms swipe into a slow gesture.
+            await Promise.all([
               touch('touchStart', x, y),
               ...Array.from({length: steps}, (_, i) => at(ms * (i + 1) / steps,
                 () => touch('touchMove', x + dx * (i + 1) / steps, y + dy * (i + 1) / steps))),
               at(ms, () => touch('touchEnd'))
-            ]).then(() => { replied = true; }),
+            ]);
+          }
+          replied = true;
+        };
+        try {
+          await bounded(Promise.all([
+            dispatch(),
             page.waitForFunction(previous => {
               const input = window.__h5InputTrace;
               const events = input.normalized.slice(previous.normalized);
@@ -225,8 +293,8 @@ const createBackend = () => {
               return down && events.some(event => event.type === 'up' && event.pointerId === down.pointerId)
                 && input.dom.slice(previous.dom).some(event => event.type === 'pointerup' && event.pointerId === down.pointerId && event.trusted);
             }, before, {timeout: 0}).then(() => { consumed = true; })
-          ])]);
-        } finally { clearTimeout(deadline); }
+          ]));
+        } finally { stopped = true; clearTimeout(deadline); }
       } else throw new Error(`未知操作 ${op}`);
     });
     await page.goto(`http://127.0.0.1:${server.address().port}/conf.html`);
