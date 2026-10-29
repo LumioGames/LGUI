@@ -40,6 +40,11 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-072` | 随插件带的工具加载失败 | 插件不完整，重新安装 LGUI 插件 |
 | `LGUI-CLI-073` | 没找到 Chrome 或 Edge | 装一个 Chrome 或 Edge |
 | `LGUI-CLI-074` | 工程的 `devPort` 被占用 | 改 `devPort`，或者 `lgui dev --port <端口>` |
+| `LGUI-CLI-080` | `lgui art split` 的参数不对（大图找不到、`--grid` / `--size` 写法不对、缺 `--pkg` / `--names`、名字不合规范） | 照用法写：`lgui art split <大图> --grid 6x4 --size 128x128 --pkg <包> --names <名字>` |
+| `LGUI-CLI-081` | 名字的数量和格子数不一样，或者名字重复 | 每格一个不同的名字，按从左到右、从上到下 |
+| `LGUI-CLI-082` | 要写的图片已经存在（不会覆盖） | 换名字，或者先删掉旧图片 |
+| `LGUI-CLI-083` | `--pkg` 写的包不存在 | 写一个已有的包名 |
+| `LGUI-CLI-084` | 读不了大图 | 用 PNG 或 JPG |
 | `LGUI-CLI-999` | 命令行内部错误（LGUI 自己的缺陷） | 把输出报告给维护者 |
 
 ## LGUI-RT-xxx

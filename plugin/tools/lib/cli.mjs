@@ -13,6 +13,7 @@ import {check} from './commands/check.mjs';
 import {verify} from './commands/verify.mjs';
 import {doctor} from './commands/doctor.mjs';
 import {upgrade} from './commands/upgrade.mjs';
+import {artSplit} from './commands/art-split.mjs';
 
 // project：'none' 不需要在工程里；'required' 必须在工程里。
 // versionCheck：运行前比对插件和工程的版本（init、doctor、upgrade 不比对）。
@@ -31,7 +32,7 @@ export const registry = [
   {name: 'verify', usage: 'verify [--size 名字] [--view View 名] [--lang 语言]', about: '在浏览器里按横竖两种方向的标准尺寸截图验证', project: 'required', versionCheck: true, flags: {size: 'string', view: 'string', lang: 'string'}, run: verify},
   {name: 'ui list', usage: 'ui list', about: '列出 ui/ 里的组件和控件', project: 'required', versionCheck: true, flags: {}, run: uiList},
   {name: 'i18n extract', usage: 'i18n extract', about: '从 ui/ 提取需要翻译的文字', project: 'required', versionCheck: true, flags: {}, run: i18nExtract},
-  {name: 'art split', usage: 'art split <大图> --grid 列x行 --size 宽x高 --pkg 包 --names 名字列表或文件', about: '把 AI 生成的网格大图拆成小图，并缩放到指定尺寸', project: 'required', versionCheck: true, flags: {grid: 'string', size: 'string', pkg: 'string', names: 'string'}, run: null},
+  {name: 'art split', usage: 'art split <大图> --grid 列x行 --size 宽x高 --pkg 包 --names 名字列表或文件', about: '把 AI 生成的网格大图拆成小图，并缩放到指定尺寸', project: 'required', versionCheck: true, flags: {grid: 'string', size: 'string', pkg: 'string', names: 'string'}, run: artSplit},
   {name: 'unity export', usage: 'unity export --to <Unity 工程路径>', about: '导出到 Unity', project: 'required', versionCheck: true, flags: {to: 'string'}, run: null},
   {name: 'upgrade', usage: 'upgrade', about: '把插件里的新版框架和 Unity 包复制进工程', project: 'required', versionCheck: false, flags: {}, run: upgrade}
 ];
