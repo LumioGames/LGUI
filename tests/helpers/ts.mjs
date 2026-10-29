@@ -27,3 +27,14 @@ export async function importTs(entry, {alias = {}} = {}) {
   await esbuild().build({entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', target: 'es2020', outfile: out, alias, logLevel: 'silent'});
   return import(pathToFileURL(out).href);
 }
+
+// 按工程自己的 tsconfig.json 做类型检查（S2-H1 的 lgui check 完成前，测试里先用它）。
+export function typecheckProject(root) {
+  const ts = typescript();
+  const configFile = path.join(root, 'tsconfig.json');
+  const {config, error} = ts.readConfigFile(configFile, ts.sys.readFile);
+  if (error) throw Error(ts.flattenDiagnosticMessageText(error.messageText, '\n'));
+  const parsed = ts.parseJsonConfigFileContent(config, ts.sys, root);
+  const program = ts.createProgram(parsed.fileNames, parsed.options);
+  return ts.getPreEmitDiagnostics(program).map(d => ts.flattenDiagnosticMessageText(d.messageText, '\n') + (d.file ? `  (${path.relative(root, d.file.fileName)}:${d.file.getLineAndCharacterOfPosition(d.start ?? 0).line + 1})` : ''));
+}

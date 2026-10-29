@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="1080,1920" type="rect" lineSize="0" fillColor="#0e1621">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="40,760" size="1000,120" fontSize="64" color="#ffffff" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="你好，LGUI">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n2" name="button" fileName="Button.xml" pkg="cmn00001" src="button01" xy="420,960" size="240,72">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="点我"/>
+    </component>
+  </displayList>
+</component>

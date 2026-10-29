@@ -1,11 +1,26 @@
 {
-  "schemaVersion": 1,
-  "name": "UI project",
-  "web": {"root": "web", "path": "/"},
-  "runtime": {"fairyguiDirectory": "platforms/unity/FairyGUI"},
-  "commands": {
-    "build-web": {"script": "scripts/build-web.mjs"},
-    "test": {"script": "scripts/test.mjs"},
-    "verify-browser": {"script": "scripts/verify-browser.mjs"}
-  }
+  "name": "__LGUI_PROJECT_NAME__",
+  "lguiVersion": "__LGUI_VERSION__",
+  "designSize": {"landscape": {"width": 1920, "height": 1080}, "portrait": {"width": 1080, "height": 1920}},
+  "orientation": "both",
+  "verifySizes": [
+    {"name": "desktop", "width": 1920, "height": 1080},
+    {"name": "ultrawide", "width": 2560, "height": 1080},
+    {"name": "phone-landscape", "width": 844, "height": 390, "safeArea": {"top": 0, "right": 47, "bottom": 21, "left": 47}},
+    {"name": "tablet", "width": 1024, "height": 768},
+    {"name": "phone-portrait", "width": 390, "height": 844, "safeArea": {"top": 47, "right": 0, "bottom": 34, "left": 0}},
+    {"name": "tablet-portrait", "width": 768, "height": 1024}
+  ],
+  "languages": ["zh-CN", "en"],
+  "defaultLanguage": "zh-CN",
+  "keyMap": {},
+  "uiCache": {"keepClosedViews": 0},
+  "requestErrorToast": true,
+  "requestTimeoutMs": 10000,
+  "placeholder": "ui://Common/placeholder",
+  "sounds": {"click": null},
+  "defaultFont": null,
+  "devPort": 4173,
+  "backend": "h5",
+  "unityProject": null
 }

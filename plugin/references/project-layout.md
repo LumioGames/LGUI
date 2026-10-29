@@ -69,3 +69,11 @@ MyGame/
 - **`src/modules/` 里的细节以 MVC 开发规范为准。** 比如文件怎么命名、服务放在哪里。本节只定到"一个功能一个文件夹"。
 - **日常命令。** 预览用 `lgui dev`（打开浏览器，改动后自动刷新），改界面用 `lgui editor`（打开编辑器，保存直接写回 `ui/`），检查用 `lgui check`，测试用 `lgui test`。
 - **队友和 CI。** 也要装插件，才能运行 `lgui` 命令。
+
+## `import 'lgui'` 怎么生效
+
+全工程只用这一种办法，不需要 `node_modules`，也不需要 import map：
+
+- **类型检查：** `tsconfig.json` 的 `paths` 把 `lgui` 指向 `.lgui/framework/index.ts`，`lgui/ui` 指向 `.lgui/build/types/index.d.ts`（由 `ui/` 生成的控件类型）。
+- **网页预览、测试、导出 Unity：** 全部由随插件带的 esbuild 打包，用 esbuild 的 `alias` 把 `lgui` 指向 `.lgui/framework/index.ts`；`lgui/ui` 只有类型，打包时会被去掉。
+- 测试文件里可以 `import` 的 Node 模块只有 `node:test` 和 `node:assert/strict`，它们的类型在 `.lgui/framework/env.d.ts`。

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,64">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="1920,64" type="rect" lineSize="0" fillColor="#99000000">
+      <relation target="" sidePair="width-width"/>
+    </graph>
+    <list id="n1" name="list" xy="24,4" size="1872,56" layout="row" colGap="24" defaultItem="ui://cmn00001hint0001" overflow="hidden">
+      <relation target="" sidePair="width-width"/>
+    </list>
+  </displayList>
+</component>

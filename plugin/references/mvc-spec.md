@@ -85,6 +85,7 @@ export const bagModel = lgui.Model(
 ```ts
 // src/modules/bag/BagView.ts
 import { View, pick, format } from 'lgui';
+import type { Bind, Keys } from 'lgui';
 import type { BagPanelUI } from 'lgui/ui';
 import { bagModel } from './BagModel';
 import { bagController } from './BagController';
@@ -93,11 +94,11 @@ import { CurrencyBarView } from '../common/CurrencyBarView';
 
 export class BagView extends View<BagPanelUI> {
   static component = 'Bag/BagPanel';
-  static layer = 'page';
+  static layer = 'page' as const;
   static fullScreen = true;
   static params: { tab?: 'equip' | 'item' } = {};
 
-  bind = {
+  bind: Bind<BagPanelUI> = {
     gold:       { text: pick(bagModel, s => s.gold, format.number) },
     emptyTip:   { visible: pick(bagModel, s => s.items.length === 0) },
     tabs:       { page: pick(bagModel, s => s.tab), change: tab => bagController.switchTab(tab) },
@@ -112,7 +113,7 @@ export class BagView extends View<BagPanelUI> {
     topBar:     { view: CurrencyBarView },
     keyHint:    { visibleOn: ['keyboardMouse'] },
   };
-  keys = { back: 'close', confirm: { do: () => bagController.sell(), hint: 'bag.sell' } };
+  keys: Keys = { back: 'close', confirm: { do: () => bagController.sell(), hint: 'bag.sell' } };
 }
 ```
 
@@ -125,6 +126,11 @@ export class BagView extends View<BagPanelUI> {
 | `PartView<组件UI>` | 好几个界面共用的部件（货币栏），跟着所在界面一起打开和关闭 | 只写 `component` |
 
 `组件UI` 类型从 `lgui/ui` 引入，名字是组件名加 `UI`（`BagPanel` → `BagPanelUI`）。
+
+**两处固定写法：**
+
+- 绑定表一定写类型：`View` 写 `bind: Bind<组件UI> = {…}`，`ItemView` 写 `bind: ItemBind<组件UI, 数据> = {…}`，`PartView` 写 `bind: Bind<组件UI> = {…}`；按键表写 `keys: Keys = {…}`。不写类型时，TypeScript 查不出写错的键名。
+- `static layer` 写成 `static layer = 'page' as const;`。
 
 ### 6.2 View 的 7 项 static
 
@@ -291,7 +297,7 @@ export class FakeBagService implements BagService {
 ### 10.1 返回键和按键动作
 
 ```ts
-keys = {
+keys: Keys = {
   back: 'close',                                                  // 'close' 关闭自己（默认）；'none' 不让返回；或者写一个函数
   confirm: { do: () => bagController.sell(), hint: 'bag.sell' },  // hint 是文本键，显示在操作提示栏
 };
