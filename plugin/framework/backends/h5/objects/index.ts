@@ -4,7 +4,7 @@ import type {
   PointerInput, Rect, UIObject, UIComponent, UIText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, Unsubscribe
 } from '../../../core/index';
 import {LgRuntimeError} from '../../../core/index';
-import {toDesign} from '../scale';
+import {pointerEventTypes, toPointerInput} from '../pointer';
 
 const toHex = (value: number): string => '#' + (value & 0xffffff).toString(16).padStart(6, '0');
 const fromHex = (value: string): number => {
@@ -20,8 +20,6 @@ function listen(target: fgui.EventDispatcher, type: string, handler: (event: fgu
   return () => target.off(type, callback);
 }
 
-const pointerTypes: Record<string, PointerInput['type']> = {pointerdown: 'down', pointermove: 'move', pointerup: 'up', pointercancel: 'cancel'};
-
 class H5Object implements UIObject {
   constructor(readonly native: fgui.GObject) {}
   get name(): string { return this.native.name; }
@@ -35,14 +33,9 @@ class H5Object implements UIObject {
   set rect(value: Rect) { this.native.setXY(value.x, value.y); this.native.setSize(value.width, value.height); }
   onPointer(handler: (event: PointerInput) => void): Unsubscribe {
     const element = this.native.element;
-    const listener = (event: PointerEvent): void => {
-      const {x, y} = toDesign(event.clientX, event.clientY);
-      const pointerType = event.pointerType === 'touch' || event.pointerType === 'pen' ? event.pointerType : 'mouse';
-      handler({type: pointerTypes[event.type], pointerId: event.pointerId, pointerType, x, y, time: performance.now()});
-    };
-    const types = Object.keys(pointerTypes);
-    for (const type of types) element.addEventListener(type, listener as EventListener);
-    return () => { for (const type of types) element.removeEventListener(type, listener as EventListener); };
+    const listener = (event: PointerEvent): void => handler(toPointerInput(event));
+    for (const type of pointerEventTypes) element.addEventListener(type, listener as EventListener);
+    return () => { for (const type of pointerEventTypes) element.removeEventListener(type, listener as EventListener); };
   }
 }
 

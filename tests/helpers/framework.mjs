@@ -19,7 +19,9 @@ export async function loadFramework() {
     `export {createHeadlessBackend} from ${f('backends/headless/index.ts')};`,
     `export * as sim from ${f('backends/headless/simulate.ts')};`,
     `export {setRuntime, clearRuntime, defaultConfig} from ${f('mvc/runtime.ts')};`,
-    `export {bus} from ${f('mvc/events.ts')};`
+    `export {bus} from ${f('mvc/events.ts')};`,
+    `export {recognize, thresholds} from ${f('mvc/input/gestures.ts')};`,
+    `export {actionForKey, keysForAction} from ${f('mvc/input/keys.ts')};`
   ].join('\n'));
   cached = await importTs(entry);
   return cached;

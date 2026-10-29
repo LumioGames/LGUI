@@ -5,6 +5,7 @@ import type {
 } from '../../../core/index';
 import {LgRuntimeError} from '../../../core/index';
 import {fitDesign, stage, toDesign} from '../scale';
+import {pointerEventTypes, toPointerInput} from '../pointer';
 
 // 一组回调，返回取消函数。
 class Handlers<T> {
@@ -50,12 +51,9 @@ export function createH5Platform(projectName: string, uiBase: string): Platform 
   document.addEventListener('visibilitychange', () => visibility.emit(document.visibilityState === 'visible'));
 
   // 原始输入（舞台上的全部指针，支持多点）
-  const pointerTypes: Record<string, PointerInput['type']> = {pointerdown: 'down', pointermove: 'move', pointerup: 'up', pointercancel: 'cancel'};
-  for (const type of Object.keys(pointerTypes)) {
+  for (const type of pointerEventTypes) {
     window.addEventListener(type, event => {
-      const e = event as PointerEvent;
-      const {x, y} = toDesign(e.clientX, e.clientY);
-      pointer.emit({type: pointerTypes[type], pointerId: e.pointerId, pointerType: e.pointerType === 'touch' || e.pointerType === 'pen' ? e.pointerType : 'mouse', x, y, time: performance.now()});
+      pointer.emit(toPointerInput(event as PointerEvent));
       unlockAudio();
     });
   }
