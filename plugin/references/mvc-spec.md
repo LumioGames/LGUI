@@ -4,7 +4,7 @@
 
 ## 1. 写功能的固定步骤
 
-1. `lgui new module <名字>` 生成 Model、View、Controller 和测试的骨架；要连界面一起生成，加 `--pattern <模式>`（见 UI 开发规范第 7.4 节）。
+1. `lgui new module <名字>` 生成 Model、Controller 和测试的骨架；要连界面和 View 一起生成，加 `--pattern <模式>`（见 UI 开发规范第 7.4 节）。给已有模块加界面用 `lgui new view <包>/<组件> --pattern <模式>`。
 2. 在 Model 里写数据和规则，在 Controller 里写操作，在 View 里写绑定表。
 3. `lgui check`：类型检查和本规范的检查规则，把报错全部改掉。
 4. `lgui test`：用 headless 后端在 Node 里跑测试。
@@ -102,7 +102,7 @@ export class BagView extends View<BagPanelUI> {
     gold:       { text: pick(bagModel, s => s.gold, format.number) },
     emptyTip:   { visible: pick(bagModel, s => s.items.length === 0) },
     tabs:       { page: pick(bagModel, s => s.tab), change: tab => bagController.switchTab(tab) },
-    list:       { items: pick(bagModel, s => s.items), item: ItemSlotView, key: it => it.id,
+    list:       { items: pick(bagModel, s => s.items), item: ItemSlotView, key: (it: BagItem) => it.id,
                   selected: pick(bagModel, s => s.selectedId), select: id => bagController.select(id) },
     sellButton: { enabled: pick(bagModel, s => s.selectedId !== null),
                   click: () => bagController.sell(), lockWhilePending: true },
@@ -166,7 +166,7 @@ export class BagView extends View<BagPanelUI> {
 | `redDot` | 有 `redDot` 子控件的控件 | 红点路径 | `redDot: 'bag.equip'` |
 | `items` | 列表 | 数组 | `items: pick(bagModel, s => s.items)` |
 | `item` | 列表 | 子项的 `ItemView` 类 | `item: ItemSlotView` |
-| `key` | 列表 | 认出同一项的函数 | `key: it => it.id` |
+| `key` | 列表 | 认出同一项的函数（参数要写上这一项的类型） | `key: (it: BagItem) => it.id` |
 | `selected` | 列表 | 选中项的 key | `selected: pick(bagModel, s => s.selectedId)` |
 | `view` | 子组件 | `PartView` 类 | `view: CurrencyBarView` |
 | `click` / `doubleClick` | 任意控件 | 调用 Controller 方法 | `click: () => bagController.sell()` |

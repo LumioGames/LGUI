@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="200,200">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="200,200" type="rect" lineSize="2" lineColor="#3a5070" fillColor="#16202e"/>
+    <loader id="n1" name="icon" xy="36,20" size="128,128" align="center" vAlign="middle" fill="scale"/>
+    <text id="n2" name="label" xy="8,150" size="184,40" fontSize="24" color="#d8e2f0" align="center" vAlign="middle" autoSize="ellipsis" singleLine="true" text=""/>
+  </displayList>
+</component>

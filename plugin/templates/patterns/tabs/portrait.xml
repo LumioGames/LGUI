@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <controller name="tabs" pages="0,first,1,second" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="1080,1920" type="rect" lineSize="0" fillColor="#0e1621">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="60,36" size="660,64" fontSize="44" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text="标题"/>
+    <component id="n2" name="closeButton" fileName="Button.xml" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="780,32" size="240,72">
+      <relation target="" sidePair="right-right,top-top"/>
+      <Button title="关闭"/>
+    </component>
+    <component id="n3" name="firstTab" fileName="Button.xml" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="60,1720" size="240,72">
+      <relation target="" sidePair="left-left,bottom-bottom"/>
+      <Button title="第一页"/>
+    </component>
+    <component id="n4" name="secondTab" fileName="Button.xml" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="320,1720" size="240,72">
+      <relation target="" sidePair="left-left,bottom-bottom"/>
+      <Button title="第二页"/>
+    </component>
+    <text id="n5" name="firstContent" xy="60,140" size="960,400" fontSize="32" color="#ffffff" autoSize="height" text="第一页的内容">
+      <gearDisplay controller="tabs" pages="0"/>
+    </text>
+    <text id="n6" name="secondContent" xy="60,140" size="960,400" fontSize="32" color="#ffffff" autoSize="height" text="第二页的内容">
+      <gearDisplay controller="tabs" pages="1"/>
+    </text>
+  </displayList>
+</component>

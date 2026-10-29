@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#0e1621">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="60,36" size="1200,64" fontSize="44" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text="标题"/>
+    <component id="n2" name="closeButton" fileName="Button.xml" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="1620,32" size="240,72">
+      <relation target="" sidePair="right-right,top-top"/>
+      <Button title="关闭"/>
+    </component>
+    <list id="n3" name="list" xy="60,140" size="1800,820" layout="flow_hz" lineGap="16" colGap="16" defaultItem="ui://{{PKGID}}{{ITEMID}}" overflow="scroll" scrollBar="hidden">
+      <relation target="" sidePair="width-width,height-height"/>
+    </list>
+  </displayList>
+</component>
