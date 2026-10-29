@@ -45,6 +45,10 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-082` | 要写的图片已经存在（不会覆盖） | 换名字，或者先删掉旧图片 |
 | `LGUI-CLI-083` | `--pkg` 写的包不存在 | 写一个已有的包名 |
 | `LGUI-CLI-084` | 读不了大图 | 用 PNG 或 JPG |
+| `LGUI-CLI-090` | 排布模式不存在 | 用 split、tabs、grid、dialog 之一 |
+| `LGUI-CLI-091` | 要生成的文件已经存在（不会覆盖） | 换一个名字，或者先删掉旧文件 |
+| `LGUI-CLI-092` | 工程里没有 `Common/Button`，排布模式要用它 | 用 `lgui init` 生成的 Common 包 |
+| `LGUI-CLI-093` | 名字写法不对（`new view` 要写「包/组件」，`new module` 要写小写开头的英文名） | 照用法写 |
 | `LGUI-CLI-999` | 命令行内部错误（LGUI 自己的缺陷） | 把输出报告给维护者 |
 
 ## LGUI-RT-xxx

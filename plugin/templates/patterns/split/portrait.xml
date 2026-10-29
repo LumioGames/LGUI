@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1080,1920">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="1080,1920" type="rect" lineSize="0" fillColor="#0e1621">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="60,36" size="700,64" fontSize="44" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text="标题"/>
+    <component id="n2" name="closeButton" fileName="Button.xml" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="780,32" size="240,72">
+      <relation target="" sidePair="right-right,top-top"/>
+      <Button title="关闭"/>
+    </component>
+    <list id="n3" name="list" xy="60,140" size="960,1000" layout="flow_hz" lineGap="16" colGap="16" defaultItem="ui://{{PKGID}}{{ITEMID}}" overflow="scroll" scrollBar="hidden">
+      <relation target="" sidePair="width-width"/>
+    </list>
+    <graph id="n4" name="panel" xy="60,1180" size="960,620" type="rect" lineSize="2" lineColor="#3a5070" fillColor="#16202e">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n5" name="detail" xy="90,1210" size="900,560" fontSize="28" color="#d8e2f0" autoSize="height" text="选中一项看详情"/>
+  </displayList>
+</component>
