@@ -13,7 +13,10 @@
 **命令行（`node <插件目录>/tools/lgui.mjs`）**
 
 - `init`、`doctor`、`dev`（改动后自动刷新）、`check`（TypeScript + UI / MVC / 多语言规则）、`test`（headless 后端、假时钟；测试文件没跑起来也算失败）、`verify`（6 组尺寸 × 横竖，`--lang`、伪翻译）、`ui list`、`new module`、`new view`（四种排布模式）、`i18n extract`、`art split`、`upgrade`、`editor`、`editor props`。`unity export` 在阶段 3 实现。
-- 所有命令支持 `--json`；错误都带错误码（`LGUI-CLI-xxx`、`LGUI-RT-xxx`、`LGUI-UI-xxx`、`LGUI-MVC-xxx`），见 `references/error-codes.md`。
+- 所有命令支持 `--json`；错误都带错误码（`LGUI-CLI-xxx`、`LGUI-RT-xxx`、`LGUI-UI-xxx`、`LGUI-MVC-xxx`），见 `references/error-codes.md`。报错里的文件一律写相对工程根目录、用 `/` 的路径。
+- `check` 的规则：MVC-001 不再误报工程里自己声明的 `location`、`window` 这类同名变量和参数；只有 View 的 `keys` 表里的 `hint` 算文本键；没写 `fontSize` 的文字按默认 12 号查 UI-011；UI-017 也查装载器的 `url` 和按钮的 `icon`；UI-020 同包引用不再警告。新规则：gearText 里写了用户能看到的文字（UI-060）、按钮直接绑控制器（UI-061）、翻译和原文一字不差（UI-062，警告）、横竖两版的固定文字不一样（UI-063，警告）、全屏界面没有 `safe`（UI-064）、音效不存在、没登记或不是 mp3（UI-065）、View 里直接改控件属性（MVC-020，警告）。
+- `verify`：同一个画面只截一次（默认 8 张）；按尺寸的 `safeArea` 模拟刘海。
+- `new module`：Model 和子项的代码里不写死文字，用文本键并补进文本表；全屏排布模式的骨架带 `safe`，贴边的控件关联到它。
 
 **框架**
 
@@ -27,7 +30,8 @@
 
 **编辑器**
 
-- `plugin/editor/`：FairyGUI Editor Online 编译版，换成 LGUI 品牌；`lgui editor` 打开它并提供实时会话中转，每次打开都从 `ui/` 重新读取；`lgui editor props` 在编辑器开着时改控件属性。
+- `plugin/editor/`：FairyGUI Editor Online 编译版，换成 LGUI 品牌；`lgui editor` 打开它并提供实时会话中转，每次打开都从 `ui/` 重新读取（不含 `art-src/`）；`lgui editor props` 在编辑器开着时改控件属性。
+- `lgui editor` 用固定端口（工程配置 `editorPort`，默认 4174，被占用时报 `LGUI-CLI-110`），浏览器记得住授权过的 `ui/` 文件夹；中转只转发 `query` 和 `transact`；中转和 `lgui dev` 的服务都只认 Host 是 `127.0.0.1:<端口>` 的请求。
 
 **规范和技能**
 

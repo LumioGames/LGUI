@@ -9,6 +9,7 @@ const ID = /^[a-z0-9]{8}$/;
 const PASCAL = /^[A-Z][A-Za-z0-9]*$/;
 const CAMEL = /^[a-z][A-Za-z0-9]*$/;
 const MIN_FONT = 20;
+const DEFAULT_FONT = 12; // XML 里不写 fontSize 时 FairyGUI 用 12 号
 const AUTO_SIZES = ['shrink', 'height', 'ellipsis', 'both'];
 
 // Common 包里的固定组件和必有控件（UI 开发规范第 10 节）。
@@ -17,10 +18,37 @@ const COMMON = {
   RedDot: ['count'], HoldProgress: [], ArtText: []
 };
 
-export function uiRules({root, model, languages, redDots = []}) {
+/** ui:// 地址指向的资源：ui://<包ID><资源ID> 或 ui://<包名>/<资源名>。找不到返回 null。 */
+export function resourceByUrl(model, url) {
+  const m = /^ui:\/\/(?:([a-z0-9]{8})([a-z0-9]{8})|([A-Z][A-Za-z0-9]*)\/(.+))$/.exec(url ?? '');
+  const pkg = m && (m[1] ? model.byId.get(m[1]) : model.packages.find(p => p.name === m[3]));
+  const res = pkg?.resources.find(r => m[1] ? r.id === m[2] : r.name === m[4]);
+  return res ? {pkg, res} : null;
+}
+
+// 图片有 @<语言> 版本（带字图片）
+const hasLanguages = (pkg, image) => image.type === 'image' && pkg.resources.some(r => r.type === 'image' && r.name.startsWith(image.name + '@'));
+
+/** 音效地址的问题：不存在、没登记、不是 mp3；没问题返回 null。 */
+export function soundProblem(model, url) {
+  const found = resourceByUrl(model, url);
+  if (!found) return `${url} 没有登记在 ui/ 的包里（地址写成 ui://包名/音效名）`;
+  const {res} = found;
+  if (res.type !== 'sound') return `${url} 不是音效（package.xml 里登记的是 ${res.type}）`;
+  if (!/\.mp3$/i.test(res.fileName)) return `${url} 是 ${res.fileName}，音效只用 mp3`;
+  if (!fs.existsSync(res.file)) return `${url} 登记的文件 ${res.path}${res.fileName} 不存在`;
+  const head = Buffer.alloc(3);
+  const fd = fs.openSync(res.file, 'r');
+  try { fs.readSync(fd, head, 0, 3, 0); } finally { fs.closeSync(fd); }
+  if (!(head.toString('latin1') === 'ID3' || (head[0] === 0xff && (head[1] & 0xe0) === 0xe0))) return `${res.path}${res.fileName} 的内容不是 mp3 格式`;
+  return null;
+}
+
+export function uiRules({root, model, languages, redDots = [], fullScreens = [], sounds = null}) {
   const out = [];
   const rel = file => path.relative(root, file).split(path.sep).join('/');
   const add = (code, message, fix, file, line) => out.push(finding(code, message, fix, {file: file ? rel(file) : undefined, line, col: 1}));
+  const soundFix = '音效用 mp3，放进包目录并登记进 package.xml（<sound id="…" name="click.mp3" path="/" exported="true"/>），地址写 ui://包名/音效名；不要声音就写 sound=""。';
 
   // UI-001 包 ID
   const pkgIds = new Map();
@@ -64,11 +92,14 @@ export function uiRules({root, model, languages, redDots = []}) {
     const registered = new Set(pkg.resources.map(r => path.resolve(r.file)));
     const walk = dir => fs.readdirSync(dir, {withFileTypes: true}).flatMap(e => e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]);
     for (const file of walk(pkg.dir)) {
-      if (path.basename(file) === 'package.xml' || !/\.(xml|png|jpg|jpeg)$/i.test(file)) continue;
+      if (path.basename(file) === 'package.xml' || !/\.(xml|png|jpg|jpeg|mp3|wav|ogg)$/i.test(file)) continue;
       if (!registered.has(path.resolve(file))) add('LGUI-UI-018', `${rel(file)} 放在包目录里，但没有登记进 package.xml。`, '登记进 package.xml，或者删掉它。', file);
     }
 
     for (const component of pkg.components) {
+      // UI-065 按钮组件自己写的音效
+      const ownSound = component.root?.children.find(n => n.tag === 'Button')?.attrs.sound;
+      if (ownSound) { const problem = soundProblem(model, ownSound); if (problem) add('LGUI-UI-065', `按钮组件 ${component.fullName} 的音效不对：${problem}。`, soundFix, component.file, 1); }
       // UI-003 元素 ID、UI-004 控件名
       const ids = new Set();
       for (const child of component.children) {
@@ -79,7 +110,22 @@ export function uiRules({root, model, languages, redDots = []}) {
         if (['text', 'richtext'].includes(child.tag)) {
           if (!AUTO_SIZES.includes(child.attrs.autoSize)) add('LGUI-UI-010', `组件 ${component.fullName} 的文字控件 ${child.name} 没写超长处理（autoSize）。`, '写 autoSize="shrink"、"height"、"ellipsis" 或 "both"（UI 开发规范第 8 节）。', component.file, child.line);
         }
-        if (['text', 'richtext', 'inputtext'].includes(child.tag) && child.attrs.fontSize && Number(child.attrs.fontSize) < MIN_FONT) add('LGUI-UI-011', `组件 ${component.fullName} 的 ${child.name} 字号是 ${child.attrs.fontSize}，小于最小字号 ${MIN_FONT}。`, `改成 ${MIN_FONT} 或更大。`, component.file, child.line);
+        if (['text', 'richtext', 'inputtext'].includes(child.tag) && Number(child.attrs.fontSize ?? DEFAULT_FONT) < MIN_FONT) add('LGUI-UI-011', `组件 ${component.fullName} 的 ${child.name} ${child.attrs.fontSize ? `字号是 ${child.attrs.fontSize}` : `没写 fontSize（FairyGUI 默认 ${DEFAULT_FONT} 号）`}，小于最小字号 ${MIN_FONT}。`, `写 fontSize="${MIN_FONT}" 或更大。`, component.file, child.line);
+        // UI-060 gearText 里写了用户能看到的文字：不会被提取翻译，headless 也不模拟
+        for (const gear of child.children.filter(n => n.tag === 'gearText')) {
+          const texts = [...(gear.attrs.values ?? '').split('|'), gear.attrs.default ?? ''].filter(t => t.trim());
+          if (texts.length) add('LGUI-UI-060', `组件 ${component.fullName} 的 ${child.name} 在 gearText 里写了用户能看到的文字（${texts.join('|')}）。这些字不会被提取翻译，lgui test 里也看不到。`, '删掉 gearText，改用绑定表：text: pick(数据, s => lgui.t(键))，文字写进 i18n/<语言>.json。', component.file, child.line);
+        }
+        const button = child.children.find(n => n.tag === 'Button' || n.tag === 'Label');
+        // UI-061 按钮直接绑控制器（点了就切页）：绕过了 Model，lgui test 里也不切
+        if (button?.tag === 'Button' && button.attrs.controller) add('LGUI-UI-061', `组件 ${component.fullName} 的按钮 ${child.name} 直接绑了控制器 ${button.attrs.controller}（点了就切页）。这样切页不经过 Model，lgui test 里也不会切。`, '删掉 <Button> 上的 controller 和 page；在绑定表里写 click: () => xxxController.方法()，由 Controller 改 Model，控制器写 page: pick(…)。', component.file, child.line);
+        // UI-065 按钮实例上写的音效；写空表示不出声
+        if (button?.tag === 'Button' && button.attrs.sound) { const problem = soundProblem(model, button.attrs.sound); if (problem) add('LGUI-UI-065', `组件 ${component.fullName} 的按钮 ${child.name} 的音效不对：${problem}。`, soundFix, component.file, child.line); }
+        // UI-017 装载器的 url、按钮的 icon 写死了带字图片：不会随语言换
+        for (const url of [child.tag === 'loader' ? child.attrs.url : null, button?.attrs.icon]) {
+          const found = url ? resourceByUrl(model, url) : null;
+          if (found && hasLanguages(found.pkg, found.res)) add('LGUI-UI-017', `组件 ${component.fullName} 的 ${child.name} 在 ui/ 里写死了带字图片 ${url}，不会随语言换。`, `ui/ 里留空，在绑定表里写 icon: 'ui://${found.pkg.name}/${found.res.name}'。`, component.file, child.line);
+        }
         // UI-009 引用存在
         if (child.tag === 'component' && !child.ref) add('LGUI-UI-009', `组件 ${component.fullName} 的子组件 ${child.name} 引用的组件不存在（src="${child.attrs.src}"）。`, '指向一个存在的组件；跨包引用要写 pkg，并且对方已导出。', component.file, child.line);
         if (child.tag === 'component' && child.ref && child.ref.pkg !== pkg && !child.ref.exported) add('LGUI-UI-009', `组件 ${component.fullName} 引用了别的包里没导出的组件 ${child.ref.fullName}。`, '在对方的 package.xml 里给它写 exported="true"。', component.file, child.line);
@@ -87,12 +133,12 @@ export function uiRules({root, model, languages, redDots = []}) {
           const target = model.byId.get(child.attrs.pkg ?? pkg.id);
           const image = target?.resources.find(r => r.id === child.attrs.src);
           // UI-017 带字图片放在图片控件里，不会随语言换
-          if (image && target.resources.some(r => r.type === 'image' && r.name.startsWith(image.name + '@'))) add('LGUI-UI-017', `组件 ${component.fullName} 的图片控件 ${child.name} 用的 ${image.name} 有各语言版本，但图片控件不会随语言换。`, `换成装载器，在绑定表里写 icon: 'ui://${target.name}/${image.name}'。`, component.file, child.line);
+          if (image && hasLanguages(target, image)) add('LGUI-UI-017', `组件 ${component.fullName} 的图片控件 ${child.name} 用的 ${image.name} 有各语言版本，但图片控件不会随语言换。`, `换成装载器，在绑定表里写 icon: 'ui://${target.name}/${image.name}'。`, component.file, child.line);
           if (!target?.resources.some(r => r.id === child.attrs.src)) add('LGUI-UI-009', `组件 ${component.fullName} 的图片 ${child.name} 引用的资源 ${child.attrs.src} 不存在。`, '指向一个存在的图片资源。', component.file, child.line);
         }
         // UI-020 编辑器保存不了的跨包写法（警告）
         const editorWarn = (message, fix) => out.push(finding('LGUI-UI-020', message, fix, {file: rel(component.file), line: child.line, col: 1, level: 'warning'}));
-        if (child.tag === 'component' && child.attrs.pkg && child.attrs.fileName) editorWarn(`组件 ${component.fullName} 的子组件 ${child.name} 跨包引用写了 fileName，编辑器保存不了这个工程。`, '删掉 fileName，只写 pkg 和 src。');
+        if (child.tag === 'component' && child.attrs.pkg && child.attrs.pkg !== pkg.id && child.attrs.fileName) editorWarn(`组件 ${component.fullName} 的子组件 ${child.name} 跨包引用写了 fileName，编辑器保存不了这个工程。`, '删掉 fileName，只写 pkg 和 src。');
         if (child.tag === 'image' && child.attrs.pkg && child.attrs.pkg !== pkg.id) editorWarn(`组件 ${component.fullName} 的图片 ${child.name} 引用了别的包里的图片，编辑器保存不了这个工程。`, '把图片放进本包；或者用一个那个包里导出的组件（组件可以跨包）、或者装载器（url 写 ui://包名/图片名）。');
         // UI-016 列表 defaultItem
         if (child.tag === 'list' && (!child.ref || !child.ref.exported)) add('LGUI-UI-016', `组件 ${component.fullName} 的列表 ${child.name} 的 defaultItem 没设，或者指向的组件不存在、没导出。`, '写 defaultItem="ui://<包ID><组件ID>"，指向一个导出的组件。', component.file, child.line);
@@ -122,6 +168,21 @@ export function uiRules({root, model, languages, redDots = []}) {
     const names = new Set(c.children.map(ch => ch.name));
     for (const r of required) if (!names.has(r)) add('LGUI-UI-014', `Common/${name} 里缺少必有控件 ${r}。`, `把 ${r} 加回来，名字不能改。`, c.file);
   }
+
+  // UI-064 全屏界面的组件（横竖两版）都有直接子控件 safe：框架把它摆进安全区，贴边的控件关联到它
+  const checked = new Set();
+  for (const v of fullScreens) {
+    const component = findComponent(model, v.component);
+    const portrait = component && findComponent(model, `${v.component}${PORTRAIT}`);
+    for (const c of [component, portrait].filter(Boolean)) {
+      if (checked.has(c)) continue;
+      checked.add(c);
+      if (!c.children.some(ch => ch.name === 'safe')) add('LGUI-UI-064', `全屏界面 ${v.component} 的组件 ${c.fullName} 里没有名为 safe 的直接子控件，界面会被刘海、圆角挡住。`, `在 displayList 里 bg 后面加一个空图形：<graph id="n…" name="safe" xy="0,0" size="${c.size}" touchable="false"><relation target="" sidePair="width-width,height-height"/></graph>；贴边、要点的控件把关联的 target 写成它的 ID（UI 开发规范第 7.3 节）。`, c.file, 1);
+    }
+  }
+
+  // UI-065 工程配置里的默认点击音效
+  if (sounds?.click) { const problem = soundProblem(model, sounds.click); if (problem) out.push(finding('LGUI-UI-065', `工程配置 sounds.click 的音效不对：${problem}。`, '改成登记过的 mp3 音效地址（ui://包名/音效名），或者写 null（不播）。', {file: '.lgui/project.json', line: 1, col: 1})); }
 
   // UI-012 绑定了 redDot 的控件里有 redDot 子控件
   for (const b of redDots) {

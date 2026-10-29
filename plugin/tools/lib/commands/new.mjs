@@ -12,6 +12,8 @@ import {extractTexts, readTable} from '../generate/i18n.mjs';
 export const PATTERNS = ['split', 'tabs', 'grid', 'dialog'];
 const LIST_PATTERNS = ['split', 'grid'];
 const read = rel => fs.readFileSync(path.join(templatesDir, rel), 'utf8');
+// 排布模式自己有这个模板就用它（比如 tabs 的 Model 多了标签页），没有就用 module/ 里的通用模板。
+const moduleTemplate = (pattern, name) => pattern && fs.existsSync(path.join(templatesDir, 'patterns', pattern, name)) ? `patterns/${pattern}/${name}` : `module/${name}`;
 const fill = (text, vars) => text.replace(/\{\{(\w+)\}\}/g, (all, key) => (key in vars ? vars[key] : all));
 
 function checkPattern(pattern) {
@@ -60,9 +62,9 @@ function writeUi(root, pkg, comp, pattern) {
   return files;
 }
 
-/** 把新界面里的固定文字补进每种语言的文本表：默认语言写原文；其他语言先填原文，提醒去翻译。 */
-function addTexts(root, project) {
-  const entries = extractTexts(readUiModel(uiProjectPath(root)));
+/** 把新界面里的固定文字、生成的代码用到的文本键（extra：键 → 原文）补进每种语言的文本表：默认语言写原文；其他语言先填原文，提醒去翻译。 */
+function addTexts(root, project, extra = {}) {
+  const entries = [...extractTexts(readUiModel(uiProjectPath(root))), ...Object.entries(extra).map(([key, text]) => ({key, text}))];
   const pending = [];
   for (const language of project.languages) {
     const table = readTable(root, language);
@@ -145,13 +147,11 @@ export async function newModule({projectRoot, project, args, flags}) {
   const vars = {...n, PKG: n.NAME, COMP: comp};
   const uiFiles = pattern ? writeUi(projectRoot, n.NAME, comp, pattern) : [];
   fs.mkdirSync(dir, {recursive: true});
-  // 只有 tabs 模式用到标签页：别的模式去掉 tab 相关的行。
-  const dropTabs = text => (pattern === 'tabs' ? text : text.split('\n').filter(line => !/\btab\b|switchTab/.test(line)).join('\n'));
-  fs.writeFileSync(files.model, dropTabs(fill(read('module/model.ts'), vars)));
+  fs.writeFileSync(files.model, fill(read(moduleTemplate(pattern, 'model.ts')), vars));
   const viewMethods = !pattern ? '' : pattern === 'dialog'
     ? `  confirm() { lgui.ui.close(${comp}View); }\n  close() { lgui.ui.close(${comp}View); }\n`
     : `  close() { lgui.ui.close(${comp}View); }\n`;
-  fs.writeFileSync(files.controller, dropTabs(fill(read('module/controller.ts'), {...vars, LGUI_IMPORT: pattern ? ', lgui' : '', VIEW_IMPORT: pattern ? `import { ${comp}View } from './${comp}View';\n` : '', VIEW_METHODS: viewMethods})));
+  fs.writeFileSync(files.controller, fill(read(moduleTemplate(pattern, 'controller.ts')), {...vars, LGUI_IMPORT: pattern ? ', lgui' : '', VIEW_IMPORT: pattern ? `import { ${comp}View } from './${comp}View';\n` : '', VIEW_METHODS: viewMethods}));
   if (pattern) {
     fs.writeFileSync(files.view, fill(read(`patterns/${pattern}/view.ts`), vars));
     if (files.item) fs.writeFileSync(files.item, fill(read(`patterns/${pattern}/item-view.ts`), vars));
@@ -159,7 +159,9 @@ export async function newModule({projectRoot, project, args, flags}) {
   } else {
     fs.writeFileSync(files.test, fill(read('module/model-test.ts'), vars));
   }
-  const pending = pattern ? addTexts(projectRoot, project) : [];
+  // 生成的代码里用到的文本键（patterns/<模式>/texts.json）
+  const texts = pattern && fs.existsSync(path.join(templatesDir, 'patterns', pattern, 'texts.json')) ? JSON.parse(fill(read(`patterns/${pattern}/texts.json`), vars)) : {};
+  const pending = pattern ? addTexts(projectRoot, project, texts) : [];
   const rel = f => path.relative(projectRoot, f).split(path.sep).join('/');
   return {
     data: {code: Object.values(files).map(rel), ui: uiFiles.map(rel), translate: pending},

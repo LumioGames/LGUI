@@ -12,7 +12,7 @@ const isVerifySize = value => isObject(value) && typeof value.name === 'string' 
   Object.keys(value).every(key => ['name', 'width', 'height', 'safeArea'].includes(key));
 const isKeyMap = value => isObject(value) && Object.values(value).every(map => isObject(map) && Object.values(map).every(action => typeof action === 'string' && action.length > 0));
 
-// 标准验证尺寸：电脑 16:9、超宽屏、手机横屏（带刘海）、平板 4:3、手机竖屏、平板竖屏。lgui verify 对每组再横竖各截一张。
+// 标准验证尺寸：电脑 16:9、超宽屏、手机横屏（带刘海）、平板 4:3、手机竖屏、平板竖屏。lgui verify 对每组再横竖各截一张（同一个画面只截一次）。
 export const defaultVerifySizes = [
   {name: 'desktop', width: 1920, height: 1080},
   {name: 'ultrawide', width: 2560, height: 1080},
@@ -43,6 +43,7 @@ export const fields = {
   sounds: {check: value => isObject(value) && (value.click === null || typeof value.click === 'string') && Object.keys(value).length === 1, type: '{ click: 音效地址 | null }', default: {click: null}},
   defaultFont: {check: value => value === null || (typeof value === 'string' && value.length > 0), type: '字体名 | null', default: null},
   devPort: {check: value => isInt(value, 1) && value <= 65535, type: '端口号 1–65535', default: 4173},
+  editorPort: {check: value => isInt(value, 1) && value <= 65535, type: '端口号 1–65535', default: 4174},
   backend: {check: value => value === 'h5', type: '"h5"', default: 'h5'},
   unityProject: {check: value => value === null || (typeof value === 'string' && value.length > 0), type: 'Unity 工程路径 | null', default: null}
 };
@@ -73,14 +74,13 @@ export function validateProject(raw, file = '.lgui/project.json') {
   return project;
 }
 
-// 读取工程根目录下的 .lgui/project.json。
+// 读取工程根目录下的 .lgui/project.json。报错里的文件写相对工程根目录的路径。
 export function readProject(root) {
-  const file = path.join(root, '.lgui', 'project.json');
   let raw;
   try {
-    raw = JSON.parse(fs.readFileSync(file, 'utf8'));
+    raw = JSON.parse(fs.readFileSync(path.join(root, '.lgui', 'project.json'), 'utf8'));
   } catch (error) {
-    throw new LgCliError('LGUI-CLI-004', `读不了工程配置：${error.message}`, {file, fix: '确认 .lgui/project.json 存在，并且是合法的 JSON。'});
+    throw new LgCliError('LGUI-CLI-004', `读不了工程配置：${error.message.replace(root + path.sep, '')}`, {file: '.lgui/project.json', fix: '确认 .lgui/project.json 存在，并且是合法的 JSON。'});
   }
-  return validateProject(raw, file);
+  return validateProject(raw);
 }

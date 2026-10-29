@@ -8,7 +8,7 @@
 2. 新界面用 `lgui new view <包>/<组件> --pattern <模式>` 一次生成横竖两版骨架（第 7 节）；改已有界面就直接编辑 `ui/` 里的 XML。
 3. 改完运行 `lgui check`，把报错全部改掉。
 4. `lgui dev` 打开预览看效果。
-5. `lgui verify` 按标准尺寸横竖各截一张图，逐张看一遍。
+5. `lgui verify` 按标准尺寸横竖截图（同一个画面只截一次，按尺寸模拟刘海），逐张看一遍。
 
 编辑器开着时不要直接改 XML：同一时间只有一方修改 `ui/`。
 
@@ -154,13 +154,13 @@ ui/
 
 ```xml
 <controller name="state" pages="0,locked,1,ready,2,claimed" selected="0"/>
-<text id="n3" name="stateText" xy="0,0" size="200,40" fontSize="22" autoSize="shrink" text="未达成">
-  <gearText controller="state" pages="0,1,2" values="未达成|可领取|已领取" default="未达成"/>
-</text>
 <image id="n4" name="doneMark" src="done0001" xy="0,0" size="40,40">
   <gearDisplay controller="state" pages="2"/>
 </image>
 ```
+
+- **用户能看到的文字不写在 `gearText` 里**：这些字不会被提取翻译，`lgui test` 里也看不到，`lgui check` 报 `LGUI-UI-060`。随状态变的文字在绑定表里写：`` stateText: { text: pick(taskModel, s => lgui.t(`task.${s.state}`)) } ``，文字放进 `i18n/<语言>.json`。
+- **按钮不直接绑控制器**（`<Button controller="tabs" page="1"/>`，点了就切页）：这样切页不经过 Model，`lgui test` 里也不会切，`lgui check` 报 `LGUI-UI-061`。点击写在绑定表里调用 Controller（`click: () => shopController.switchTab('second')`），控制器的页由 `page: pick(…)` 决定。
 
 **关联**（同一方向内适配不同宽高比，第 7.3 节）：
 
@@ -195,7 +195,7 @@ ui/
 
 - 需要两种排法的界面做两个组件：横版 `BagPanel` 和竖版 `BagPanel@portrait`，都要导出。
 - **两版的控件名和类型必须完全一致**（包括控制器和页名），代码只写一份。不一致时 `lgui check` 报 `LGUI-UI-007`。
-- **两版的固定文字也要一样**：两版共用一个文本键（`<包>/<组件>/<控件>`），`lgui i18n extract` 和翻译都以横版的文字为准，竖版写了不同的字会被丢掉。两版要说不一样的话，就用代码里的 `lgui.t`。
+- **两版的固定文字也要一样**：两版共用一个文本键（`<包>/<组件>/<控件>`），`lgui i18n extract` 和翻译都取横版的文字。两版写了不同的字，`lgui check` 警告 `LGUI-UI-063`：默认语言下两版各显示各的，换了语言竖版也显示横版的翻译。两版要说不一样的话，就用代码里的 `lgui.t`。
 - 按钮、道具格子这类子组件两版共用。
 - 弹窗这类没有竖版的组件，两种方向通用，只靠关联适配。
 - **全屏界面必须有竖版**；确实两种方向都用同一版的，在 View 里写 `static bothOrientations = true`（见 MVC 开发规范）。
@@ -213,6 +213,25 @@ ui/
 | `center-center`、`middle-middle` | 水平居中 / 垂直居中 |
 
   一个方向只写一条（比如右上角的关闭按钮写 `right-right,top-top`）。其他取值照 FairyGUI 的关联规则。
+- **安全区：** 全屏界面的组件（横竖两版）在 `bg` 后面放一个名为 `safe` 的空图形，铺满组件，框架把它摆进屏幕的安全区（避开刘海、圆角）。背景关联到组件本身（`target=""`），贴边的控件和要点的内容关联到 `safe`（`target` 写它的元素 ID）。没有 `safe` 时 `lgui check` 报 `LGUI-UI-064`。`lgui init` 和 `lgui new view` 生成的全屏界面已经这样写好了：
+
+```xml
+<graph id="n0" name="bg" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#0e1621">
+  <relation target="" sidePair="width-width,height-height"/>
+</graph>
+<graph id="n4" name="safe" xy="0,0" size="1920,1080" touchable="false">
+  <relation target="" sidePair="width-width,height-height"/>
+</graph>
+<component id="n2" name="closeButton" pkg="cmn00001" src="button01" xy="1620,32" size="240,72">
+  <relation target="n4" sidePair="right-right,top-top"/>
+  <Button title="关闭"/>
+</component>
+<list id="n3" name="list" xy="60,140" size="1800,820" layout="flow_hz" defaultItem="ui://bag00001slot0001" overflow="scroll">
+  <relation target="n4" sidePair="left-left,top-top,width-width,height-height"/>
+</list>
+```
+
+  关联到 `safe` 时，`left-left` 这类写法表示跟着 `safe` 的边移动，`width-width` 表示跟着 `safe` 变宽变窄；铺满安全区的内容四条都写。
 - **底部留空：** 操作提示栏（第 10 节）占屏幕底部 64 设计像素，全屏界面底部的按钮和内容要留出这段高度。
 - **列表：** 用列表的自动排布（`layout="flow_hz"`），按宽度决定每行几个，不在代码里算列数。
 - **代码里不写坐标和尺寸**，布局只在 `ui/` 里定义。
@@ -231,7 +250,7 @@ ui/
 ## 8. 文字
 
 - **默认字体**在工程配置 `defaultFont` 里设置；XML 里不写 `font`，除非这一处必须用别的字体。
-- **最小字号 20**（按设计尺寸）。小于 20 时 `lgui check` 报 `LGUI-UI-011`。
+- **最小字号 20**（按设计尺寸）。小于 20 时 `lgui check` 报 `LGUI-UI-011`；没写 `fontSize` 的按 FairyGUI 默认的 12 号算，也报。
 - **每个文字控件都要声明文字超长时怎么处理**，就是 `autoSize` 的取值：
 
 | 写法 | 效果 |
@@ -251,9 +270,9 @@ ui/
 - 第一版不支持从右往左排版的语言。
 - **固定文字**写在 `ui/` 里，`lgui i18n extract` 把它们提取到默认语言的 `i18n/<语言>.json`，键名是 `<包>/<组件>/<控件路径>`，比如 `Bag/BagPanel/sellButton`、`Bag/BagPanel/header.count`。按钮的标题、输入框的提示文字也一样提取。
 - **默认语言的固定文字以 `ui/` 为准**：要改默认语言的文字，直接改 `ui/`；默认语言文本表里的这些键只是给翻译看的原文。
-- 其他语言的 `i18n/<语言>.json` 照同样的键翻译。只编辑这些 JSON，不碰生成的翻译 XML。
+- 其他语言的 `i18n/<语言>.json` 照同样的键翻译。只编辑这些 JSON，不碰生成的翻译 XML。翻译和默认语言的原文一字不差时，`lgui check` 警告 `LGUI-UI-062`（多半是还没翻，比如 `lgui new` 先填进去的原文）。
 - 占位符写成 `{count}`，各语言的占位符必须一致。
-- **带字的图片**按 `@<语言>` 命名提供各语言版本，比如 `title.png`（默认）和 `title@en.png`。必须有不带后缀的默认版本；后缀的语言必须在工程配置 `languages` 里。界面里用**装载器**放它，在绑定表里写 `icon: 'ui://<包>/<图片名>'`（不带后缀），框架按当前语言换成对应版本；图片控件（`<image>`）不会随语言换，`lgui check` 报 `LGUI-UI-017`。
+- **带字的图片**按 `@<语言>` 命名提供各语言版本，比如 `title.png`（默认）和 `title@en.png`。必须有不带后缀的默认版本；后缀的语言必须在工程配置 `languages` 里。界面里用**装载器**放它，在绑定表里写 `icon: 'ui://<包>/<图片名>'`（不带后缀），框架按当前语言换成对应版本；图片控件（`<image>`）、在 `ui/` 里写死的装载器 `url` 和按钮 `icon` 都不会随语言换，`lgui check` 报 `LGUI-UI-017`。
 - 布局要给翻译留空间：英文、德文通常比中文长 40% 以上。用 `lgui verify --lang pseudo` 检查（文字加长 40%）。
 
 ## 10. Common 包（`lgui init` 自带）
@@ -328,18 +347,24 @@ ui/
 | `LGUI-UI-007` | 横竖两版的控件名、类型、控制器和页名完全一致 | 两版都有 `sellButton`（按钮） | 竖版少了 `sellButton`，或者竖版里它是文字 |
 | `LGUI-UI-009` | 引用的资源存在；跨包引用的资源已导出 | `src="sword001"`（存在） | 引用了已删掉的资源 |
 | `LGUI-UI-010` | 文字控件写了超长处理（`autoSize` 是 `shrink`、`height`、`ellipsis`、`both` 之一） | `autoSize="ellipsis" singleLine="true"` | 不写 `autoSize`，或写 `none` |
-| `LGUI-UI-011` | 字号不小于 20 | `fontSize="22"` | `fontSize="14"` |
+| `LGUI-UI-011` | 字号不小于 20；没写 `fontSize` 按 FairyGUI 默认的 12 号算 | `fontSize="22"` | `fontSize="14"`、不写 `fontSize` |
 | `LGUI-UI-012` | 绑定了 `redDot` 的控件里有名为 `redDot` 的子控件 | 按钮里放了 `redDot` | 绑了 `redDot`，按钮里没有这个子控件 |
 | `LGUI-UI-013` | ArtText 的 `customData` 格式对，字体目录存在 | `font=Bag/dmg;align=center` | `font=dmg`、字体目录不存在 |
 | `LGUI-UI-014` | Common 包里的固定组件和必有控件都在 | `Common/Confirm` 里有 `ok`、`cancel` | 删了 `Common/Toast`，或 `Confirm` 里没有 `ok` |
 | `LGUI-UI-015` | 九宫格：`scale="9grid"` 和 `scale9grid` 成对出现，区域不超出图片 | `scale="9grid" scale9grid="12,12,40,40"` | 只写了 `scale="9grid"` |
 | `LGUI-UI-016` | 列表的 `defaultItem` 指向一个存在、已导出的组件 | `defaultItem="ui://bag00001slot0001"` | 不写 `defaultItem` |
-| `LGUI-UI-017` | `@<语言>` 图片有默认版本，语言在 `languages` 里；带字图片用装载器放（图片控件不随语言换） | `title.png` + `title@en.png`，装载器 + `icon: 'ui://Bag/title'` | 只有 `title@en.png`，或 `title@xx.png`；`<image src="title 的 ID">` |
-| `LGUI-UI-018` | `package.xml` 登记的文件都存在，包目录里的组件和图片都已登记 | 新图片登记进 `package.xml` | 放了图片没登记 |
+| `LGUI-UI-017` | `@<语言>` 图片有默认版本，语言在 `languages` 里；带字图片用装载器放，地址写在绑定表里（图片控件、`ui/` 里写死的装载器 `url` 和按钮 `icon` 都不随语言换） | `title.png` + `title@en.png`，装载器 + `icon: 'ui://Bag/title'` | 只有 `title@en.png`，或 `title@xx.png`；`<image src="title 的 ID">`；`<loader url="ui://Bag/title">` |
+| `LGUI-UI-018` | `package.xml` 登记的文件都存在，包目录里的组件、图片和音效都已登记 | 新图片登记进 `package.xml` | 放了图片没登记 |
 | `LGUI-UI-019` | 代码里用到的组件（View 的 `component`、列表子项）已导出 | `exported="true"` | 没写 `exported` |
 | `LGUI-UI-020`（警告） | 跨包引用写成编辑器能保存的样子：子组件跨包只写 `pkg` + `src`，不写 `fileName`；图片不跨包引用 | `pkg="cmn00001" src="button01"` | `fileName="Button.xml" pkg="cmn00001"`；`<image … pkg="cmn00001">` |
-| `LGUI-UI-030` | 代码里 `lgui.t` 用到的键、绑定的固定文字，在每种语言的文本表里都有 | 各语言都有 `bag.sold` | `en.json` 里缺 `bag.sold` |
+| `LGUI-UI-030` | 代码里 `lgui.t` 用到的键（包括 View 的 `keys` 表里的 `hint`）、`ui/` 里的固定文字，在每种语言的文本表里都有 | 各语言都有 `bag.sold` | `en.json` 里缺 `bag.sold` |
 | `LGUI-UI-031`（警告） | 文本表里没有用不到的键（用模板字符串拼的键 `` lgui.t(`item.${kind}.name`) ``、条件表达式两边的键都算用到了；用变量传进来的键查不出来，所以只是警告） | — | 删掉了按钮，`Bag/BagPanel/oldButton` 还在表里 |
 | `LGUI-UI-032` | 同一个键在各语言里的占位符一致 | `已售出 {count} 件` / `Sold {count}` | `Sold {num}` |
+| `LGUI-UI-060` | 用户能看到的文字不写在 `gearText` 里 | `gearDisplay` + 绑定表 `text: pick(…, s => lgui.t(…))` | `<gearText … values="未达成\|可领取"/>` |
+| `LGUI-UI-061` | 按钮不直接绑控制器（点了就切页） | 绑定表 `click: () => shopController.switchTab('second')` | `<Button controller="tabs" page="1"/>` |
+| `LGUI-UI-062`（警告） | 别的语言的翻译和默认语言的原文不一样（一字不差多半是还没翻；不含文字的值不算） | `"Main/MainView/button": "Tap me"` | `en.json` 里写 `"点我"` |
+| `LGUI-UI-063`（警告） | 横竖两版同一个控件的固定文字一样 | 两版都是 `text="背包"` | 竖版写 `text="我的背包"` |
+| `LGUI-UI-064` | 全屏界面（`static fullScreen = true`）的组件，横竖两版都有名为 `safe` 的直接子控件 | 见第 7.3 节 | 全屏界面没有 `safe` |
+| `LGUI-UI-065` | 音效（按钮的 `sound`、工程配置的 `sounds.click`）指向存在、已登记的 mp3；`sound=""` 表示不出声 | `<Button sound="ui://Bag/click"/>`，`click.mp3` 登记在 Bag 包里 | 没登记、文件不存在、`click.wav` |
 
 靠人看、机器查不出的：图里不放文字；同一个工程的图风格一致；文字在各尺寸下没有被截断（看 `lgui verify` 的截图）。

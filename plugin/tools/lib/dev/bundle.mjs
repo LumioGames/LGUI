@@ -19,11 +19,11 @@ export function readTexts(root, languages) {
   const texts = {};
   for (const lang of languages) {
     const file = path.join(root, 'i18n', `${lang}.json`);
-    if (!fs.existsSync(file)) throw new LgCliError('LGUI-CLI-031', `缺少文本表 i18n/${lang}.json（工程配置 languages 里有 ${lang}）。`, {file, fix: `新建 i18n/${lang}.json，或者从 languages 里去掉 ${lang}。`});
+    if (!fs.existsSync(file)) throw new LgCliError('LGUI-CLI-031', `缺少文本表 i18n/${lang}.json（工程配置 languages 里有 ${lang}）。`, {file: `i18n/${lang}.json`, fix: `新建 i18n/${lang}.json，或者从 languages 里去掉 ${lang}。`});
     try {
       texts[lang] = JSON.parse(fs.readFileSync(file, 'utf8'));
     } catch (error) {
-      throw new LgCliError('LGUI-CLI-031', `文本表 i18n/${lang}.json 不是合法的 JSON：${error.message}`, {file, fix: '改成合法的 JSON。'});
+      throw new LgCliError('LGUI-CLI-031', `文本表 i18n/${lang}.json 不是合法的 JSON：${error.message}`, {file: `i18n/${lang}.json`, fix: '改成合法的 JSON。'});
     }
   }
   return texts;

@@ -35,7 +35,7 @@ MyGame/
 | `lguiVersion` | 版本号 | 必填 | 工程用的 LGUI 版本；和插件不一致时命令报 `LGUI-CLI-003`，先运行 `lgui upgrade` |
 | `designSize` | `{ landscape: {width,height}, portrait: {width,height} }` | 横 1920×1080，竖 1080×1920 | 设计尺寸 |
 | `orientation` | `"both"` \| `"landscape"` \| `"portrait"` | `"both"` | 跟随设备旋转，或者锁定一种方向 |
-| `verifySizes` | `[{ name, width, height, safeArea? }]` | 6 组，见下 | `lgui verify` 的标准验证尺寸，每组横竖各截一张 |
+| `verifySizes` | `[{ name, width, height, safeArea? }]` | 6 组，见下 | `lgui verify` 的标准验证尺寸，每组横竖各截一张（同一个画面只截一次） |
 | `languages` | 语言代码数组 | `["zh-CN", "en"]` | 支持的语言 |
 | `defaultLanguage` | 语言代码 | `"zh-CN"` | 默认语言，必须在 `languages` 里 |
 | `keyMap` | `{ <平台>: { <按键名>: <动作名> } }` | `{}` | 按平台改写「按键 → 动作」映射 |
@@ -46,6 +46,7 @@ MyGame/
 | `sounds` | `{ click: 音效地址 \| null }` | `{ click: null }` | 按钮点击音效，`null` 表示不播 |
 | `defaultFont` | 字体名 \| `null` | `null` | 默认字体，`null` 表示用 FairyGUI 的默认字体 |
 | `devPort` | 端口号 1–65535 | `4173` | `lgui dev` 的端口 |
+| `editorPort` | 端口号 1–65535 | `4174` | `lgui editor` 的端口。浏览器按地址（含端口）记住授权过的 `ui/` 文件夹，所以端口固定；改了端口要在编辑器里重新授权。被占用时报 `LGUI-CLI-110` |
 | `backend` | `"h5"` | `"h5"` | 默认后端 |
 | `unityProject` | 路径 \| `null` | `null` | 导出过的 Unity 工程路径，由 `lgui unity export` 写入 |
 
@@ -60,6 +61,8 @@ MyGame/
 | `phone-portrait` | 390×844 | 47 0 34 0 | 手机竖屏 |
 | `tablet-portrait` | 768×1024 | — | 平板竖屏 |
 
+- `lgui verify` 对每组横竖各截一张，但同一个画面只截一次：`phone-landscape` 转成竖屏和 `phone-portrait` 是同一个画面，只留本来就是竖屏的那组（平板同理），所以默认是 8 张。
+- `safeArea` 按这组尺寸本来的方向写（单位 CSS 像素）；截图前设好 `window.__lguiSafeArea = { top, right, bottom, left }`，网页后端按它模拟刘海；转到另一个方向截图时，四边跟着转 90°。没写就是 0。
 
 **说明**
 
@@ -67,7 +70,7 @@ MyGame/
 - **框架复制进工程，不走 npm 安装。** 离线可用，版本固定，同一工程在谁的机器上跑都一样。插件和工程的版本不一致时，命令会直接报错，提示运行 `lgui upgrade`。
 - **游戏代码的写法。** `src/main.ts` 里 `import` 的是 `lgui`，指向 `.lgui/framework/`；需要的配置由 `lgui init` 生成。游戏代码不出现 `document`、`window`、`CS.` 这类引擎或平台的 API，这一条由 `lgui check` 检查。
 - **`src/modules/` 里的细节以 MVC 开发规范为准。** 比如文件怎么命名、服务放在哪里。本节只定到"一个功能一个文件夹"。
-- **日常命令。** 预览用 `lgui dev`（打开浏览器，改动后自动刷新），改界面用 `lgui editor`（打开编辑器，保存直接写回 `ui/`），检查用 `lgui check`，测试用 `lgui test`。
+- **日常命令。** 预览用 `lgui dev`（打开浏览器，改动后自动刷新），改界面用 `lgui editor`（打开编辑器；在编辑器里授权过 `ui/` 文件夹，保存就写回 `ui/`），检查用 `lgui check`，测试用 `lgui test`。
 - **队友和 CI。** 也要装插件，才能运行 `lgui` 命令。
 
 ## `import 'lgui'` 怎么生效

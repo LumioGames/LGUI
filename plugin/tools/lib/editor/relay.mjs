@@ -1,18 +1,22 @@
 // lgui editor 的本地服务：提供编辑器的静态文件，加上实时会话中转（照搬旧补丁 agent-relay.mjs 的安全做法）。
-// - 只监听 127.0.0.1，端口随机；每次启动随机生成 32 字节令牌，写进连接文件（权限 0600）。
-// - Agent 一侧（/__lgui_editor/clients、/__lgui_editor/rpc）：必须带 Authorization: Bearer <令牌>；带了来源但不是编辑器自己的页面 → 403。
+// - 只监听 127.0.0.1，端口固定（工程配置 editorPort：浏览器按来源记住授权过的文件夹，端口一换就忘了）；被占用时报 LGUI-CLI-110。
+// - 每个请求的 Host 头都必须是 127.0.0.1:<端口>，否则 403（挡住 DNS 重绑定）。
+// - 每次启动随机生成 32 字节令牌，写进连接文件（权限 0600）。
+// - Agent 一侧（/__lgui_editor/clients、/__lgui_editor/rpc）：必须带 Authorization: Bearer <令牌>；带了来源但不是编辑器自己的页面 → 403；只转发 query 和 transact。
 // - 浏览器一侧（events、hello、response、bye）：只接受编辑器页面自己发的同源请求（Sec-Fetch-Site: same-origin，POST 还要核对 Origin）。
 // - 请求只发给指定的一个浏览器标签页，不广播；浏览器 15 秒没回结果按「结果未知」回 504。
-// - 编辑器页面每次打开时从 /__lgui_editor/project 读工程的 ui/（只读），保证显示的是 ui/ 里的最新内容。
+// - 编辑器页面每次打开时从 /__lgui_editor/project 读工程的 ui/（只读，不含 art-src/ 的原始大图），保证显示的是 ui/ 里的最新内容。
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
+import {LgCliError} from '../errors.mjs';
 
 const PREFIX = '/__lgui_editor/';
 const MAX_BODY = 256 * 1024;        // Agent 发来的请求
 const MAX_RESULT = 8 * 1024 * 1024; // 浏览器回的结果（查询整个工程时会比较大）
 const ALIVE_MS = 10000;
+const RPC_METHODS = ['query', 'transact']; // lgui editor props 只用这两个
 const TYPES = {'.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.css': 'text/css', '.map': 'application/json', '.md': 'text/markdown; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.fui': 'application/octet-stream', '.wasm': 'application/wasm'};
 
 const json = (res, status, value) => { res.writeHead(status, {'Content-Type': 'application/json', 'Cache-Control': 'no-store'}); res.end(JSON.stringify(value)); };
@@ -27,12 +31,12 @@ async function readBody(req, limit = MAX_BODY) {
   try { return JSON.parse(raw); } catch { throw Object.assign(new Error('请求不是合法的 JSON。'), {status: 400, code: 'invalid_request'}); }
 }
 
-// 工程 ui/ 下的全部文件（不含隐藏文件），路径用 /，内容 base64。
+// 工程 ui/ 下的全部文件（不含隐藏文件和 art-src/ 的原始大图：界面不引用它们），路径用 /，内容 base64。
 function readProjectFiles(dir) {
   const files = [];
   const walk = rel => {
     for (const e of fs.readdirSync(path.join(dir, rel), {withFileTypes: true})) {
-      if (e.name.startsWith('.')) continue;
+      if (e.name.startsWith('.') || (!rel && e.name === 'art-src')) continue;
       const child = rel ? `${rel}/${e.name}` : e.name;
       if (e.isDirectory()) walk(child);
       else if (e.isFile()) files.push({path: child, data: fs.readFileSync(path.join(dir, child)).toString('base64')});
@@ -42,12 +46,13 @@ function readProjectFiles(dir) {
   return files;
 }
 
-/** 启动服务。返回 { baseUrl, token, close }。 */
-export async function startEditorServer({editorDir, projectDir, connectionFile, timeoutMs = 15000}) {
+/** 启动服务。port 是 0 时随机选一个（测试和编辑器兼容实测用；lgui editor 传工程配置的 editorPort）。返回 { baseUrl, token, close }。 */
+export async function startEditorServer({editorDir, projectDir, connectionFile, port = 0, timeoutMs = 15000}) {
   const token = crypto.randomBytes(32).toString('hex');
   const clients = new Map();   // clientId → { res（SSE）, url, lastSeen }
   const pending = new Map();   // 请求 id → { res, timer, clientId }
   let baseUrl = '';
+  let host = ''; // 127.0.0.1:<端口>
 
   const finish = (id, status, value) => {
     const item = pending.get(id);
@@ -118,6 +123,7 @@ export async function startEditorServer({editorDir, projectDir, connectionFile, 
     const target = clients.get(body?.clientId);
     if (!target || !active().some(c => c.clientId === body.clientId)) return reject(res, 409, 'client_unavailable', '指定一个正在连接的编辑器标签页（clientId）；写操作不会广播。');
     if (!body.request || typeof body.request !== 'object') return reject(res, 400, 'invalid_request', '缺少 request。');
+    if (!RPC_METHODS.includes(body.request.method)) return reject(res, 400, 'method_not_allowed', `中转只转发 ${RPC_METHODS.join('、')}，不转发 ${body.request.method}。`);
     const id = crypto.randomUUID();
     const timer = setTimeout(() => finish(id, 504, {ok: false, error: {code: 'result_unknown', message: '编辑器没有按时回复，写操作可能已经执行：用同一个 requestId 和同样的内容重试，不要换新的 ID。'}}), timeoutMs);
     pending.set(id, {res, timer, clientId: body.clientId});
@@ -126,6 +132,7 @@ export async function startEditorServer({editorDir, projectDir, connectionFile, 
 
   const server = http.createServer(async (req, res) => {
     try {
+      if (req.headers.host !== host) return reject(res, 403, 'host_rejected', `只接受发给 ${host} 的请求。`);
       const url = new URL(req.url, 'http://127.0.0.1');
       const route = decodeURIComponent(url.pathname);
       if (!route.startsWith(PREFIX)) {
@@ -139,8 +146,12 @@ export async function startEditorServer({editorDir, projectDir, connectionFile, 
       if (!res.writableEnded) reject(res, error.status ?? 400, error.code ?? 'invalid_request', String(error.message ?? error));
     }
   });
-  await new Promise((resolve, reject_) => { server.once('error', reject_); server.listen(0, '127.0.0.1', resolve); });
-  baseUrl = `http://127.0.0.1:${server.address().port}`;
+  await new Promise((resolve, reject_) => {
+    server.once('error', error => reject_(error.code === 'EADDRINUSE' ? new LgCliError('LGUI-CLI-110', `编辑器的端口 ${port} 已经被占用了（可能另一个 lgui editor 还开着）。`, {fix: '先关掉占用它的程序；要换端口就改 .lgui/project.json 的 editorPort（换了端口，浏览器要重新授权 ui/ 文件夹）。'}) : error));
+    server.listen(port, '127.0.0.1', resolve);
+  });
+  host = `127.0.0.1:${server.address().port}`;
+  baseUrl = `http://${host}`;
   fs.mkdirSync(path.dirname(connectionFile), {recursive: true});
   fs.rmSync(connectionFile, {force: true});
   fs.writeFileSync(connectionFile, JSON.stringify({schemaVersion: 1, baseUrl, token, pid: process.pid, startedAt: new Date().toISOString()}, null, 2) + '\n', {mode: 0o600});

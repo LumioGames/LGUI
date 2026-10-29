@@ -1,4 +1,5 @@
-// lgui verify：生成一次，在随机端口起服务，用 Chrome 或 Edge 按标准尺寸 × 横竖两种方向截图，每张图旁边存一份界面快照。
+// lgui verify：生成一次，在随机端口起服务，用 Chrome 或 Edge 按标准尺寸 × 横竖两种方向截图（同一个画面只截一次），每张图旁边存一份界面快照。
+// 每张图都按尺寸的 safeArea 模拟刘海：启动前设好 window.__lguiSafeArea，网页后端读它。
 // --size 只截一组；--view 先打开指定的界面；--lang <语言> 再乘上语言；--lang pseudo 用伪翻译（文字加长 40%、换成带重音的字母），再按最长的语言横竖各截一张。
 import fs from 'node:fs';
 import http from 'node:http';
@@ -23,6 +24,31 @@ export function pseudo(text) {
 
 const pseudoTable = table => Object.fromEntries(Object.entries(table).map(([k, v]) => [k, typeof v === 'string' ? pseudo(v) : Object.fromEntries(Object.entries(v).map(([f, t]) => [f, pseudo(t)]))]));
 const tableLength = table => Object.values(table).reduce((sum, v) => sum + (typeof v === 'string' ? v.length : Object.values(v).join('').length), 0);
+
+const NO_INSETS = {top: 0, right: 0, bottom: 0, left: 0};
+
+/** 要截哪些：每组尺寸横竖各一张，去掉重复的画面（手机横屏转成竖屏，和手机竖屏那组是同一个画面，只留本来就是竖屏的那组）。
+ *  safeArea 按尺寸本来的方向写；转到另一个方向时四边跟着转 90°。返回 [{ size, orientation, viewport, safeArea }]。 */
+export function verifyShots(sizes) {
+  const native = s => (s.width >= s.height ? 'landscape' : 'portrait');
+  const viewportOf = (s, o) => { const long = Math.max(s.width, s.height), short = Math.min(s.width, s.height); return o === 'landscape' ? {width: long, height: short} : {width: short, height: long}; };
+  const key = v => `${v.width}x${v.height}`;
+  const natives = new Set(sizes.map(s => key(viewportOf(s, native(s)))));
+  const seen = new Set();
+  const shots = [];
+  for (const size of sizes) {
+    for (const orientation of ['landscape', 'portrait']) {
+      const viewport = viewportOf(size, orientation);
+      const rotated = orientation !== native(size);
+      if (seen.has(key(viewport)) || (rotated && natives.has(key(viewport)))) continue;
+      seen.add(key(viewport));
+      const a = size.safeArea ?? NO_INSETS;
+      const safeArea = !rotated ? {...a} : orientation === 'portrait' ? {top: a.left, right: a.top, bottom: a.right, left: a.bottom} : {top: a.right, right: a.bottom, bottom: a.left, left: a.top};
+      shots.push({size, orientation, viewport, safeArea});
+    }
+  }
+  return shots;
+}
 
 async function launch() {
   const {chromium} = playwright();
@@ -74,26 +100,27 @@ export async function runVerify(root, project, {size, view, lang} = {}) {
   fs.rmSync(out, {recursive: true, force: true});
   fs.mkdirSync(out, {recursive: true});
 
-  // 要截哪些：尺寸 × 方向（× 语言）
+  // 要截哪些：尺寸 × 方向（去掉重复的画面）× 语言
   const shots = [];
   const langs = lang ? [lang] : [null];
-  for (const l of langs) for (const s of sizes) for (const orientation of ['landscape', 'portrait']) shots.push({size: s, orientation, lang: l});
+  for (const l of langs) for (const shot of verifyShots(sizes)) shots.push({...shot, lang: l});
   if (lang === 'pseudo') {
     // 再按最长的那种语言，横竖各截一张
     const longest = project.languages.reduce((a, b) => tableLength(texts[b] ?? {}) > tableLength(texts[a] ?? {}) ? b : a);
-    for (const orientation of ['landscape', 'portrait']) shots.push({size: sizes[0], orientation, lang: longest});
+    for (const shot of verifyShots([sizes[0]])) shots.push({...shot, lang: longest});
   }
 
   const browser = await launch();
   const results = [];
   try {
     for (const shot of shots) {
-      const long = Math.max(shot.size.width, shot.size.height), short = Math.min(shot.size.width, shot.size.height);
-      const viewport = shot.orientation === 'landscape' ? {width: long, height: short} : {width: short, height: long};
+      const {viewport, safeArea} = shot;
       const page = await browser.newPage({viewport, locale: project.defaultLanguage});
       const errors = [];
       page.on('pageerror', e => errors.push(String(e.message ?? e)));
       try {
+        // 模拟刘海：网页后端启动时读 window.__lguiSafeArea（CSS 像素，上右下左）
+        await page.addInitScript(insets => { window.__lguiSafeArea = insets; }, safeArea);
         await page.goto(url);
         await page.waitForFunction(() => window.__lguiReady || document.getElementById('lgui-overlay')?.style.display === 'block', null, {timeout: 20000});
         if (shot.lang && shot.lang !== project.defaultLanguage) await page.evaluate(l => window.__lgui.lgui.setLanguage(l), shot.lang);
@@ -111,7 +138,7 @@ export async function runVerify(root, project, {size, view, lang} = {}) {
         await page.screenshot({path: image});
         const snapshot = await page.evaluate(() => window.__lgui.snapshot());
         fs.writeFileSync(path.join(out, `${name}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-        results.push({name, image: path.relative(root, image).split(path.sep).join('/'), viewport, errors});
+        results.push({name, image: path.relative(root, image).split(path.sep).join('/'), viewport, safeArea, errors});
       } finally {
         await page.close();
       }
@@ -130,7 +157,7 @@ export async function verify({projectRoot, project, flags}) {
   const failed = shots.filter(s => s.errors.length);
   return {
     data: {shots},
-    summary: [`截了 ${shots.length} 张图（.lgui/build/verify/，每张旁边有同名的界面快照 .json）：`, ...shots.map(s => `  ${s.image}  ${s.viewport.width}×${s.viewport.height}${s.errors.length ? `  页面报错：${s.errors.join('；')}` : ''}`), '逐张看一遍：文字有没有被截断、横竖两版排得对不对。'],
+    summary: [`截了 ${shots.length} 张图（.lgui/build/verify/，每张旁边有同名的界面快照 .json）：`, ...shots.map(s => `  ${s.image}  ${s.viewport.width}×${s.viewport.height}${Object.values(s.safeArea).some(Boolean) ? `  安全区（上右下左）${Object.values(s.safeArea).join(' ')}` : ''}${s.errors.length ? `  页面报错：${s.errors.join('；')}` : ''}`), '逐张看一遍：文字有没有被截断、横竖两版排得对不对。'],
     errors: failed.map(s => new LgCliError('LGUI-CLI-064', `截图 ${s.name} 时页面报错：${s.errors.join('；')}`, {fix: '按报错改代码；lgui dev 里能看到同样的错误。'}))
   };
 }

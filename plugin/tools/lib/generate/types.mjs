@@ -27,7 +27,7 @@ export function members(component, prefix = '', seen = new Set()) {
       const clash = names.get(child.name) === 'controller';
       errors.push(new LgCliError(clash ? 'LGUI-UI-005' : 'LGUI-UI-004', clash
         ? `组件 ${component.fullName} 里控件 ${child.name} 和控制器同名。`
-        : `组件 ${component.fullName} 里有两个控件都叫 ${child.name}。`, {file: component.file, line: child.line, fix: clash ? '给控件或控制器换一个名字。' : '控件名在组件内要唯一，给其中一个换名字。'}));
+        : `组件 ${component.fullName} 里有两个控件都叫 ${child.name}。`, {file: uiFile(component), line: child.line, fix: clash ? '给控件或控制器换一个名字。' : '控件名在组件内要唯一，给其中一个换名字。'}));
       continue;
     }
     names.set(child.name, 'child');
@@ -58,7 +58,7 @@ export function comparePortrait(landscape, portrait, landscapeMembers, portraitM
     if (!a || !b || a.kind !== b.kind || (a.kind === 'controller' && a.pages.join() !== b.pages.join())) diffs.push(`${key}：横版${describe(a)}，竖版${describe(b)}`);
   }
   if (!diffs.length) return [];
-  return [new LgCliError('LGUI-UI-007', `${landscape.fullName} 和 ${portrait.fullName} 的控件不一致：${diffs.join('；')}。`, {file: portrait.file, fix: '两版的控件名、类型、控制器和页名要完全一致；改成一样的再生成。'})];
+  return [new LgCliError('LGUI-UI-007', `${landscape.fullName} 和 ${portrait.fullName} 的控件不一致：${diffs.join('；')}。`, {file: uiFile(portrait), fix: '两版的控件名、类型、控制器和页名要完全一致；改成一样的再生成。'})];
 }
 
 function tsType(member) {
@@ -111,4 +111,9 @@ export function generateTypes(model, out) {
   fs.writeFileSync(indexFile, indexLines.join('\n'));
   files.push(indexFile);
   return {files, components: index.map(component => component.fullName)};
+}
+
+// 报错里的组件文件：相对工程根目录（ui/assets/<包>/ 往上三级），用 /。
+function uiFile(component) {
+  return path.relative(path.resolve(component.pkg.dir, '../../..'), component.file).split(path.sep).join('/');
 }
