@@ -157,7 +157,7 @@ export class BagView extends View<BagPanelUI> {
 
 | 词 | 用在 | 值 | 例子 |
 |---|---|---|---|
-| `text` | 文字、按钮标题、`ArtText` | 固定值或 `pick` | `text: pick(bagModel, s => s.gold, format.number)` |
+| `text` | 文字、按钮标题、`ArtText` | `pick`（不写固定字符串：固定文字放在 `ui/` 里） | `text: pick(bagModel, s => s.gold, format.number)` |
 | `visible` | 任意控件 | 布尔 | `visible: pick(bagModel, s => s.items.length === 0)` |
 | `enabled` | 任意控件 | 布尔；`false` 时变灰、不可点 | `enabled: pick(bagModel, s => s.selectedId !== null)` |
 | `icon` | 加载器、按钮图标 | 图片地址 | `icon: it => it.iconUrl` |
@@ -280,7 +280,7 @@ export class FakeBagService implements BagService {
 - 被压住：`onDeactivate`
 - 关闭：`onDeactivate`（如果当时是激活的）→ `onClose` → 解绑和清理 → 销毁或缓存 → 释放资源
 
-屏幕旋转、切换语言时，View 实例保留，只重建组件，不调用 `onOpen` 和 `onClose`。
+屏幕旋转、切换语言时，View 实例保留，只重建组件，不调用 `onOpen` 和 `onClose`。所以钩子里不写控件属性，只写绑定表（`lgui check` 警告 `LGUI-MVC-020`）。
 
 - 绑定表在新组件上重新绑一遍，显示的内容按当前数据和语言重新取。
 - View 里的 `PartView` 实例也保留，定时器和收听接着走；列表子项（`ItemView`）和子项里的部件跟着列表重建。
@@ -429,10 +429,10 @@ beforeEach(() => bagModel.reset());
 
 | 错误码 | 规则 | 正确写法 | 错误写法 |
 |---|---|---|---|
-| `LGUI-MVC-001` | 游戏代码只 import `lgui`、`lgui/ui` 和工程内的相对路径；不用 `document`、`window`、`globalThis`、`CS`、`localStorage`、`fetch` 等平台全局对象 | `lgui.platform.net.fetch(…)` | `fetch(…)`、`document.body` |
+| `LGUI-MVC-001` | 游戏代码只 import `lgui`、`lgui/ui` 和工程内的相对路径；不用 `document`、`window`、`globalThis`、`CS`、`localStorage`、`fetch` 等平台全局对象（工程里自己声明的同名变量、参数不算） | `lgui.platform.net.fetch(…)` | `fetch(…)`、`document.body` |
 | `LGUI-MVC-002` | View 写了必填的 `component` 和 `layer` | `static layer = 'page'` | 没写 `layer` |
-| `LGUI-MVC-003` | View 只写 6.2 表里的 7 项 static；`ItemView`、`PartView` 只写 `component` | — | `static cache = true` |
-| `LGUI-MVC-004` | static 的值合法：`layer` 是 5 层之一，`component` 是存在的导出组件，`inputMode` 是 `ui`/`game`/`all` | `static layer = 'popup'` | `static layer = 'dialog'` |
+| `LGUI-MVC-003` | View 只写 6.2 表里列出的 static；`ItemView`、`PartView` 只写 `component` | — | `static cache = true` |
+| `LGUI-MVC-004` | static 的值合法：`layer` 是 5 层之一，`component` 是存在的导出组件，`inputMode` 是 `ui`/`game`/`all`，`music` 是登记在 `ui/` 里的 mp3 音效（`ui://包名/音效名`） | `static layer = 'popup'`、`static music = 'ui://Bag/bgm'` | `static layer = 'dialog'`、`static music = 'bgm.mp3'` |
 | `LGUI-MVC-005` | 绑定表的键是组件里真实存在的控件、控制器、动效或点号路径 | `'header.count'` | `'header.cnt'` |
 | `LGUI-MVC-006` | 绑定表只用词表里的词；控制器只用 `page`、`change`；动效只用 `playing`、`play`、`done` | `{ text: … }` | `{ label: … }`、控制器上写 `visible` |
 | `LGUI-MVC-007` | View 里显示类的值是固定值或 `pick(…)`；`ItemView` 里是函数 | `pick(bagModel, s => s.gold)` | `bagModel.get().gold` |
@@ -442,11 +442,12 @@ beforeEach(() => bagModel.reset());
 | `LGUI-MVC-011` | Controller 不碰控件 | 改 Model | Controller 里用 `lgui.ui.get(BagView).ui.gold` |
 | `LGUI-MVC-012` | Model 不依赖界面、服务、平台 | 纯逻辑 | Model 里 import View 或调用 `lgui.ui` |
 | `LGUI-MVC-013` | Service 不操作界面 | 广播事件 | Service 里调用 `lgui.ui.open`、`lgui.toast` |
-| `LGUI-MVC-014` | 不写死用户能看到的文字：绑定表里 `text` 的固定字符串、`lgui.toast` / `lgui.confirm` 的参数都要是文本键 | `lgui.toast('bag.sold')` | `lgui.toast('已售出')`、`text: '金币'` |
+| `LGUI-MVC-014` | 不写死用户能看到的文字：绑定表的 `text` 不写固定字符串（固定文字放在 `ui/` 里，动态文字用 `pick(…, lgui.t(键))`）；`lgui.toast` / `lgui.confirm` 的参数是文本键 | `lgui.toast('bag.sold')`、`text: pick(bagModel, s => lgui.t('bag.gold', { n: s.gold }))` | `lgui.toast('已售出')`、`text: '金币'`、`text: 'bag.title'` |
 | `LGUI-MVC-015` | 代码里不写坐标和尺寸 | 在 `ui/` 里用关联 | `this.ui.list.width = 800` |
 | `LGUI-MVC-016` | 全屏界面要么有 `@portrait` 竖版，要么写 `static bothOrientations = true` | 有 `BagPanel@portrait` | 全屏、没竖版、也没写 `bothOrientations` |
 | `LGUI-MVC-017` | 文件位置和命名照第 2 节；一个文件只写一个 View | `src/modules/bag/BagView.ts` | 一个文件里写两个 View |
 | `LGUI-MVC-018`（警告） | 不跨界面修改控件 | 改 Model | `lgui.ui.get(ShopView)` 之后改它的控件 |
 | `LGUI-MVC-019` | `keys` 表：`back` 是 `'close'`、`'none'` 或函数；其他动作是 `{ do, hint? }`，`hint` 是文本键 | `confirm: { do: …, hint: 'bag.sell' }` | `confirm: 'sell'` |
+| `LGUI-MVC-020`（警告） | View 里不直接改控件属性（坐标尺寸归 `LGUI-MVC-015`）：旋转、换语言重建组件后改的值就没了 | 绑定表 `title: { visible: pick(…) }` | 钩子里写 `this.ui.title.visible = false` |
 
 TypeScript 自己的类型错误也一起报出来（带 TS 的错误码）。靠人看、机器查不出的：Model 的规则写得对不对、交互是否顺手。

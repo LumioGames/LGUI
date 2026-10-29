@@ -19,11 +19,11 @@ LGUI 是面向 AI Agent 的 UI 框架：界面在 `ui/`（FairyGUI 格式）里�
 | `lgui dev` | 打开网页预览，改动后自动刷新 |
 | `lgui check` | 类型检查和规范检查 |
 | `lgui test` | 跑 `tests/` 里的测试 |
-| `lgui verify` | 按标准尺寸横竖各截一张图 |
+| `lgui verify` | 按标准尺寸横竖截图（同一个画面只截一次，按尺寸模拟刘海） |
 | `lgui ui list` | 列出 `ui/` 里的组件和控件 |
 | `lgui new module <名字> [--pattern <模式>]` | 生成一个功能的骨架（带模式时连横竖两版界面一起生成） |
 | `lgui new view <包>/<组件> --pattern <模式>` | 按排布模式生成横竖两版界面和 View 骨架 |
-| `lgui editor` | 打开编辑器（每次都从本工程的 `ui/` 读取；要在编辑器里保存回 `ui/`，第一次在编辑器里「从文件夹导入」本工程的 `ui/`） |
+| `lgui editor` | 打开编辑器（每次都从本工程的 `ui/` 读取；要在编辑器里保存回 `ui/`，在编辑器里「从文件夹导入」本工程的 `ui/` 并允许读写。端口固定（`editorPort`），浏览器一般会记住授权；浏览器忘了时要再导入一次，不然保存不会写回 `ui/`） |
 | `lgui editor props <组件> <控件> <属性>=<值> ...` | 编辑器开着时修改已有控件的属性，编辑器里马上变 |
 | `lgui doctor --paths` | 打印规范所在的目录 |
 

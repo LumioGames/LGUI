@@ -32,8 +32,8 @@ export async function conformanceProject() {
   const dir = path.join(root, 'conformance');
   fs.cpSync(path.join(here, 'cases'), path.join(dir, 'cases'), {recursive: true});
   fs.copyFileSync(path.join(here, 'harness.ts'), path.join(dir, 'harness.ts'));
-  // 用例在 conformance/cases/ 里，写的是 ../src/...；把 src 映射过去。
-  fs.symlinkSync(path.join(root, 'src'), path.join(dir, 'src'), 'dir');
+  // 用例在 conformance/cases/ 里，写的是 ../src/...；把 src 映射过去（junction：Windows 没开开发者模式也能建，别的系统上当作 dir）。
+  fs.symlinkSync(path.join(root, 'src'), path.join(dir, 'src'), 'junction');
 
   const project = readProject(root);
   await generateWeb(uiProjectPath(root), webUiDir(root));

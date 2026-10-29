@@ -47,6 +47,12 @@ const cases = {
   'LGUI-UI-018': {fail: r => fs.copyFileSync(path.join(r, 'ui/assets/Common/placeholder.png'), path.join(r, 'ui/assets/Main/stray.png'))},
   'LGUI-UI-019': {fail: r => { edit(r, MAIN_PKG, 'name="MainView.xml" path="/" exported="true"', 'name="MainView.xml" path="/"'); edit(r, MAIN_PKG, 'name="MainView@portrait.xml" path="/" exported="true"', 'name="MainView@portrait.xml" path="/"'); }},
   'LGUI-UI-020': {fail: r => edit(r, MAIN_XML, 'pkg="cmn00001" src="button01"', 'fileName="Button.xml" pkg="cmn00001" src="button01"'), warning: true},
+  'LGUI-UI-060': {fail: r => { edit(r, MAIN_XML, '<displayList>', '<controller name="state" pages="0,a,1,b" selected="0"/>\n  <displayList>'); edit(r, MAIN_XML, 'text="你好，LGUI">', 'text="你好，LGUI">\n      <gearText controller="state" pages="0,1" values="甲|乙" default="甲"/>'); }},
+  'LGUI-UI-061': {fail: r => { edit(r, MAIN_XML, '<displayList>', '<controller name="tabs" pages="0,a,1,b" selected="0"/>\n  <displayList>'); edit(r, MAIN_XML, '<Button title="点我"/>', '<Button title="点我" controller="tabs" page="1"/>'); }},
+  'LGUI-UI-062': {fail: r => edit(r, 'i18n/en.json', '"Main/MainView/button": "Tap me"', '"Main/MainView/button": "点我"'), warning: true},
+  'LGUI-UI-063': {fail: r => edit(r, 'ui/assets/Main/MainView@portrait.xml', 'text="你好，LGUI"', 'text="你好"'), warning: true},
+  'LGUI-UI-064': {fail: r => edit(r, 'ui/assets/Main/MainView@portrait.xml', /\s*<graph id="n4" name="safe"[\s\S]*?<\/graph>/, '')},
+  'LGUI-UI-065': {fail: r => edit(r, MAIN_XML, '<Button title="点我"/>', '<Button title="点我" sound="ui://Main/click"/>')},
   'LGUI-UI-030': {fail: r => edit(r, 'i18n/en.json', /\s*"main\.hint": "[^"]*",/, '')},
   'LGUI-UI-031': {fail: r => edit(r, 'i18n/en.json', '{', '{\n  "nope.unused": "x",'), warning: true},
   'LGUI-UI-032': {fail: r => edit(r, 'i18n/en.json', 'Clicked {count} times', 'Clicked {n} times')},
@@ -71,7 +77,15 @@ const cases = {
   },
   'LGUI-MVC-017': {fail: r => write(r, 'src/helpers.ts', 'export const x = 1;\n')},
   'LGUI-MVC-018': {fail: r => write(r, 'src/modules/main/OtherView.ts', "import { View, lgui } from 'lgui';\nimport { MainView } from './MainView';\nexport class OtherView extends View<object> { static component = 'Main/MainView'; static layer = 'popup' as const; onOpen() { void lgui.ui.get(MainView)?.__component; } }\n"), warning: true},
-  'LGUI-MVC-019': {fail: r => edit(r, VIEW, "keys: Keys = { back: 'none' };", "keys: Keys = { back: 'none', confirm: { do: () => mainController.click(), hint: '出售' } };")}
+  'LGUI-MVC-019': {fail: r => edit(r, VIEW, "keys: Keys = { back: 'none' };", "keys: Keys = { back: 'none', confirm: { do: () => mainController.click(), hint: '出售' } };")},
+  'LGUI-MVC-020': {fail: r => edit(r, VIEW, "  keys: Keys = { back: 'none' };", "  keys: Keys = { back: 'none' };\n  onOpen() { this.ui.title.visible = false; }"), warning: true}
+};
+
+// 一段 mp3 文件头（ID3 标签 + 一个 MPEG 帧头），音效规则的样例用。
+const MP3 = Buffer.from([0x49, 0x44, 0x33, 3, 0, 0, 0, 0, 0, 0, 0xff, 0xfb, 0x90, 0x64, 0, 0, 0, 0]);
+const addSound = (r, file, bytes = MP3, id = 'click001') => {
+  fs.writeFileSync(path.join(r, 'ui/assets/Main', file), bytes);
+  edit(r, MAIN_PKG, '</resources>', `  <sound id="${id}" name="${file}" path="/" exported="true"/>\n  </resources>`);
 };
 
 test('新建的工程检查通过：没有任何错误和警告', async () => {
@@ -103,7 +117,7 @@ test('LGUI-UI-017：带字图片放在图片控件里（不会随语言换）报
 
 test('LGUI-UI-031：用模板字符串或条件表达式拼的键算用到了', async () => {
   const root = await fresh();
-  for (const lang of ['zh-CN', 'en']) edit(root, `i18n/${lang}.json`, '{', '{\n  "main.tip.a": "A",\n  "main.tip.b": "B",\n  "main.yes": "Y",\n  "main.no": "N",');
+  for (const lang of ['zh-CN', 'en']) edit(root, `i18n/${lang}.json`, '{', `{\n  "main.tip.a": "A ${lang}",\n  "main.tip.b": "B ${lang}",\n  "main.yes": "Y ${lang}",\n  "main.no": "N ${lang}",`);
   edit(root, CTRL, 'click() { mainModel.addClick(); }', "click() { mainModel.addClick(); lgui.toast(`main.tip.${mainModel.get().clicks % 2 ? 'a' : 'b'}`); lgui.toast(mainModel.get().clicks ? 'main.yes' : 'main.no'); }");
   edit(root, CTRL, "import { Controller } from 'lgui';", "import { Controller, lgui } from 'lgui';");
   assert.deepEqual(await codes(root), []);
@@ -123,4 +137,110 @@ test('报错格式：文件:行:列  错误码  说明  → 怎么改；有错�
   const result = await run(['check'], root);
   assert.equal(result.code, 1);
   assert.match(result.stderr, /^src\/modules\/main\/MainController\.ts:\d+  LGUI-MVC-001  用了平台全局对象 document。.*  → /m);
+});
+
+const findings = async root => {
+  const json = JSON.parse((await run(['check', '--json'], root)).stdout);
+  return json.data ? json.data.findings : json.errors;
+};
+
+test('LGUI-MVC-001：工程里自己声明的同名变量、参数不算平台全局对象；用全局对象赋值也拦得住', async () => {
+  const root = await fresh();
+  edit(root, CTRL, 'click() { mainModel.addClick(); }', 'click() { mainModel.addClick(); const navigator = 1; void navigator; }\n  distance(location: { x: number }, window = 0) { return location.x + window; }');
+  assert.ok(!(await codes(root)).includes('LGUI-MVC-001'));
+  const bad = await fresh();
+  edit(bad, CTRL, 'click() { mainModel.addClick(); }', 'click() { mainModel.addClick(); const w = window; const o = { navigator }; void w; void o; }');
+  assert.equal((await findings(bad)).filter(f => f.code === 'LGUI-MVC-001').length, 2);
+});
+
+test('LGUI-UI-030：只有 View 的 keys 表里的 hint 算文本键', async () => {
+  const root = await fresh();
+  edit(root, CTRL, 'click() { mainModel.addClick(); }', "click() { mainModel.addClick(); }\n  options() { return { hint: 'not.a.key', other: 1 }; }");
+  assert.deepEqual(await codes(root), []);
+  edit(root, VIEW, "keys: Keys = { back: 'none' };", "keys: Keys = { back: 'none', confirm: { do: () => mainController.click(), hint: 'main.sell' } };");
+  assert.ok((await findings(root)).some(f => f.code === 'LGUI-UI-030' && f.message.includes('main.sell')));
+});
+
+test('LGUI-UI-011：没写 fontSize 的文字按 FairyGUI 默认的 12 号算', async () => {
+  const root = await fresh();
+  edit(root, MAIN_XML, ' fontSize="64"', '');
+  assert.ok((await findings(root)).some(f => f.code === 'LGUI-UI-011' && f.file === MAIN_XML));
+});
+
+test('LGUI-UI-017：装载器的 url、按钮的 icon 写死了带字图片也报错', async () => {
+  const lang = r => {
+    fs.copyFileSync(path.join(r, 'ui/assets/Common/placeholder.png'), path.join(r, 'ui/assets/Common/placeholder@en.png'));
+    edit(r, 'ui/assets/Common/package.xml', '</resources>', '  <image id="placehd2" name="placeholder@en.png" path="/" exported="true"/>\n  </resources>');
+  };
+  for (const url of ['ui://Common/placeholder', 'ui://cmn00001placehd1']) {
+    const root = await fresh();
+    lang(root);
+    edit(root, 'ui/assets/Common/Toast.xml', '</displayList>', `  <loader id="n9" name="pic" xy="0,0" size="32,32" url="${url}"/>\n  </displayList>`);
+    assert.ok((await findings(root)).some(f => f.code === 'LGUI-UI-017' && f.file === 'ui/assets/Common/Toast.xml'), url);
+  }
+  const root = await fresh();
+  lang(root);
+  edit(root, MAIN_XML, '<Button title="点我"/>', '<Button title="点我" icon="ui://Common/placeholder"/>');
+  assert.ok((await findings(root)).some(f => f.code === 'LGUI-UI-017' && f.file === MAIN_XML));
+});
+
+test('LGUI-UI-020：同一个包里写了 pkg 和 fileName 不报', async () => {
+  const root = await fresh();
+  edit(root, 'ui/assets/Common/Confirm.xml', 'name="cancel" src="button01"', 'name="cancel" fileName="Button.xml" pkg="cmn00001" src="button01"');
+  assert.ok(!(await codes(root)).includes('LGUI-UI-020'));
+});
+
+test('LGUI-UI-065：按钮音效要存在、已登记、是 mp3；写空表示不出声', async () => {
+  const ok = await fresh();
+  addSound(ok, 'click.mp3');
+  edit(ok, MAIN_XML, '<Button title="点我"/>', '<Button title="点我" sound="ui://Main/click"/>');
+  edit(ok, 'ui/assets/Common/Confirm.xml', '<Button title="取消"/>', '<Button title="取消" sound=""/>');
+  assert.deepEqual(await codes(ok), []);
+  const wav = await fresh();
+  addSound(wav, 'click.wav', Buffer.from('RIFF0000WAVEfmt '));
+  edit(wav, MAIN_XML, '<Button title="点我"/>', '<Button title="点我" sound="ui://Main/click"/>');
+  assert.ok((await findings(wav)).some(f => f.code === 'LGUI-UI-065' && /mp3/.test(f.message)));
+  const fake = await fresh();
+  addSound(fake, 'click.mp3', Buffer.from('not an mp3 at all'));
+  edit(fake, MAIN_XML, '<Button title="点我"/>', '<Button title="点我" sound="ui://main0001click001"/>');
+  assert.ok((await findings(fake)).some(f => f.code === 'LGUI-UI-065'));
+  const stray = await fresh();
+  fs.writeFileSync(path.join(stray, 'ui/assets/Main/click.mp3'), MP3);
+  assert.ok((await codes(stray)).includes('LGUI-UI-018'), '包目录里没登记的音效也报');
+});
+
+test('static music：写存在的 mp3 音效通过；音效不存在报 LGUI-MVC-004', async () => {
+  const ok = await fresh();
+  addSound(ok, 'bgm.mp3', MP3, 'bgm00001');
+  edit(ok, VIEW, '  static fullScreen = true;', "  static fullScreen = true;\n  static music = 'ui://Main/bgm';");
+  const okCodes = await codes(ok);
+  assert.ok(!okCodes.includes('LGUI-MVC-003') && !okCodes.includes('LGUI-MVC-004'), okCodes.join(', '));
+  const bad = await fresh();
+  edit(bad, VIEW, '  static fullScreen = true;', "  static fullScreen = true;\n  static music = 'ui://Main/bgm';");
+  assert.ok((await findings(bad)).some(f => f.code === 'LGUI-MVC-004' && f.message.includes('music')));
+});
+
+test('绑定表的新词：输入框、滑动条、动效、拖放的词通过；动效只用 playing、play、done；动作只调用 Controller', async () => {
+  const root = await fresh();
+  for (const f of ['MainView.xml', 'MainView@portrait.xml']) edit(root, `ui/assets/Main/${f}`, '</displayList>', '</displayList>\n  <transition name="enter">\n    <item time="0" type="Alpha" target="n1" duration="12" tween="true" startValue="0" endValue="1"/>\n  </transition>');
+  edit(root, VIEW, '    button: {', [
+    "    title: { value: pick(mainModel, s => s.clicks), dragData: pick(mainModel, s => s.clicks), dragIcon: 'ui://Common/placeholder' },",
+    '    status: { input: text => mainController.click(text), change: v => mainController.click(v), drop: d => mainController.click(d) },',
+    '    enter: { playing: pick(mainModel, s => s.clicks > 0), done: () => mainController.click() },',
+    '    button: {'
+  ].join('\n'));
+  const found = await findings(root);
+  for (const code of ['LGUI-MVC-005', 'LGUI-MVC-006', 'LGUI-MVC-007', 'LGUI-MVC-008']) assert.ok(!found.some(f => f.code === code), `${code}：${JSON.stringify(found.filter(f => f.code === code))}`);
+  edit(root, VIEW, '    enter: { playing: pick(mainModel, s => s.clicks > 0), done: () => mainController.click() },', "    enter: { text: 'x', done: () => { mainModel.addClick(); } },\n    'title.x': { value: mainModel.get().clicks },");
+  const bad = (await findings(root)).map(f => f.code);
+  for (const code of ['LGUI-MVC-006', 'LGUI-MVC-007', 'LGUI-MVC-008']) assert.ok(bad.includes(code), `应该报 ${code}：${bad.join(', ')}`);
+});
+
+test('LGUI-UI-064：全屏界面两版都要有 safe；不是全屏的界面不要求', async () => {
+  const root = await fresh();
+  edit(root, MAIN_XML, /\s*<graph id="n4" name="safe"[\s\S]*?<\/graph>/, '');
+  assert.ok((await findings(root)).some(f => f.code === 'LGUI-UI-064' && f.file === MAIN_XML));
+  edit(root, VIEW, '  static fullScreen = true;\n', '');
+  edit(root, VIEW, "static layer = 'page' as const;", "static layer = 'popup' as const;");
+  assert.ok(!(await codes(root)).includes('LGUI-UI-064'));
 });

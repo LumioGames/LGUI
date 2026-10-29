@@ -7,15 +7,15 @@ import {LgCliError} from '../errors.mjs';
 
 const require = createRequire(new URL('../../vendor/package.json', import.meta.url));
 
-// XML → { tag, attrs, children, line }，保留顺序。
-function parseXml(file) {
+// XML → { tag, attrs, children, line }，保留顺序。root 是工程根目录（报错里的文件写成相对它的路径）。
+function parseXml(file, root) {
   const {XMLParser} = require('fast-xml-parser');
   const text = fs.readFileSync(file, 'utf8');
   let tree;
   try {
     tree = new XMLParser({preserveOrder: true, ignoreAttributes: false, attributeNamePrefix: '', parseAttributeValue: false, trimValues: true}).parse(text);
   } catch (error) {
-    throw new LgCliError('LGUI-CLI-020', `XML 写错了：${error.message}`, {file, fix: '按 UI 开发规范第 6 节的模板改。'});
+    throw new LgCliError('LGUI-CLI-020', `XML 写错了：${error.message}`, {file: path.relative(root, file).split(path.sep).join('/'), fix: '按 UI 开发规范第 6 节的模板改。'});
   }
   const lines = text.split('\n');
   // 按 id 属性找行号（同一文件内元素 ID 唯一时准确；找不到就是 undefined）。
@@ -49,12 +49,13 @@ export function parsePages(pages = '') {
 // 读整个 ui/：fairyPath 是 ui/UI.fairy。
 export function readUiModel(fairyPath) {
   const assets = path.join(path.dirname(fairyPath), 'assets');
+  const projectRoot = path.dirname(path.dirname(fairyPath));
   const packages = [];
   const byId = new Map();
   for (const dirName of fs.existsSync(assets) ? fs.readdirSync(assets).sort() : []) {
     const descriptor = path.join(assets, dirName, 'package.xml');
     if (!fs.existsSync(descriptor)) continue;
-    const {root} = parseXml(descriptor);
+    const {root} = parseXml(descriptor, projectRoot);
     const pkg = {id: root.attrs.id, name: dirName, dir: path.join(assets, dirName), file: descriptor, line: 1, resources: [], components: []};
     const resources = root.children.find(child => child.tag === 'resources')?.children ?? [];
     for (const resource of resources) {
@@ -73,7 +74,7 @@ export function readUiModel(fairyPath) {
   for (const pkg of packages) {
     for (const resource of pkg.resources.filter(item => item.type === 'component')) {
       if (!fs.existsSync(resource.file)) continue;
-      const {root} = parseXml(resource.file);
+      const {root} = parseXml(resource.file, projectRoot);
       const displayList = root.children.find(child => child.tag === 'displayList')?.children ?? [];
       const extension = root.attrs.extention ?? root.attrs.extension ?? null;
       // 按钮的模式（Common / Check / Radio）：只有 Check、Radio 能保持选中，列表的选中项靠它显示。

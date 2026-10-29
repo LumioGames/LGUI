@@ -21,6 +21,7 @@
   "sounds": {"click": null},
   "defaultFont": null,
   "devPort": 4173,
+  "editorPort": 4174,
   "backend": "h5",
   "unityProject": null
 }

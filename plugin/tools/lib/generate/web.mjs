@@ -32,7 +32,7 @@ export async function generateWeb(fairyPath, out) {
         // 直接从 ui/assets/ 读图片字节（OpenFairyGUI 后端的 readResourceBytes 有 1 MiB 上限）。
         const source = path.join(assets, name, image.getPath().replace(/^\/+/, ''), image.getFileName());
         if (!fs.existsSync(source)) {
-          throw new LgCliError('LGUI-CLI-021', `包 ${name} 的图片 ${image.getId()} 指向的文件不存在：${source}。`, {file: path.join(assets, name, 'package.xml'), fix: '把图片放回 package.xml 写的位置，或者从 package.xml 里删掉这条图片资源。'});
+          throw new LgCliError('LGUI-CLI-021', `包 ${name} 的图片 ${image.getId()} 指向的文件不存在：${source}。`, {file: `ui/assets/${name}/package.xml`, fix: '把图片放回 package.xml 写的位置，或者从 package.xml 里删掉这条图片资源。'});
         }
         const file = `${image.getId()}${path.extname(image.getFileName()) || '.png'}`;
         fs.copyFileSync(source, path.join(dir, file));
