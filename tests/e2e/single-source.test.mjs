@@ -20,6 +20,7 @@ const freePort = () => new Promise(resolve => {
 test('单一源：改 ui/ 里的标题文字，网页上读到的就是它', async t => {
   const browser = await launchBrowser();
   if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
+  try {
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-e2e-'));
   // 1. lgui init
   const init = spawnSync(process.execPath, [cli, 'init', 'game', '--json'], {cwd: parent, encoding: 'utf8'});
@@ -52,6 +53,8 @@ test('单一源：改 ui/ 里的标题文字，网页上读到的就是它', asy
   } finally {
     // 5. 关掉服务
     dev.kill();
+  }
+  } finally {
     await browser.close();
   }
 });

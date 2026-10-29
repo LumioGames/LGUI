@@ -225,6 +225,8 @@ export const lgui = {
   /** 测试（只在 lgui test 里能用）。 */
   testing: {
     /** 用 headless 后端和假时钟启动。 */
-    start(app: AppDefinition, options?: {services?: Record<string, () => object>; language?: string; screen?: {width: number; height: number}}): Promise<TestHarness> { void app; void options; return todo('lgui.testing.start'); }
+    start(app: AppDefinition, options?: {services?: Record<string, () => object>; language?: string; screen?: {width: number; height: number}}): Promise<TestHarness> {
+      return import('./testing').then(m => m.startTest(app, options));
+    }
   }
 };

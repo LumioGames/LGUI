@@ -27,6 +27,8 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-030` | `lgui dev` 的端口已经被占用 | 在 `.lgui/project.json` 里改 `devPort`，或者加 `--port <端口>` |
 | `LGUI-CLI-031` | 缺少某种语言的文本表，或者文本表不是合法的 JSON | 新建或修好 `i18n/<语言>.json` |
 | `LGUI-CLI-032` | 打包 `src/` 失败（语法错误、找不到 import 的文件等），带文件和行号 | 按提示改代码 |
+| `LGUI-CLI-040` | `tests/` 里没有测试文件（`*.test.ts`） | 在 `tests/` 下写测试，写法见 mvc-spec.md 第 12 节 |
+| `LGUI-CLI-041` | 测试没通过（报错里附上测试结束时的界面状态快照） | 看测试输出，按断言改代码或测试 |
 | `LGUI-CLI-999` | 命令行内部错误（LGUI 自己的缺陷） | 把输出报告给维护者 |
 
 ## LGUI-RT-xxx
@@ -65,4 +67,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-100` | `lgui.request` 超时（工程配置 `requestTimeoutMs`，默认 10 秒） | 检查网络；需要更长时间就改配置 |
 | `LGUI-RT-101` | `lgui.request` 里的请求失败了（报错里带原因） | 看 Service 返回的错误 |
 | `LGUI-RT-102` | 用了没有注册的服务 | 在 `main.ts` 的 `lgui.app({ services })` 里注册；测试里用 `lgui.testing.start(app, { services })` |
+| `LGUI-RT-110` | 在 `lgui test` 以外用了 `lgui.testing` | 用 `lgui test` 跑测试 |
+| `LGUI-RT-111` | 测试里的控件路径找不到（界面没打开、控件名不对、列表没有这一项） | 用 `lgui ui list` 查看真实路径；路径写成 `包/组件.控件路径`，列表子项写 `list[序号]` |
+| `LGUI-RT-112` | 测试结束时（`t.end()`）关掉所有界面后，还有界面或包没清理 | 检查是不是有界面没走 `lgui.ui` 关闭 |
 | `LGUI-RT-027` | 后端还没启动就开始用 | 先调用 `backend.init(config)`（框架启动时会自动调用） |
