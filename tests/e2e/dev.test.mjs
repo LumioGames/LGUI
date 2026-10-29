@@ -1,0 +1,90 @@
+// lgui dev：init → dev → 页面显示主界面；改 XML、改代码、改文本表都会自动刷新；语法错误时页面盖一层错误提示，改好后消失。
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {run} from '../unit/cli/helpers.mjs';
+import {launchBrowser} from '../helpers/browser.mjs';
+import {startDev} from '../../plugin/tools/lib/dev/index.mjs';
+import {readProject} from '../../plugin/tools/lib/project.mjs';
+
+const visibleText = page => page.evaluate(() => document.body.innerText);
+const waitText = (page, text, timeout = 5000) => page.waitForFunction(t => document.body.innerText.includes(t), text, {timeout});
+
+test('lgui dev：显示主界面，改 XML / 代码 / 文本表自动刷新，语法错误有提示', async t => {
+  const browser = await launchBrowser();
+  if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
+  const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-dev-'));
+  const init = await run(['init', 'game'], parent);
+  assert.equal(init.code, 0, init.stderr);
+  const root = path.join(parent, 'game');
+  const logs = [];
+  const server = await startDev(root, readProject(root), {port: 0, log: line => logs.push(line)});
+  try {
+    const page = await browser.newPage({viewport: {width: 1280, height: 720}, locale: 'zh-CN'});
+    const pageErrors = [];
+    page.on('pageerror', e => pageErrors.push(String(e)));
+    await page.goto(server.url);
+    await page.waitForFunction(() => window.__lguiReady, null, {timeout: 15000});
+    await waitText(page, '你好，LGUI');
+    await waitText(page, '点下面的按钮试试');
+    assert.deepEqual(pageErrors, []);
+
+    // 改 XML 里的标题文字，2 秒内页面更新
+    const xml = path.join(root, 'ui/assets/Main/MainView.xml');
+    const started = Date.now();
+    fs.writeFileSync(xml, fs.readFileSync(xml, 'utf8').replace('text="你好，LGUI"', 'text="改过的标题"'));
+    await waitText(page, '改过的标题', 2000);
+    const uiMs = Date.now() - started;
+
+    // 改文本表
+    const zh = path.join(root, 'i18n/zh-CN.json');
+    fs.writeFileSync(zh, fs.readFileSync(zh, 'utf8').replace('点下面的按钮试试', '文本表改过了'));
+    await waitText(page, '文本表改过了');
+
+    // 改 src/ 里的代码
+    const controller = path.join(root, 'src/modules/main/MainController.ts');
+    const original = fs.readFileSync(controller, 'utf8');
+    fs.writeFileSync(controller, original.replace('click() { mainModel.addClick(); }', 'click() { mainModel.addClick(); mainModel.addClick(); }'));
+    await page.waitForFunction(() => window.__lguiReady, null, {timeout: 5000});
+    await new Promise(r => setTimeout(r, 300));
+    await page.waitForFunction(() => window.__lguiReady);
+    const button = await page.evaluate(() => {
+      const el = [...document.querySelectorAll('*')].find(e => e.textContent === '点我' && e.children.length === 0);
+      const r = el.getBoundingClientRect();
+      return {x: r.x + r.width / 2, y: r.y + r.height / 2};
+    });
+    await page.mouse.click(button.x, button.y);
+    await waitText(page, '点了 2 次');
+
+    // 故意写一个语法错误：页面出现错误提示；改好后提示消失
+    fs.writeFileSync(controller, original.replace('click() {', 'click() { const = ;'));
+    await page.waitForFunction(() => getComputedStyle(document.getElementById('lgui-overlay')).display === 'block', null, {timeout: 5000});
+    const overlay = await page.evaluate(() => document.getElementById('lgui-overlay').textContent);
+    assert.match(overlay, /LGUI-CLI-032/);
+    assert.match(overlay, /MainController\.ts:\d+/);
+    assert.ok(logs.some(l => /LGUI-CLI-032/.test(l)), '终端也打印错误码');
+    fs.writeFileSync(controller, original);
+    await page.waitForFunction(() => getComputedStyle(document.getElementById('lgui-overlay')).display === 'none' && window.__lguiReady, null, {timeout: 5000});
+    assert.ok((await visibleText(page)).includes('改过的标题'));
+    console.log(`改 XML 到页面更新：${uiMs} 毫秒`);
+  } finally {
+    await server.close();
+    await browser.close();
+  }
+});
+
+test('端口被占用时报 LGUI-CLI-030；服务只监听 127.0.0.1', async () => {
+  const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-dev-port-'));
+  await run(['init', 'game'], parent);
+  const root = path.join(parent, 'game');
+  const first = await startDev(root, readProject(root), {port: 0});
+  try {
+    assert.match(first.url, /^http:\/\/127\.0\.0\.1:\d+\/$/);
+    const port = Number(new URL(first.url).port);
+    await assert.rejects(startDev(root, readProject(root), {port}), e => e.code === 'LGUI-CLI-030' && /devPort|--port/.test(e.fix));
+  } finally {
+    await first.close();
+  }
+});

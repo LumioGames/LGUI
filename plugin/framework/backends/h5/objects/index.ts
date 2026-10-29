@@ -30,7 +30,7 @@ class H5Object implements UIObject {
   get touchable(): boolean { return this.native.touchable; }
   set touchable(value: boolean) { this.native.touchable = value; }
   get rect(): Rect { return {x: this.native.x, y: this.native.y, width: this.native.width, height: this.native.height}; }
-  set rect(value: Rect) { this.native.setXY(value.x, value.y); this.native.setSize(value.width, value.height); }
+  set rect(value: Rect) { this.native.setPosition(value.x, value.y); this.native.setSize(value.width, value.height); }
   onPointer(handler: (event: PointerInput) => void): Unsubscribe {
     const element = this.native.element;
     const listener = (event: PointerEvent): void => handler(toPointerInput(event));

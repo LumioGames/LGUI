@@ -1,0 +1,97 @@
+// 打包用户工程：生成一个启动入口（选后端、读文本表和配置、启动 app），用 esbuild 打包。
+// lgui dev（网页）用它；lgui test 和 lgui unity export 用同样的写法换后端。
+import fs from 'node:fs';
+import path from 'node:path';
+import {LgCliError, LgCliErrors} from '../errors.mjs';
+import {esbuild} from '../vendor.mjs';
+
+/** 工程配置里框架运行时要用的那部分。 */
+export function runtimeConfig(project) {
+  const keys = ['name', 'designSize', 'orientation', 'languages', 'defaultLanguage', 'keyMap', 'uiCache', 'requestErrorToast', 'requestTimeoutMs', 'placeholder', 'sounds'];
+  return Object.fromEntries(keys.map(key => [key, project[key]]));
+}
+
+/** 工程里的框架入口：import 'lgui' 指向它（esbuild alias）。 */
+export const frameworkEntry = root => path.join(root, '.lgui', 'framework', 'index.ts');
+
+/** 读 i18n/ 下全部文本表。 */
+export function readTexts(root, languages) {
+  const texts = {};
+  for (const lang of languages) {
+    const file = path.join(root, 'i18n', `${lang}.json`);
+    if (!fs.existsSync(file)) throw new LgCliError('LGUI-CLI-031', `缺少文本表 i18n/${lang}.json（工程配置 languages 里有 ${lang}）。`, {file, fix: `新建 i18n/${lang}.json，或者从 languages 里去掉 ${lang}。`});
+    try {
+      texts[lang] = JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch (error) {
+      throw new LgCliError('LGUI-CLI-031', `文本表 i18n/${lang}.json 不是合法的 JSON：${error.message}`, {file, fix: '改成合法的 JSON。'});
+    }
+  }
+  return texts;
+}
+
+/** 写网页端的启动入口 .lgui/build/web/boot.ts。 */
+export function writeWebBootstrap(root, project) {
+  const fw = rel => JSON.stringify(path.join(root, '.lgui', 'framework', rel).split(path.sep).join('/'));
+  const file = path.join(root, '.lgui', 'build', 'web', 'boot.ts');
+  fs.mkdirSync(path.dirname(file), {recursive: true});
+  fs.writeFileSync(file, `// 由 lgui dev 生成，不要手改。
+import app from ${JSON.stringify(path.join(root, 'src', 'main.ts').split(path.sep).join('/'))};
+import {createH5Backend} from ${fw('backends/h5/index.ts')};
+import {boot} from ${fw('mvc/boot.ts')};
+import {lgui} from ${fw('index.ts')};
+
+const config = ${JSON.stringify(runtimeConfig(project))};
+const deps = ${JSON.stringify(readDeps(root))};
+const texts = ${JSON.stringify(readTexts(root, project.languages))};
+
+(async () => {
+  const backend = createH5Backend();
+  await backend.init({projectName: config.name, defaultFont: ${JSON.stringify(project.defaultFont)}, uiBase: '/ui'});
+  (window as unknown as {__lgui: unknown}).__lgui = {snapshot: () => lgui.debug.snapshot()};
+  await boot(backend, app, config, deps, {texts});
+  (window as unknown as {__lguiReady: boolean}).__lguiReady = true;
+})().catch(error => {
+  const e = error as {code?: string; message?: string};
+  (window as unknown as {__lguiShowErrors?: (errors: unknown[]) => void}).__lguiShowErrors?.([{code: e.code ?? 'LGUI-RT', message: String(e.message ?? error)}]);
+  throw error;
+});
+`);
+  return file;
+}
+
+function readDeps(root) {
+  const file = path.join(root, '.lgui', 'build', 'deps.json');
+  return fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
+}
+
+/** esbuild 报错 → LGUI-CLI-032（带文件和行号）。 */
+export function bundleErrors(error, root) {
+  const errors = error?.errors ?? [];
+  if (!errors.length) return new LgCliErrors([new LgCliError('LGUI-CLI-032', `打包失败：${error?.message ?? error}`, {fix: '按提示改代码。'})]);
+  return new LgCliErrors(errors.map(e => new LgCliError('LGUI-CLI-032', `打包失败：${e.text}`, {
+    file: e.location?.file ? path.relative(root, path.resolve(root, e.location.file)) : undefined,
+    line: e.location?.line,
+    fix: '按提示改代码。'
+  })));
+}
+
+/** 网页用的 esbuild 选项。 */
+export function webBuildOptions(root, entry) {
+  return {
+    entryPoints: [entry],
+    bundle: true,
+    format: 'esm',
+    target: 'es2020',
+    sourcemap: true,
+    outfile: path.join(root, '.lgui', 'build', 'web', 'app.js'),
+    alias: {lgui: frameworkEntry(root)},
+    define: {LGUI_DEV: 'true'},
+    absWorkingDir: root,
+    logLevel: 'silent'
+  };
+}
+
+/** 建一个可以反复重新打包的 esbuild context。 */
+export async function createWebContext(root, entry) {
+  return esbuild().context(webBuildOptions(root, entry));
+}

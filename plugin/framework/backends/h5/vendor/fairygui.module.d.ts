@@ -26,7 +26,7 @@ export class GObject extends EventDispatcher {
   readonly parent: GComponent | null;
   readonly packageItem: PackageItem | null;
   readonly element: HTMLElement;
-  setXY(x: number, y: number): void;
+  setPosition(x: number, y: number): void;
   setSize(width: number, height: number): void;
   dispose(): void;
   removeFromParent(): void;
@@ -134,7 +134,7 @@ export class UIPackage {
   readonly name: string;
   static loadPackage(url: string): Promise<UIPackage>;
   static removePackage(packageIdOrName: string): void;
-  static getByName(name: string): UIPackage | null;
+  static getByName(name: string): UIPackage | undefined;
   static createObject(pkgName: string, resName: string): GObject | null;
   static setImageManifest(manifest: unknown): void;
   static loadImageManifest(url: string): Promise<void>;
