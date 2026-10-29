@@ -309,3 +309,106 @@ test('h5 一致性输入：真实抬起已消费但驱动应答悬挂，明确�
     await browser.close();
   }
 });
+
+test('h5 一致性输入：慢拖调度中途迟到，不追赶压缩剩余移动间隔', async t => {
+  const browser = await launchBrowser();
+  if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
+  let context, stalled = false;
+  const instrumented = {
+    async newPage(options) {
+      const page = await browser.newPage(options);
+      const browserContext = page.context();
+      const newSession = browserContext.newCDPSession.bind(browserContext);
+      browserContext.newCDPSession = async (...args) => {
+        const session = await newSession(...args);
+        const send = session.send.bind(session);
+        let gesture = 0, move = 0;
+        session.send = async (method, params) => {
+          if (method === 'Input.dispatchTouchEvent' && params.type === 'touchStart') { gesture++; move = 0; }
+          if (method === 'Input.dispatchTouchEvent' && params.type === 'touchMove') move++;
+          const currentGesture = gesture, currentMove = move;
+          const result = await send(method, params);
+          if (method === 'Input.dispatchTouchEvent' && currentGesture === 2 && params.type === 'touchMove' && currentMove === 7 && !stalled) {
+            stalled = true;
+            // Actual Node scheduler work: the browser keeps running. Absolute
+            // deadlines for moves 8/9 expire while this thread cannot dispatch.
+            const until = performance.now() + 100;
+            while (performance.now() < until) { /* fault injection, not a test-driver delay */ }
+          }
+          return result;
+        };
+        return session;
+      };
+      return page;
+    }
+  };
+  try {
+    context = await conformanceProject();
+    const expected = await runHeadless(context, 'gestures');
+    const actual = await runH5(context, 'gestures', instrumented);
+    assert.ok(stalled, '必须实际延迟慢拖的中途调度');
+    assert.deepEqual(actual, expected);
+    const {dom, normalized, protocol, touchOperations} = context.h5Trace;
+    const down = normalized.filter(event => event.type === 'down' && event.pointerType === 'touch').at(-1);
+    const moves = normalized.filter(event => event.pointerType === 'touch' && event.pointerId === down.pointerId && event.type === 'move');
+    assert.equal(moves.length, 10, '慢拖每个原始点都必须先实际消费，后续点不能覆盖它');
+    let previous = down;
+    for (let i = 0; i < moves.length; i++) {
+      const event = moves[i];
+      assert.ok(event.time - previous.time >= 40, JSON.stringify({previous, event}));
+      assert.deepEqual([event.x - down.x, event.y - down.y], [0, 150 * (i + 1) / 10]);
+      assert.ok(dom.some(raw => raw.trusted && raw.pointerId === event.pointerId && raw.type === 'pointermove' && raw.timestamp === event.time));
+      previous = event;
+    }
+    const starts = protocol.map((command, index) => command.params.type === 'touchStart' ? index : -1).filter(index => index >= 0);
+    const slow = protocol.slice(starts.at(-1)).filter(command => command.method === 'Input.dispatchTouchEvent');
+    for (let i = 1; i <= 10; i++) assert.ok(slow[i].sendEpoch - slow[i - 1].sendEpoch >= 40);
+    assert.equal(touchOperations.at(-1).consumedMoves, 10);
+    assert.equal(touchOperations.at(-1).replies, 12);
+  } catch (error) {
+    console.error('h5 input trace (slow drag scheduler stall): ' + JSON.stringify(context?.h5Trace));
+    throw error;
+  } finally { await browser.close(); }
+});
+
+test('h5 一致性输入：慢拖中途 CDP 拒绝保留首因并停止后续输入', async t => {
+  const browser = await launchBrowser();
+  if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
+  let context, rejected = false;
+  const afterFailure = [];
+  const instrumented = {
+    async newPage(options) {
+      const page = await browser.newPage(options);
+      const browserContext = page.context();
+      const newSession = browserContext.newCDPSession.bind(browserContext);
+      browserContext.newCDPSession = async (...args) => {
+        const session = await newSession(...args);
+        const send = session.send.bind(session);
+        let gesture = 0, move = 0;
+        session.send = async (method, params) => {
+          if (method === 'Input.dispatchTouchEvent') {
+            if (rejected) afterFailure.push(params);
+            if (params.type === 'touchStart') { gesture++; move = 0; }
+            if (params.type === 'touchMove') move++;
+            if (gesture === 2 && params.type === 'touchMove' && move === 3) {
+              rejected = true;
+              throw new Error('LGUI-RT-001 controlled slow CDP move rejection');
+            }
+          }
+          return send(method, params);
+        };
+        return session;
+      };
+      return page;
+    }
+  };
+  try {
+    context = await conformanceProject();
+    await assert.rejects(runH5(context, 'gestures', instrumented), /LGUI-RT-001 controlled slow CDP move rejection/);
+    assert.ok(rejected);
+    assert.deepEqual(afterFailure, [], '首个协议错误后不再注入后续 move 或 up');
+    assert.equal(context.h5Trace.touchOperations.at(-1).consumedMoves, 2);
+    assert.equal(context.h5Trace.touchOperations.at(-1).point, 3);
+    assert.match(context.h5Trace.touchOperations.at(-1).error, /controlled slow CDP move rejection/);
+  } finally { await browser.close(); }
+});
