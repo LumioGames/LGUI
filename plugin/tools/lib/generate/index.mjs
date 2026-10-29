@@ -18,8 +18,9 @@ export const typesDir = root => path.join(root, '.lgui', 'build', 'types');
 export const headlessDir = root => path.join(root, '.lgui', 'build', 'headless');
 
 // 控件类型和 headless 描述（先用 OpenFairyGUI 校验 ui/）。
-export async function generateProjectTypes(root) {
-  await readUiProject(uiProjectPath(root));
+// validated：调用方已经用 OpenFairyGUI 校验过 ui/ 了（比如刚生成过网页界面包），不用再校验一遍。
+export async function generateProjectTypes(root, {validated = false} = {}) {
+  if (!validated) await readUiProject(uiProjectPath(root));
   const model = readUiModel(uiProjectPath(root));
   const deps = packageDeps(model);
   fs.mkdirSync(path.join(root, '.lgui', 'build'), {recursive: true});
