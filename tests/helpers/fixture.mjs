@@ -2,6 +2,25 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import zlib from 'node:zlib';
+
+// 生成一张纯色 PNG（同步，测试界面里的字符小图用）。
+export function png(width, height, [r, g, b] = [255, 200, 0]) {
+  const chunk = (type, data) => {
+    const body = Buffer.concat([Buffer.from(type), data]);
+    const len = Buffer.alloc(4); len.writeUInt32BE(data.length);
+    const crc = Buffer.alloc(4); crc.writeUInt32BE(zlib.crc32(body));
+    return Buffer.concat([len, body, crc]);
+  };
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(width, 0); ihdr.writeUInt32BE(height, 4); ihdr[8] = 8; ihdr[9] = 6;
+  const row = Buffer.concat([Buffer.from([0]), Buffer.from(Array.from({length: width}, () => [r, g, b, 255]).flat())]);
+  const raw = Buffer.concat(Array.from({length: height}, () => row));
+  return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', ihdr), chunk('IDAT', zlib.deflateSync(raw)), chunk('IEND', Buffer.alloc(0))]);
+}
+
+// 美术字 dmg 的字符：0–9 宽 12（1 宽 8），+ 宽 10，高都是 16。
+const glyphs = [...'0123456789'.split('').map(c => [c, c === '1' ? 8 : 12]), ['plus', 10]];
 
 const xml = body => `<?xml version="1.0" encoding="utf-8"?>\n${body}\n`;
 
@@ -35,6 +54,8 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
     <component id="header01" name="Header.xml" path="/"/>
     <component id="bar00001" name="Bar.xml" path="/" exported="true"/>
     <component id="reddot01" name="RedDot.xml" path="/"/>
+    <component id="fx000001" name="Fx.xml" path="/" exported="true"/>
+${glyphs.map(([c, w], i) => `    <image id="dmg${String(i).padStart(5, '0')}" name="dmg_${c}.png" path="/artfont/dmg/" exported="true" width="${w}" height="16"/>`).join('\n')}
   </resources>
 </packageDescription>`));
   fs.writeFileSync(path.join(bag, 'BagPanel.xml'), landscape);
@@ -47,6 +68,14 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
     <component id="n2" name="redDot" src="reddot01" xy="140,-8" size="32,32" visible="false"/>
   </displayList>
   <Button/>
+</component>`));
+  fs.mkdirSync(path.join(bag, 'artfont', 'dmg'), {recursive: true});
+  for (const [c, w] of glyphs) fs.writeFileSync(path.join(bag, 'artfont', 'dmg', `dmg_${c}.png`), png(w, 16));
+  fs.writeFileSync(path.join(bag, 'Fx.xml'), xml(`<component size="400,100">
+  <displayList>
+    <component id="n0" name="damage" fileName="ArtText.xml" pkg="cmn00001" src="arttext1" xy="100,30" size="200,40" customData="font=Bag/dmg;align=center;spacing=2"/>
+    <component id="n1" name="bad" fileName="ArtText.xml" pkg="cmn00001" src="arttext1" xy="0,0" size="200,40" customData="font=dmg"/>
+  </displayList>
 </component>`));
   fs.writeFileSync(path.join(bag, 'RedDot.xml'), xml(`<component size="32,32">
   <displayList>
@@ -76,6 +105,7 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
     <component id="curbar01" name="CurrencyBar.xml" path="/" exported="true"/>
     <component id="hintbar1" name="ActionHintBar.xml" path="/" exported="true"/>
     <component id="hint0001" name="ActionHint.xml" path="/" exported="true"/>
+    <component id="arttext1" name="ArtText.xml" path="/" exported="true"/>
     <component id="toast001" name="Toast.xml" path="/" exported="true"/>
     <component id="confirm1" name="Confirm.xml" path="/" exported="true"/>
     <component id="loading1" name="Loading.xml" path="/" exported="true"/>
@@ -86,6 +116,9 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
   <displayList>
     <text id="n0" name="gold" xy="0,0" size="200,40" fontSize="24" autoSize="shrink" singleLine="true" text="0"/>
   </displayList>
+</component>`));
+  fs.writeFileSync(path.join(common, 'ArtText.xml'), xml(`<component size="200,64">
+  <displayList/>
 </component>`));
   fs.writeFileSync(path.join(common, 'Toast.xml'), xml(`<component size="720,96">
   <displayList>

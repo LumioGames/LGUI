@@ -15,6 +15,7 @@ import {bindPart} from './part';
 import {applyIcon} from './icon';
 import {pick} from '../pick';
 import {redDots, redDotState} from '../red-dot';
+import {renderArtText} from '../art-text';
 
 /** 绑定时要知道的事。 */
 export interface BindContext {
@@ -69,7 +70,7 @@ export function watch<T>(value: unknown, ctx: BindContext, apply: (value: T) => 
 function setText(target: UIObject, text: string, where: string, key: string): void {
   if ('title' in target) (target as UIButton).title = text;
   else if ('text' in target) (target as UIText).text = text;
-  else if ((target as UIComponent).componentName === 'Common/ArtText') fail('LGUI-RT-001', '框架还没实现「ArtText」。', '这是开发中的功能，等待新版本，或者先不用它。');
+  else if ((target as UIComponent).componentName === 'Common/ArtText') renderArtText(target as UIComponent, text, `${where} 的 ${key}`);
   else fail('LGUI-RT-063', `${where} 的 ${key} 不能绑定 text（它不是文字、按钮或 ArtText）。`, '换成文字控件，或者去掉 text。');
 }
 

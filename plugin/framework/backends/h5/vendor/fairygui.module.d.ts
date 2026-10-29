@@ -124,6 +124,8 @@ export class Transition {
 export class PackageItem {
   id: string;
   name: string;
+  width: number;
+  height: number;
   owner: UIPackage;
   type: number;
   file: string;

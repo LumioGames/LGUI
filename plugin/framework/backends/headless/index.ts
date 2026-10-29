@@ -2,7 +2,7 @@
 import type {Backend, BackendConfig, KeyInput, LogEntry, Platform, PointerInput, UIComponent, WheelInput} from '../../core/index';
 import {LgRuntimeError, notImplemented} from '../../core/index';
 import type {ComponentDescriptor, PackageDescriptor} from './descriptor';
-import {Handlers, HeadlessComponent, HeadlessLoader, buildComponent} from './objects';
+import {Handlers, HeadlessComponent, HeadlessLoader, buildComponent, buildImage} from './objects';
 
 /** headless 后端独有的状态，模拟操作和测试断言用。 */
 export interface HeadlessState {
@@ -35,6 +35,8 @@ export interface HeadlessBackend extends Backend {
 export function createHeadlessBackend(packages: readonly PackageDescriptor[]): HeadlessBackend {
   const byPackage = new Map(packages.map(p => [p.package, p]));
   const components = new Map<string, ComponentDescriptor>();
+  const images = new Map<string, {width: number; height: number}>();
+  for (const p of packages) for (const image of p.images ?? []) images.set(`ui://${p.package}/${image.name}`, image);
   for (const p of packages) for (const c of p.components) components.set(c.name, c);
   const lookup = (name: string): ComponentDescriptor => {
     const found = components.get(name);
@@ -92,6 +94,8 @@ export function createHeadlessBackend(packages: readonly PackageDescriptor[]): H
       if (!state.loaded.has(packageName)) throw new LgRuntimeError('LGUI-RT-002', `界面包 ${packageName} 还没加载。`, '先加载这个包（UIManager 打开界面时会自动加载）。');
       return buildComponent(lookup(`${packageName}/${componentName}`), lookup) as unknown as UIComponent<Name>;
     },
+    imageSize: url => { const found = images.get(url); return found && state.loaded.has(url.slice(5).split('/')[0]) ? {width: found.width, height: found.height} : null; },
+    createImage(url) { return buildImage(url, this.imageSize(url)); },
     has: (packageName, componentName) => state.loaded.has(packageName) && components.has(`${packageName}/${componentName}`),
     createContainer: name => new HeadlessComponent(name, '', 'container')
   };

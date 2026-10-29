@@ -9,6 +9,7 @@ const bool = (value, fallback) => value === undefined ? fallback : value === 'tr
 function props(child) {
   const a = child.attrs;
   const p = {visible: bool(a.visible, true), enabled: !bool(a.grayed, false), touchable: bool(a.touchable, true)};
+  if (a.customData) p.customData = a.customData;
   if (['text', 'richtext', 'input'].includes(child.kind)) p.text = a.text ?? '';
   if (child.kind === 'input') p.promptText = a.prompt ?? '';
   if (child.kind === 'loader') p.url = a.url ?? '';
@@ -49,13 +50,27 @@ export function describeComponent(component) {
   };
 }
 
+// 图片尺寸：package.xml 里写了就用它，否则读 PNG 文件头（JPG 等读不出来时是 0）。
+function imageSize(resource) {
+  const w = Number(resource.attrs.width), h = Number(resource.attrs.height);
+  if (w > 0 && h > 0) return {width: w, height: h};
+  try {
+    const head = fs.readFileSync(resource.file).subarray(0, 24);
+    if (head.subarray(1, 4).toString() === 'PNG') return {width: head.readUInt32BE(16), height: head.readUInt32BE(20)};
+  } catch {
+    // 文件不在：lgui check 会报 LGUI-UI-018
+  }
+  return {width: 0, height: 0};
+}
+
 export function generateHeadless(model, out) {
   fs.rmSync(out, {recursive: true, force: true});
   fs.mkdirSync(out, {recursive: true});
   const files = [];
   for (const pkg of model.packages) {
     const file = path.join(out, `${pkg.name}.json`);
-    fs.writeFileSync(file, JSON.stringify({schemaVersion: 1, package: pkg.name, id: pkg.id, components: pkg.components.map(describeComponent)}, null, 2) + '\n');
+    const images = pkg.resources.filter(r => r.type === 'image').map(r => ({name: r.name, ...imageSize(r)}));
+    fs.writeFileSync(file, JSON.stringify({schemaVersion: 1, package: pkg.name, id: pkg.id, components: pkg.components.map(describeComponent), images}, null, 2) + '\n');
     files.push(file);
   }
   return {files};

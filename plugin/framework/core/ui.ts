@@ -44,6 +44,8 @@ export interface UIObject {
   touchable: boolean;
   /** 内部用：位置和尺寸（设计尺寸）。游戏代码不写坐标和尺寸。 */
   rect: Rect;
+  /** 在 ui/ 里写的自定义数据（customData），比如 ArtText 的配置。 */
+  readonly customData: string;
   /** 订阅落在这个对象上的原始指针事件，手势由框架识别。 */
   onPointer(handler: (event: PointerInput) => void): Unsubscribe;
 }

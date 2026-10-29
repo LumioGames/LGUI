@@ -14,7 +14,7 @@ export interface ChildDescriptor {
   /** [x, y, 宽, 高]（设计尺寸）。 */
   rect: [number, number, number, number];
   /** 初始属性。 */
-  props: {visible: boolean; enabled: boolean; touchable: boolean; text?: string; promptText?: string; url?: string; title?: string; icon?: string; selected?: boolean; value?: number; max?: number; color?: string};
+  props: {visible: boolean; enabled: boolean; touchable: boolean; customData?: string; text?: string; promptText?: string; url?: string; title?: string; icon?: string; selected?: boolean; value?: number; max?: number; color?: string};
 }
 
 /** 一个组件。 */
@@ -47,4 +47,6 @@ export interface PackageDescriptor {
   id: string;
   /** 组件。 */
   components: ComponentDescriptor[];
+  /** 图片：名字和尺寸（ArtText 拼字时要用）。 */
+  images: {name: string; width: number; height: number}[];
 }
