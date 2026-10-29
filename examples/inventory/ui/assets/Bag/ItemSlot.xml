@@ -28,5 +28,5 @@
     <text id="n8" name="count" xy="84,120" size="68,34" fontSize="24" color="#f3ead6" align="right" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
     <component id="n9" name="newMark" pkg="cmn00001" visible="false" src="reddot01" xy="128,4" size="28,28"/>
   </displayList>
-  <Button/>
+  <Button mode="Radio"/>
 </component>

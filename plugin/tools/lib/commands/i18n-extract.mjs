@@ -1,5 +1,5 @@
 // lgui i18n extract：把 ui/ 里用户能看到的固定文字提取到默认语言的 i18n/<语言>.json。
-// 已有的翻译保留；新增的键追加在后面；ui/ 里已经没有的键列出来报告，但不删。
+// 默认语言的原文以 ui/ 为准：新增的键追加在后面，原文变了的照 ui/ 更新（并提醒重新翻译其他语言）；ui/ 里已经没有的键列出来报告，但不删。
 import fs from 'node:fs';
 import path from 'node:path';
 import {readUiProject} from '../generate/read.mjs';
@@ -16,19 +16,22 @@ export async function i18nExtract({projectRoot, project}) {
   const language = project.defaultLanguage;
   const file = path.join(projectRoot, 'i18n', `${language}.json`);
   const table = readTable(projectRoot, language);
-  const added = [];
+  const added = [], changed = [];
   for (const entry of entries) {
     if (!(entry.key in table)) { table[entry.key] = entry.text; added.push(entry.key); }
+    else if (table[entry.key] !== entry.text) { table[entry.key] = entry.text; changed.push(entry.key); }
   }
   const current = new Set(entries.map(e => e.key));
   const stale = Object.keys(table).filter(key => isUiKey(key) && !current.has(key));
   fs.mkdirSync(path.dirname(file), {recursive: true});
   fs.writeFileSync(file, JSON.stringify(table, null, 2) + '\n');
   generateTranslations(projectRoot, model, project.languages, path.join(projectRoot, '.lgui', 'build', 'web', 'i18n'), project.defaultLanguage);
-  const summary = [`从 ui/ 提取了 ${entries.length} 条文字，写进 i18n/${language}.json：新增 ${added.length} 条。`];
+  const summary = [`从 ui/ 提取了 ${entries.length} 条文字，写进 i18n/${language}.json：新增 ${added.length} 条，原文改了 ${changed.length} 条。`];
   if (added.length) summary.push(...added.map(key => `  新增 ${key}`));
+  if (changed.length) summary.push(...changed.map(key => `  原文改了 ${key}`));
   if (stale.length) summary.push(`这些键在 ui/ 里已经没有了（没有删，确认不要了就手动删掉）：`, ...stale.map(key => `  ${key}`));
   const others = project.languages.filter(l => l !== language);
   if (others.length && added.length) summary.push(`别忘了在 ${others.map(l => `i18n/${l}.json`).join('、')} 里加上同样的键。`);
-  return {data: {language, keys: entries.length, added, stale}, summary};
+  if (others.length && changed.length) summary.push(`原文改了的键，${others.map(l => `i18n/${l}.json`).join('、')} 里的翻译要跟着重新翻译。`);
+  return {data: {language, keys: entries.length, added, changed, stale}, summary};
 }
