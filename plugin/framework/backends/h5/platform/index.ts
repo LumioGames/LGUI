@@ -26,8 +26,10 @@ function keyName(event: KeyboardEvent): string {
   return event.key;
 }
 
-// 用一个放了 env(safe-area-inset-*) 的探测元素读出安全区。
+// 安全区：设置了 globalThis.__lguiSafeArea 时用它（lgui verify 用它模拟刘海），否则用一个放了 env(safe-area-inset-*) 的探测元素读出来。
 function readSafeArea(): Insets {
+  const injected = (globalThis as {__lguiSafeArea?: Insets}).__lguiSafeArea;
+  if (injected) return {top: injected.top, right: injected.right, bottom: injected.bottom, left: injected.left};
   const probe = document.createElement('div');
   probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';
   document.body.appendChild(probe);

@@ -1,5 +1,5 @@
-// headless 后端的模拟操作（给 lgui test 用）：点击、长按、拖拽、滑动、双指缩放、滚轮、按键、换屏幕尺寸、假时钟。
-import type {PointerInput, UIObject} from '../../core/index';
+// headless 后端的模拟操作（给 lgui test 用）：点击、长按、拖拽、滑动、双指缩放、滚轮、按键、换屏幕尺寸和安全区、假时钟。
+import type {Insets, PointerInput, UIObject} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
 import type {HeadlessBackend} from './index';
 import {HeadlessList, asHeadless} from './objects';
@@ -138,6 +138,13 @@ export async function key(backend: HeadlessBackend, name: string): Promise<void>
 export async function setScreen(backend: HeadlessBackend, width: number, height: number): Promise<void> {
   backend.state.screen = {width, height};
   backend.state.handlers.resize.emit({width, height});
+  await advance(backend, 0);
+}
+
+/** 换安全区的边距（屏幕像素，模拟刘海、圆角）。和真机一样发出一次尺寸变化，框架随后重新摆放界面。 */
+export async function setSafeArea(backend: HeadlessBackend, insets: Insets): Promise<void> {
+  backend.state.safeArea = {top: insets.top, right: insets.right, bottom: insets.bottom, left: insets.left};
+  backend.state.handlers.resize.emit({...backend.state.screen});
   await advance(backend, 0);
 }
 

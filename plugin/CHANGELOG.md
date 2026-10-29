@@ -20,6 +20,8 @@
 - MVC：`lgui.Model` + `pick`、View / ItemView / PartView 和绑定表、Controller、Service、`lgui.request`。
 - UIManager：hud、page、popup、modal（队列）、toast 五层，激活和遮挡，`onClose` 交回结果，资源引用计数和关闭界面缓存。
 - 横竖屏：按方向自动换 `@portrait` 版本，View 实例保留。
+- UIManager 的边界情况：modal 按打开的先后排队，前一个打开失败或被取消时照常放出下一个，loading 不参与排队；`lgui.confirm` 一次显示一个，总会有结果（被取消当 `false`）；`popTo`、`closeAll` 最后只重算一次激活；返回键不关 `hud` 层；对打开着的界面再登记 `onClose` 报 `LGUI-RT-084`。
+- 旋转、换语言重建时 PartView 实例保留，通用弹窗的文字换成新语言；安全区：全屏界面的 `safe` 子控件摆进安全区，弹窗放在安全区正中，测试用 `t.setSafeArea`。
 - 输入：手势（点击、双击、长按、拖拽、滑动、双指缩放、滚轮、悬停）、按键动作、返回键、操作提示栏、输入类型。
 - 多语言：`lgui.t`、复数、格式化、运行时切换语言、带字图片、伪翻译。
 - 定时器（跟着界面暂停和取消；回调出错时照常报错，不影响别的定时器和以后的帧）、广播站、红点、按钮音效、图片占位、通用弹窗（提示、确认、加载中）、ArtText 美术字、`lgui.time.wait`。

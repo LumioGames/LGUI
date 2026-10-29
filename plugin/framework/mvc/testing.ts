@@ -1,6 +1,6 @@
 // lgui.testing：只在 lgui test 里能用。用 headless 后端和假时钟启动 app，提供模拟操作和读控件属性。
 // 路径写成「包/组件.控件路径」，列表子项用 list[序号]。
-import type {Backend, UIComponent, UIController, UIList, UIObject, UIText, UIButton} from '../core/index';
+import type {Backend, Insets, UIComponent, UIController, UIList, UIObject, UIText, UIButton} from '../core/index';
 import {LgRuntimeError} from '../core/index';
 import type {AppDefinition, Snapshot, TestHarness} from './lgui';
 import type {InputType, ParamsOf, ViewClass} from './types';
@@ -33,6 +33,7 @@ type Sim = {
   wheel(b: Backend, o: UIObject, dy: number): Promise<void>;
   key(b: Backend, name: string): Promise<void>;
   setScreen(b: Backend, w: number, h: number): Promise<void>;
+  setSafeArea(b: Backend, insets: Insets): Promise<void>;
   advance(b: Backend, ms: number): Promise<void>;
 };
 
@@ -112,6 +113,8 @@ class Harness implements TestHarness {
   }
   /** 换屏幕尺寸，等防抖（150 毫秒）结束、换版完成后返回。 */
   async setScreen(width: number, height: number): Promise<void> { await this.sim.setScreen(this.backend, width, height); await this.sim.advance(this.backend, 200); }
+  /** 换安全区（屏幕像素的边距），等重新摆放完成后返回。 */
+  async setSafeArea(insets: Insets): Promise<void> { await this.sim.setSafeArea(this.backend, insets); await this.sim.advance(this.backend, 200); }
   async setLanguage(language: string): Promise<void> {
     const {lgui} = await import('./lgui');
     await lgui.setLanguage(language);
@@ -120,7 +123,10 @@ class Harness implements TestHarness {
   advance(ms: number): Promise<void> { return this.sim.advance(this.backend, ms); }
   snapshot(): Snapshot { return snapshot(this.ui); }
   end(): void {
-    for (const layer of ['toast', 'modal', 'popup', 'page', 'hud'] as const) this.ui.closeAll(layer);
+    // 关闭时钩子里又打开的界面（比如 onClose 里弹 toast）也关掉：一直关到没有界面为止，最多 10 轮。
+    for (let round = 0; round < 10 && this.ui.all().length; round++) {
+      for (const layer of ['toast', 'modal', 'popup', 'page', 'hud'] as const) this.ui.closeAll(layer);
+    }
     const left = this.snapshot();
     const leaked = left.views.length || left.packages.length;
     if (leaked) throw new LgRuntimeError('LGUI-RT-112', `关闭所有界面后还有没清理的东西：${JSON.stringify({views: left.views, packages: left.packages})}。`, '检查是不是有界面没走 lgui.ui 关闭，或者在框架外面加了监听。');

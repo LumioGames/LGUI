@@ -109,6 +109,8 @@ export interface TestHarness {
   items(path: string): number;
   /** 模拟屏幕尺寸（旋转）。 */
   setScreen(width: number, height: number): Promise<void>;
+  /** 模拟安全区（刘海、圆角），边距用屏幕像素。 */
+  setSafeArea(insets: {top: number; right: number; bottom: number; left: number}): Promise<void>;
   /** 切换语言。 */
   setLanguage(language: string): Promise<void>;
   /** 切换输入设备。 */
