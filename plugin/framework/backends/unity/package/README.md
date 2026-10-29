@@ -17,7 +17,9 @@ FairyGUI 除 `Assets/Scripts` 外，还包含同一固定提交必需的 Image�
 - `LoadText(resourcePath)` 读取 Resources 文本；翻译使用 `UI/i18n/<语言>`。
 - `Fetch` 使用 `UnityWebRequest`，在 Unity 主线程回调 JSON `{status, text, error}`。请求头参数为 JSON `{items: [{name, value}]}`。
 - `PlayAudio` 播放 `ui://` 音效或 HTTP(S) 音效；`Log`、`SystemLanguage`、`IsComposing` 和 `SetInputMode` 提供其余平台信息。
-- `LGUIResourceLoader` 为 FairyGUI 的外部图片加载增加完成/失败事件和 HTTP(S) 支持；释放时只销毁自己创建的纹理。
+- `LGUIResourceLoader` 为 FairyGUI 的外部图片加载增加完成/失败事件和 HTTP(S) 支持。同一 URL 的预载与界面显示共享请求、纹理；占位图保持到预载成功，显示时直接接收已下载纹理。
+
+外链纹理由原生图形引用计数持有；最后一个消费者释放后只保留两帧，供 PuerTS 的下一次 `Tick` 完成预载 Promise 到显示控件的交接。`LGUIBoot` 在 `Tick` 和每帧回调之后清理闲置纹理，关闭宿主时清空缓存并取消请求。一个界面关闭不会销毁另一个界面仍在使用的共享纹理；过期 URL 的响应不覆盖新图片。
 
 WebSocket 尚未实现，后端必须报告 `LGUI-RT-001`。缺脚本或生命周期失败报告 `LGUI-RT-160`，平台服务失败报告 `LGUI-RT-161`。
 
