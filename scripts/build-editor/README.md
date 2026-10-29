@@ -15,6 +15,7 @@ node scripts/build-editor/build.mjs
 3. 打补丁：
    - `patches/agent-session.patch`：实时会话（让 Agent 在编辑器开着时改控件属性）。来自 tag `v0.2.0-final` 的 `patches/editor-online-45f0bef-agent-session.patch`，改动：原来浏览器经 vite 开发服务器的 websocket 收发请求，编译以后没有 vite，改成连 `lgui editor` 提供的同源中转 `/__lgui_editor/`（服务端发请求用 Server-Sent Events，浏览器回结果用同源 POST）；去掉了 vite 插件、中转脚本和只在开发服务器上跑的验证脚本。只在 `127.0.0.1` 上、地址带 `?agent=1` 时启用。
    - `patches/rebrand.patch`（编辑器源码）和 `patches/rebrand-ui.patch`（界面工程，打在子模块 `vendor/FairyGUI-Editor` 里）：换品牌，见下表。
+   - `patches/project-reload.patch`：由 `lgui editor` 打开时（`127.0.0.1`、`?agent=1`），每次都从 `/__lgui_editor/project` 读工程的 `ui/` 重新导入，不用浏览器里存的旧副本；已经绑定过的文件夹保留，保存时照样写回 `ui/`。原因见 [CONTRIBUTING.md](../../CONTRIBUTING.md) 的「编辑器实测」。
    - 用 `brand/logo128.png`（源文件 `brand/logo.svg`）换掉界面工程里的 Logo。
 4. 从换过品牌的界面工程重新发布编辑器界面包（`npm run publish:editor-ui`），类型检查，`vite build`。
 5. 产物复制到 `plugin/editor/`（去掉 LayaAir 的 `.meta` 文件），连同编辑器原有的 `LICENSE`、`THIRD_PARTY_NOTICES.md`、`TRADEMARKS.md`，再写 `VERSION.md`。
@@ -40,6 +41,14 @@ node scripts/build-editor/build.mjs
 | 界面工程 `Builder/dialogs/PublishPackageSettings.xml` | 「FairyGUI提供了专门的着色器混合」 | **保留**：说明运行时的技术事实 |
 | 导入相关的文字（「导入 FairyGUI 项目」「Import FairyGUI Package」「请选择 FairyGUI 工程文件夹或 ZIP」等） | — | **保留**：说明格式兼容 |
 | 控制台日志前缀 `[FairyGUI Editor]` | — | **保留**：只在浏览器开发者工具里能看到 |
+
+## 兼容实测
+
+```bash
+node scripts/build-editor/check-compat.mjs [工程目录 ...]
+```
+
+编辑器打开并保存工程（把一个文字控件右移 1 像素）→ 导出 → 和原文件比较 → 随插件带的 OpenFairyGUI 0.7.0 生成网页界面包 → 浏览器里加载每个包、创建每个导出的组件。不写参数时测 `lgui init` 的模板工程（再多跑 `lgui check` 和 `lgui verify --size desktop`）和 `examples/inventory/legacy/project`。升级上游编辑器后跑一遍。
 
 ## 验证
 

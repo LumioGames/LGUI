@@ -6,15 +6,15 @@
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
     <text id="n1" name="title" xy="60,36" size="660,64" fontSize="44" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text="标题"/>
-    <component id="n2" name="closeButton" fileName="Button.xml" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="780,32" size="240,72">
+    <component id="n2" name="closeButton" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="780,32" size="240,72">
       <relation target="" sidePair="right-right,top-top"/>
       <Button title="关闭"/>
     </component>
-    <component id="n3" name="firstTab" fileName="Button.xml" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="60,1720" size="240,72">
+    <component id="n3" name="firstTab" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="60,1720" size="240,72">
       <relation target="" sidePair="left-left,bottom-bottom"/>
       <Button title="第一页"/>
     </component>
-    <component id="n4" name="secondTab" fileName="Button.xml" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="320,1720" size="240,72">
+    <component id="n4" name="secondTab" pkg="{{COMMONID}}" src="{{BUTTONID}}" xy="320,1720" size="240,72">
       <relation target="" sidePair="left-left,bottom-bottom"/>
       <Button title="第二页"/>
     </component>
