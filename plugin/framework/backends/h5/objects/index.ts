@@ -1,0 +1,275 @@
+// 把 FairyGUI-dom 的对象包成接口层的 UI 对象。每个对象只包一次（WeakMap 缓存），事件一律返回取消函数。
+import * as fgui from '../vendor/fairygui.module.js';
+import type {
+  PointerInput, Rect, UIObject, UIComponent, UIText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, Unsubscribe
+} from '../../../core/index';
+import {LgRuntimeError} from '../../../core/index';
+import {toDesign} from '../scale';
+
+const toHex = (value: number): string => '#' + (value & 0xffffff).toString(16).padStart(6, '0');
+const fromHex = (value: string): number => {
+  const match = /^#?([0-9a-f]{6}|[0-9a-f]{8})$/i.exec(value);
+  if (!match) throw new LgRuntimeError('LGUI-RT-020', `颜色 ${value} 的格式不对。`, '写成 #rrggbb。');
+  return parseInt(match[1].slice(-6), 16);
+};
+
+// 订阅 FairyGUI 事件，返回取消函数。
+function listen(target: fgui.EventDispatcher, type: string, handler: (event: fgui.FguiEvent) => void): Unsubscribe {
+  const callback: fgui.FguiListener = event => handler(event);
+  target.on(type, callback);
+  return () => target.off(type, callback);
+}
+
+const pointerTypes: Record<string, PointerInput['type']> = {pointerdown: 'down', pointermove: 'move', pointerup: 'up', pointercancel: 'cancel'};
+
+class H5Object implements UIObject {
+  constructor(readonly native: fgui.GObject) {}
+  get name(): string { return this.native.name; }
+  get visible(): boolean { return this.native.visible; }
+  set visible(value: boolean) { this.native.visible = value; }
+  get enabled(): boolean { return !this.native.grayed; }
+  set enabled(value: boolean) { this.native.grayed = !value; this.native.element.style.pointerEvents = value ? '' : 'none'; }
+  get touchable(): boolean { return this.native.touchable; }
+  set touchable(value: boolean) { this.native.touchable = value; }
+  get rect(): Rect { return {x: this.native.x, y: this.native.y, width: this.native.width, height: this.native.height}; }
+  set rect(value: Rect) { this.native.setXY(value.x, value.y); this.native.setSize(value.width, value.height); }
+  onPointer(handler: (event: PointerInput) => void): Unsubscribe {
+    const element = this.native.element;
+    const listener = (event: PointerEvent): void => {
+      const {x, y} = toDesign(event.clientX, event.clientY);
+      const pointerType = event.pointerType === 'touch' || event.pointerType === 'pen' ? event.pointerType : 'mouse';
+      handler({type: pointerTypes[event.type], pointerId: event.pointerId, pointerType, x, y, time: performance.now()});
+    };
+    const types = Object.keys(pointerTypes);
+    for (const type of types) element.addEventListener(type, listener as EventListener);
+    return () => { for (const type of types) element.removeEventListener(type, listener as EventListener); };
+  }
+}
+
+class H5Component extends H5Object implements UIComponent {
+  constructor(readonly native: fgui.GComponent, readonly componentName: string) { super(native); }
+  child(path: string): UIObject | null {
+    let current: fgui.GObject | null = this.native;
+    for (const part of path.split('.')) {
+      if (!(current instanceof fgui.GComponent)) return null;
+      current = current.getChild(part);
+      if (!current) return null;
+    }
+    return current ? wrap(current) : null;
+  }
+  controller(name: string): UIController | null {
+    const native = this.native.getController(name);
+    return native ? wrapController(native) : null;
+  }
+  transition(name: string): UITransition | null {
+    const native = this.native.getTransition(name);
+    return native ? wrapTransition(native) : null;
+  }
+  childNames(): readonly string[] {
+    const names: string[] = [];
+    for (let i = 0; i < this.native.numChildren; i++) names.push(this.native.getChildAt(i).name);
+    return names;
+  }
+  addChild(child: UIObject): void { this.native.addChild(nativeOf(child)); }
+  removeChild(child: UIObject): void { this.native.removeChild(nativeOf(child)); }
+  dispose(): void { this.native.dispose(); }
+}
+
+class H5Text extends H5Object implements UIText {
+  constructor(readonly native: fgui.GTextField) { super(native); }
+  get text(): string { return this.native.text; }
+  set text(value: string) { this.native.text = value; }
+  get color(): string { return toHex(this.native.color); }
+  set color(value: string) { this.native.color = fromHex(value); }
+}
+
+class H5Input extends H5Text implements UIInput {
+  private prompt = '';
+  constructor(readonly native: fgui.GTextInput) { super(native); }
+  get promptText(): string { return this.prompt; }
+  set promptText(value: string) { this.prompt = value; this.native.setPromptText(value); }
+  onChange(handler: (text: string) => void): Unsubscribe { return listen(this.native, 'changed', () => handler(this.native.text)); }
+}
+
+class H5Button extends H5Component implements UIButton {
+  constructor(readonly native: fgui.GButton, componentName: string) { super(native, componentName); }
+  get title(): string { return this.native.title; }
+  set title(value: string) { this.native.title = value; }
+  get icon(): string { return this.native.icon; }
+  set icon(value: string) { this.native.icon = value; }
+  get selected(): boolean { return this.native.selected; }
+  set selected(value: boolean) { this.native.selected = value; }
+}
+
+const fillMethods = ['none', 'horizontal', 'vertical', 'radial90', 'radial180', 'radial360'] as const;
+
+class H5Image extends H5Object implements UIImage {
+  constructor(readonly native: fgui.GImage) { super(native); }
+  get fillMethod(): UIImage['fillMethod'] { return fillMethods[this.native.fillMethod] ?? 'none'; }
+  set fillMethod(value: UIImage['fillMethod']) { this.native.fillMethod = fillMethods.indexOf(value); }
+  get fillOrigin(): number { return this.native.fillOrigin; }
+  set fillOrigin(value: number) { this.native.fillOrigin = value; }
+  get fillClockwise(): boolean { return this.native.fillClockwise; }
+  set fillClockwise(value: boolean) { this.native.fillClockwise = value; }
+  get fillAmount(): number { return this.native.fillAmount; }
+  set fillAmount(value: number) { this.native.fillAmount = value; }
+}
+
+class H5Loader extends H5Object implements UILoader {
+  private loads = new Set<() => void>();
+  private errors = new Set<(url: string) => void>();
+  private current = '';
+  constructor(readonly native: fgui.GLoader) { super(native); }
+  get url(): string { return this.current; }
+  set url(value: string) {
+    this.current = value;
+    this.native.url = value;
+    if (!value) return;
+    // ui:// 是包里的图片，同步就绪；网络图片用一个探测 img 判断加载成功还是失败（FairyGUI-dom 的加载器不报失败）。
+    if (value.startsWith('ui://')) { for (const handler of [...this.loads]) handler(); return; }
+    const probe = new Image();
+    probe.onload = () => { if (this.current === value) for (const handler of [...this.loads]) handler(); };
+    probe.onerror = () => { if (this.current === value) for (const handler of [...this.errors]) handler(value); };
+    probe.src = value;
+  }
+  onLoad(handler: () => void): Unsubscribe { this.loads.add(handler); return () => { this.loads.delete(handler); }; }
+  onError(handler: (url: string) => void): Unsubscribe { this.errors.add(handler); return () => { this.errors.delete(handler); }; }
+}
+
+class H5List extends H5Object implements UIList {
+  private renderer: ((index: number, item: UIComponent) => void) | null = null;
+  private isVirtual = false;
+  constructor(readonly native: fgui.GList) { super(native); }
+  get numItems(): number { return this.native.numItems; }
+  set numItems(value: number) { this.native.numItems = value; }
+  get itemRenderer(): ((index: number, item: UIComponent) => void) | null { return this.renderer; }
+  set itemRenderer(value: ((index: number, item: UIComponent) => void) | null) {
+    this.renderer = value;
+    this.native.itemRenderer = value ? (index, item) => value(index, wrapComponent(item)) : null;
+  }
+  get virtual(): boolean { return this.isVirtual; }
+  set virtual(value: boolean) {
+    if (value === this.isVirtual) return;
+    if (!value) throw new LgRuntimeError('LGUI-RT-021', '列表一旦设成虚拟列表就不能改回去。', '在第一次给数据之前决定要不要虚拟列表。');
+    this.isVirtual = true;
+    this.native.setVirtual();
+  }
+  get scrollPosition(): {x: number; y: number} { const pane = this.native.scrollPane; return {x: pane?.posX ?? 0, y: pane?.posY ?? 0}; }
+  set scrollPosition(value: {x: number; y: number}) { const pane = this.native.scrollPane; if (pane) { pane.setPosX(value.x, false); pane.setPosY(value.y, false); } }
+  get selectedIndex(): number { return this.native.selectedIndex; }
+  set selectedIndex(value: number) { this.native.selectedIndex = value; }
+  onClickItem(handler: (index: number) => void): Unsubscribe {
+    return listen(this.native, 'click_item', event => {
+      const item = event.data as fgui.GObject;
+      handler(this.native.childIndexToItemIndex(childIndex(this.native, item)));
+    });
+  }
+  itemAt(index: number): UIComponent | null {
+    const childIndex = this.native.itemIndexToChildIndex(index);
+    if (childIndex < 0 || childIndex >= this.native.numChildren) return null;
+    return wrapComponent(this.native.getChildAt(childIndex));
+  }
+  scrollToView(index: number): void { this.native.scrollToView(index, false); }
+}
+
+function childIndex(parent: fgui.GComponent, child: fgui.GObject): number {
+  for (let i = 0; i < parent.numChildren; i++) if (parent.getChildAt(i) === child) return i;
+  return -1;
+}
+
+class H5Progress extends H5Component implements UIProgress {
+  constructor(readonly native: fgui.GProgressBar, componentName: string) { super(native, componentName); }
+  get value(): number { return this.native.value; }
+  set value(value: number) { this.native.value = value; }
+  get max(): number { return this.native.max; }
+  set max(value: number) { this.native.max = value; }
+}
+
+class H5Graph extends H5Object implements UIGraph {
+  constructor(readonly native: fgui.GGraph) { super(native); }
+  get color(): string { return toHex(this.native.color); }
+  set color(value: string) { this.native.color = fromHex(value); }
+}
+
+class H5Controller implements UIController {
+  constructor(readonly native: fgui.Controller) {}
+  get name(): string { return this.native.name; }
+  get selectedPage(): string { return this.native.selectedPage; }
+  set selectedPage(value: string) {
+    if (!this.pages.includes(value)) throw new LgRuntimeError('LGUI-RT-022', `控制器 ${this.name} 没有页 ${value}。`, `能用的页：${this.pages.join('、')}。`);
+    this.native.selectedPage = value;
+  }
+  get pages(): readonly string[] {
+    const pages: string[] = [];
+    for (let i = 0; i < this.native.pageCount; i++) pages.push(this.native.getPageName(i));
+    return pages;
+  }
+  onChange(handler: (page: string) => void): Unsubscribe { return listen(this.native, 'status_changed', () => handler(this.native.selectedPage)); }
+}
+
+class H5Transition implements UITransition {
+  constructor(readonly native: fgui.Transition) {}
+  get name(): string { return this.native.name; }
+  play(options: {times?: number; delay?: number} = {}): Promise<void> {
+    return new Promise(resolve => this.native.play(resolve, options.times ?? 1, options.delay ?? 0));
+  }
+  stop(): void { this.native.stop(true, false); }
+  setPaused(paused: boolean): void { this.native.setPaused(paused); }
+}
+
+const cache = new WeakMap<object, UIObject>();
+const controllerCache = new WeakMap<fgui.Controller, UIController>();
+const transitionCache = new WeakMap<fgui.Transition, UITransition>();
+const natives = new WeakMap<UIObject, fgui.GObject>();
+
+// 组件的「包/组件」名：创建时由后端写进 data 之外的一个私有字段。
+const componentNames = new WeakMap<fgui.GObject, string>();
+export function setComponentName(native: fgui.GObject, name: string): void { componentNames.set(native, name); }
+
+/** 包一个 FairyGUI 对象。 */
+export function wrap(native: fgui.GObject): UIObject {
+  const cached = cache.get(native);
+  if (cached) return cached;
+  const item = native.packageItem;
+  const name = componentNames.get(native) ?? (item ? `${item.owner.name}/${item.name}` : '');
+  let wrapped: UIObject;
+  if (native instanceof fgui.GList) wrapped = new H5List(native);
+  else if (native instanceof fgui.GButton) wrapped = new H5Button(native, name);
+  else if (native instanceof fgui.GProgressBar) wrapped = new H5Progress(native, name);
+  else if (native instanceof fgui.GComponent) wrapped = new H5Component(native, name);
+  else if (native instanceof fgui.GTextInput) wrapped = new H5Input(native);
+  else if (native instanceof fgui.GTextField) wrapped = new H5Text(native);
+  else if (native instanceof fgui.GImage) wrapped = new H5Image(native);
+  else if (native instanceof fgui.GLoader) wrapped = new H5Loader(native);
+  else if (native instanceof fgui.GGraph) wrapped = new H5Graph(native);
+  else wrapped = new H5Object(native);
+  cache.set(native, wrapped);
+  natives.set(wrapped, native);
+  return wrapped;
+}
+
+/** 包一个组件；不是组件时报错。 */
+export function wrapComponent(native: fgui.GObject): UIComponent {
+  const wrapped = wrap(native);
+  if (!(wrapped instanceof H5Component)) throw new LgRuntimeError('LGUI-RT-023', `${native.name} 不是组件。`, '检查 ui/ 里这个控件的类型。');
+  return wrapped;
+}
+
+function wrapController(native: fgui.Controller): UIController {
+  let wrapped = controllerCache.get(native);
+  if (!wrapped) { wrapped = new H5Controller(native); controllerCache.set(native, wrapped); }
+  return wrapped;
+}
+
+function wrapTransition(native: fgui.Transition): UITransition {
+  let wrapped = transitionCache.get(native);
+  if (!wrapped) { wrapped = new H5Transition(native); transitionCache.set(native, wrapped); }
+  return wrapped;
+}
+
+/** 接口对象 → FairyGUI 对象。 */
+export function nativeOf(object: UIObject): fgui.GObject {
+  const native = natives.get(object);
+  if (!native) throw new LgRuntimeError('LGUI-RT-024', `${object.name} 不是 h5 后端创建的对象。`, '不要混用不同后端的对象。');
+  return native;
+}

@@ -1,0 +1,162 @@
+// h5 后端的平台服务：浏览器 API。
+import * as fgui from '../vendor/fairygui.module.js';
+import type {
+  Platform, KeyInput, WheelInput, LogEntry, NetResponse, NetSocket, Insets, PointerInput, Rect, Unsubscribe
+} from '../../../core/index';
+import {LgRuntimeError} from '../../../core/index';
+import {fitDesign, stage, toDesign} from '../scale';
+
+// 一组回调，返回取消函数。
+class Handlers<T> {
+  private set = new Set<(value: T) => void>();
+  add(handler: (value: T) => void): Unsubscribe { this.set.add(handler); return () => { this.set.delete(handler); }; }
+  emit(value: T): void { for (const handler of [...this.set]) handler(value); }
+}
+
+// 统一按键名：安卓返回键当 Back。
+function keyName(event: KeyboardEvent): string {
+  if (event.key === 'GoBack' || event.key === 'BrowserBack') return 'Back';
+  if (event.key === 'Esc') return 'Escape';
+  return event.key;
+}
+
+// 用一个放了 env(safe-area-inset-*) 的探测元素读出安全区。
+function readSafeArea(): Insets {
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';
+  document.body.appendChild(probe);
+  const style = getComputedStyle(probe);
+  const insets = {top: parseFloat(style.paddingTop) || 0, right: parseFloat(style.paddingRight) || 0, bottom: parseFloat(style.paddingBottom) || 0, left: parseFloat(style.paddingLeft) || 0};
+  probe.remove();
+  return insets;
+}
+
+export function createH5Platform(projectName: string, uiBase: string): Platform {
+  const frame = new Handlers<number>();
+  const visibility = new Handlers<boolean>();
+  const pointer = new Handlers<PointerInput>();
+  const keys = new Handlers<KeyInput>();
+  const wheels = new Handlers<WheelInput>();
+  const resizes = new Handlers<{width: number; height: number}>();
+  const logs: LogEntry[] = [];
+  let composing = false;
+  let audio: AudioContext | null = null;
+  const sounds = new Map<string, Promise<AudioBuffer>>();
+
+  // 每帧
+  let last = performance.now();
+  const tick = (now: number): void => { frame.emit(now - last); last = now; requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+  document.addEventListener('visibilitychange', () => visibility.emit(document.visibilityState === 'visible'));
+
+  // 原始输入（舞台上的全部指针，支持多点）
+  const pointerTypes: Record<string, PointerInput['type']> = {pointerdown: 'down', pointermove: 'move', pointerup: 'up', pointercancel: 'cancel'};
+  for (const type of Object.keys(pointerTypes)) {
+    window.addEventListener(type, event => {
+      const e = event as PointerEvent;
+      const {x, y} = toDesign(e.clientX, e.clientY);
+      pointer.emit({type: pointerTypes[type], pointerId: e.pointerId, pointerType: e.pointerType === 'touch' || e.pointerType === 'pen' ? e.pointerType : 'mouse', x, y, time: performance.now()});
+      unlockAudio();
+    });
+  }
+  window.addEventListener('keydown', e => { if (!composing) keys.emit({type: 'down', key: keyName(e), repeat: e.repeat}); unlockAudio(); });
+  window.addEventListener('keyup', e => { if (!composing) keys.emit({type: 'up', key: keyName(e), repeat: false}); });
+  window.addEventListener('wheel', e => { const {x, y} = toDesign(e.clientX, e.clientY); wheels.emit({x, y, deltaX: e.deltaX, deltaY: e.deltaY}); }, {passive: true});
+  window.addEventListener('compositionstart', () => { composing = true; });
+  window.addEventListener('compositionend', () => { composing = false; });
+
+  // 屏幕
+  const size = (): {width: number; height: number} => ({width: window.visualViewport?.width ?? window.innerWidth, height: window.visualViewport?.height ?? window.innerHeight});
+  const onResize = (): void => resizes.emit(size());
+  window.addEventListener('resize', onResize);
+  window.addEventListener('orientationchange', onResize);
+  window.visualViewport?.addEventListener('resize', onResize);
+
+  // 音频：第一次点击或按键时解锁
+  function unlockAudio(): void {
+    if (!audio) audio = new AudioContext();
+    if (audio.state === 'suspended') void audio.resume();
+  }
+
+  const write = (level: LogEntry['level'], message: string): void => {
+    logs.push({level, message, time: performance.now()});
+    if (logs.length > 200) logs.shift();
+    console[level === 'debug' ? 'debug' : level](message);
+  };
+
+  const prefix = `lgui:${projectName}:`;
+
+  return {
+    time: {now: () => performance.now(), onFrame: h => frame.add(h), onVisibilityChange: h => visibility.add(h)},
+    storage: {
+      get: key => localStorage.getItem(prefix + key),
+      set: (key, value) => localStorage.setItem(prefix + key, value),
+      remove: key => localStorage.removeItem(prefix + key)
+    },
+    resource: {
+      loadPackage: async name => { if (!fgui.UIPackage.getByName(name)) await fgui.UIPackage.loadPackage(`${uiBase}/${name}`); },
+      releasePackage: name => { if (fgui.UIPackage.getByName(name)) fgui.UIPackage.removePackage(name); },
+      hasPackage: name => fgui.UIPackage.getByName(name) !== null,
+      loadImage: url => new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve();
+        image.onerror = () => reject(new LgRuntimeError('LGUI-RT-025', `图片 ${url} 加载失败。`, '确认地址对、文件存在。'));
+        image.src = url;
+      })
+    },
+    input: {onPointer: h => pointer.add(h), onKey: h => keys.add(h), onWheel: h => wheels.add(h), setInputMode: () => {}},
+    textInput: {isComposing: () => composing},
+    screen: {
+      size,
+      safeArea: readSafeArea,
+      onResize: h => resizes.add(h),
+      applyDesignSize(design): Rect {
+        const {scale, visible} = fitDesign(size(), design);
+        stage.scale = scale;
+        const root = fgui.GRoot.inst;
+        root.element.style.transformOrigin = '0 0';
+        root.element.style.transform = `scale(${scale})`;
+        root.setSize(visible.width, visible.height);
+        return visible;
+      }
+    },
+    audio: {
+      play(url, options = {}) {
+        if (!audio) return; // 没解锁之前浏览器不让放声音
+        const context = audio;
+        let buffer = sounds.get(url);
+        if (!buffer) { buffer = fetch(url).then(r => r.arrayBuffer()).then(data => context.decodeAudioData(data)); sounds.set(url, buffer); }
+        void buffer.then(decoded => {
+          const source = context.createBufferSource();
+          const gain = context.createGain();
+          gain.gain.value = options.volume ?? 1;
+          source.buffer = decoded;
+          source.connect(gain).connect(context.destination);
+          source.start();
+        }, () => write('error', `LGUI-RT-026  音效 ${url} 加载失败。`));
+      }
+    },
+    locale: {systemLanguages: () => navigator.languages.length ? [...navigator.languages] : [navigator.language]},
+    log: {write, recent: () => logs},
+    net: {
+      async fetch(url, init = {}): Promise<NetResponse> {
+        const response = await fetch(url, init);
+        return {status: response.status, ok: response.ok, text: () => response.text(), json: () => response.json() as Promise<unknown>};
+      },
+      webSocket(url): NetSocket {
+        const socket = new WebSocket(url);
+        const on = <K extends keyof WebSocketEventMap>(type: K, handler: (event: WebSocketEventMap[K]) => void): Unsubscribe => {
+          socket.addEventListener(type, handler);
+          return () => socket.removeEventListener(type, handler);
+        };
+        return {
+          send: data => socket.send(data),
+          close: () => socket.close(),
+          onMessage: h => on('message', e => h(String(e.data))),
+          onClose: h => on('close', e => h(e.code)),
+          onOpen: h => on('open', () => h())
+        };
+      }
+    }
+  };
+}

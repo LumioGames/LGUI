@@ -22,7 +22,7 @@ export async function serve(routes) {
     res.writeHead(404).end('not found');
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-  return {url: `http://127.0.0.1:${server.address().port}`, close: () => new Promise(resolve => server.close(resolve))};
+  return {url: `http://127.0.0.1:${server.address().port}`, close: () => new Promise(resolve => { server.closeAllConnections(); server.close(resolve); })};
 }
 
 // 先试 Chrome，再试 Edge；都没有时返回 null（测试标「跳过」）。
