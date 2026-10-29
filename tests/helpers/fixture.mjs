@@ -33,6 +33,7 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
     <component id="btn00001" name="Btn.xml" path="/"/>
     <component id="slot0001" name="ItemSlot.xml" path="/" exported="true"/>
     <component id="header01" name="Header.xml" path="/"/>
+    <component id="bar00001" name="Bar.xml" path="/" exported="true"/>
   </resources>
 </packageDescription>`));
   fs.writeFileSync(path.join(bag, 'BagPanel.xml'), landscape);
@@ -41,8 +42,15 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
   <controller name="button" pages="0,up,1,down" selected="0"/>
   <displayList>
     <text id="n0" name="title" xy="0,0" size="160,56" fontSize="24" autoSize="shrink" singleLine="true" text=""/>
+    <component id="n1" name="holdProgress" src="bar00001" xy="0,50" size="160,6"/>
   </displayList>
   <Button/>
+</component>`));
+  fs.writeFileSync(path.join(bag, 'Bar.xml'), xml(`<component size="160,6" extention="ProgressBar">
+  <displayList>
+    <graph id="n0" name="bar" xy="0,0" size="160,6" type="rect" lineSize="0" fillColor="#6aa7ff"/>
+  </displayList>
+  <ProgressBar/>
 </component>`));
   fs.writeFileSync(path.join(bag, 'ItemSlot.xml'), xml(`<component size="128,128">
   <displayList>
