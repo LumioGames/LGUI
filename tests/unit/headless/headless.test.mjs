@@ -96,7 +96,7 @@ test('点列表子项会更新选中项并通知', async () => {
   list.numItems = 4;
   const clicked = [];
   list.onClickItem(i => clicked.push(i));
-  await sim.click(backend, list.itemAt(2).child('count'));
+  await sim.click(backend, list.itemAt(2));
   assert.deepEqual([clicked, list.selectedIndex], [[2], 2]);
 });
 

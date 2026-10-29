@@ -36,8 +36,12 @@ export async function hover(backend: HeadlessBackend, object: UIObject, ms = 100
   await advance(backend, 0);
 }
 
+// 和 FairyGUI 的各个运行时一样：文字、富文本、图片自己收不到指针输入（点击会落到下面的控件上）。
+const NOT_HIT = ['text', 'richtext', 'image'];
+
 function target(object: UIObject): {o: HeadlessObject; x: number; y: number} {
   const o = asHeadless(object);
+  if (NOT_HIT.includes(o.kind)) throw new LgRuntimeError('LGUI-RT-032', `控件 ${o.name} 是文字或图片，收不到点击和手势（各个后端都一样）。`, '把点击和手势绑在按钮、组件、列表或有填充的图形上。');
   if (!o.reachable()) throw new LgRuntimeError('LGUI-RT-032', `控件 ${o.name} 现在点不到（自己或上级没显示、不可用或不接收输入）。`, '检查这个控件和它所在的界面是不是显示、可用、激活。');
   const r = o.globalRect();
   return {o, x: r.x + r.width / 2, y: r.y + r.height / 2};
