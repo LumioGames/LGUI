@@ -7,6 +7,9 @@ import {LgCliError} from '../errors.mjs';
 import {esbuild} from '../vendor.mjs';
 import {generateProjectTypes, headlessDir} from '../generate/index.mjs';
 import {bundleErrors, frameworkEntry, readTexts, runtimeConfig} from '../dev/bundle.mjs';
+import {readUiModel} from '../generate/model.mjs';
+import {extractTexts, translationMaps} from '../generate/i18n.mjs';
+import {uiProjectPath} from '../generate/index.mjs';
 
 function findTests(dir) {
   if (!fs.existsSync(dir)) return [];
@@ -22,6 +25,8 @@ function writeEnv(root, project, out) {
   const fw = rel => JSON.stringify(path.join(root, '.lgui', 'framework', rel).split(path.sep).join('/'));
   const packages = fs.readdirSync(headlessDir(root)).map(file => JSON.parse(fs.readFileSync(path.join(headlessDir(root), file), 'utf8')));
   const deps = JSON.parse(fs.readFileSync(path.join(root, '.lgui', 'build', 'deps.json'), 'utf8'));
+  const texts = readTexts(root, project.languages);
+  const translations = translationMaps(extractTexts(readUiModel(uiProjectPath(root))), texts);
   const file = path.join(out, 'env.ts');
   fs.writeFileSync(file, `// 由 lgui test 生成，不要手改。
 import {afterEach} from 'node:test';
@@ -31,11 +36,11 @@ import * as sim from ${fw('backends/headless/simulate.ts')};
 
 const packages = ${JSON.stringify(packages)};
 const env = {
-  createBackend: () => createHeadlessBackend(packages),
+  createBackend: () => createHeadlessBackend(packages, ${JSON.stringify(translations)}),
   sim,
   deps: ${JSON.stringify(deps)},
   config: ${JSON.stringify(runtimeConfig(project))},
-  texts: ${JSON.stringify(readTexts(root, project.languages))},
+  texts: ${JSON.stringify(texts)},
   current: null as null | {snapshot(): unknown}
 };
 (globalThis as unknown as {__lguiTest: typeof env}).__lguiTest = env;

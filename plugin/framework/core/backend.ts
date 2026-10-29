@@ -10,6 +10,8 @@ export interface BackendConfig {
   defaultFont: string | null;
   /** 界面包所在的地址或目录（h5 是 .lgui/build/web/ui/ 对应的网址）。 */
   uiBase: string;
+  /** 翻译文件所在的地址（h5 是 .lgui/build/web/i18n/ 对应的网址）。不写时不加载翻译。 */
+  i18nBase?: string;
 }
 
 /** 一个后端。 */
@@ -26,6 +28,8 @@ export interface Backend {
   releasePackage(name: string): void;
   /** 创建一个组件实例；包没加载或组件不存在时报 LGUI-RT 错误。 */
   create<Name extends string>(packageName: string, componentName: string): UIComponent<Name>;
+  /** 换界面上固定文字的语言：加载这种语言的翻译，并重新加载已经加载的界面包（翻译只在组件创建时生效）。之后创建的组件都是新语言。 */
+  setLanguage(language: string): Promise<void>;
   /** 包里有没有这个组件（包要先加载）。换横竖版时用。 */
   has(packageName: string, componentName: string): boolean;
   /** 包里一张图片的尺寸（地址写成 ui://包名/图片名，包要先加载）；没有这张图片返回 null。 */

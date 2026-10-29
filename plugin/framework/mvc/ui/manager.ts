@@ -206,6 +206,40 @@ export class UIManager {
     }
   }
 
+  /** 用同一个 View 实例把界面换到另一个组件上：记下列表的滚动位置和选中项，建新组件，重新绑定，再恢复。不调用 onOpen、onClose。 */
+  private swap(entry: Entry, version: string): void {
+    if (!entry.component) return;
+    const [pkg] = entry.cls.component.split('/');
+    const lists = listStates(entry.component);
+    const old = entry.component;
+    const component = this.backend.create(pkg, version);
+    entry.component = component;
+    entry.version = version;
+    this.place(entry, component);
+    component.visible = !entry.covered;
+    component.touchable = entry.active;
+    (this.containers.get(entry.layer) as UIComponent).addChild(component);
+    entry.view.__mount(component, {isActive: () => entry.active && entry.state === 'open'});
+    restoreLists(component, lists);
+    old.dispose();
+    this.reorder();
+  }
+
+  /** 换过的组件是后加进去的，按栈的顺序重新排一遍，层内的上下关系不变。 */
+  private reorder(): void {
+    for (const layer of LAYERS) {
+      const container = this.containers.get(layer) as UIComponent;
+      for (const entry of this.stacks[layer]) if (entry.component) { container.removeChild(entry.component); container.addChild(entry.component); }
+    }
+  }
+
+  /** 内部用：换语言后重建所有打开的界面（和旋转同一套机制），清空界面缓存。 */
+  rebuildAll(): void {
+    this.clearCache();
+    for (const entry of this.all()) if (entry.state === 'open' && entry.component) this.swap(entry, entry.version);
+    this.updateHints();
+  }
+
   /** 内部用：现在就按屏幕尺寸判方向并换版（平时由尺寸变化触发，测试里可以直接调用）。 */
   applyOrientation(): void {
     const next = this.decideOrientation();
@@ -215,31 +249,10 @@ export class UIManager {
     this.visible = this.backend.platform.screen.applyDesignSize(this.design());
     for (const entry of this.all()) {
       if (entry.state !== 'open' || !entry.component) continue;
-      const [pkg] = entry.cls.component.split('/');
       const version = this.versionOf(entry.cls);
-      if (version !== entry.version) {
-        // 换版：记下列表的滚动位置和选中项，建另一版组件，用同一个 View 实例重新绑定，再恢复。
-        const lists = listStates(entry.component);
-        const old = entry.component;
-        const component = this.backend.create(pkg, version);
-        entry.component = component;
-        entry.version = version;
-        this.place(entry, component);
-        component.visible = !entry.covered;
-        component.touchable = entry.active;
-        (this.containers.get(entry.layer) as UIComponent).addChild(component);
-        entry.view.__mount(component, {isActive: () => entry.active && entry.state === 'open'});
-        restoreLists(component, lists);
-        old.dispose();
-      } else {
-        this.place(entry, entry.component);
-      }
+      if (version !== entry.version) this.swap(entry, version);
+      else this.place(entry, entry.component);
       if (changed) this.hook(entry, 'onOrientationChange', next);
-    }
-    // 换版的组件是后加进去的，按栈的顺序重新排一遍，层内的上下关系不变。
-    for (const layer of LAYERS) {
-      const container = this.containers.get(layer) as UIComponent;
-      for (const entry of this.stacks[layer]) if (entry.component) { container.removeChild(entry.component); container.addChild(entry.component); }
     }
     this.updateHints();
     if (changed) bus.emit(builtinEvents.orientationChange, {orientation: next});

@@ -5,6 +5,8 @@ import type {UIKind} from '../../core/index';
 export interface ChildDescriptor {
   /** 控件名。 */
   name: string;
+  /** 元素 ID（翻译文件用它定位）。 */
+  elementId?: string;
   /** 控件类型。 */
   kind: UIKind;
   /** 子组件引用的「包/组件」。 */

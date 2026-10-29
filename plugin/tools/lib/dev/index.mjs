@@ -7,6 +7,8 @@ import {fileURLToPath} from 'node:url';
 import {LgCliError, LgCliErrors} from '../errors.mjs';
 import {toErrors} from '../output.mjs';
 import {generateProjectTypes, generateWeb, uiProjectPath, webUiDir} from '../generate/index.mjs';
+import {readUiModel} from '../generate/model.mjs';
+import {generateTranslations} from '../generate/i18n.mjs';
 import {bundleErrors, createWebContext, writeWebBootstrap} from './bundle.mjs';
 import {openInBrowser} from '../browser.mjs';
 import {copyFramework} from '../commands/init.mjs';
@@ -29,9 +31,12 @@ export async function startDev(root, project, {port = project.devPort, log = () 
   const generateUi = async () => {
     await generateWeb(uiProjectPath(root), webUiDir(root));
     await generateProjectTypes(root, {validated: true});
+    translations();
   };
+  const translations = () => generateTranslations(root, readUiModel(uiProjectPath(root)), project.languages, path.join(root, '.lgui', 'build', 'web', 'i18n'));
   let context = null;
   const bundle = async () => {
+    translations();
     const entry = writeWebBootstrap(root, project);
     if (!context) context = await createWebContext(root, entry);
     try {

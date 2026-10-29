@@ -6,7 +6,7 @@ import {todo} from './todo';
 import {createModel} from './model';
 import {bus, builtinEvents, defineEvent} from './events';
 import {UIManager} from './ui/manager';
-import {currentLanguage, t} from './i18n';
+import {currentLanguage, setCurrentLanguage, t} from './i18n';
 import {createRequest} from './request';
 import {service} from './service';
 import {snapshot} from './snapshot';
@@ -196,7 +196,15 @@ export const lgui = {
   /** 取文本，占位符写成 {count}。 */
   t(key: string, params?: Record<string, string | number>): string { return t(key, params); },
   /** 切换语言。 */
-  setLanguage(language: string): Promise<void> { void language; return todo('lgui.setLanguage'); },
+  async setLanguage(language: string): Promise<void> {
+    const {config, backend} = runtime();
+    if (!config.languages.includes(language)) throw new LgRuntimeError('LGUI-RT-140', `工程不支持语言 ${language}（languages 是 ${config.languages.join('、')}）。`, '在 .lgui/project.json 的 languages 里加上它，并新建 i18n/' + language + '.json。');
+    // 1. 加载新语言的翻译，卸载并重新加载界面包；2. 换 lgui.t 的文本表；3. 重建已打开的界面（和旋转同一套机制）；4. 发出 languageChange。
+    await backend.setLanguage(language);
+    setCurrentLanguage(language);
+    manager().rebuildAll();
+    bus.emit(builtinEvents.languageChange, {language});
+  },
   /** 当前语言。 */
   language(): string { return currentLanguage(); },
   /** 时间。 */

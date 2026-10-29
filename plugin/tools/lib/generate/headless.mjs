@@ -39,6 +39,7 @@ export function describeComponent(component) {
     transitions: component.transitions,
     children: component.children.filter(child => child.kind && child.name).map(child => ({
       name: child.name,
+      elementId: child.id,
       kind: child.kind,
       ref: child.tag === 'component' ? child.ref?.fullName ?? null : null,
       defaultItem: child.kind === 'list' ? child.ref?.fullName ?? null : null,

@@ -1,0 +1,85 @@
+// 多语言：从 ui/ 提取用户能看到的固定文字；按文本表生成 FairyGUI 的翻译文件。
+// 键名：<包>/<组件>/<控件名>（竖版和横版共用一个键）。FairyGUI 翻译文件里的名字：<包ID><组件ID>-<元素ID>[-prompt]。
+import fs from 'node:fs';
+import path from 'node:path';
+import {LgCliError} from '../errors.mjs';
+
+const xmlEscape = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** 提取：[{ key, text, targets: [{ name }] }]，name 是翻译文件里的名字。 */
+export function extractTexts(model) {
+  const byKey = new Map();
+  const add = (key, text, name) => {
+    if (!text) return;
+    let entry = byKey.get(key);
+    if (!entry) { entry = {key, text, targets: []}; byKey.set(key, entry); }
+    entry.targets.push({name});
+  };
+  for (const pkg of model.packages) {
+    for (const component of pkg.components) {
+      const base = `${pkg.name}/${component.name.replace(/@portrait$/, '')}`;
+      const owner = `${pkg.id}${component.id}`;
+      for (const child of component.children) {
+        if (!child.name || !child.id) continue;
+        const key = `${base}/${child.name}`;
+        const name = `${owner}-${child.id}`;
+        if (['text', 'richtext'].includes(child.tag)) add(key, child.attrs.text ?? '', name);
+        if (child.tag === 'inputtext') {
+          add(key, child.attrs.text ?? '', name);
+          add(`${key}@prompt`, child.attrs.prompt ?? '', `${name}-prompt`);
+        }
+        if (child.tag === 'component') {
+          const button = child.children.find(node => node.tag === 'Button');
+          if (button) add(key, button.attrs.title ?? '', name);
+        }
+      }
+    }
+  }
+  return [...byKey.values()];
+}
+
+/** 读一种语言的文本表；不存在返回 {}。 */
+export function readTable(root, language) {
+  const file = path.join(root, 'i18n', `${language}.json`);
+  if (!fs.existsSync(file)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch (error) {
+    throw new LgCliError('LGUI-CLI-031', `文本表 i18n/${language}.json 不是合法的 JSON：${error.message}`, {file, fix: '改成合法的 JSON。'});
+  }
+}
+
+/** 一种语言的翻译文件（FairyGUI 的 <resources><string name=…>…</string></resources>）。 */
+export function translationXml(entries, table) {
+  const lines = ['<?xml version="1.0" encoding="utf-8"?>', '<resources>'];
+  for (const entry of entries) {
+    const value = table[entry.key];
+    if (typeof value !== 'string') continue;
+    for (const target of entry.targets) lines.push(`  <string name="${xmlEscape(target.name)}">${xmlEscape(value)}</string>`);
+  }
+  lines.push('</resources>', '');
+  return lines.join('\n');
+}
+
+/** 每种语言：翻译文件里的名字 → 文字（给 headless 后端用）。 */
+export function translationMaps(entries, tables) {
+  return Object.fromEntries(Object.entries(tables).map(([language, table]) => [language, Object.fromEntries(
+    entries.flatMap(entry => typeof table[entry.key] === 'string' ? entry.targets.map(t => [t.name, table[entry.key]]) : [])
+  )]));
+}
+
+/** 生成全部语言的翻译文件到 outDir/<语言>.xml，并写对照表 .lgui/build/i18n/map.json。 */
+export function generateTranslations(root, model, languages, outDir) {
+  const entries = extractTexts(model);
+  fs.rmSync(outDir, {recursive: true, force: true});
+  fs.mkdirSync(outDir, {recursive: true});
+  const tables = {};
+  for (const language of languages) {
+    tables[language] = readTable(root, language);
+    fs.writeFileSync(path.join(outDir, `${language}.xml`), translationXml(entries, tables[language]));
+  }
+  const mapFile = path.join(root, '.lgui', 'build', 'i18n', 'map.json');
+  fs.mkdirSync(path.dirname(mapFile), {recursive: true});
+  fs.writeFileSync(mapFile, JSON.stringify(Object.fromEntries(entries.map(e => [e.key, e.targets.map(t => t.name)])), null, 2) + '\n');
+  return {entries, tables};
+}

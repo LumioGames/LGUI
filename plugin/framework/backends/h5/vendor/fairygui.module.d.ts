@@ -147,3 +147,11 @@ export class UIPackage {
 export class UIConfig {
   static defaultFont: string;
 }
+
+export class XML {
+  constructor(source: string);
+}
+
+export class TranslationHelper {
+  static loadFromXML(source: XML): void;
+}

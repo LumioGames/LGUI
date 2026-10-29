@@ -55,6 +55,8 @@ export function writeFixture(root = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-
     <component id="bar00001" name="Bar.xml" path="/" exported="true"/>
     <component id="reddot01" name="RedDot.xml" path="/"/>
     <component id="fx000001" name="Fx.xml" path="/" exported="true"/>
+    <image id="flag0001" name="flag.png" path="/" exported="true"/>
+    <image id="flag0002" name="flag@en.png" path="/" exported="true"/>
 ${glyphs.map(([c, w], i) => `    <image id="dmg${String(i).padStart(5, '0')}" name="dmg_${c}.png" path="/artfont/dmg/" exported="true" width="${w}" height="16"/>`).join('\n')}
   </resources>
 </packageDescription>`));
@@ -69,6 +71,8 @@ ${glyphs.map(([c, w], i) => `    <image id="dmg${String(i).padStart(5, '0')}" na
   </displayList>
   <Button/>
 </component>`));
+  fs.writeFileSync(path.join(bag, 'flag.png'), png(8, 8, [200, 0, 0]));
+  fs.writeFileSync(path.join(bag, 'flag@en.png'), png(8, 8, [0, 0, 200]));
   fs.mkdirSync(path.join(bag, 'artfont', 'dmg'), {recursive: true});
   for (const [c, w] of glyphs) fs.writeFileSync(path.join(bag, 'artfont', 'dmg', `dmg_${c}.png`), png(w, 16));
   fs.writeFileSync(path.join(bag, 'Fx.xml'), xml(`<component size="400,100">
