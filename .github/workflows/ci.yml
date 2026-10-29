@@ -19,19 +19,4 @@ jobs:
           node-version: 24.22.1
       - run: npm run check
       - run: node scripts/tools-smoke.mjs
-      # Temporary evidence collection for the macOS gesture timing failure.
-      # Remove after its cause and regression are verified; stop on first failure.
-      - name: Capture macOS gesture input timing
-        if: runner.os == 'macOS'
-        timeout-minutes: 2
-        run: |
-          node --input-type=module <<'NODE'
-          import {spawnSync} from 'node:child_process';
-          for (let sample = 1; sample <= 10; sample++) {
-            console.log(`macOS gestures input trace ${sample}/10`);
-            const result = spawnSync(process.execPath, ['--test', '--test-name-pattern', '一致性：gestures', 'tests/conformance/conformance.test.mjs'], {stdio: 'inherit'});
-            if (result.error) throw result.error;
-            if (result.status !== 0) process.exit(result.status ?? 1);
-          }
-          NODE
       - run: npm test
