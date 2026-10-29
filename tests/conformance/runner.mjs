@@ -161,7 +161,12 @@ const createBackend = () => {
     const cdp = await page.context().newCDPSession(page);
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await page.exposeFunction('__pw', async (op, ...a) => {
-      if (op === 'press') { await page.mouse.move(a[0], a[1]); await page.mouse.down(); await sleep(a[2]); await page.mouse.up(); }
+      // Chromium owns the requested press duration. Separating down/up with a Node
+      // timer lets a late driver response turn a 50ms click into a >300ms hold.
+      if (op === 'press') {
+        await page.mouse.move(a[0], a[1]);
+        await cdp.send('Input.synthesizeTapGesture', {x: a[0], y: a[1], duration: a[2], gestureSourceType: 'mouse'});
+      }
       else if (op === 'wheel') { await page.mouse.move(a[0], a[1]); await page.mouse.wheel(0, a[2]); }
       else if (op === 'key') await page.keyboard.press(a[0]);
       else if (op === 'viewport') { await page.setViewportSize({width: a[0], height: a[1]}); }
