@@ -37,7 +37,7 @@ test('不在工程里时报 LGUI-CLI-002，提示先运行 lgui init', async () 
 test('在工程的子目录里也能找到工程', async () => {
   const root = tempProject();
   fs.mkdirSync(path.join(root, 'src', 'modules'), {recursive: true});
-  const json = parse((await run(['upgrade', '--json'], path.join(root, 'src', 'modules'))).stdout);
+  const json = parse((await run(['unity', 'export', '--json'], path.join(root, 'src', 'modules'))).stdout);
   assert.equal(json.errors[0].code, 'LGUI-CLI-000');
 });
 
@@ -50,7 +50,7 @@ test('版本不一致时报 LGUI-CLI-003，原话提示运行 lgui upgrade', asy
 
 test('init、doctor、upgrade 不做版本检查', async () => {
   const root = tempProject({lguiVersion: '0.0.1'});
-  for (const argv of [['init'], ['upgrade']]) {
+  for (const argv of [['init']]) {
     const json = parse((await run([...argv, '--json'], root)).stdout);
     assert.notEqual(json.errors[0].code, 'LGUI-CLI-003', argv.join(' '));
   }

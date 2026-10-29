@@ -11,7 +11,7 @@
 
 1. 用 Node 24.22.1。
 2. 每个任务从最新的 `origin/main` 建自己的 worktree 和分支：`git worktree add ../LGUI-wt/<任务号> -b lgui/<任务号>-<短名> origin/main`。不在主目录里直接改，因为可能有别的 Agent 同时在这个仓库干活。
-3. 改了插件版本或身份，只改 `plugin/plugin.json`，再运行 `npm run generate`。
+3. 改了插件版本或身份，只改 `plugin/plugin.json`，再运行 `npm run generate`。改了根目录的 `CHANGELOG.md` 也要运行它（会复制成 `plugin/CHANGELOG.md`，`lgui upgrade` 要读）。
 4. 提交前跑 `npm run check` 和 `npm test`。
 5. 一个任务一个 PR。PR 里写：任务号、做了什么、跑了哪些命令和关键输出；没跑的写「未执行」。CI 是红是绿都不拦合入；CI 跑不起来时在 PR 里写明。
 6. 合入 main、打 tag、推 tag、删除远端分支、任何对外发布，都要先问 Owner。
