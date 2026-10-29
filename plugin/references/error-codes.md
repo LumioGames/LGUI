@@ -13,6 +13,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 
 | 错误码 | 什么时候出现 | 怎么改 |
 |---|---|---|
+| `LGUI-CLI-005` | 当前平台不受支持。随插件带的 esbuild 和 sharp 只有 macOS arm64、macOS x64、Linux x64（glibc）、Windows x64 这 4 个平台的版本；Linux musl、Linux arm64、Windows arm64 都不支持 | 换到上面 4 个平台之一运行 |
 
 ## LGUI-RT-xxx
 
