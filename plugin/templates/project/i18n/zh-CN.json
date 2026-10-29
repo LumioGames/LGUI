@@ -1,4 +1,5 @@
 {
   "main.hint": "点下面的按钮试试",
-  "main.clicked": "点了 {count} 次"
+  "main.clicked": "点了 {count} 次",
+  "lgui.back": "返回"
 }
