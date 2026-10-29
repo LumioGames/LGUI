@@ -2,9 +2,13 @@
 import type {Bind, ItemBind, Keys, Layer, InputMode} from './types';
 import type {EventDef} from './lgui';
 import {todo} from './todo';
+import {bus} from './events';
+import {Scope} from './scope';
 
 /** 三种 View 共用的部分：定时器和收听都跟着界面走，关闭时自动清理。 */
 abstract class ViewBase<UI> {
+  /** 内部用：这个界面的清理清单，关闭时由框架清理。 */
+  readonly __scope = new Scope();
   /** 控件（只在生命周期钩子里的特殊情况用；平时写绑定表）。 */
   protected get ui(): UI { return todo('View.ui'); }
   /** 延时执行一次。 */
@@ -16,7 +20,7 @@ abstract class ViewBase<UI> {
   /** 每帧执行。 */
   protected onUpdate(handler: (deltaMs: number) => void): void { void handler; todo('定时器 onUpdate'); }
   /** 收听广播站的事件，关闭时自动取消。 */
-  protected on<P>(event: EventDef<P>, handler: (payload: P) => void): void { void event; void handler; todo('View.on'); }
+  protected on<P>(event: EventDef<P>, handler: (payload: P) => void): void { this.__scope.add(bus.on(event, handler)); }
 }
 
 /** 一个界面。UI 是 ui/ 生成的控件类型（比如 BagPanelUI）。 */

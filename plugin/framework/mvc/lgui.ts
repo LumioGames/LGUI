@@ -3,6 +3,7 @@ import type {LgRuntimeError, NetService, Rect, StorageService} from '../core/ind
 import type {InputMode, InputType, Layer, Orientation, ParamsOf, Readable, ResultOf, ViewClass} from './types';
 import {todo} from './todo';
 import {createModel} from './model';
+import {bus, defineEvent} from './events';
 import type {Model} from './model';
 
 /** 入口 main.ts 的定义。 */
@@ -116,7 +117,7 @@ export interface OpenOptions<V> {
   onClose?: (result: ResultOf<V> | undefined) => void;
 }
 
-const event = <P>(name: string): EventDef<P> => ({name});
+const event = <P>(name: string): EventDef<P> => defineEvent<P>(`lgui.${name}`);
 
 export const lgui = {
   /** 定义入口。 */
@@ -191,9 +192,9 @@ export const lgui = {
     setServerOffset(ms: number): void { void ms; todo('lgui.time.setServerOffset'); }
   },
   /** 声明一个事件。 */
-  defineEvent<P>(name: string): EventDef<P> { return event<P>(name); },
+  defineEvent<P>(name: string): EventDef<P> { return defineEvent<P>(name); },
   /** 广播一个事件。 */
-  emit<P>(definition: EventDef<P>, payload: P): void { void definition; void payload; todo('lgui.emit'); },
+  emit<P>(definition: EventDef<P>, payload: P): void { bus.emit(definition, payload); },
   /** 框架自己的事件。 */
   events: {
     /** 界面打开了。 */
