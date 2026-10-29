@@ -4,21 +4,24 @@ import type {EventDef} from './lgui';
 import {todo} from './todo';
 import {bus} from './events';
 import {Scope} from './scope';
+import {ViewTimers} from './timers';
 
 /** 三种 View 共用的部分：定时器和收听都跟着界面走，关闭时自动清理。 */
 abstract class ViewBase<UI> {
   /** 内部用：这个界面的清理清单，关闭时由框架清理。 */
   readonly __scope = new Scope();
+  /** 内部用：这个界面的定时器。 */
+  readonly __timers = new ViewTimers(this.__scope);
   /** 控件（只在生命周期钩子里的特殊情况用；平时写绑定表）。 */
   protected get ui(): UI { return todo('View.ui'); }
   /** 延时执行一次。 */
-  protected after(ms: number, handler: () => void): void { void ms; void handler; todo('定时器 after'); }
+  protected after(ms: number, handler: () => void): void { this.__timers.after(ms, handler); }
   /** 重复执行。 */
-  protected every(ms: number, handler: () => void): void { void ms; void handler; todo('定时器 every'); }
+  protected every(ms: number, handler: () => void): void { this.__timers.every(ms, handler); }
   /** 倒计时：每秒回调剩余毫秒数，到点调用 done。 */
-  protected countdown(endsAt: number, tick: (leftMs: number) => void, done: () => void): void { void endsAt; void tick; void done; todo('定时器 countdown'); }
+  protected countdown(endsAt: number, tick: (leftMs: number) => void, done: () => void): void { this.__timers.countdown(endsAt, tick, done); }
   /** 每帧执行。 */
-  protected onUpdate(handler: (deltaMs: number) => void): void { void handler; todo('定时器 onUpdate'); }
+  protected onUpdate(handler: (deltaMs: number) => void): void { this.__timers.onUpdate(handler); }
   /** 收听广播站的事件，关闭时自动取消。 */
   protected on<P>(event: EventDef<P>, handler: (payload: P) => void): void { this.__scope.add(bus.on(event, handler)); }
 }

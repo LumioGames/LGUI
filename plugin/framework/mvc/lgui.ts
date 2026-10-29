@@ -4,6 +4,7 @@ import type {InputMode, InputType, Layer, Orientation, ParamsOf, Readable, Resul
 import {todo} from './todo';
 import {createModel} from './model';
 import {bus, defineEvent} from './events';
+import {runtime, wallNow} from './runtime';
 import type {Model} from './model';
 
 /** 入口 main.ts 的定义。 */
@@ -187,9 +188,9 @@ export const lgui = {
   /** 时间。 */
   time: {
     /** 当前时间（毫秒，和服务器对齐过）。 */
-    now(): number { return todo('lgui.time.now'); },
+    now(): number { return wallNow(); },
     /** 设置和服务器的时间差。 */
-    setServerOffset(ms: number): void { void ms; todo('lgui.time.setServerOffset'); }
+    setServerOffset(ms: number): void { runtime().serverOffset = ms; }
   },
   /** 声明一个事件。 */
   defineEvent<P>(name: string): EventDef<P> { return defineEvent<P>(name); },

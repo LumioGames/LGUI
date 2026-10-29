@@ -1,0 +1,68 @@
+// 框架运行时：当前用的后端和工程配置。由 lgui 启动时（网页、测试、Unity）设置。
+import type {Backend} from '../core/index';
+import {LgRuntimeError} from '../core/index';
+
+/** 框架用到的工程配置（来自 .lgui/project.json）。 */
+export interface RuntimeConfig {
+  /** 工程名。 */
+  name: string;
+  /** 设计尺寸。 */
+  designSize: {landscape: {width: number; height: number}; portrait: {width: number; height: number}};
+  /** 方向。 */
+  orientation: 'both' | 'landscape' | 'portrait';
+  /** 语言列表。 */
+  languages: string[];
+  /** 默认语言。 */
+  defaultLanguage: string;
+  /** 按平台的「按键 → 动作」。 */
+  keyMap: Record<string, Record<string, string>>;
+  /** 界面缓存。 */
+  uiCache: {keepClosedViews: number};
+  /** 请求失败时统一弹提示。 */
+  requestErrorToast: boolean;
+  /** 请求超时（毫秒）。 */
+  requestTimeoutMs: number;
+  /** 默认占位图。 */
+  placeholder: string;
+  /** 按钮音效。 */
+  sounds: {click: string | null};
+}
+
+/** 默认配置（和 lgui init 生成的一样），测试里可以只改其中几项。 */
+export const defaultConfig: RuntimeConfig = {
+  name: 'lgui', designSize: {landscape: {width: 1920, height: 1080}, portrait: {width: 1080, height: 1920}}, orientation: 'both',
+  languages: ['zh-CN', 'en'], defaultLanguage: 'zh-CN', keyMap: {}, uiCache: {keepClosedViews: 0}, requestErrorToast: true,
+  requestTimeoutMs: 10000, placeholder: 'ui://Common/placeholder', sounds: {click: null}
+};
+
+interface Current {
+  backend: Backend;
+  config: RuntimeConfig;
+  /** 启动时的墙上时间和后端时钟，用来算 lgui.time.now()。 */
+  wallBase: number;
+  monoBase: number;
+  /** 和服务器的时间差（毫秒）。 */
+  serverOffset: number;
+}
+
+let current: Current | null = null;
+
+/** 内部用：设置当前后端。 */
+export function setRuntime(backend: Backend, config: RuntimeConfig, wallBase = Date.now()): void {
+  current = {backend, config, wallBase, monoBase: backend.platform.time.now(), serverOffset: 0};
+}
+
+/** 内部用：清掉（测试之间用）。 */
+export function clearRuntime(): void { current = null; }
+
+/** 内部用：当前运行时；框架还没启动时报 LGUI-RT-050。 */
+export function runtime(): Current {
+  if (!current) throw new LgRuntimeError('LGUI-RT-050', '框架还没启动。', '用 lgui dev 预览，或者在测试里先调用 lgui.testing.start(app)。');
+  return current;
+}
+
+/** 当前时间（毫秒，墙上时间，和服务器对齐过）。 */
+export function wallNow(): number {
+  const r = runtime();
+  return r.wallBase + (r.backend.platform.time.now() - r.monoBase) + r.serverOffset;
+}
