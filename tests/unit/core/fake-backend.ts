@@ -18,6 +18,7 @@ class FakeObject implements UIObject {
   enabled = true;
   touchable = true;
   rect: Rect = {x: 0, y: 0, width: 100, height: 100};
+  customData = '';
   readonly pointer = new Emitter<PointerInput>();
   constructor(readonly name: string) {}
   onPointer(handler: (event: PointerInput) => void): Unsubscribe { return this.pointer.on(handler); }
@@ -73,6 +74,8 @@ export function createFakeBackend(): Backend {
       return new FakeComponent(comp, `${pkg}/${comp}`) as unknown as UIComponent<Name>;
     },
     has: () => false,
+    imageSize: () => null,
+    createImage: url => new FakeObject(url),
     createContainer: name => new FakeComponent(name, ''),
     platform
   };

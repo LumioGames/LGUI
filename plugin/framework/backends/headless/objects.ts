@@ -21,6 +21,7 @@ export class HeadlessObject implements UIObject {
   enabled = true;
   touchable = true;
   rect: Rect = {x: 0, y: 0, width: 0, height: 0};
+  customData = '';
   parent: HeadlessComponent | null = null;
   readonly pointer = new Handlers<PointerInput>();
   constructor(readonly name: string, readonly kind: UIKind | 'container') {}
@@ -201,6 +202,7 @@ function buildChild(child: ChildDescriptor, lookup: Lookup): HeadlessObject {
     }
   }
   object.visible = p.visible;
+  object.customData = p.customData ?? '';
   object.enabled = p.enabled;
   object.touchable = p.touchable;
   const [x, y, width, height] = child.rect;
@@ -233,3 +235,11 @@ export function buildComponent(descriptor: ComponentDescriptor, lookup: Lookup, 
 }
 
 export {HeadlessLoader, HeadlessInput};
+
+/** 按地址建一张图片（ArtText 用）。 */
+export function buildImage(url: string, size: {width: number; height: number} | null): HeadlessObject {
+  const loader = new HeadlessLoader('', 'loader');
+  loader.url = url;
+  if (size) loader.rect = {x: 0, y: 0, width: size.width, height: size.height};
+  return loader;
+}

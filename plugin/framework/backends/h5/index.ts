@@ -3,7 +3,9 @@ import * as fgui from './vendor/fairygui.module.js';
 import type {Backend, BackendConfig, Platform, UIComponent} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
 import {createH5Platform} from './platform/index';
-import {setComponentName, wrapComponent} from './objects/index';
+import {setComponentName, wrap, wrapComponent} from './objects/index';
+
+const parseUrl = (url: string): [string, string] | null => { const m = /^ui:\/\/([^/]+)\/(.+)$/.exec(url); return m ? [m[1], m[2]] : null; };
 
 export function createH5Backend(): Backend {
   let platform: Platform | null = null;
@@ -38,6 +40,18 @@ export function createH5Backend(): Backend {
     has(packageName: string, componentName: string): boolean {
       const pkg = fgui.UIPackage.getByName(packageName);
       return pkg !== undefined && pkg.getItemByName(componentName) !== undefined;
+    },
+    imageSize(url: string) {
+      const parts = parseUrl(url);
+      const item = parts ? fgui.UIPackage.getByName(parts[0])?.getItemByName(parts[1]) : undefined;
+      return item ? {width: item.width, height: item.height} : null;
+    },
+    createImage(url: string) {
+      const loader = new fgui.GLoader();
+      loader.url = url;
+      const size = this.imageSize(url);
+      if (size) loader.setSize(size.width, size.height);
+      return wrap(loader);
     },
     createContainer(name: string): UIComponent {
       const native = new fgui.GComponent();

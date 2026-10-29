@@ -27,6 +27,7 @@ class H5Object implements UIObject {
   set visible(value: boolean) { this.native.visible = value; }
   get enabled(): boolean { return !this.native.grayed; }
   set enabled(value: boolean) { this.native.grayed = !value; this.native.element.style.pointerEvents = value ? '' : 'none'; }
+  get customData(): string { return this.native.data == null ? '' : String(this.native.data); }
   get touchable(): boolean { return this.native.touchable; }
   set touchable(value: boolean) { this.native.touchable = value; }
   get rect(): Rect { return {x: this.native.x, y: this.native.y, width: this.native.width, height: this.native.height}; }

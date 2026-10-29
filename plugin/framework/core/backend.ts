@@ -1,6 +1,6 @@
 // 接口层的后端：每个引擎实现一份（h5、headless、unity）。
 import type {Platform} from './platform';
-import type {UIComponent} from './ui';
+import type {UIComponent, UIObject} from './ui';
 
 /** 后端启动参数，来自工程配置。 */
 export interface BackendConfig {
@@ -28,6 +28,10 @@ export interface Backend {
   create<Name extends string>(packageName: string, componentName: string): UIComponent<Name>;
   /** 包里有没有这个组件（包要先加载）。换横竖版时用。 */
   has(packageName: string, componentName: string): boolean;
+  /** 包里一张图片的尺寸（地址写成 ui://包名/图片名，包要先加载）；没有这张图片返回 null。 */
+  imageSize(url: string): {width: number; height: number} | null;
+  /** 按地址创建一张图片（ArtText 用它拼字）。 */
+  createImage(url: string): UIObject;
   /** 创建一个空容器（UIManager 的层用它）。 */
   createContainer(name: string): UIComponent;
   /** 平台服务。 */

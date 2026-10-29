@@ -10,6 +10,7 @@ import {boot} from './boot';
 import {inputType} from './input/input-type';
 import type {UIManager} from './ui/manager';
 import {snapshot} from './snapshot';
+import {artTextOf} from './art-text';
 
 /** lgui test 注入的测试环境（由生成的 .lgui/build/test/env.ts 设置）。 */
 interface TestEnv {
@@ -92,6 +93,7 @@ class Harness implements TestHarness {
   text(path: string): string {
     const o = this.object(path);
     if ('title' in o) return (o as UIButton).title;
+    if ('componentName' in o && (o as UIComponent).componentName === 'Common/ArtText') return artTextOf(o as UIComponent) ?? '';
     if ('text' in o) return (o as UIText).text;
     throw new LgRuntimeError('LGUI-RT-111', `${path} 不是文字或按钮，读不了文字。`, '换一个文字控件的路径。');
   }
