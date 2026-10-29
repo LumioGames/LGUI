@@ -116,6 +116,15 @@ type Obj = {native: {element: HTMLElement}};
 type Pw = (op: string, ...args: number[] | string[]) => Promise<void>;
 const pw = (window as unknown as {__pw: Pw}).__pw;
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// 只收集诊断；不重写事件、时间、坐标或任何手势判定。
+const inputTrace: {browserTimeOrigin: number; dom: unknown[]; normalized: unknown[]} = {browserTimeOrigin: performance.timeOrigin, dom: [], normalized: []};
+(window as unknown as {__h5InputTrace: unknown}).__h5InputTrace = inputTrace;
+for (const type of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel']) window.addEventListener(type, event => {
+  const pointer = event as PointerEvent;
+  inputTrace.dom.push({type, pointerId: pointer.pointerId, pointerType: pointer.pointerType, x: pointer.clientX, y: pointer.clientY,
+    timestamp: pointer.timeStamp, timestampEpoch: performance.timeOrigin + pointer.timeStamp,
+    handledEpoch: performance.timeOrigin + performance.now(), trusted: pointer.isTrusted});
+}, true);
 // 控件中心在页面上的坐标。
 const center = (o: unknown) => { const r = (o as Obj).native.element.getBoundingClientRect(); return {x: r.x + r.width / 2, y: r.y + r.height / 2}; };
 const touchDrag = async (o: unknown, dx: number, dy: number, ms: number, steps: number) => { const p = center(o); await pw('touchDrag', p.x, p.y, dx * stage.scale, dy * stage.scale, ms, steps); await wait(50); };
@@ -134,7 +143,11 @@ const sim = {
 const createBackend = () => {
   const backend = createH5Backend();
   const init = backend.init.bind(backend);
-  backend.init = options => init({...options, uiBase: '/ui', i18nBase: '/i18n'});
+  backend.init = async options => {
+    await init({...options, uiBase: '/ui', i18nBase: '/i18n'});
+    backend.platform.input.onPointer(event => inputTrace.normalized.push({...event, epoch: performance.timeOrigin + event.time,
+      observedEpoch: performance.timeOrigin + performance.now(), scale: stage.scale}));
+  };
   return backend;
 };
 (globalThis as unknown as {__lguiTest: unknown}).__lguiTest = {createBackend, sim, deps, config, texts, current: null};
@@ -155,24 +168,39 @@ const createBackend = () => {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const {screen} = await caseScreen(ctx, name);
   const page = await browser.newPage({viewport: screen, hasTouch: true});
+  const trace = {name, nodeTimeOrigin: performance.timeOrigin, protocol: []};
+  ctx.h5Trace = trace;
+  let captured = false;
+  const captureTrace = async () => {
+    const browserTrace = await page.evaluate(() => window.__h5InputTrace);
+    if (browserTrace) Object.assign(trace, browserTrace);
+    else trace.captureError = 'h5 input trace was not initialized';
+    captured = true;
+  };
   try {
     const errors = [];
     page.on('pageerror', e => errors.push(String(e.message ?? e)));
     const cdp = await page.context().newCDPSession(page);
+    const inputCommand = async (method, params) => {
+      const entry = {method, params, sendEpoch: performance.timeOrigin + performance.now()};
+      trace.protocol.push(entry);
+      try { return await cdp.send(method, params); }
+      finally { entry.replyEpoch = performance.timeOrigin + performance.now(); }
+    };
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await page.exposeFunction('__pw', async (op, ...a) => {
       // Chromium owns the requested press duration. Separating down/up with a Node
       // timer lets a late driver response turn a 50ms click into a >300ms hold.
       if (op === 'press') {
         await page.mouse.move(a[0], a[1]);
-        await cdp.send('Input.synthesizeTapGesture', {x: a[0], y: a[1], duration: a[2], gestureSourceType: 'mouse'});
+        await inputCommand('Input.synthesizeTapGesture', {x: a[0], y: a[1], duration: a[2], gestureSourceType: 'mouse'});
       }
       else if (op === 'wheel') { await page.mouse.move(a[0], a[1]); await page.mouse.wheel(0, a[2]); }
       else if (op === 'key') await page.keyboard.press(a[0]);
       else if (op === 'viewport') { await page.setViewportSize({width: a[0], height: a[1]}); }
       else if (op === 'touchDrag') {
         const [x, y, dx, dy, ms, steps] = a;
-        const touch = (type, px, py) => cdp.send('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x: px, y: py, id: 1}]});
+        const touch = (type, px, py) => inputCommand('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x: px, y: py, id: 1}]});
         await touch('touchStart', x, y);
         for (let i = 1; i <= steps; i++) { await sleep(ms / steps); await touch('touchMove', x + (dx * i) / steps, y + (dy * i) / steps); }
         await touch('touchEnd');
@@ -181,8 +209,15 @@ const createBackend = () => {
     await page.goto(`http://127.0.0.1:${server.address().port}/conf.html`);
     await page.waitForFunction(() => window.__run, null, {timeout: 15000});
     const result = await page.evaluate(() => window.__run());
+    await captureTrace();
     if (errors.length) throw new Error(`h5 页面报错：${errors.join('；')}`);
     return result;
+  } catch (error) {
+    if (!captured) {
+      try { await captureTrace(); }
+      catch (captureError) { trace.captureError = String(captureError); }
+    }
+    throw error;
   } finally {
     await page.close();
     server.closeAllConnections();

@@ -69,3 +69,28 @@ test('h5 一致性输入：驱动响应迟到 400ms，不应把一次 50ms 点�
     assert.ok(delayedDown || delayedGesture, '必须实际覆盖原生输入完成后的驱动响应延迟');
   } finally { await browser.close(); }
 });
+
+test('h5 一致性输入：保留 CDP 应答、trusted DOM 与框架原始指针轨迹供失败定位', async t => {
+  const browser = await launchBrowser();
+  if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
+  let context;
+  try {
+    context = await conformanceProject();
+    const expected = await runHeadless(context, 'gestures');
+    const actual = await runH5(context, 'gestures', browser);
+    assert.deepEqual(actual, expected);
+    const trace = context.h5Trace;
+    assert.ok(trace, '运行器必须保留本次输入的完整诊断，不使用前一个用例的数据');
+    assert.equal(trace.name, 'gestures');
+    assert.ok(trace.protocol.length > 0);
+    assert.ok(trace.protocol.every(command => command.replyEpoch >= command.sendEpoch));
+    assert.ok(trace.dom.length > 0);
+    assert.ok(trace.dom.every(event => event.trusted && Number.isFinite(event.timestampEpoch) && Number.isFinite(event.handledEpoch)));
+    assert.ok(trace.normalized.length > 0);
+    assert.ok(trace.normalized.every(event => Number.isFinite(event.time) && Number.isFinite(event.epoch) && event.scale > 0));
+    assert.ok(trace.normalized.some(event => event.type === 'move' && event.pointerType === 'touch'));
+  } catch (error) {
+    console.error(`h5 input trace (gestures): ${JSON.stringify(context?.h5Trace)}`);
+    throw error;
+  } finally { await browser.close(); }
+});

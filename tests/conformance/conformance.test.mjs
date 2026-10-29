@@ -14,8 +14,13 @@ for (const name of cases) {
     try {
       const c = await project();
       const headless = await runHeadless(c, name);
-      const h5 = await runH5(c, name, browser);
-      assert.deepEqual(h5, headless);
+      try {
+        const h5 = await runH5(c, name, browser);
+        assert.deepEqual(h5, headless);
+      } catch (error) {
+        console.error(`h5 input trace (${name}): ${JSON.stringify(c.h5Trace)}`);
+        throw error;
+      }
     } finally {
       await browser.close();
     }

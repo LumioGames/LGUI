@@ -11,3 +11,5 @@ h5 的按压时长由 Chromium 原生手势输入执行，驱动响应迟到不�
 **加用例：** 在 `cases/` 里加一个文件，默认导出 `{ screen, run(t) }`，`run` 返回要比对的数据。界面从 `../src/modules/...` 引入，也可以在用例里写一个只给这个用例用的 View。运行：`node --test tests/conformance/`（需要 Chrome 或 Edge，没有时跳过）。
 
 Unity 在 S3-04 接进来。
+
+一致性失败时，测试仍按完整快照断言失败，并打印本次 `h5 input trace`：CDP 命令发出/应答时刻、trusted DOM 指针的原始 timestamp 与处理时刻、框架指针的设计坐标/原时间和缩放。各进程的 `performance.timeOrigin` 也保留，便于核对驱动应答时 DOM 是否已经消费事件；采样不修改输入、时钟或手势阈值，也不自动重试。
