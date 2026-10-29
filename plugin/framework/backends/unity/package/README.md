@@ -2,9 +2,11 @@
 
 Unity 6000.6 的 embedded package（`com.lumiogames.lgui`）。包含 C# 启动与平台服务，以及固定版本的 FairyGUI-unity。`lgui unity export` 的命令接入在 S3-03 完成；本目录本身可以复制进 Unity 工程的 `Packages/com.lumiogames.lgui/`。
 
+FairyGUI 除 `Assets/Scripts` 外，还包含同一固定提交必需的 Image、Text、BMFont 三个 shader，位于 `FairyGUI/Resources/Shaders/`；保留原 `.meta` 和许可。放入 Resources 以便 Unity 将它们纳入 Player。仅复制 C# 源码会缺少这三个 shader，使上游改用 `UI/Default`；这不能算正确的 LGUI 渲染。Unity 自带的 `UnityCG.cginc` 不随包复制。
+
 先按 PuerTS 官方说明准备 3.0.3 的 Core 和 V8 本地包。LGUI 不分发或安装 PuerTS。包的 UGUI 依赖提供 FairyGUI 所需的 TextMeshPro 程序集。
 
-启动场景挂 `LGUI.LGUIBoot`。它从 `Resources.Load<TextAsset>("Game/game")` 读取 `Assets/LGUI/Resources/Game/game.js.txt`，调用脚本的 `globalThis.__lguiStart()`，每帧先 `JsEnv.Tick()` 再通知 TypeScript。退出前先取消 TypeScript 监听、停止原生异步请求，再释放环境。脚本需提供 `__lguiFrame(deltaMs)`、`__lguiVisibility(visible)`、`__lguiDispose()` 生命周期钩子。`debugPort` 默认 `-1`；只有显式启用时才开放 PuerTS 调试器。
+启动场景挂 `LGUI.LGUIBoot`。它从 `Resources.Load<TextAsset>("Game/game.js")` 读取 `Assets/LGUI/Resources/Game/game.js.txt`：Unity 导入文本时只剥掉最后的 `.txt`，实际 TextAsset 名称保留 `.js`。之后调用脚本的 `globalThis.__lguiStart()`，每帧先 `JsEnv.Tick()` 再通知 TypeScript。退出前先取消 TypeScript 监听、停止原生异步请求，再释放环境。脚本需提供 `__lguiFrame(deltaMs)`、`__lguiVisibility(visible)`、`__lguiDispose()` 生命周期钩子。`debugPort` 默认 `-1`；只有显式启用时才开放 PuerTS 调试器。
 
 `Runtime/link.xml` 是供导出器复制的模板；Unity 不处理直接位于 package 内的 link.xml。构建 IL2CPP 前，必须将它复制到 `Assets/LGUI/link.xml`（S3-03 导出器负责），保留由 JS 动态调用的 FairyGUI、LGUI 平台桥和 PuerTS Core/V8 入口。只有包内这份文件时，不能声称已防止代码裁剪。
 

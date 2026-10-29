@@ -34,9 +34,9 @@ namespace LGUI
             {
                 Platform.Initialize(this);
                 UIObjectFactory.SetLoaderExtension(() => new LGUIResourceLoader());
-                var script = Resources.Load<TextAsset>("Game/game");
+                var script = Resources.Load<TextAsset>("Game/game.js");
                 if (script == null)
-                    throw new InvalidOperationException("Game/game.js.txt is missing. Run lgui unity export again.");
+                    throw new InvalidOperationException("Assets/LGUI/Resources/Game/game.js.txt is missing. Run lgui unity export again.");
 #pragma warning disable CS0618
                 environment = new JsEnv(new DefaultLoader(), debugPort, BackendType.V8, IntPtr.Zero, IntPtr.Zero);
 #pragma warning restore CS0618

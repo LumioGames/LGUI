@@ -38,3 +38,16 @@ test('Unity 包保留 FairyGUI 原始许可，并提供复制到 Assets 的动�
   assert.match(linker, /assembly fullname="com.tencent.puerts.core" preserve="all"/);
   assert.match(linker, /assembly fullname="com.tencent.puerts.v8" preserve="all"/, 'JsEnv 通过名字反射创建 V8 backend，不能裁剪它');
 });
+
+test('Unity 包携带 Image、Text、BMFont 所需的原始 shader 和 Unity meta', () => {
+  const shaders = path.join(packageRoot, 'FairyGUI/Resources/Shaders');
+  for (const kind of ['Image', 'Text', 'BMFont']) {
+    const file = path.join(shaders, `FairyGUI-${kind}.shader`);
+    assert.ok(fs.existsSync(file), `缺少 FairyGUI/${kind}，Unity 会误用 UI/Default`);
+    assert.match(fs.readFileSync(file, 'utf8'), new RegExp(`Shader "FairyGUI/${kind}"`));
+    assert.ok(fs.existsSync(`${file}.meta`), '原始 shader GUID 必须保留');
+  }
+  assert.ok(fs.existsSync(path.join(packageRoot, 'FairyGUI/Resources.meta')));
+  assert.ok(fs.existsSync(path.join(packageRoot, 'FairyGUI/Resources/Shaders.meta')));
+  assert.equal(fs.existsSync(path.join(shaders, 'UnityCG.cginc')), false, 'Unity 的内置 include 不随 LGUI 分发');
+});
