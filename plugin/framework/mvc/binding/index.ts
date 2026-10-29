@@ -13,6 +13,8 @@ import type {InputType} from '../types';
 import {bindList} from './list';
 import {bindPart} from './part';
 import {applyIcon} from './icon';
+import {pick} from '../pick';
+import {redDots, redDotState} from '../red-dot';
 
 /** 绑定时要知道的事。 */
 export interface BindContext {
@@ -102,7 +104,16 @@ function bindObject(component: UIComponent, key: string, target: UIObject, bindi
     if (!('max' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不能绑定 progress（它不是进度条）。`, '换成进度条组件，或者去掉 progress。');
     watch<number>(binding.progress, ctx, v => { const bar = target as UIProgress; bar.value = (Math.max(0, Math.min(100, v)) / 100) * bar.max; });
   }
-  if ('redDot' in binding) fail('LGUI-RT-001', '框架还没实现「红点」。', '这是开发中的功能，等待新版本，或者先不用它。');
+  if ('redDot' in binding) {
+    const dot = 'child' in target ? (target as UIComponent).child('redDot') : null;
+    if (!dot) fail('LGUI-UI-012', `${ctx.where} 的 ${key} 绑定了 redDot，但它里面没有名为 redDot 的子控件。`, '在 ui/ 里给这个控件放一个 Common/RedDot 的实例，名字叫 redDot（UI 开发规范第 10 节）。');
+    const path = String(binding.redDot);
+    watch<{lit: boolean; count: number}>(pick(redDots, () => redDotState(path), s => s), ctx, s => {
+      (dot as UIObject).visible = s.lit;
+      const count = (dot as UIComponent).child?.('count') as UIText | null;
+      if (count && 'text' in count) count.text = s.count > 0 ? String(s.count) : '';
+    });
+  }
   // 列表、部件
   if (listWords.some(word => word in binding)) {
     if (!('numItems' in target)) fail('LGUI-RT-063', `${ctx.where} 的 ${key} 不是列表，不能用 ${listWords.join('、')}。`, '换成列表控件。');

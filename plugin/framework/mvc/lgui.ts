@@ -11,6 +11,7 @@ import {createRequest} from './request';
 import {service} from './service';
 import {snapshot} from './snapshot';
 import * as common from './common-views';
+import {getRedDot, setRedDot} from './red-dot';
 import type {Entry} from './ui/manager';
 import {runtime, wallNow} from './runtime';
 import type {Model} from './model';
@@ -188,9 +189,9 @@ export const lgui = {
   /** 红点。 */
   redDot: {
     /** 点亮（true 或数字）或熄灭（false）。 */
-    set(path: string, value: boolean | number): void { void path; void value; todo('lgui.redDot.set'); },
+    set(path: string, value: boolean | number): void { setRedDot(path, value); },
     /** 当前值（数字是合计）。 */
-    get(path: string): boolean | number { void path; return todo('lgui.redDot.get'); }
+    get(path: string): boolean | number { return getRedDot(path); }
   },
   /** 取文本，占位符写成 {count}。 */
   t(key: string, params?: Record<string, string | number>): string { return t(key, params); },
