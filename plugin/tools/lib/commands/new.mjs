@@ -119,7 +119,7 @@ export class ${comp}ItemView extends ItemView<${comp}ItemUI, { label: string }> 
 }
 `);
   const pending = addTexts(projectRoot, project);
-  const rel = f => path.relative(projectRoot, f);
+  const rel = f => path.relative(projectRoot, f).split(path.sep).join('/');
   return {
     data: {ui: uiFiles.map(rel), code: tsFiles.map(rel), translate: pending},
     summary: [`按排布模式 ${flags.pattern} 生成了 ${pkg}/${comp}（横版和 @portrait 竖版）：`, ...[...uiFiles, ...tsFiles].map(f => `  ${rel(f)}`), ...(pending.length ? [`新界面的固定文字已经补进文本表，其他语言先填的是原文，记得翻译（${pending.length} 条）。`] : []), '接着：lgui check → lgui dev → lgui verify。']
@@ -158,7 +158,7 @@ export async function newModule({projectRoot, project, args, flags}) {
     fs.writeFileSync(files.test, fill(read('module/model-test.ts'), vars));
   }
   const pending = pattern ? addTexts(projectRoot, project) : [];
-  const rel = f => path.relative(projectRoot, f);
+  const rel = f => path.relative(projectRoot, f).split(path.sep).join('/');
   return {
     data: {code: Object.values(files).map(rel), ui: uiFiles.map(rel), translate: pending},
     summary: [`生成了模块 ${n.feature}${pattern ? `（排布模式 ${pattern}）` : ''}：`, ...[...Object.values(files), ...uiFiles].map(f => `  ${rel(f)}`), ...(pattern ? [] : ['没有界面：要界面就再运行 lgui new view <包>/<组件> --pattern <模式>，或者用 lgui new module <名字> --pattern <模式> 一次生成。']), ...(pending.length ? [`新界面的固定文字已经补进文本表，其他语言先填的是原文，记得翻译（${pending.length} 条）。`] : []), '接着：lgui check → lgui test → lgui dev。']

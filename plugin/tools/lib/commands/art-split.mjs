@@ -65,7 +65,7 @@ export async function artSplit({projectRoot, args, flags, cwd}) {
   fs.mkdirSync(path.dirname(artSrc), {recursive: true});
   fs.copyFileSync(source, artSrc);
   return {
-    data: {images: names.map((n, i) => ({name: n, id: ids[i], file: path.relative(projectRoot, targets[i]), url: `ui://${flags.pkg}/${n}`})), source: path.relative(projectRoot, artSrc), cell: {width: cellW, height: cellH}},
+    data: {images: names.map((n, i) => ({name: n, id: ids[i], file: path.relative(projectRoot, targets[i]).split(path.sep).join('/'), url: `ui://${flags.pkg}/${n}`})), source: path.relative(projectRoot, artSrc).split(path.sep).join('/'), cell: {width: cellW, height: cellH}},
     summary: [`把 ${path.basename(source)}（${meta.width}×${meta.height}）切成 ${cols}×${rows} 格，每格 ${cellW}×${cellH}，缩放到 ${width}×${height}：`, `  存进 ui/assets/${flags.pkg}/（${names.length} 张，已登记进 package.xml），原图放在 ui/art-src/${flags.pkg}/。`, '接着运行 lgui check。']
   };
 }

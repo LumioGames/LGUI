@@ -111,7 +111,7 @@ export async function runVerify(root, project, {size, view, lang} = {}) {
         await page.screenshot({path: image});
         const snapshot = await page.evaluate(() => window.__lgui.snapshot());
         fs.writeFileSync(path.join(out, `${name}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-        results.push({name, image: path.relative(root, image), viewport, errors});
+        results.push({name, image: path.relative(root, image).split(path.sep).join('/'), viewport, errors});
       } finally {
         await page.close();
       }

@@ -13,12 +13,22 @@ import {readUiModel, findComponent} from '../../plugin/tools/lib/generate/model.
 // 打开编辑器页面，等它从 ui/ 导入完。
 async function openEditor(context, server) {
   const page = await context.newPage();
+  const logs = [];
+  page.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') logs.push(`${m.type()}: ${m.text()}`.slice(0, 300)); });
+  page.on('pageerror', e => logs.push(`pageerror: ${e.message}`.slice(0, 300)));
   await page.goto(`${server.baseUrl}/?agent=1`);
   await page.waitForFunction(() => window.fairyEditorAgent, null, {timeout: 20000});
-  await page.waitForFunction(async () => {
-    const state = await window.fairyEditorAgent.request({method: 'state'});
-    return state.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession;
-  }, null, {timeout: 30000, polling: 500});
+  try {
+    await page.waitForFunction(async () => {
+      const state = await window.fairyEditorAgent.request({method: 'state'});
+      return state.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession;
+    }, null, {timeout: 30000, polling: 500});
+  } catch (error) {
+    // 没导入成功：把编辑器自己的状态、状态栏和页面报错带出来，方便在 CI 上查原因。
+    const state = await page.evaluate(() => window.fairyEditorAgent.request({method: 'state'})).catch(e => String(e));
+    const status = await page.evaluate(() => [...document.querySelectorAll('[data-fairy-editor-status], [data-fairy-editor-workspace-import]')].map(e => e.outerHTML.slice(0, 200))).catch(() => []);
+    throw new Error(`编辑器没有从 ui/ 导入：${error.message}\nstate: ${JSON.stringify(state).slice(0, 2500)}\nattrs: ${JSON.stringify(status)}\nlogs: ${logs.slice(-20).join(' | ')}`);
+  }
   await page.waitForTimeout(1000);
   return page;
 }

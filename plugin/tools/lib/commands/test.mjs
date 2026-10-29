@@ -112,5 +112,5 @@ export async function test({projectRoot, project}) {
   for (const r of failed) summary.push(`失败：${r.name}`);
   const errors = failed.map(r => new LgCliError('LGUI-CLI-041', `测试没通过：${r.name}。测试结束时的界面状态：${JSON.stringify(snapshots[r.name] ?? null)}`, {fix: '看上面的测试输出，按断言改代码或测试。'}));
   if (failed.length) summary.unshift(output.trim());
-  return {data: {files: files.map(f => path.relative(projectRoot, f)), passed, failed: failed.map(r => ({name: r.name, snapshot: snapshots[r.name] ?? null})), results}, summary, errors};
+  return {data: {files: files.map(f => path.relative(projectRoot, f).split(path.sep).join('/')), passed, failed: failed.map(r => ({name: r.name, snapshot: snapshots[r.name] ?? null})), results}, summary, errors};
 }
