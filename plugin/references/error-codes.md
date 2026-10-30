@@ -42,11 +42,13 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-072` | 随插件带的工具加载失败 | 插件不完整，重新安装 LGUI 插件 |
 | `LGUI-CLI-073` | 没找到 Chrome 或 Edge | 装一个 Chrome 或 Edge |
 | `LGUI-CLI-074` | 工程的 `devPort` 被占用 | 改 `devPort`，或者 `lgui dev --port <端口>` |
-| `LGUI-CLI-080` | `lgui art split` 的参数不对（大图找不到、`--grid` / `--size` 写法不对、缺 `--pkg` / `--names`、名字不合规范） | 照用法写：`lgui art split <大图> --grid 6x4 --size 128x128 --pkg <包> --names <名字>` |
-| `LGUI-CLI-081` | 名字的数量和格子数不一样，或者名字重复 | 每格一个不同的名字，按从左到右、从上到下 |
+| `LGUI-CLI-080` | `lgui art split` / `lgui art cut` 的参数不对（大图找不到、`--grid` / `--size` / `--scale` 写法不对、缺 `--pkg` / `--names`、名字不合规范、名字文件里的尺寸 / `9grid` / `tile` 写法不对） | 照用法写：`lgui art split <大图> --grid 6x4 --size 128x128 --pkg <包> --names <名字>`；`lgui art cut` 的名字文件写法见 ui-spec.md 第 5 节 |
+| `LGUI-CLI-081` | 名字的数量和格子数（`art cut`：找到的物件数）不一样，或者名字重复 | 每格一个不同的名字，按从左到右、从上到下；`art cut` 报错里列出了找到的物件，碎片用 `--gap` 并进去、杂点用 `--speck` 丢掉、空格子写 `EMPTY` |
 | `LGUI-CLI-082` | 要写的图片已经存在（不会覆盖） | 换名字，或者先删掉旧图片 |
 | `LGUI-CLI-083` | `--pkg` 写的包不存在 | 写一个已有的包名 |
-| `LGUI-CLI-084` | 读不了大图 | 用 PNG 或 JPG |
+| `LGUI-CLI-084` | 读不了大图 | 用 PNG 或 JPG（`art cut` 要透明底的 PNG） |
+| `LGUI-CLI-085` | `lgui art cut` 规整不了：按 `--scale` 缩放后放不进导出尺寸、比九宫格边距还小，或者整页没有固定尺寸的方向算不出缩放比例 | 去掉 `--scale` 自动算或改小；九宫格边距按导出尺寸写；全是九宫格的页写 `--scale` |
+| `LGUI-CLI-086` | `lgui art cut` 的平铺图（`tile`）左右接不上 | 让 AI 重画、要求左右无缝拼接，或者去掉 `tile` 当普通图片用 |
 | `LGUI-CLI-090` | 排布模式不存在 | 用 split、tabs、grid、dialog 之一 |
 | `LGUI-CLI-091` | 要生成的文件已经存在（不会覆盖） | 换一个名字，或者先删掉旧文件 |
 | `LGUI-CLI-092` | 工程里没有 `Common/Button`，排布模式要用它 | 用 `lgui init` 生成的 Common 包 |

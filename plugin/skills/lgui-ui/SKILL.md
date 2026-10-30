@@ -1,6 +1,6 @@
 ---
 name: lgui-ui
-description: "在 LGUI 工程里拼界面：按 UI 开发规范写 ui/ 里的 FairyGUI XML、用排布模式生成横竖两版、AI 出图后用 art split 拆图、加动效、在编辑器里和人一起改。要新做或修改界面的样子时用。"
+description: "在 LGUI 工程里拼界面：按 UI 开发规范写 ui/ 里的 FairyGUI XML、用排布模式生成横竖两版、AI 出图后用 art split / art cut 拆图、加动效、在编辑器里和人一起改。要新做或修改界面的样子时用。"
 license: MIT
 ---
 
@@ -20,6 +20,7 @@ license: MIT
 | 连功能骨架一起生成 | `lgui new module <名字> --pattern <模式>` |
 | 查现有组件和控件名 | `lgui ui list` |
 | AI 出的网格大图拆成小图 | `lgui art split <大图> --grid 6x4 --size 128x128 --pkg <包> --names <名字>`（原图放进 `ui/art-src/`） |
+| AI 出的图集页（物件漂过格线、大小不一、自由排布的九宫格零件）拆成小图 | `lgui art cut <整页图> --pkg <包> --names <名字文件>`：按透明区域找物件、整页统一缩放、去白边、九宫格重拼并写 `scale9grid`、检查平铺接缝，出一张检查图（规范第 5 节） |
 | 检查规范 | `lgui check`（`LGUI-UI-xxx`） |
 | 看效果 | `lgui dev`；截图 `lgui verify` |
 | 和人一起在编辑器里改 | `lgui editor`；编辑器开着时改已有控件的属性：`lgui editor props <组件> <控件> <属性>=<值> ...` |

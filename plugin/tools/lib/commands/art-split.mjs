@@ -6,14 +6,14 @@ import path from 'node:path';
 import {LgCliError} from '../errors.mjs';
 import {sharp} from '../vendor.mjs';
 
-const pair = (value, flag) => {
+export const pair = (value, flag) => {
   const m = /^(\d+)x(\d+)$/.exec(value ?? '');
   if (!m || Number(m[1]) < 1 || Number(m[2]) < 1) throw new LgCliError('LGUI-CLI-080', `--${flag} 要写成 宽x高 或 列x行，比如 6x4（现在是 ${value ?? '没写'}）。`, {fix: `写成 --${flag} 6x4。`});
   return [Number(m[1]), Number(m[2])];
 };
 
 /** 包里没用过的资源 ID：art 加 5 位数字。 */
-function nextIds(xml, count) {
+export function nextIds(xml, count) {
   const used = new Set([...xml.matchAll(/\bid="([a-z0-9]{8})"/g)].map(m => m[1]));
   const ids = [];
   for (let n = 0; ids.length < count; n++) {
