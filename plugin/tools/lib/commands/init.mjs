@@ -13,7 +13,8 @@ export function copyFramework(target) {
   fs.rmSync(target, {recursive: true, force: true});
   for (const part of frameworkParts) {
     const from = path.join(frameworkDir, part);
-    if (!fs.existsSync(from)) throw new LgCliError('LGUI-CLI-011', `插件里缺少框架文件 ${part}。`, {file: from, fix: '插件不完整，重新安装 LGUI 插件。'});
+    // 缺的是插件里的文件，不在工程里：路径写进说明，不写 file
+    if (!fs.existsSync(from)) throw new LgCliError('LGUI-CLI-011', `插件里缺少框架文件 framework/${part}（插件目录 ${path.dirname(frameworkDir)}）。`, {fix: '插件不完整，重新安装 LGUI 插件。'});
     fs.cpSync(from, path.join(target, part), {recursive: true});
   }
 }

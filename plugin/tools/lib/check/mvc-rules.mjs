@@ -3,11 +3,13 @@ import path from 'node:path';
 import {finding, where, viewClasses, literalValue, objectProps} from './program.mjs';
 import {members} from '../generate/types.mjs';
 import {findComponent} from '../generate/model.mjs';
+import {soundProblem} from './ui-rules.mjs';
 
-const VIEW_STATICS = ['component', 'layer', 'fullScreen', 'params', 'result', 'inputMode', 'bothOrientations'];
+const VIEW_STATICS = ['component', 'layer', 'fullScreen', 'params', 'result', 'inputMode', 'bothOrientations', 'music'];
 const LAYERS = ['hud', 'page', 'popup', 'modal', 'toast'];
-const DISPLAY = ['text', 'visible', 'enabled', 'icon', 'progress', 'page', 'redDot'];
-const ACTIONS = ['click', 'doubleClick', 'hold', 'drag', 'swipe', 'pinch', 'wheel', 'hover', 'change', 'select'];
+const DISPLAY = ['text', 'visible', 'enabled', 'icon', 'progress', 'page', 'redDot', 'value', 'playing', 'play', 'dragData', 'dragIcon'];
+const ACTIONS = ['click', 'doubleClick', 'hold', 'drag', 'swipe', 'pinch', 'wheel', 'hover', 'change', 'select', 'input', 'drop', 'done'];
+const TRANSITION_WORDS = ['playing', 'play', 'done'];
 const LIST = ['items', 'item', 'key', 'selected'];
 const OTHER = ['view', 'lockWhilePending', 'visibleOn', 'placeholder'];
 const WORDS = [...DISPLAY, ...ACTIONS, ...LIST, ...OTHER];
@@ -22,10 +24,23 @@ function roleOf(file) {
   return null;
 }
 
-export function mvcRules({ts, root, files, model, ui}) {
+/** this.ui 开头的写法：this.ui.title、this.ui['header.count'].text。 */
+function fromThisUi(ts, expr) {
+  for (let e = expr; ts.isPropertyAccessExpression(e) || ts.isElementAccessExpression(e); e = e.expression) {
+    if (ts.isPropertyAccessExpression(e) && e.name.text === 'ui' && e.expression.kind === ts.SyntaxKind.ThisKeyword) return true;
+  }
+  return false;
+}
+
+export function mvcRules({ts, checker, root, files, model}) {
   const out = [];
   const add = (code, node, message, fix, level) => out.push(finding(code, message, fix, {...where(root, node), level}));
-  const exportedComponents = new Set(model.packages.flatMap(p => p.components.filter(c => c.exported).map(c => c.fullName)));
+  // 标识符指向工程自己（src/、tests/）里的声明就不是平台全局对象：同名的变量、参数、import 都不算。
+  const own = new Set(files);
+  const isGlobal = node => {
+    const symbol = ts.isShorthandPropertyAssignment(node.parent) ? checker.getShorthandAssignmentValueSymbol(node.parent) : checker.getSymbolAtLocation(node);
+    return !(symbol?.declarations ?? []).some(d => own.has(d.getSourceFile()));
+  };
 
   for (const sf of files) {
     const rel = path.relative(root, sf.fileName).split(path.sep).join('/');
@@ -43,12 +58,14 @@ export function mvcRules({ts, root, files, model, ui}) {
     if (views.length > 1) add('LGUI-MVC-017', views[1].node, `${rel} 里写了 ${views.length} 个 View，一个文件只写一个。`, '把每个 View 放进自己的文件。');
 
     // 逐个节点检查
+    const viewNodes = new Set(views.map(v => v.node));
+    const inView = node => { for (let n = node.parent; n; n = n.parent) if (viewNodes.has(n)) return true; return false; };
     const visit = node => {
       // MVC-001 平台全局对象
       if (ts.isIdentifier(node) && FORBIDDEN_GLOBALS.includes(node.text)) {
         const parent = node.parent;
-        const isPropertyName = (ts.isPropertyAccessExpression(parent) && parent.name === node) || (ts.isPropertyAssignment(parent) && parent.name === node) || ts.isPropertyDeclaration(parent) || ts.isMethodDeclaration(parent) || ts.isParameter(parent) || ts.isVariableDeclaration(parent) || ts.isImportSpecifier(parent) || ts.isShorthandPropertyAssignment(parent);
-        if (!isPropertyName) add('LGUI-MVC-001', node, `用了平台全局对象 ${node.text}。游戏代码不直接用浏览器或引擎的 API。`, '改用 lgui 提供的接口：网络用 lgui.platform.net，存储用 lgui.platform.storage，定时器写在 View 里用 this.after / this.every。');
+        const isMemberName = (ts.isPropertyAccessExpression(parent) && parent.name === node) || (ts.isQualifiedName(parent) && parent.right === node);
+        if (!isMemberName && isGlobal(node)) add('LGUI-MVC-001', node, `用了平台全局对象 ${node.text}。游戏代码不直接用浏览器或引擎的 API。`, '改用 lgui 提供的接口：网络用 lgui.platform.net，存储用 lgui.platform.storage，定时器写在 View 里用 this.after / this.every。');
       }
       // MVC-001 import
       if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
@@ -89,6 +106,11 @@ export function mvcRules({ts, root, files, model, ui}) {
         || (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && ['setXY', 'setSize', 'setPosition'].includes(node.expression.name.text))) {
         add('LGUI-MVC-015', node, '代码里写了坐标或尺寸。布局只在 ui/ 里定义。', '在 ui/ 里用关联、列表的自动排布来适配，代码里不改位置和大小。');
       }
+      // MVC-020 View 里直接改控件属性（坐标尺寸归 MVC-015）：旋转、换语言重建组件后就丢了
+      else if (inView(node) && ts.isBinaryExpression(node) && node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment && node.operatorToken.kind <= ts.SyntaxKind.LastAssignment
+        && (ts.isPropertyAccessExpression(node.left) || ts.isElementAccessExpression(node.left)) && fromThisUi(ts, node.left.expression) && !(ts.isPropertyAccessExpression(node.left) && LAYOUT_PROPS.includes(node.left.name.text))) {
+        add('LGUI-MVC-020', node, `View 里直接改了控件属性 ${node.left.getText(sf)}。旋转屏幕、换语言时组件会重建，这样改的值会丢。`, '写进绑定表（比如 visible: pick(…)），由 Model 驱动。', 'warning');
+      }
       ts.forEachChild(node, visit);
     };
     visit(sf);
@@ -109,6 +131,11 @@ export function mvcRules({ts, root, files, model, ui}) {
         if (!LAYERS.includes(layer)) add('LGUI-MVC-004', view.statics.get('layer'), `${view.name} 的 static layer 不是 5 层之一。`, `用 ${LAYERS.join('、')} 之一。`);
       }
       if (isView && view.statics.has('inputMode') && !['ui', 'game', 'all'].includes(literalValue(ts, view.statics.get('inputMode').initializer))) add('LGUI-MVC-004', view.statics.get('inputMode'), `${view.name} 的 static inputMode 只能是 ui、game、all。`, '改成其中一个，或者不写。');
+      if (isView && view.statics.has('music')) {
+        const music = literalValue(ts, view.statics.get('music').initializer);
+        const problem = typeof music === 'string' ? soundProblem(model, music) : '要写成字符串 ui://包名/音效名';
+        if (problem) add('LGUI-MVC-004', view.statics.get('music'), `${view.name} 的 static music 不对：${problem}。`, "写成 static music = 'ui://<包>/<音效名>';，音效是 mp3，登记在那个包的 package.xml 里。");
+      }
       const component = typeof componentName === 'string' ? findComponent(model, componentName) : null;
       if (typeof componentName === 'string' && (!component || !component.exported)) {
         add(component ? 'LGUI-UI-019' : 'LGUI-MVC-004', componentDecl, component ? `${view.name} 用的组件 ${componentName} 没有导出。` : `${view.name} 的 static component 是 ${componentName}，ui/ 里没有这个组件。`, component ? '在 package.xml 里给它写 exported="true"。' : '用 lgui ui list 查看组件名。');
@@ -120,9 +147,12 @@ export function mvcRules({ts, root, files, model, ui}) {
       // 绑定表
       const binds = objectProps(ts, view.bind) ?? [];
       const memberMap = component ? members(component).result : new Map();
+      // 动效名也能当键（和控制器一样）
+      const transitions = new Set((component?.transitions ?? []).map(t => typeof t === 'string' ? t : t?.name));
       for (const entry of binds) {
+        const isTransition = transitions.has(entry.key) || memberMap.get(entry.key)?.kind === 'transition';
         // MVC-005 键在组件里存在
-        if (component && !memberMap.has(entry.key)) add('LGUI-MVC-005', entry.node, `${view.name} 的绑定表里写了 ${entry.key}，但 ${componentName} 里没有这个控件或控制器。`, '用 lgui ui list 查看真实的名字。');
+        if (component && !memberMap.has(entry.key) && !isTransition) add('LGUI-MVC-005', entry.node, `${view.name} 的绑定表里写了 ${entry.key}，但 ${componentName} 里没有这个控件、控制器或动效。`, '用 lgui ui list 查看真实的名字。');
         const member = memberMap.get(entry.key);
         const words = objectProps(ts, entry.value);
         if (!words) continue;
@@ -130,6 +160,8 @@ export function mvcRules({ts, root, files, model, ui}) {
           // MVC-006 词表
           if (!WORDS.includes(w.key)) { add('LGUI-MVC-006', w.node, `${view.name} 的 ${entry.key} 用了词表以外的词 ${w.key}。`, '能用的词见 mvc-spec.md 第 6.4 节。'); continue; }
           if (member?.kind === 'controller' && !['page', 'change'].includes(w.key)) add('LGUI-MVC-006', w.node, `${entry.key} 是控制器，只能用 page 和 change，不能用 ${w.key}。`, '控制器只写 page 和 change。');
+          if (isTransition && !TRANSITION_WORDS.includes(w.key)) add('LGUI-MVC-006', w.node, `${entry.key} 是动效，只能用 ${TRANSITION_WORDS.join('、')}，不能用 ${w.key}。`, '动效写 playing: pick(…)、play: pick(…) 或 done: () => xxxController.方法()。');
+          if (member && !isTransition && member.kind !== 'movieclip' && TRANSITION_WORDS.includes(w.key)) add('LGUI-MVC-006', w.node, `${entry.key} 不是动效，不能用 ${w.key}。`, 'playing、play、done 只写在动效名（ui/ 里的 transition）上；序列帧动画只用 playing。');
           // MVC-007 显示类的值
           if (DISPLAY.includes(w.key) && w.key !== 'redDot' && w.value) {
             const v = w.value;
@@ -168,7 +200,6 @@ export function mvcRules({ts, root, files, model, ui}) {
       }
     }
   }
-  void ui; void exportedComponents;
   return out;
 }
 
@@ -210,10 +241,28 @@ export function usedTextKeys({ts, root, files}) {
         if ((callee === 'lgui.t' || callee === 'lgui.toast') && first) out.push(...keysIn(first));
         if (callee === 'lgui.confirm' && first && ts.isObjectLiteralExpression(first)) for (const p of first.properties) if (ts.isPropertyAssignment(p) && ts.isStringLiteral(p.initializer)) out.push({key: p.initializer.text, loc: where(root, p.initializer)});
       }
-      if (ts.isPropertyAssignment(node) && node.name.getText(sf) === 'hint' && ts.isStringLiteral(node.initializer)) out.push({key: node.initializer.text, loc: where(root, node.initializer)});
       ts.forEachChild(node, visit);
     };
     visit(sf);
+    // View 的 keys 表里的 hint（别处的 hint 字段不是文本键）
+    for (const view of viewClasses(ts, sf)) {
+      for (const k of objectProps(ts, view.keys) ?? []) {
+        const hint = (objectProps(ts, k.value) ?? []).find(p => p.key === 'hint');
+        if (hint?.value && ts.isStringLiteral(hint.value)) out.push({key: hint.value.text, loc: where(root, hint.value)});
+      }
+    }
+  }
+  return out;
+}
+
+/** 写了 static fullScreen = true 的 View 用的组件（给 UI-064 用）：[{ component, loc }]。 */
+export function fullScreenViews({ts, root, files}) {
+  const out = [];
+  for (const sf of files) {
+    for (const view of viewClasses(ts, sf)) {
+      const component = literalValue(ts, view.statics.get('component')?.initializer);
+      if (view.kind === 'View' && typeof component === 'string' && literalValue(ts, view.statics.get('fullScreen')?.initializer) === true) out.push({component, loc: where(root, view.node)});
+    }
   }
   return out;
 }

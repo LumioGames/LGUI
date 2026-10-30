@@ -7,6 +7,7 @@ import {bus} from './events';
 import {Scope} from './scope';
 import {ViewTimers} from './timers';
 import {applyBindings} from './binding/index';
+import {ViewMotion, motionOf} from './binding/transition';
 
 type Table = Record<string, Record<string, unknown> | undefined>;
 
@@ -16,6 +17,8 @@ abstract class ViewBase<UI> {
   readonly __scope = new Scope();
   /** 内部用：这个界面的定时器。 */
   readonly __timers = new ViewTimers(this.__scope);
+  /** 内部用：这个界面的动效（被盖住时暂停，关闭时停掉）。 */
+  readonly __motion = new ViewMotion();
   /** 内部用：当前绑定的组件。 */
   __component: UIComponent | null = null;
   /** 内部用：当前这一次绑定的清理清单（换版重新绑定时只清这一份）。 */
@@ -28,7 +31,7 @@ abstract class ViewBase<UI> {
     const component = this.__component;
     if (!component) throw new LgRuntimeError('LGUI-RT-065', `${this.constructor.name} 还没打开或已经关闭，不能用 this.ui。`, '只在生命周期钩子里用 this.ui。');
     return new Proxy({}, {
-      get: (_, key) => typeof key === 'string' ? component.child(key) ?? component.controller(key) ?? undefined : undefined
+      get: (_, key) => typeof key === 'string' ? component.child(key) ?? component.controller(key) ?? component.transition(key) ?? undefined : undefined
     }) as UI;
   }
 
@@ -38,7 +41,11 @@ abstract class ViewBase<UI> {
     this.__component = component;
     const scope = new Scope();
     this.__bindScope = scope;
-    applyBindings(component, this.bind as Table, {owner: options.owner ?? this, scope, isActive: options.isActive ?? (() => true), item: options.item, where: this.constructor.name});
+    const owner = options.owner ?? this;
+    applyBindings(component, this.bind as Table, {owner, scope, isActive: options.isActive ?? (() => true), item: options.item, where: this.constructor.name});
+    // 所在的界面正被盖住（换版、列表新出现的子项）：新组件里自动播放的动效也先停着。
+    const motion = motionOf(owner);
+    if (motion?.isPaused) motion.pause(component);
   }
 
   /** 内部用：解绑。 */
@@ -48,10 +55,23 @@ abstract class ViewBase<UI> {
     this.__component = null;
   }
 
-  /** 内部用：彻底清理（解绑、取消定时器和收听）。 */
+  /** 内部用：彻底清理（解绑、停掉动效、取消定时器和收听）。 */
   __dispose(): void {
     this.__unmount();
+    this.__motion.stop();
     this.__scope.dispose();
+  }
+
+  /** 内部用：被盖住时暂停定时器和动效。 */
+  __pause(): void {
+    this.__timers.pause();
+    this.__motion.pause(this.__component);
+  }
+
+  /** 内部用：露出来时恢复定时器和动效。 */
+  __resume(): void {
+    this.__motion.resume();
+    this.__timers.resume();
   }
 
   /** 内部用：绑定和清理清单里一共登记了多少项（给调试快照用）。 */
@@ -85,6 +105,8 @@ export abstract class View<UI> extends ViewBase<UI> {
   static inputMode?: InputMode;
   /** 全屏又没有竖版时写 true。 */
   static bothOrientations?: boolean;
+  /** 背景音乐（ui://包名/声音名）：栈里最上面写了 music 的已打开界面决定放哪首。 */
+  static music?: string;
   /** 绑定表。 */
   bind: Bind<UI> = {};
   /** 按键表。 */
@@ -112,12 +134,12 @@ export abstract class PartView<UI> extends ViewBase<UI> {
   bind: Bind<UI> = {};
 }
 
-const viewStatics = ['component', 'layer', 'fullScreen', 'params', 'result', 'inputMode', 'bothOrientations'];
+const viewStatics = ['component', 'layer', 'fullScreen', 'params', 'result', 'inputMode', 'bothOrientations', 'music'];
 const layers: readonly Layer[] = ['hud', 'page', 'popup', 'modal', 'toast'];
 const ownStatics = (cls: object): string[] => Object.getOwnPropertyNames(cls).filter(name => !['length', 'name', 'prototype'].includes(name));
 
-/** 内部用：打开界面前检查 View 的 7 项固定信息（lgui check 会提前查出来）。 */
-export function validateViewClass(cls: object & {name: string; prototype: object; component?: unknown; layer?: unknown; inputMode?: unknown}): void {
+/** 内部用：打开界面前检查 View 的 8 项固定信息（lgui check 会提前查出来）。 */
+export function validateViewClass(cls: object & {name: string; prototype: object; component?: unknown; layer?: unknown; inputMode?: unknown; music?: unknown}): void {
   const isItemOrPart = cls.prototype instanceof ItemView || cls.prototype instanceof PartView;
   const allowed = isItemOrPart ? ['component'] : viewStatics;
   for (const name of ownStatics(cls)) {
@@ -129,5 +151,6 @@ export function validateViewClass(cls: object & {name: string; prototype: object
   if (!isItemOrPart) {
     if (!layers.includes(cls.layer as Layer)) throw new LgRuntimeError('LGUI-RT-060', `${cls.name} 缺少必填的 static layer，或者不是 5 层之一。`, `写成 static layer = 'page' as const;（能用：${layers.join('、')}）`);
     if (cls.inputMode !== undefined && !['ui', 'game', 'all'].includes(cls.inputMode as string)) throw new LgRuntimeError('LGUI-RT-060', `${cls.name} 的 static inputMode 只能是 ui、game、all。`, '改成其中一个，或者不写。');
+    if (cls.music !== undefined && (typeof cls.music !== 'string' || !/^ui:\/\/[A-Z][A-Za-z0-9]*\/[^/\s]+$/.test(cls.music))) throw new LgRuntimeError('LGUI-RT-060', `${cls.name} 的 static music 写法不对（${String(cls.music)}）。`, "写成 static music = 'ui://Common/bgm';（ui/ 包里登记的声音），或者不写。");
   }
 }

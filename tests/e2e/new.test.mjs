@@ -18,8 +18,9 @@ test('lgui new module --pattern：四种模式生成后 check、test、verify �
     assert.equal(r.ok, true, JSON.stringify(r.errors));
     assert.ok(r.data.ui.some(f => f.endsWith('@portrait.xml')), `${pattern} 要有竖版`);
   }
+  // 新界面的固定文字在别的语言里先填原文，只有「还没翻」的警告（LGUI-UI-062）
   const check = JSON.parse((await run(['check', '--json'], root)).stdout);
-  assert.deepEqual(check.data.findings.map(f => `${f.code} ${f.file}:${f.line} ${f.message}`), []);
+  assert.deepEqual(check.data.findings.filter(f => f.code !== 'LGUI-UI-062').map(f => `${f.code} ${f.file}:${f.line} ${f.message}`), []);
   const tests = JSON.parse((await run(['test', '--json'], root)).stdout);
   assert.equal(tests.ok, true, JSON.stringify(tests.errors));
   assert.deepEqual(tests.data.failed, []);

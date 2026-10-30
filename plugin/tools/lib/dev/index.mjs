@@ -1,5 +1,5 @@
 // lgui dev：生成界面包和类型 → 打包 → 本地服务（只监听 127.0.0.1）→ 监听 ui/、src/、i18n/ 的改动，自动刷新页面。
-// 不提供任何写文件的接口。
+// 不提供任何写文件的接口；Host 头不是 127.0.0.1:<端口> 的请求一律 403（挡住 DNS 重绑定）。
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
@@ -14,7 +14,7 @@ import {openInBrowser} from '../browser.mjs';
 import {copyFramework} from '../commands/init.mjs';
 
 const shell = fs.readFileSync(fileURLToPath(new URL('./shell.html', import.meta.url)));
-const types = {'.js': 'text/javascript; charset=utf-8', '.map': 'application/json', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.xml': 'application/octet-stream'};
+const types = {'.js': 'text/javascript; charset=utf-8', '.map': 'application/json', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.xml': 'application/octet-stream', '.mp3': 'audio/mpeg'};
 
 /** 返回 .lgui/build/web/ 下的生成物（/ui/ 是界面包）；只读，不在里面就 404。 */
 export function serveBuilt(root, url, res) {
@@ -79,7 +79,9 @@ export async function startDev(root, project, {port = project.devPort, log = () 
   }
 
   // 本地服务
+  let host = ''; // 127.0.0.1:<端口>，开始监听后才知道
   const server = http.createServer((req, res) => {
+    if (req.headers.host !== host) { res.writeHead(403).end('forbidden'); return; }
     const url = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (url === '/__lgui/events') {
       res.writeHead(200, {'content-type': 'text/event-stream', 'cache-control': 'no-cache', connection: 'keep-alive'});
@@ -105,7 +107,8 @@ export async function startDev(root, project, {port = project.devPort, log = () 
     await context?.dispose();
     throw error;
   }
-  const url = `http://127.0.0.1:${server.address().port}/`;
+  host = `127.0.0.1:${server.address().port}`;
+  const url = `http://${host}/`;
 
   // 监听文件：ui/ 的改动等 200 毫秒合成一次再重新生成；src/、i18n/ 的改动重新打包。
   const watchers = [];

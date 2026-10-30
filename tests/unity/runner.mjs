@@ -98,6 +98,11 @@ const sim = {
   drag: (_b: unknown,o: unknown,dx: number,dy: number) => move(o,dx,dy,400,10),
   swipe: (_b: unknown,o: unknown,dx: number,dy: number) => move(o,dx,dy,80,4),
   async pinch() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接双指缩放输入。'); },
+  async dragTo() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接拖放输入（t.dragTo）。'); },
+  async type() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接输入框打字（t.type）。'); },
+  async setValue() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接拖动滑动条（t.setValue）。'); },
+  async choose() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接下拉框选择（t.choose）。'); },
+  async setSafeArea() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接安全区模拟（t.setSafeArea）。'); },
   async wheel(_b: unknown,o: unknown,dy: number) { await rendered();const p=center(o);native.Wheel(p.x,p.y,0,dy);await wait(50); },
   async key(_b: unknown,key: string) { await rendered();native.Key(key);await wait(50); },
   async setScreen(_b: unknown,width: number,height: number) {

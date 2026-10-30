@@ -1,19 +1,21 @@
 // 多语言：从 ui/ 提取用户能看到的固定文字；按文本表生成 FairyGUI 的翻译文件。
-// 键名：<包>/<组件>/<控件名>（竖版和横版共用一个键）。FairyGUI 翻译文件里的名字：<包ID><组件ID>-<元素ID>[-prompt]。
+// 键名：<包>/<组件>/<控件名>（竖版和横版共用一个键，原文取横版的）。FairyGUI 翻译文件里的名字：<包ID><组件ID>-<元素ID>[-prompt]。
 import fs from 'node:fs';
 import path from 'node:path';
 import {LgCliError} from '../errors.mjs';
 
 const xmlEscape = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** 提取：[{ key, text, targets: [{ name }] }]，name 是翻译文件里的名字。 */
+/** 提取：[{ key, text, targets: [{ name }], portrait? }]，name 是翻译文件里的名字。
+ *  text 取横版的文字（横版没写字时取竖版的）；两版的字不一样时 portrait 是 { text, landscapeText, file }（lgui check 警告）。 */
 export function extractTexts(model) {
   const byKey = new Map();
-  const add = (key, text, name) => {
-    if (!text) return;
+  const add = (key, text, name, component) => {
     let entry = byKey.get(key);
-    if (!entry) { entry = {key, text, targets: []}; byKey.set(key, entry); }
-    entry.targets.push({name});
+    if (!entry) { entry = {key, targets: []}; byKey.set(key, entry); }
+    entry[component.name.endsWith('@portrait') ? 'portraitText' : 'landscapeText'] = text;
+    if (component.name.endsWith('@portrait')) entry.portraitFile = component.file;
+    if (text) entry.targets.push({name});
   };
   for (const pkg of model.packages) {
     for (const component of pkg.components) {
@@ -23,19 +25,22 @@ export function extractTexts(model) {
         if (!child.name || !child.id) continue;
         const key = `${base}/${child.name}`;
         const name = `${owner}-${child.id}`;
-        if (['text', 'richtext'].includes(child.tag)) add(key, child.attrs.text ?? '', name);
+        if (['text', 'richtext'].includes(child.tag)) add(key, child.attrs.text ?? '', name, component);
         if (child.tag === 'inputtext') {
-          add(key, child.attrs.text ?? '', name);
-          add(`${key}@prompt`, child.attrs.prompt ?? '', `${name}-prompt`);
+          add(key, child.attrs.text ?? '', name, component);
+          add(`${key}@prompt`, child.attrs.prompt ?? '', `${name}-prompt`, component);
         }
         if (child.tag === 'component') {
           const button = child.children.find(node => node.tag === 'Button');
-          if (button) add(key, button.attrs.title ?? '', name);
+          if (button) add(key, button.attrs.title ?? '', name, component);
         }
       }
     }
   }
-  return [...byKey.values()];
+  return [...byKey.values()].filter(e => e.landscapeText || e.portraitText).map(({key, targets, landscapeText, portraitText, portraitFile}) => ({
+    key, text: landscapeText || portraitText, targets,
+    ...(landscapeText !== undefined && portraitText !== undefined && landscapeText !== portraitText ? {portrait: {text: portraitText, landscapeText, file: portraitFile}} : {})
+  }));
 }
 
 /** 读一种语言的文本表；不存在返回 {}。 */
@@ -45,7 +50,7 @@ export function readTable(root, language) {
   try {
     return JSON.parse(fs.readFileSync(file, 'utf8'));
   } catch (error) {
-    throw new LgCliError('LGUI-CLI-031', `文本表 i18n/${language}.json 不是合法的 JSON：${error.message}`, {file, fix: '改成合法的 JSON。'});
+    throw new LgCliError('LGUI-CLI-031', `文本表 i18n/${language}.json 不是合法的 JSON：${error.message}`, {file: `i18n/${language}.json`, fix: '改成合法的 JSON。'});
   }
 }
 

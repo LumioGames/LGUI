@@ -1,5 +1,6 @@
 // 接口层的 UI 对象：各后端的 FairyGUI 运行时统一成这一套写法。
 // 只在框架内部用；游戏代码通过绑定表和钩子里的 this.ui 用到这些类型。
+import type {WheelInput} from './platform';
 
 /** 取消订阅。所有事件订阅都返回它。 */
 export type Unsubscribe = () => void;
@@ -48,6 +49,12 @@ export interface UIObject {
   readonly customData: string;
   /** 订阅落在这个对象上的原始指针事件，手势由框架识别。 */
   onPointer(handler: (event: PointerInput) => void): Unsubscribe;
+  /** 内部用：设计尺寸里 (x, y) 这一点上最上面那个接收输入的控件在自己里面第几层（0 是自己），不在自己里面是 -1。拖放找落点用。 */
+  hitDepth(x: number, y: number): number;
+  /** 订阅落在这个对象（或它里面的控件）上的滚轮事件，坐标是设计尺寸里的坐标。 */
+  onWheel(handler: (event: WheelInput) => void): Unsubscribe;
+  /** 内部用：是不是真的显示着：自己和各级父组件都显示，也没有被齿轮（gearDisplay）或组藏起来。 */
+  readonly shown: boolean;
 }
 
 /** 组件：可以按路径找子控件、控制器和动效。Name 是组件在 ui/ 里的「包/组件」名。 */
@@ -60,6 +67,8 @@ export interface UIComponent<Name extends string = string> extends UIObject {
   controller(name: string): UIController | null;
   /** 内部用：按名字找动效，找不到返回 null。 */
   transition(name: string): UITransition | null;
+  /** 内部用：组件自己的全部动效（不含子组件的）。 */
+  allTransitions(): readonly UITransition[];
   /** 内部用：直接子控件的名字，按显示顺序。 */
   childNames(): readonly string[];
   /** 内部用：把一个对象加到最上面（UIManager 往层里放界面时用）。 */
@@ -85,7 +94,7 @@ export interface UIRichText extends UIText {}
 export interface UIInput extends UIText {
   /** 没有输入时显示的提示文字。 */
   promptText: string;
-  /** 用户改了文字时调用，参数是新文字。 */
+  /** 用户改了文字时调用，参数是新文字；输入法还在选字时不调用，选完调用一次。 */
   onChange(handler: (text: string) => void): Unsubscribe;
 }
 
@@ -97,6 +106,10 @@ export interface UIButton extends UIComponent {
   icon: string;
   /** 是否选中（单选、多选按钮）。 */
   selected: boolean;
+  /** ui/ 里给这个按钮设的点击音效（实例上写的优先，其次是按钮组件的），没设是空字符串。 */
+  readonly sound: string;
+  /** ui/ 里设的点击音效音量（0–1，没设是 1；0 表示这个按钮不出声）。 */
+  readonly soundVolume: number;
 }
 
 /** 图片。fill 用于进度显示（比如长按进度、冷却）。 */
@@ -157,11 +170,15 @@ export interface UIController<Page extends string = string> {
 export interface UITransition {
   /** 动效名。 */
   readonly name: string;
-  /** 播放；放完时 Promise 完成。times 是播放次数，-1 表示一直循环。 */
-  play(options?: { times?: number; delay?: number }): Promise<void>;
+  /** ui/ 里写的设置：是否自动播放、播放次数（-1 一直循环）、自动播放前等多久（毫秒）。 */
+  readonly settings: {autoPlay: boolean; times: number; delay: number};
+  /** 是否正在播放（暂停着、还在等 delay 也算）。 */
+  readonly playing: boolean;
+  /** 从头播放 times 次（-1 一直循环），先等 delay 毫秒；正常放完时调用 onComplete，被 stop、重播或销毁打断时不调用。 */
+  play(options?: {times?: number; delay?: number}, onComplete?: () => void): void;
   /** 停止，停在最后一帧。 */
   stop(): void;
-  /** 暂停或恢复（界面被盖住时由框架调用）。 */
+  /** 暂停或恢复（界面被盖住时由框架调用）；没在播放时不起作用。 */
   setPaused(paused: boolean): void;
 }
 
@@ -171,6 +188,70 @@ export interface UIProgress extends UIComponent {
   value: number;
   /** 最大值。 */
   max: number;
+}
+
+/** 标签（扩展类型 Label）：标题文字加图标，不能点选。 */
+export interface UILabel extends UIComponent {
+  /** 标题文字（子控件 title）。 */
+  title: string;
+  /** 图标地址（子控件 icon）。 */
+  icon: string;
+}
+
+/** 滑动条（扩展类型 Slider）。 */
+export interface UISlider extends UIComponent {
+  /** 当前值（滑动条自己的单位，在 min 和 max 之间）。 */
+  value: number;
+  /** 最小值。 */
+  min: number;
+  /** 最大值。 */
+  max: number;
+  /** 用户拖动或点击改了值时调用（代码设置不调用），参数是新值。 */
+  onChange(handler: (value: number) => void): Unsubscribe;
+}
+
+/** 下拉框（扩展类型 ComboBox）：点开以后从弹出的列表里选一项。 */
+export interface UIComboBox extends UIComponent {
+  /** 每一项显示的文字。换了以后选中项还在范围内就保留，否则变成 -1。 */
+  items: readonly string[];
+  /** 选中项的序号，没有选中时是 -1。 */
+  selectedIndex: number;
+  /** 现在显示的文字（选中项的文字，没有选中时是空字符串）。 */
+  readonly text: string;
+  /** 用户选了一项时调用（代码设置不调用），参数是序号。 */
+  onChange(handler: (index: number) => void): Unsubscribe;
+}
+
+/** 序列帧动画（movieclip）。 */
+export interface UIMovieClip extends UIObject {
+  /** 是否在播放。 */
+  playing: boolean;
+  /** 当前帧。 */
+  frame: number;
+}
+
+/** 树的一个节点。 */
+export interface UITreeNode {
+  /** 认出同一个节点（整棵树里唯一）。 */
+  key: string | number;
+  /** 子节点；空数组表示叶子。 */
+  children: readonly UITreeNode[];
+}
+
+/** 树（列表写了 treeView="true"）：一层层的节点，每个节点用列表的子项组件显示。 */
+export interface UITree extends UIObject {
+  /** 换一整棵树。同一个 key 的节点保留展开状态，新节点是展开的。 */
+  setNodes(nodes: readonly UITreeNode[]): void;
+  /** 显示一个节点时调用：节点的 key 和它的子项组件（子项组件会复用）。 */
+  nodeRenderer: ((key: string | number, item: UIComponent) => void) | null;
+  /** 选中节点的 key，没有选中时是 null；设置时先展开它的各级父节点。 */
+  selectedKey: string | number | null;
+  /** 用户点了一个节点时调用，参数是 key。 */
+  onClickNode(handler: (key: string | number) => void): Unsubscribe;
+  /** 现在显示着的节点数（收起的节点下面的不算）。 */
+  readonly numItems: number;
+  /** 内部用：显示着的第 index 个节点的子项组件，没有时返回 null。 */
+  itemAt(index: number): UIComponent | null;
 }
 
 /** 图形（矩形、圆等）。 */
@@ -201,6 +282,16 @@ export interface UIKinds {
   progress: UIProgress;
   /** 图形。 */
   graph: UIGraph;
+  /** 标签。 */
+  label: UILabel;
+  /** 滑动条。 */
+  slider: UISlider;
+  /** 下拉框。 */
+  combobox: UIComboBox;
+  /** 序列帧动画。 */
+  movieclip: UIMovieClip;
+  /** 树。 */
+  tree: UITree;
 }
 
 /** 控件类型名。 */

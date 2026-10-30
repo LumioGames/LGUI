@@ -1,10 +1,11 @@
-// lgui editor：在 127.0.0.1 的随机端口上提供编辑器，带实时会话中转，用 Chrome 或 Edge 打开（地址带 ?agent=1）。
+// lgui editor：在 127.0.0.1 的固定端口（工程配置 editorPort）上提供编辑器，带实时会话中转，用 Chrome 或 Edge 打开（地址带 ?agent=1）。
 // lgui editor props <组件> <控件> <属性>=<值> ...：编辑器开着时，修改已有控件的属性（编辑器的 setDisplayNodeProps），编辑器里马上变。
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import {LgCliError} from '../errors.mjs';
 import {editorDir} from '../paths.mjs';
+import {readProject} from '../project.mjs';
 import {openInBrowser} from '../browser.mjs';
 import {startEditorServer} from '../editor/relay.mjs';
 import {readUiModel, findComponent} from '../generate/model.mjs';
@@ -12,14 +13,14 @@ import {uiProjectPath} from '../generate/index.mjs';
 
 export const connectionPath = root => path.join(root, '.lgui', 'build', 'editor-connection.json');
 
-/** 启动编辑器服务（测试也用它）。 */
-export async function startEditor(root) {
+/** 启动编辑器服务（测试也用它）。端口用工程配置的 editorPort。 */
+export async function startEditor(root, {port = readProject(root).editorPort} = {}) {
   if (!fs.existsSync(path.join(editorDir, 'index.html'))) throw new LgCliError('LGUI-CLI-104', `插件里没有编辑器（${editorDir}）。`, {fix: '重新安装插件；在 LGUI 仓库里开发时运行 node scripts/build-editor/build.mjs。'});
-  return startEditorServer({editorDir, projectDir: path.join(root, 'ui'), connectionFile: connectionPath(root)});
+  return startEditorServer({editorDir, projectDir: path.join(root, 'ui'), connectionFile: connectionPath(root), port});
 }
 
-export async function editor({projectRoot, flags}) {
-  const server = await startEditor(projectRoot);
+export async function editor({projectRoot, project, flags}) {
+  const server = await startEditor(projectRoot, {port: project.editorPort});
   const url = `${server.baseUrl}/?agent=1`;
   const stop = () => { server.close().finally(() => process.exit(0)); };
   process.once('SIGINT', stop);
@@ -31,7 +32,7 @@ export async function editor({projectRoot, flags}) {
       `编辑器地址：${url}`,
       opened ? '已经用 Chrome / Edge 打开。' : (flags['no-open'] ? '没有自动打开浏览器（--no-open）。' : '没找到 Chrome 或 Edge，请手动打开上面的地址。'),
       '编辑器每次打开都从本工程的 ui/ 重新读取，显示的总是 ui/ 里的最新内容。',
-      `要在编辑器里保存回 ui/：第一次在编辑器里点「文件 → 从文件夹导入…」，选择 ${path.join(projectRoot, 'ui')} 并允许读写（只要做一次）。`,
+      `要在编辑器里保存回 ui/：在编辑器里点「文件 → 从文件夹导入…」，选择 ${path.join(projectRoot, 'ui')} 并允许读写。端口固定（工程配置 editorPort），浏览器一般会记住这个授权；浏览器忘了时（比如清了网站数据、换了端口），要再导入一次，不然保存只存在浏览器里，不会写回 ui/。`,
       '编辑器开着时，Agent 可以用 lgui editor props 修改控件属性。按 Ctrl+C 停止。'
     ],
     errors: []
@@ -119,6 +120,6 @@ export async function editorProps({projectRoot, args}) {
   if (!result.ok) throw new LgCliError('LGUI-CLI-103', `编辑器拒绝了修改：${result.error?.code} ${result.error?.message ?? ''}`, {fix: result.error?.code === 'stale_write' ? '编辑器里的内容刚变过，再运行一次。' : '按编辑器的提示改属性值。'});
   return {
     data: {component: componentName, control, props, revision: result.data?.identity?.revision ?? null},
-    summary: [`已经在编辑器里修改 ${componentName} 的 ${control}：${pairs.join(' ')}`, '在编辑器里保存（Ctrl+S）后写回 ui/。']
+    summary: [`已经在编辑器里修改 ${componentName} 的 ${control}：${pairs.join(' ')}`, '在编辑器里保存（Ctrl+S）后写回 ui/（编辑器要已经授权了 ui/ 文件夹，见 lgui editor 的提示）。']
   };
 }

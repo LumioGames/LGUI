@@ -61,6 +61,7 @@ namespace LGUI
             requests.Clear();
             foreach (var clip in downloadedSounds) if (clip != null) UnityEngine.Object.Destroy(clip);
             downloadedSounds.Clear();
+            StopAudio();
             owner = null;
             inputMode = "all";
         }

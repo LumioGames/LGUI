@@ -19,11 +19,11 @@ export function readTexts(root, languages) {
   const texts = {};
   for (const lang of languages) {
     const file = path.join(root, 'i18n', `${lang}.json`);
-    if (!fs.existsSync(file)) throw new LgCliError('LGUI-CLI-031', `缺少文本表 i18n/${lang}.json（工程配置 languages 里有 ${lang}）。`, {file, fix: `新建 i18n/${lang}.json，或者从 languages 里去掉 ${lang}。`});
+    if (!fs.existsSync(file)) throw new LgCliError('LGUI-CLI-031', `缺少文本表 i18n/${lang}.json（工程配置 languages 里有 ${lang}）。`, {file: `i18n/${lang}.json`, fix: `新建 i18n/${lang}.json，或者从 languages 里去掉 ${lang}。`});
     try {
       texts[lang] = JSON.parse(fs.readFileSync(file, 'utf8'));
     } catch (error) {
-      throw new LgCliError('LGUI-CLI-031', `文本表 i18n/${lang}.json 不是合法的 JSON：${error.message}`, {file, fix: '改成合法的 JSON。'});
+      throw new LgCliError('LGUI-CLI-031', `文本表 i18n/${lang}.json 不是合法的 JSON：${error.message}`, {file: `i18n/${lang}.json`, fix: '改成合法的 JSON。'});
     }
   }
   return texts;
@@ -88,8 +88,12 @@ export function bundleErrors(error, root) {
   })));
 }
 
-/** 网页用的 esbuild 选项。 */
-export function webBuildOptions(root, entry) {
+/**
+ * 网页用的 esbuild 选项。dev：开发模式（lgui dev、lgui verify 都是）。框架靠 esbuild 的 define 知道是不是开发模式：
+ * LGUI_DEV = true 时，代码或界面写错了（缺文本键等）直接抛错；正式构建传 dev: false（LGUI_DEV = false），只记 error 日志、界面照常显示。
+ * lgui test 也定义 LGUI_DEV = true（commands/test.mjs）。
+ */
+export function webBuildOptions(root, entry, {dev = true} = {}) {
   return {
     entryPoints: [entry],
     bundle: true,
@@ -98,7 +102,7 @@ export function webBuildOptions(root, entry) {
     sourcemap: true,
     outfile: path.join(root, '.lgui', 'build', 'web', 'app.js'),
     alias: {lgui: frameworkEntry(root)},
-    define: {LGUI_DEV: 'true'},
+    define: {LGUI_DEV: String(dev)},
     keepNames: true, // 界面类名会出现在调试快照和报错里，不能被改名
     absWorkingDir: root,
     logLevel: 'silent'

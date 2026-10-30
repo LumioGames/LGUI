@@ -1,4 +1,4 @@
-import { View, pick } from 'lgui';
+import { View, pick, lgui } from 'lgui';
 import type { Bind, Keys } from 'lgui';
 import type { {{COMP}}UI } from 'lgui/ui';
 import { {{model}} } from './{{NAME}}Model';
@@ -16,7 +16,7 @@ export class {{COMP}}View extends View<{{COMP}}UI> {
       items: pick({{model}}, s => s.items), item: {{COMP}}ItemView, key: (it: {{NAME}}Item) => it.id,
       selected: pick({{model}}, s => s.selectedId), select: id => {{controller}}.select(String(id)),
     },
-    detail: { text: pick({{model}}, s => s.items.find(it => it.id === s.selectedId)?.label ?? ''), visible: pick({{model}}, s => s.selectedId !== null) },
+    detail: { text: pick({{model}}, s => s.items.find(it => it.id === s.selectedId)?.n ?? 0, n => (n ? lgui.t('{{feature}}.item', { n }) : '')), visible: pick({{model}}, s => s.selectedId !== null) },
     closeButton: { click: () => {{controller}}.close() },
   };
   keys: Keys = { back: 'close' };

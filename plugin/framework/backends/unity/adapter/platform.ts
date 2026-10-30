@@ -1,8 +1,8 @@
 // Unity 平台服务：原始输入来自 FairyGUI Stage，其余能力调用 LGUI.Platform。
-import type {KeyInput, LogEntry, NetResponse, Platform, PointerInput, Rect, Unsubscribe, WheelInput} from '../../../core/index';
+import type {KeyInput, LogLevel, Logger, NetResponse, Platform, PointerInput, Rect, Unsubscribe, WheelInput} from '../../../core/index';
 import {LgRuntimeError, notImplemented} from '../../../core/index';
 import type {NativeEventContext, NativeLoader} from './native-ui';
-import type {UnityPlatformOptions} from './native-platform';
+import type {NativePlatformHost, UnityPlatformOptions} from './native-platform';
 
 class Handlers<T> {
   private readonly handlers = new Set<(value: T) => void>();
@@ -37,6 +37,34 @@ function keyName(context: NativeEventContext): string | null {
   return code === 0 ? null : `KeyCode${code}`;
 }
 
+// 写成 Unity 控制台里的一行：[分类] 事件名  错误码  说明  → 怎么改  数据  上下文；错误带堆栈。
+function text(value: unknown): string {
+  if (value instanceof Error) return value.stack ?? `${value.name}: ${value.message}`;
+  try { return JSON.stringify(value, (_key, item: unknown) => item instanceof Error ? `${item.name}: ${item.message}` : item) ?? String(value); }
+  catch { return String(value); }
+}
+
+/** Unity 的默认日志出口：写到 Unity 控制台（debug、info 用 Debug.Log，warn 用 LogWarning，error 用 LogError）。 */
+export function unityLogger(host: NativePlatformHost, alive: () => void, category = 'game', context: object = {}): Logger {
+  const write = (level: LogLevel, event: string, data: unknown, error: unknown): void => {
+    alive();
+    const value = typeof data === 'function' ? (data as () => unknown)() : data;
+    const framework = value as {code?: unknown; message?: unknown; fix?: unknown} | undefined;
+    const head = framework && typeof framework.message === 'string' ? `  ${String(framework.code ?? '')}  ${framework.message}${framework.fix ? `  → ${String(framework.fix)}` : ''}` : '';
+    const extra = [value, Object.keys(context).length ? context : undefined, error].filter(x => x !== undefined).map(text);
+    host.Log(level, [`[${category}] ${event}${head}`, ...extra].join('  '));
+  };
+  return {
+    enabled: () => true,
+    debug: (event, data) => write('debug', event, data, undefined),
+    info: (event, data) => write('info', event, data, undefined),
+    warn: (event, data, error) => write('warn', event, data, error),
+    error: (event, error, data) => write('error', event, data, error),
+    child: (extra, sub) => unityLogger(host, alive, sub ? `${category}.${sub}` : category, {...context, ...extra})
+  };
+}
+
+const unregistered = (url: string): LgRuntimeError => new LgRuntimeError('LGUI-RT-170', `声音 ${url} 没有登记在 ui/ 的包里。`, '把 mp3 放进包目录，在 package.xml 里登记成 <sound … exported="true"/>，地址写成 ui://包名/声音名。');
 const imageError = (url: string, detail = ''): LgRuntimeError => new LgRuntimeError('LGUI-RT-025', `图片 ${url} 加载失败。${detail}`, '确认地址对、资源存在；远程图片需要可访问的 HTTP(S) 地址。');
 const requestError = (url: string, detail: string): LgRuntimeError => new LgRuntimeError('LGUI-RT-101', `HTTP 请求 ${url} 失败：${detail}`, '确认服务器地址、网络连接和请求参数。');
 
@@ -49,7 +77,6 @@ export function createUnityPlatform(options: UnityPlatformOptions): {platform: P
   const keys = new Handlers<KeyInput>();
   const wheels = new Handlers<WheelInput>();
   const resizes = new Handlers<{width: number; height: number}>();
-  const logs: LogEntry[] = [];
   const pressed = new Map<number, string>();
   const activePointers = new Map<number, PointerInput>();
   const pending = new Set<() => void>();
@@ -169,17 +196,23 @@ export function createUnityPlatform(options: UnityPlatformOptions): {platform: P
         return rect;
       }
     },
-    audio: {play(url, options = {}) { alive(); host.PlayAudio(url, options.volume ?? 1); }},
-    locale: {systemLanguages: () => [host.SystemLanguage]},
-    log: {
-      write(level, message) {
+    // 声音由 LGUI.Platform 自己的 AudioSource 放；没登记的 ui:// 地址先在这里报 LGUI-RT-170（和 h5 一样），网络声音下载失败由 C# 记 warn。
+    audio: {
+      play(url, volume, onError) {
         alive();
-        logs.push({level, message, time: host.Now});
-        if (logs.length > 200) logs.shift();
-        host.Log(level, message);
+        if (url.startsWith('ui://') && !fgui.UIPackage.GetItemByURL(url)) { onError(unregistered(url)); return; }
+        try { host.PlayAudio(url, volume); } catch (error) { onError(error); }
       },
-      recent: () => [...logs]
+      music(url, volume, fadeMs, onError) {
+        alive();
+        const missing = url !== null && url.startsWith('ui://') && !fgui.UIPackage.GetItemByURL(url);
+        try { host.PlayMusic(url === null || missing ? '' : url, volume, fadeMs); } catch (error) { onError(error); return; }
+        if (missing) onError(unregistered(url));
+      },
+      setPaused(paused) { alive(); host.SetAudioPaused(paused); }
     },
+    locale: {systemLanguages: () => [host.SystemLanguage]},
+    log: unityLogger(host, alive),
     net: {
       fetch(url, init = {}): Promise<NetResponse> {
         alive();
@@ -221,7 +254,7 @@ export function createUnityPlatform(options: UnityPlatformOptions): {platform: P
       if (next.width !== previousSize.width || next.height !== previousSize.height) { previousSize = next; resizes.emit(next); }
       // 与 h5 相同：错误照常报告，但一个界面的回调不能终止其余回调或下一帧。
       // 异常不能越过 PuerTS 的帧桥，否则 LGUIBoot 会按宿主启动失败关闭整个环境。
-      frame.emit(deltaMs, error => platform.log.write('error', `LGUI-RT-160 Unity 每帧回调出错：${error instanceof Error ? error.stack ?? error.message : String(error)}  → 按堆栈修正该回调；其他每帧回调继续运行。`));
+      frame.emit(deltaMs, error => platform.log.error('lgui_rt_160', error, {code: 'LGUI-RT-160', message: 'Unity 每帧回调出错。', fix: '按堆栈修正该回调；其他每帧回调继续运行。'}));
     },
     visibility(value) {
       if (disposed) return;

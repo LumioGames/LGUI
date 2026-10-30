@@ -116,10 +116,10 @@ test('换屏幕尺寸、假时钟、存储、音频和日志', async () => {
   backend.platform.storage.set('save', '{"gold":1}');
   assert.equal(backend.platform.storage.get('save'), '{"gold":1}');
   assert.deepEqual([...backend.state.storage.keys()], ['lgui:demo:save']);
-  backend.platform.audio.play('ui://Common/click', {volume: 0.5});
-  assert.deepEqual(backend.state.sounds, [{url: 'ui://Common/click', volume: 0.5}]);
-  backend.platform.log.write('warn', '小心');
-  assert.equal(backend.state.logs.at(-1).message, '小心');
+  backend.platform.audio.play('https://x/click.mp3', 0.5, () => {});
+  assert.deepEqual(backend.state.sounds, [{url: 'https://x/click.mp3', volume: 0.5}]);
+  backend.platform.log.warn('careful', {n: 1});
+  assert.deepEqual([backend.state.logs.at(-1).event, backend.state.logs.at(-1).data], ['careful', {n: 1}]);
   assert.throws(() => backend.platform.net.fetch('/x'), e => e.code === 'LGUI-RT-001');
 });
 

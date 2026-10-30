@@ -8,10 +8,12 @@ import {writeFixture} from './fixture.mjs';
 import {generateProjectTypes} from '../../plugin/tools/lib/generate/index.mjs';
 
 const framework = fileURLToPath(new URL('../../plugin/framework', import.meta.url));
-let cached = null;
+const cached = {};
 
-export async function loadFramework() {
-  if (cached) return cached;
+// production：按正式构建打包（LGUI_DEV 定义成 false）；默认和 lgui dev、lgui test 一样是开发模式。
+export async function loadFramework({production = false} = {}) {
+  const mode = production ? 'production' : 'development';
+  if (cached[mode]) return cached[mode];
   const entry = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-fw-')), 'entry.ts');
   const f = rel => JSON.stringify(path.join(framework, rel));
   fs.writeFileSync(entry, [
@@ -28,15 +30,20 @@ export async function loadFramework() {
     `export {HeadlessLoader} from ${f('backends/headless/objects.ts')};`,
     `export {boot} from ${f('mvc/boot.ts')};`,
     `export {setTexts, pickLanguage} from ${f('mvc/i18n.ts')};`,
-    `export {clearRedDots} from ${f('mvc/red-dot.ts')};`
+    `export {clearRedDots} from ${f('mvc/red-dot.ts')};`,
+    `export {devMode} from ${f('mvc/log.ts')};`,
+    `export {MUSIC_FADE_MS} from ${f('mvc/sound.ts')};`
   ].join('\n'));
-  cached = await importTs(entry);
-  return cached;
+  cached[mode] = await importTs(entry, {define: production ? {LGUI_DEV: 'false'} : {}});
+  return cached[mode];
 }
 
+/** 框架自己用到的文本键（lgui init 的文本表里都有）。 */
+export const frameworkTexts = {'lgui.back': '返回', 'lgui.requestFailed': '请求失败（{code}）'};
+
 // 用 fixture（或给定工程根目录）的 headless 描述建一个后端，并设成当前运行时。
-export async function headless({root = writeFixture(), config = {}} = {}) {
-  const fw = await loadFramework();
+export async function headless({root = writeFixture(), config = {}, production = false} = {}) {
+  const fw = await loadFramework({production});
   await generateProjectTypes(root);
   const dir = path.join(root, '.lgui/build/headless');
   const packages = fs.readdirSync(dir).map(file => JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8')));
@@ -47,9 +54,11 @@ export async function headless({root = writeFixture(), config = {}} = {}) {
   return {fw, backend, root, deps};
 }
 
-// 再加上 UIManager（不调用 app.start）。
+// 再加上 UIManager（不调用 app.start）。文本表默认只有框架自己的键；app 可以带 platform（换日志、声音）。
 export async function started(options = {}) {
   const ctx = await headless(options);
-  const ui = await ctx.fw.boot(ctx.backend, {backend: 'headless', start() {}}, {...ctx.fw.defaultConfig, ...(options.config ?? {})}, ctx.deps, {wallBase: 1_700_000_000_000});
+  const texts = options.texts ?? {'zh-CN': {...frameworkTexts}};
+  const app = {backend: 'headless', start() {}, ...(options.app ?? {})};
+  const ui = await ctx.fw.boot(ctx.backend, app, {...ctx.fw.defaultConfig, ...(options.config ?? {})}, ctx.deps, {wallBase: 1_700_000_000_000, texts, language: options.language});
   return {...ctx, ui, sim: ctx.fw.sim};
 }

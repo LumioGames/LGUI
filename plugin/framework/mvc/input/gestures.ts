@@ -117,7 +117,7 @@ export function recognize(object: UIObject, input: InputService, time: TimeServi
     }
     const track = tracks.get(e.pointerId);
     if (!track || e.type === 'down') return;
-    if (e.type === 'cancel') { if (dragging) handlers.drag?.({phase: 'end', x: track.x, y: track.y, dx: track.x - track.startX, dy: track.y - track.startY}); if (pinching) handlers.pinch?.({phase: 'end', scale: 1}); reset(); return; }
+    if (e.type === 'cancel') { if (dragging) handlers.drag?.({phase: 'end', x: track.x, y: track.y, dx: track.x - track.startX, dy: track.y - track.startY, cancelled: true}); if (pinching) handlers.pinch?.({phase: 'end', scale: 1}); reset(); return; }
     track.x = e.x;
     track.y = e.y;
     track.samples.push({x: e.x, y: e.y, time: e.time});

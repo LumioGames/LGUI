@@ -1,6 +1,8 @@
 // 多语言：文本表、lgui.t、格式化。文本表是 i18n/<语言>.json，扁平的「键 → 文字」；
 // 要按数量变化的文字写成按复数形式分开的对象：{"one": "…", "other": "…"}，用参数 count 选。
-import {runtime} from './runtime';
+import {LgRuntimeError} from '../core/index';
+import {hasRuntime} from './runtime';
+import {fault} from './log';
 
 /** 一种语言的文本表。 */
 export type TextTable = Record<string, string | Partial<Record<PluralForm, string>>>;
@@ -44,18 +46,13 @@ function pluralForm(language: string, count: number): PluralForm {
   return count === 1 ? 'one' : 'other';
 }
 
-const reported = new Set<string>();
-
-/** 取文本，占位符写成 {count}。找不到键时记一条 LGUI-RT-090，显示键名。 */
+/** 取文本，占位符写成 {count}。找不到键是写错了（LGUI-RT-090）：开发和测试里抛错；正式构建里记一条 error（同一个键只记一次），显示键名。 */
 export function t(key: string, params: Record<string, string | number> = {}): string {
   const table = state.tables[state.language] ?? {};
   let entry = table[key];
   if (entry === undefined) {
-    const id = `${state.language}:${key}`;
-    if (!reported.has(id)) {
-      reported.add(id);
-      try { runtime().backend.platform.log.write('error', `LGUI-RT-090  文本表 i18n/${state.language}.json 里没有键 ${key}。  → 在每种语言的文本表里加上它（lgui check 会列出缺的键）。`); } catch { /* 框架没启动时（纯 Model 单测）只返回键名 */ }
-    }
+    if (!hasRuntime()) return key; // 框架没启动（纯 Model 单测）：还没有文本表，只返回键名
+    fault(new LgRuntimeError('LGUI-RT-090', `文本表 i18n/${state.language}.json 里没有键 ${key}。`, '在每种语言的文本表里加上它（lgui check 会列出缺的键）。'), {key, language: state.language}, `${state.language}:${key}`);
     return key;
   }
   if (typeof entry !== 'string') {

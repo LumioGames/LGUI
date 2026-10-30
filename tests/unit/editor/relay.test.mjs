@@ -1,4 +1,4 @@
-// lgui editor 的中转：令牌、来源、只给指定标签页、连接文件权限；editor props 的属性换算和报错。
+// lgui editor 的中转：令牌、来源、Host 头、只给指定标签页、只转发 query 和 transact、连接文件权限、固定端口；editor props 的属性换算和报错。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -6,7 +6,8 @@ import http from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import {startEditorServer} from '../../../plugin/tools/lib/editor/relay.mjs';
-import {toEditorProps, connectionPath} from '../../../plugin/tools/lib/commands/editor.mjs';
+import {toEditorProps, connectionPath, startEditor} from '../../../plugin/tools/lib/commands/editor.mjs';
+import {readProject} from '../../../plugin/tools/lib/project.mjs';
 import {run} from '../cli/helpers.mjs';
 
 const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-relay-'));
@@ -79,9 +80,15 @@ test('中转：连接文件 0600、只听 127.0.0.1；没令牌 401、别的来�
     const b = await fakeBrowser(server, 'tab-b', rpc => ({ok: true, data: {echo: rpc.method, tab: 'b'}}));
     const clients = (await request(server.baseUrl, '/__lgui_editor/clients', {headers: auth})).body.data.clients.map(c => c.clientId).sort();
     assert.deepEqual(clients, ['tab-a', 'tab-b']);
-    const reply = await request(server.baseUrl, '/__lgui_editor/rpc', {method: 'POST', headers: auth, body: {clientId: 'tab-b', request: {method: 'state'}}});
-    assert.deepEqual(reply.body, {ok: true, data: {echo: 'state', tab: 'b'}});
-    assert.equal((await request(server.baseUrl, '/__lgui_editor/rpc', {method: 'POST', headers: auth, body: {clientId: 'nobody', request: {method: 'state'}}})).status, 409);
+    const reply = await request(server.baseUrl, '/__lgui_editor/rpc', {method: 'POST', headers: auth, body: {clientId: 'tab-b', request: {method: 'query'}}});
+    assert.deepEqual(reply.body, {ok: true, data: {echo: 'query', tab: 'b'}});
+    assert.equal((await request(server.baseUrl, '/__lgui_editor/rpc', {method: 'POST', headers: auth, body: {clientId: 'nobody', request: {method: 'query'}}})).status, 409);
+    // 只转发 query 和 transact
+    for (const method of ['state', 'save', 'export', 'undo']) {
+      const refused = await request(server.baseUrl, '/__lgui_editor/rpc', {method: 'POST', headers: auth, body: {clientId: 'tab-b', request: {method}}});
+      assert.deepEqual([refused.status, refused.body.error.code], [400, 'method_not_allowed'], method);
+      assert.match(refused.body.error.message, /query.*transact/);
+    }
     a.destroy(); b.destroy();
   } finally {
     await server.close();
@@ -97,7 +104,7 @@ test('浏览器没按时回复：504 result_unknown', async () => {
     const mute = http.get(`${server.baseUrl}/__lgui_editor/events?clientId=mute`, {headers: {'sec-fetch-site': 'same-origin'}});
     await new Promise(r => mute.on('response', r));
     await request(server.baseUrl, '/__lgui_editor/hello', {method: 'POST', headers: {'sec-fetch-site': 'same-origin', origin: server.baseUrl}, body: {clientId: 'mute', url: `${server.baseUrl}/`}});
-    const res = await request(server.baseUrl, '/__lgui_editor/rpc', {method: 'POST', headers: {authorization: `Bearer ${server.token}`}, body: {clientId: 'mute', request: {method: 'state'}}});
+    const res = await request(server.baseUrl, '/__lgui_editor/rpc', {method: 'POST', headers: {authorization: `Bearer ${server.token}`}, body: {clientId: 'mute', request: {method: 'query'}}});
     assert.equal(res.status, 504);
     assert.equal(res.body.error.code, 'result_unknown');
     mute.destroy();
@@ -130,12 +137,14 @@ test('editor props 报错：控件不存在 LGUI-CLI-102；编辑器没开 LGUI-
   assert.equal((await json(['editor', 'props', 'Main/MainView', 'title', 'text=x'])).errors[0].code, 'LGUI-CLI-100');
 });
 
-test('编辑器页面从 /__lgui_editor/project 读工程的 ui/（只读、只认同源、不含隐藏文件）', async () => {
+test('编辑器页面从 /__lgui_editor/project 读工程的 ui/（只读、只认同源、不含隐藏文件和 art-src/）', async () => {
   const dir = tmp();
   const ui = path.join(dir, 'ui');
   fs.mkdirSync(path.join(ui, 'assets', 'Main'), {recursive: true});
+  fs.mkdirSync(path.join(ui, 'art-src'), {recursive: true});
   fs.writeFileSync(path.join(ui, 'UI.fairy'), '<projectDescription/>');
   fs.writeFileSync(path.join(ui, 'assets', 'Main', 'package.xml'), '<packageDescription/>');
+  fs.writeFileSync(path.join(ui, 'art-src', 'sheet.png'), 'big');
   fs.writeFileSync(path.join(ui, '.gitkeep'), '');
   const server = await startEditorServer({editorDir: dir, projectDir: ui, connectionFile: path.join(dir, 'c.json')});
   try {
@@ -149,4 +158,47 @@ test('编辑器页面从 /__lgui_editor/project 读工程的 ui/（只读、只�
   } finally {
     await server.close();
   }
+});
+
+test('Host 头不是 127.0.0.1:<端口> 的请求一律 403（静态文件、浏览器一侧、Agent 一侧都是）', async () => {
+  const dir = tmp();
+  fs.writeFileSync(path.join(dir, 'index.html'), '<!doctype html>editor');
+  const ui = path.join(dir, 'ui');
+  fs.mkdirSync(ui);
+  fs.writeFileSync(path.join(ui, 'UI.fairy'), '<projectDescription/>');
+  const server = await startEditorServer({editorDir: dir, projectDir: ui, connectionFile: path.join(dir, 'c.json')});
+  try {
+    const port = new URL(server.baseUrl).port;
+    const page = {'sec-fetch-site': 'same-origin'};
+    for (const host of ['evil.example', `evil.example:${port}`, `localhost:${port}`]) {
+      for (const [route, headers] of [['/', {}], ['/__lgui_editor/project', page], ['/__lgui_editor/clients', {authorization: `Bearer ${server.token}`}]]) {
+        const res = await request(server.baseUrl, route, {headers: {...headers, host}});
+        assert.equal(res.status, 403, `${host} ${route}`);
+      }
+    }
+    assert.equal((await request(server.baseUrl, '/__lgui_editor/project', {headers: page})).status, 200);
+  } finally {
+    await server.close();
+  }
+});
+
+test('固定端口：用工程配置的 editorPort（默认 4174）；端口被占用报 LGUI-CLI-110；关掉再开还是同一个地址', async () => {
+  const parent = tmp();
+  await run(['init', 'g'], parent);
+  const root = path.join(parent, 'g');
+  assert.equal(readProject(root).editorPort, 4174);
+  const blocker = http.createServer();
+  await new Promise(resolve => blocker.listen(0, '127.0.0.1', resolve));
+  const port = blocker.address().port;
+  try {
+    await assert.rejects(startEditor(root, {port}), e => e.code === 'LGUI-CLI-110' && /editorPort/.test(e.fix));
+  } finally {
+    await new Promise(resolve => blocker.close(resolve));
+  }
+  const first = await startEditor(root, {port});
+  assert.equal(first.baseUrl, `http://127.0.0.1:${port}`);
+  await first.close();
+  const second = await startEditor(root, {port});
+  assert.equal(second.baseUrl, first.baseUrl);
+  await second.close();
 });

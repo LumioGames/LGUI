@@ -9,9 +9,10 @@ let implementation;
 async function adapter(...args) {
   try { implementation ??= await importTs(entry); }
   catch (error) { assert.fail(`Unity UI object adapter is unavailable: ${error.message}`); }
-  const [fgui, now, toPoint, onComponentReleased] = args;
-  return implementation.createObjectAdapter(fgui, now, toPoint, (x, y, width, height) => new NativeRect(x, y, width, height), onComponentReleased);
+  const [fgui, now, toPoint, onComponentReleased, services = noServices] = args;
+  return implementation.createObjectAdapter(fgui, now, toPoint, (x, y, width, height) => new NativeRect(x, y, width, height), services, onComponentReleased);
 }
+const noServices = {wheelDeltaX: () => 0, hitTest: () => null, buttonSound: () => '', transitionSettings: () => ({autoPlay: false, times: 1, delay: 0})};
 
 class NativeRect {
   constructor(x, y, width, height) { Object.assign(this, {x, y, width, height}); }
@@ -25,8 +26,14 @@ class Listener {
   RemoveCapture(fn) { this.Remove(fn); }
   Call(data) { const event = data?.inputEvent ? data : {data, inputEvent: null}; for (const fn of [...this.handlers]) fn(event); }
 }
+// FairyGUI 的显示对象：父节点跟着 GObject 的父组件走。
+class Display {
+  visible = true; onMouseWheel = new Listener();
+  constructor(owner) { this.gOwner = owner; }
+  get parent() { return this.gOwner.parent?.displayObject ?? null; }
+}
 class Obj {
-  name = ''; visible = true; grayed = false; touchable = true;
+  name = ''; visible = true; grayed = false; touchable = true; onStage = true; displayObject = new Display(this);
   x = 0; y = 0; width = 10; height = 20; data = null; packageItem = null; parent = null;
   onTouchBegin = new Listener(); onTouchMove = new Listener(); onTouchEnd = new Listener();
   onRollOver = new Listener(); onRollOut = new Listener();
@@ -44,12 +51,25 @@ class Component extends Obj {
   GetChildIndex(child) { return this.children.indexOf(child); }
   GetController(name) { return this.controllers.get(name) ?? null; }
   GetTransition(name) { return this.transitions.get(name) ?? null; }
+  get Transitions() { const list = [...this.transitions.values()]; return {Count: list.length, get_Item: index => list[index]}; }
   AddChild(child) { this.children.push(child); child.parent = this; return child; }
   RemoveChild(child) { this.children.splice(this.children.indexOf(child), 1); return child; }
 }
 class Text extends Obj { text = ''; color = {r: 1, g: 1, b: 1, a: 1}; }
 class Input extends Text { promptText = ''; onChanged = new Listener(); }
-class Button extends Component { title = ''; icon = ''; selected = false; }
+class Button extends Component { title = ''; icon = ''; selected = false; sound = null; soundVolumeScale = 1; }
+class Label extends Component { title = null; icon = null; }
+class Slider extends Component { value = 0; min = 0; max = 100; onChanged = new Listener(); }
+// 和 FairyGUI 一样：ApplyListChange 把 -1 改成 0、把超出的改成最后一项。itemList 像 PuerTS 里的 C# List。
+class ComboBox extends Component {
+  list = []; index = -1; onChanged = new Listener();
+  itemList = {owner: this, get Count() { return this.owner.list.length; }, get_Item(index) { return this.owner.list[index]; }, Clear() { this.owner.list.length = 0; }, Add(item) { this.owner.list.push(item); }};
+  ApplyListChange() { this.index = !this.list.length ? -1 : this.index >= this.list.length ? this.list.length - 1 : this.index === -1 ? 0 : this.index; }
+  get selectedIndex() { return this.index; }
+  set selectedIndex(value) { this.index = value; }
+  get text() { return this.list[this.index] ?? ''; }
+}
+class MovieClip extends Obj { playing = true; frame = 0; }
 class Image extends Obj { fillMethod = 0; fillOrigin = 0; fillClockwise = true; fillAmount = 1; }
 class Loader extends Obj { url = ''; texture = null; component = null; onLoaded = new Listener(); onLoadError = new Listener(); }
 class Graph extends Obj { color = {r: 1, g: 1, b: 1, a: 1}; }
@@ -63,9 +83,26 @@ class List extends Component {
   ChildIndexToItemIndex(index) { return index + this.first; }
   ScrollToView(index) { this.scrolledTo = index; }
 }
+class TreeNode {
+  expanded = false; cell = null; parent = null;
+  constructor(hasChild) { this.children = hasChild ? [] : null; }
+  AddChild(child) { this.children.push(child); child.parent = this; return child; }
+  RemoveChildren(begin, end) { this.removed = [begin, end]; this.children.length = 0; }
+}
+// 树：显示着的节点按顺序当子控件，子项组件第一次显示时创建并交给 treeNodeRender。
+class Tree extends List {
+  rootNode = Object.assign(new TreeNode(true), {expanded: true}); treeNodeRender = null; selectedNode = null;
+  shownNodes() { const out = []; const walk = node => { for (const child of node.children ?? []) { out.push(child); if (child.expanded) walk(child); } }; walk(this.rootNode); return out; }
+  get numChildren() { return this.shownNodes().length; }
+  GetChildAt(index) { const node = this.shownNodes()[index]; node.cell ??= new Component(); this.treeNodeRender?.(node, node.cell); return node.cell; }
+  SelectNode(node, scroll) { this.selectedNode = node; this.scrolled = scroll; }
+  ClearSelection() { this.selectedNode = null; }
+  EnsureBoundsCorrect() { this.boundsCorrect = true; }
+}
 const fgui = {
   GComponent: Component, GTextField: Text, GTextInput: Input, GButton: Button,
   GImage: Image, GLoader: Loader, GList: List, GGraph: Graph, GProgressBar: Progress,
+  GLabel: Label, GSlider: Slider, GComboBox: ComboBox, GMovieClip: MovieClip, GTree: Tree, GTreeNode: TreeNode,
   Stage: {touchScreen: false}, UIPackage: {GetItemByURL() { return null; }},
   Utils: {ToolSet: {ConvertFromHtmlColor(value) {
     const hex = value.slice(1); const alpha = hex.length === 8 ? parseInt(hex.slice(0, 2), 16) / 255 : 1;
@@ -212,7 +249,7 @@ test('Unity controller changes, text input, image fill, colors and transition ca
   const native = new Component();
   const controller = {name: 'tabs', selectedPage: 'bag', pageCount: 2, GetPageName(i) {return ['bag','shop'][i];}, onChanged: new Listener()};
   native.controllers.set('tabs', controller);
-  const transition = {name: 'fade', Play(times, delay, callback) {this.play = {times, delay}; this.complete = callback;}, Stop(complete, callback) {this.stop = {complete, callback};}, SetPaused(value) {this.paused = value;}};
+  const transition = {name: 'fade', playing: false, Play(times, delay, callback) {this.play = {times, delay}; this.complete = callback;}, Stop(complete, callback) {this.stop = {complete, callback};}, SetPaused(value) {this.paused = value;}};
   native.transitions.set('fade', transition);
   const component = a.wrapComponent(native); const tabs = component.controller('tabs');
   const pages = []; const off = tabs.onChange(page => pages.push(page));
@@ -226,8 +263,71 @@ test('Unity controller changes, text input, image fill, colors and transition ca
   assert.equal(image.fillMethod, 4); assert.equal(wrappedImage.fillMethod, 'radial180'); assert.equal(image.fillAmount, .25);
   const graph = new Graph(); a.wrap(graph).color = '#80ff0000'; assert.equal(graph.color.a, 128 / 255); assert.equal(a.wrap(graph).color, '#80ff0000');
   const progress = new Progress(); const wrappedProgress = a.wrap(progress); wrappedProgress.value = 15; wrappedProgress.max = 20; assert.equal(progress.value, 15); assert.equal(progress.max, 20);
-  const effect = component.transition('fade'); const done = effect.play({times: 2, delay: .5}); assert.deepEqual(transition.play, {times: 2, delay: .5});
-  transition.complete(); await done; effect.setPaused(true); assert.equal(transition.paused, true); effect.stop(); assert.deepEqual(transition.stop, {complete: true, callback: false});
+  // 重播前先不带回调停掉（FairyGUI 重播会调用上一次的回调）；delay 换成秒；只有正常放完才通知。
+  const effect = component.transition('fade'); let completed = 0;
+  effect.play({times: 2, delay: 500}, () => completed++);
+  assert.deepEqual(transition.stop, {complete: true, callback: false}); assert.deepEqual(transition.play, {times: 2, delay: .5});
+  transition.complete(); assert.equal(completed, 1);
+  effect.play(); assert.deepEqual(transition.play, {times: 1, delay: 0}); transition.complete(); assert.equal(completed, 1, 'play() without onComplete notifies nobody');
+  transition.playing = true; assert.equal(effect.playing, true);
+  effect.setPaused(true); assert.equal(transition.paused, true); transition.stop = null; effect.stop(); assert.deepEqual(transition.stop, {complete: true, callback: false});
+  assert.deepEqual(component.allTransitions(), [effect]);
+});
+
+test('Unity 对象：shown、hitDepth、onWheel、按钮音效和动效设置走 FairyGUI 和 LGUI.Platform', async () => {
+  const hits = {target: null};
+  const services = {
+    wheelDeltaX: () => 3, hitTest: (x, y) => { hits.at = [x, y]; return hits.target; },
+    buttonSound: button => button.sound ? 'ui://abcd0001' : '',
+    transitionSettings: () => ({autoPlay: true, times: -1, delay: 250})
+  };
+  const a = await adapter(fgui, () => 0, (x, y) => ({x: x / 2, y: y / 2}), undefined, services);
+  const root = new Component(); const panel = new Component(); const button = new Button();
+  root.AddChild(panel); panel.AddChild(button);
+  const wrapped = a.wrap(button);
+  assert.equal(wrapped.shown, true);
+  panel.displayObject.visible = false; assert.equal(wrapped.shown, false, 'a hidden ancestor hides it');
+  panel.displayObject.visible = true; button.onStage = false; assert.equal(wrapped.shown, false, 'gear or group removed it from the stage');
+  button.onStage = true;
+  hits.target = button;
+  assert.equal(a.wrap(root).hitDepth(10, 20), 2); assert.deepEqual(hits.at, [10, 20]);
+  assert.equal(a.wrap(button).hitDepth(10, 20), 0);
+  hits.target = new Obj(); assert.equal(a.wrap(root).hitDepth(10, 20), -1);
+  const wheels = []; const off = a.wrap(panel).onWheel(event => wheels.push(event));
+  panel.displayObject.onMouseWheel.Call({inputEvent: {x: 40, y: 60, mouseWheelDelta: 120}, data: null});
+  assert.deepEqual(wheels, [{x: 20, y: 30, deltaX: 3, deltaY: 120}]);
+  off(); assert.equal(panel.displayObject.onMouseWheel.handlers.size, 0);
+  assert.equal(wrapped.sound, ''); assert.equal(wrapped.soundVolume, 1);
+  button.sound = {}; button.soundVolumeScale = 0; assert.equal(wrapped.sound, 'ui://abcd0001'); assert.equal(wrapped.soundVolume, 0);
+  root.transitions.set('pulse', {name: 'pulse', playing: false});
+  assert.deepEqual(a.wrapComponent(root).transition('pulse').settings, {autoPlay: true, times: -1, delay: 250});
+});
+
+test('Unity 新控件：标签、滑动条、下拉框、序列帧动画、树按 core 合同包装', async () => {
+  const a = await adapter(fgui, () => 0, (x, y) => ({x, y}));
+  const label = a.wrap(new Label()); assert.equal(label.title, ''); label.title = '金币'; label.icon = 'ui://Common/coin'; assert.deepEqual([label.native.title, label.native.icon], ['金币', 'ui://Common/coin']);
+  const sliderNative = new Slider(); const slider = a.wrap(sliderNative); const values = [];
+  slider.min = 10; slider.max = 50; slider.value = 20; assert.deepEqual([sliderNative.min, sliderNative.max, sliderNative.value], [10, 50, 20]);
+  const offSlider = slider.onChange(value => values.push(value)); sliderNative.value = 35; sliderNative.onChanged.Call(); offSlider(); assert.deepEqual(values, [35]);
+  const comboNative = new ComboBox(); const combo = a.wrap(comboNative); const picks = [];
+  combo.items = ['低', '中', '高']; assert.equal(combo.selectedIndex, -1, 'giving items keeps "nothing selected"'); assert.equal(combo.text, '');
+  combo.selectedIndex = 2; combo.items = ['低', '中']; assert.equal(combo.selectedIndex, -1, 'an out-of-range selection becomes -1');
+  combo.selectedIndex = 1; assert.equal(combo.text, '中'); assert.deepEqual(combo.items, ['低', '中']);
+  combo.onChange(index => picks.push(index)); comboNative.index = 0; comboNative.onChanged.Call(); assert.deepEqual(picks, [0]);
+  const clipNative = new MovieClip(); const clip = a.wrap(clipNative); clip.playing = false; clip.frame = 3; assert.deepEqual([clipNative.playing, clipNative.frame], [false, 3]);
+  const treeNative = new Tree(); const tree = a.wrap(treeNative); const rendered = []; const clicks = [];
+  tree.nodeRenderer = (key, item) => rendered.push([key, item.native]);
+  tree.setNodes([{key: 'a', children: [{key: 'a1', children: []}]}, {key: 'b', children: []}]);
+  assert.equal(tree.numItems, 3, 'new nodes are expanded');
+  treeNative.rootNode.children[0].expanded = false;
+  tree.setNodes([{key: 'a', children: [{key: 'a1', children: []}, {key: 'a2', children: []}]}, {key: 'c', children: []}]);
+  assert.deepEqual(treeNative.rootNode.removed, [0, -1]); assert.equal(tree.numItems, 2, 'node a keeps its collapsed state');
+  tree.selectedKey = 'c'; assert.equal(treeNative.selectedNode, treeNative.rootNode.children[1]); assert.equal(treeNative.scrolled, false);
+  tree.onClickNode(key => clicks.push(key));
+  const cell = tree.itemAt(0).native; treeNative.onClickItem.Call(cell);
+  assert.deepEqual(clicks, ['a']); assert.equal(tree.selectedKey, 'a');
+  assert.ok(rendered.some(([key]) => key === 'a'));
+  tree.nodeRenderer = null; assert.equal(treeNative.treeNodeRender, null);
 });
 
 test('Unity UI wrapper satisfies core interfaces under strict TypeScript without browser globals', () => {

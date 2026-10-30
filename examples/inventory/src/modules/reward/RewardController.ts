@@ -32,8 +32,8 @@ export class RewardController extends Controller {
     this.syncRedDot();
     if (!items.length) return;
     rewardModel.setLastClaim(items, coins);
-    void lgui.ui.open(RewardDialogView);
-    if (coins > 0) void lgui.ui.open(CoinDialogView);
+    await lgui.ui.open(RewardDialogView);
+    if (coins > 0) void lgui.ui.open(CoinDialogView); // 道具窗口开着，金币窗口排在它后面
   }
   closeItems() { lgui.ui.close(RewardDialogView); }
   closeCoins() { lgui.ui.close(CoinDialogView); }

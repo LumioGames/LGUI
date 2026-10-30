@@ -357,7 +357,7 @@ test('加载失败报 LGUI-RT-080，不留半成品；关闭没打开的界面�
   await assert.rejects(lgui.ui.open(Broken), e => e.code === 'LGUI-RT-080');
   assert.deepEqual([ui.all().length, ui.packageRefs().length], [0, 0]);
   lgui.ui.close(DetailView);
-  assert.match(backend.state.logs.at(-1).message, /LGUI-RT-082/);
+  assert.deepEqual([backend.state.logs.at(-1).level, backend.state.logs.at(-1).data.code], ['info', 'LGUI-RT-082']);
 });
 
 test('界面关闭后包引用归零、监听和定时器清干净', async () => {
@@ -365,4 +365,138 @@ test('界面关闭后包引用归零、监听和定时器清干净', async () =>
   const {lgui} = fw;
   for (let i = 0; i < 20; i++) { await lgui.ui.open(MainView); await lgui.ui.open(DetailView); lgui.ui.closeAll('popup'); lgui.ui.closeAll('page'); }
   assert.deepEqual([ui.all().length, ui.packageRefs().length], [0, 0]);
+});
+
+// 让界面包的加载停在半路，放行后才加载完（模拟网络慢）。
+function gateLoads(backend, names) {
+  const load = backend.loadPackage;
+  let open;
+  const gate = new Promise(r => { open = r; });
+  backend.loadPackage = name => names.includes(name) ? gate.then(() => load(name)) : load(name);
+  return () => open();
+}
+const tick = () => new Promise(r => setTimeout(r, 0));
+
+test('同一轮里先后打开两个 modal：按调用顺序显示，后一个排队', async () => {
+  const {fw, views: {MainView, Reward1, Reward2}} = await setup();
+  const {lgui} = fw;
+  await lgui.ui.open(MainView);
+  const first = lgui.ui.open(Reward1);
+  const second = lgui.ui.open(Reward2);
+  await tick();
+  assert.deepEqual(lgui.debug.snapshot().layers.modal, ['Reward1']);
+  lgui.ui.close(Reward1);
+  await second;
+  assert.deepEqual(lgui.debug.snapshot().layers.modal, ['Reward2']);
+  await first;
+});
+
+test('排在前面的 modal 在加载中被关掉：后面排队的照常弹出；包引用马上释放，加载完也不留着', async () => {
+  const {fw, backend, ui, views: {Reward1, Reward2}} = await setup();
+  const {lgui} = fw;
+  const release = gateLoads(backend, ['Bag']);
+  const slow = lgui.ui.open(Reward2);          // Bag 包加载中
+  const next = lgui.ui.open(Reward1);          // 排在它后面
+  await tick();
+  assert.equal(lgui.ui.isOpen(Reward1), false, '排队');
+  lgui.ui.close(Reward2);
+  assert.equal(ui.packageRefs().find(p => p.name === 'Bag'), undefined, '关掉的同时就释放了引用');
+  await next;
+  assert.deepEqual(lgui.debug.snapshot().layers.modal, ['Reward1']);
+  release();
+  await assert.rejects(slow, e => e.code === 'LGUI-RT-081');
+  await tick();
+  assert.equal(backend.state.loaded.has('Bag'), false, '没人用的包加载完马上卸载');
+});
+
+test('排在前面的 modal 打开失败（onOpen 抛错）：后面排队的照常弹出', async () => {
+  const {fw, backend, views: {Reward1}} = await setup();
+  const {lgui, View} = fw;
+  class Broken extends View { static component = 'Bag/Header'; static layer = 'modal'; onOpen() { throw new Error('坏了'); } }
+  const release = gateLoads(backend, ['Bag']);
+  const broken = lgui.ui.open(Broken);
+  const next = lgui.ui.open(Reward1);
+  await tick();
+  assert.equal(lgui.ui.isOpen(Reward1), false, '排队');
+  release();
+  await assert.rejects(broken, e => e.code === 'LGUI-RT-080');
+  await next;
+  assert.deepEqual(lgui.debug.snapshot().layers.modal, ['Reward1']);
+});
+
+test('排在前面的 modal 加载失败：后面排队的照常弹出', async () => {
+  const {fw, backend, views: {Reward1}} = await setup();
+  const {lgui, View} = fw;
+  class Missing extends View { static component = 'Nope/Missing'; static layer = 'modal'; }
+  const load = backend.loadPackage;
+  let fail;
+  backend.loadPackage = name => name === 'Nope' ? new Promise((_, reject) => { fail = () => reject(new Error('没有')); }) : load(name);
+  const missing = lgui.ui.open(Missing);
+  const next = lgui.ui.open(Reward1);
+  await tick();
+  assert.equal(lgui.ui.isOpen(Reward1), false, '排队');
+  fail();
+  await assert.rejects(missing, e => e.code === 'LGUI-RT-080');
+  await next;
+  assert.deepEqual(lgui.debug.snapshot().layers.modal, ['Reward1']);
+});
+
+test('关掉 loading 不会把排队的 modal 弹到已经打开的 modal 上面', async () => {
+  const {fw, views: {Reward1, Reward2}} = await setup();
+  const {lgui} = fw;
+  await lgui.ui.open(Reward1);
+  const queued = lgui.ui.open(Reward2);
+  await tick();
+  lgui.loading.show();
+  await tick();
+  lgui.loading.hide();
+  await tick();
+  assert.deepEqual(lgui.debug.snapshot().layers.modal, ['Reward1']);
+  lgui.ui.close(Reward1);
+  await queued;
+  assert.deepEqual(lgui.debug.snapshot().layers.modal, ['Reward2']);
+});
+
+test('closeAll、popTo：全部关完才重新算一次激活，要关掉的界面收不到 onActivate、onRevealed', async () => {
+  const {fw, log, views: {MainView, BagView, DetailView, PickerView}} = await setup();
+  const {lgui} = fw;
+  await lgui.ui.open(MainView);
+  await lgui.ui.open(DetailView);
+  await lgui.ui.open(PickerView);
+  log.length = 0;
+  lgui.ui.closeAll('popup');
+  assert.deepEqual(log, ['Picker.onDeactivate', 'Picker.onClose', 'Detail.onClose', 'Main.onActivate']);
+  await lgui.ui.open(BagView);
+  await lgui.ui.open(DetailView);
+  log.length = 0;
+  lgui.ui.popTo(MainView);
+  assert.deepEqual(log, ['Detail.onDeactivate', 'Detail.onClose', 'Bag.onClose', 'Main.onRevealed', 'Main.onActivate']);
+});
+
+test('返回键不关 hud 层的界面；keys.back 写成函数时照常调用；操作提示栏也不显示返回', async () => {
+  const {fw, ui, views: {HudView, DetailView}} = await setup();
+  const {lgui} = fw;
+  const hud = await lgui.ui.open(HudView);
+  lgui.ui.back();
+  assert.equal(lgui.ui.isOpen(HudView), true);
+  assert.equal(ui.hintBar.component.child('list').numItems, 0, 'hud 上不显示返回');
+  await lgui.ui.open(DetailView);
+  assert.equal(ui.hintBar.component.child('list').numItems, 1, 'popup 上显示返回');
+  lgui.ui.close(DetailView);
+  let called = 0;
+  hud.keys = {back: () => { called++; }};
+  lgui.ui.back();
+  assert.deepEqual([called, lgui.ui.isOpen(HudView)], [1, true]);
+});
+
+test('对已经打开（或正在打开）的界面再 open：返回同一个 Promise，参数被忽略；又登记 onClose 时报 LGUI-RT-084', async () => {
+  const {fw, views: {MainView, DetailView}} = await setup();
+  const {lgui} = fw;
+  await lgui.ui.open(MainView);
+  const opening = lgui.ui.open(DetailView);
+  assert.equal(lgui.ui.open(DetailView, {id: 2}), opening, '参数被忽略，合并成一次');
+  assert.throws(() => lgui.ui.open(DetailView, undefined, {onClose: () => {}}), e => e.code === 'LGUI-RT-084');
+  await opening;
+  assert.throws(() => lgui.ui.open(DetailView, undefined, {onClose: () => {}}), e => e.code === 'LGUI-RT-084');
+  assert.equal(lgui.ui.open(MainView), lgui.ui.open(MainView));
 });

@@ -24,6 +24,10 @@ export class GObject extends EventDispatcher {
   height: number;
   data: unknown;
   readonly parent: GComponent | null;
+  /** 没被齿轮藏起来（所在的组也没有）。 */
+  readonly internalVisible: boolean;
+  /** 自己显示，所在的组也显示。 */
+  readonly internalVisible2: boolean;
   readonly packageItem: PackageItem | null;
   readonly element: HTMLElement;
   setPosition(x: number, y: number): void;
@@ -38,8 +42,11 @@ export class GComponent extends GObject {
   getChildAt(index: number): GObject;
   getController(name: string): Controller | null;
   getTransition(name: string): Transition | null;
+  /** 组件自己的全部动效（上游没有公开的读法，读内部字段）。 */
+  readonly _transitions: Transition[];
   addChild(child: GObject): GObject;
   removeChild(child: GObject, dispose?: boolean): GObject;
+  ensureBoundsCorrect(): void;
 }
 
 export class GRoot extends GComponent {
@@ -61,6 +68,8 @@ export class GButton extends GComponent {
   title: string;
   icon: string;
   selected: boolean;
+  sound: string | null;
+  soundVolumeScale: number;
 }
 
 export class GImage extends GObject {
@@ -101,6 +110,43 @@ export class GList extends GComponent {
   scrollToView(index: number, ani?: boolean, setFirst?: boolean): void;
   itemIndexToChildIndex(index: number): number;
   childIndexToItemIndex(index: number): number;
+  clearSelection(): void;
+}
+
+export class GLabel extends GComponent {
+  title: string | null;
+  icon: string | null;
+}
+
+export class GSlider extends GComponent {
+  value: number;
+  min: number;
+  max: number;
+}
+
+export class GComboBox extends GComponent {
+  items: string[];
+  selectedIndex: number;
+  readonly text: string | null;
+}
+
+export class GMovieClip extends GObject {
+  playing: boolean;
+  frame: number;
+}
+
+export class GTreeNode {
+  constructor(isFolder?: boolean, resURL?: string);
+  expanded: boolean;
+  readonly cell: GComponent | null;
+  addChild(child: GTreeNode): GTreeNode;
+  removeChildren(beginIndex?: number, endIndex?: number): void;
+}
+
+export class GTree extends GList {
+  readonly rootNode: GTreeNode;
+  treeNodeRender: ((node: GTreeNode, cell: GComponent) => void) | null;
+  selectNode(node: GTreeNode, scrollItToView?: boolean): void;
 }
 
 export class GProgressBar extends GComponent {
@@ -122,6 +168,11 @@ export class Controller extends EventDispatcher {
 
 export class Transition {
   name: string;
+  readonly playing: boolean;
+  /** ui/ 里写的自动播放、播放次数、延迟（秒）（上游没有公开的读法，读内部字段）。 */
+  readonly _autoPlay: boolean;
+  readonly _autoPlayTimes: number;
+  readonly _autoPlayDelay: number;
   play(onComplete?: () => void, times?: number, delay?: number): void;
   stop(setToComplete?: boolean, processCallback?: boolean): void;
   setPaused(paused: boolean): void;

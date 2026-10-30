@@ -10,7 +10,7 @@ export interface BackendConfig {
   defaultFont: string | null;
   /** 界面包所在的地址或目录（h5 是 .lgui/build/web/ui/ 对应的网址）。 */
   uiBase: string;
-  /** 翻译文件所在的地址（h5 是 .lgui/build/web/i18n/ 对应的网址）。不写时不加载翻译。 */
+  /** 翻译文件所在的地址（h5 是 .lgui/build/web/i18n/ 对应的网址）。不写时只能用默认语言，换语言报 LGUI-RT-173。 */
   i18nBase?: string;
 }
 

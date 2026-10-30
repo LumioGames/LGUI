@@ -18,6 +18,16 @@ export interface NativeEventListener {
   AddCapture(handler: NativeEventHandler): void;
   RemoveCapture(handler: NativeEventHandler): void;
 }
+/** PuerTS 里的 C# List<T>。 */
+export interface NativeCsList<T> {readonly Count: number; get_Item(index: number): T}
+export interface NativeCsMutableList<T> extends NativeCsList<T> {Clear(): void; Add(item: T): void}
+/** FairyGUI 的显示对象：只用到显示、父节点和它所属的 GObject。 */
+export interface NativeDisplayObject {
+  readonly visible: boolean;
+  readonly parent: NativeDisplayObject | null;
+  readonly gOwner: NativeObject | null;
+  readonly onMouseWheel: NativeEventListener;
+}
 export interface NativePackageItem {
   name: string; owner: {name: string}; width: number; height: number;
   /** FairyGUI.PackageItemType。 */
@@ -32,6 +42,9 @@ export interface NativeObject {
   readonly onTouchBegin: NativeEventListener;
   readonly onTouchMove: NativeEventListener;
   readonly onTouchEnd: NativeEventListener;
+  /** 显示对象在舞台上（被齿轮或组藏起来时 FairyGUI 把它从父容器里移走）。 */
+  readonly onStage: boolean;
+  readonly displayObject: NativeDisplayObject | null;
   SetXY(x: number, y: number): void;
   SetSize(width: number, height: number): void;
   Dispose(): void;
@@ -43,12 +56,22 @@ export interface NativeComponent extends NativeObject {
   GetChildIndex(child: NativeObject): number;
   GetController(name: string): NativeController | null;
   GetTransition(name: string): NativeTransition | null;
+  readonly Transitions: NativeCsList<NativeTransition>;
   AddChild(child: NativeObject): NativeObject;
   RemoveChild(child: NativeObject): NativeObject;
 }
 export interface NativeText extends NativeObject {text: string; color: NativeColor}
 export interface NativeTextInput extends NativeText {promptText: string; readonly onChanged: NativeEventListener}
-export interface NativeButton extends NativeComponent {title: string; icon: string; selected: boolean}
+/** sound 是 NAudioClip（地址由 LGUI.Platform.ButtonSoundUrl 反查）。 */
+export interface NativeButton extends NativeComponent {title: string; icon: string; selected: boolean; sound: unknown | null; soundVolumeScale: number}
+export interface NativeLabel extends NativeComponent {title: string | null; icon: string | null}
+export interface NativeSlider extends NativeComponent {value: number; min: number; max: number; readonly onChanged: NativeEventListener}
+/** items 是 C# 的 string[]（PuerTS 不和 JS 数组互转），所以读写都走 itemList，改完调用 ApplyListChange。 */
+export interface NativeComboBox extends NativeComponent {
+  readonly itemList: NativeCsMutableList<string>; selectedIndex: number; readonly text: string | null; readonly onChanged: NativeEventListener;
+  ApplyListChange(): void;
+}
+export interface NativeMovieClip extends NativeObject {playing: boolean; frame: number}
 export interface NativeImage extends NativeObject {
   fillMethod: number; fillOrigin: number; fillClockwise: boolean; fillAmount: number;
 }
@@ -77,6 +100,19 @@ export interface NativeList extends NativeComponent {
   ItemIndexToChildIndex(index: number): number;
   ScrollToView(index: number, animate: boolean): void;
 }
+export interface NativeTreeNode {
+  expanded: boolean;
+  readonly cell: NativeComponent | null;
+  AddChild(child: NativeTreeNode): NativeTreeNode;
+  RemoveChildren(beginIndex: number, endIndex: number): void;
+}
+export interface NativeTree extends NativeList {
+  readonly rootNode: NativeTreeNode;
+  treeNodeRender: ((node: NativeTreeNode, cell: NativeComponent) => void) | null;
+  SelectNode(node: NativeTreeNode, scrollItToView: boolean): void;
+  ClearSelection(): void;
+  EnsureBoundsCorrect(): void;
+}
 export interface NativeProgress extends NativeComponent {value: number; max: number}
 export interface NativeGraph extends NativeObject {color: NativeColor}
 export interface NativeController {
@@ -86,6 +122,7 @@ export interface NativeController {
 }
 export interface NativeTransition {
   readonly name: string;
+  readonly playing: boolean;
   Play(times: number, delay: number, complete: () => void): void;
   Stop(setToComplete: boolean, processCallback: boolean): void;
   SetPaused(paused: boolean): void;
@@ -100,6 +137,12 @@ export interface NativeFairyGUI {
   GList: new () => NativeList;
   GProgressBar: new () => NativeProgress;
   GGraph: new () => NativeGraph;
+  GLabel: new () => NativeLabel;
+  GSlider: new () => NativeSlider;
+  GComboBox: new () => NativeComboBox;
+  GMovieClip: new () => NativeMovieClip;
+  GTree: new () => NativeTree;
+  GTreeNode: new (hasChild: boolean) => NativeTreeNode;
   Utils: {ToolSet: {ConvertFromHtmlColor(value: string): NativeColor}};
   Stage: {touchScreen: boolean};
   UIPackage: {GetItemByURL(url: string): NativePackageItem | null};

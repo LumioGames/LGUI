@@ -1,6 +1,8 @@
-// icon：加载器的地址或按钮图标。加载器先显示占位图，图片加载好了再换上；加载失败就留着占位图并报错。
+// icon：加载器的地址或按钮图标。加载器先显示占位图，图片加载好了再换上；网络图片加载失败（外部失败）就留着占位图并记 warn。
 import type {UIButton, UILoader} from '../../core/index';
+import {LgRuntimeError} from '../../core/index';
 import {runtime} from '../runtime';
+import {failure, fault} from '../log';
 import {currentLanguage} from '../i18n';
 import type {BindContext} from './index';
 
@@ -20,15 +22,15 @@ export function applyIcon(target: UILoader | UIButton, url: string, placeholder:
   tokens.set(loader, token);
   const {backend, config} = runtime();
   if (!url || url.startsWith('ui://')) {
-    // 别的包里的图片：那个包要已经加载（是这个界面依赖的包），否则显示不出来——明确报出来，不默默留空。
+    // 别的包里的图片：那个包要已经加载（是这个界面依赖的包），否则显示不出来——这是写错了（LGUI-RT-071），不默默留空。
     const pkg = /^ui:\/\/([^/]+)\//.exec(url)?.[1];
-    if (pkg && !backend.platform.resource.hasPackage(pkg)) backend.platform.log.write('error', `LGUI-RT-071  ${ctx.where} 的图片 ${url} 所在的包 ${pkg} 没有加载，显示不出来。  → 让这个界面依赖 ${pkg} 包：在组件里引用一次 ${pkg} 包的组件（比如列表的 defaultItem 用 ${pkg} 包里的组件）。`);
+    if (pkg && !backend.platform.resource.hasPackage(pkg)) fault(new LgRuntimeError('LGUI-RT-071', `${ctx.where} 的图片 ${url} 所在的包 ${pkg} 没有加载，显示不出来。`, `让这个界面依赖 ${pkg} 包：在组件里引用一次 ${pkg} 包的组件（比如列表的 defaultItem 用 ${pkg} 包里的组件）。`), {url, where: ctx.where});
     loader.url = localized(url);
     return;
   }
   loader.url = placeholder ?? config.placeholder;
   backend.platform.resource.loadImage(url).then(
     () => { if (tokens.get(loader) === token && !ctx.scope.isClosed) loader.url = url; },
-    () => { if (tokens.get(loader) === token) backend.platform.log.write('error', `LGUI-RT-070  ${ctx.where} 的图片 ${url} 加载失败，显示占位图。  → 确认图片地址对、能访问。`); }
+    () => { if (tokens.get(loader) === token) failure(new LgRuntimeError('LGUI-RT-070', `${ctx.where} 的图片 ${url} 加载失败，显示占位图。`, '确认图片地址对、能访问。'), {url, where: ctx.where}); }
   );
 }

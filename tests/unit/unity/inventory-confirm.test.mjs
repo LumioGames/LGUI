@@ -11,7 +11,7 @@ const codePath = file => JSON.stringify(file.split(path.sep).join('/'));
 
 test('inventory sell and buy confirmation interpolate once and produce no runtime errors', async () => {
   const context = await createInventoryContext();
-  // Repository development instrumentation reads the real backend log. The
+  // Repository development instrumentation reads the headless backend's recorded log. The
   // public game platform API remains limited to its network/storage contract.
   fs.writeFileSync(path.join(context.root, 'conformance/cases/confirm-log.ts'), `
 import {BagView} from ${codePath(path.join(repository, 'examples/inventory/src/modules/bag/BagView.ts'))};
@@ -24,7 +24,7 @@ export default {screen:{width:1280,height:720},async run(t){
   await t.click('Bag/BagPanel.shopButton');await t.advance(16);
   await t.click('Shop/ShopPanel.list[2]');
   const buy={title:t.text('Common/Confirm.title'),message:t.text('Common/Confirm.message')};
-  return {sell,buy,errors:runtime().backend.platform.log.recent().filter(entry=>entry.level==='error')};
+  return {sell,buy,errors:(runtime().backend as unknown as {state:{logs:{level:string}[]}}).state.logs.filter(entry=>entry.level==='error')};
 }};
 `);
   const output = await runHeadless(context, 'confirm-log');

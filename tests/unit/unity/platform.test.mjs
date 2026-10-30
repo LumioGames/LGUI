@@ -50,6 +50,8 @@ function environment() {
     Log: (level, message) => calls.push(['log', level, message]),
     SetInputMode: mode => { host.InputMode = mode; },
     PlayAudio: (url, volume) => calls.push(['audio', url, volume]),
+    PlayMusic: (url, volume, fadeMs) => calls.push(['music', url, volume, fadeMs]),
+    SetAudioPaused: paused => calls.push(['audioPaused', paused]),
     Fetch: (...args) => calls.push(['fetch', ...args])
   };
   const scale = {value: 1};
@@ -69,7 +71,8 @@ function environment() {
       GetByName: name => packages.has(name) ? {} : null,
       AddPackage: path => { calls.push(['package', path]); packages.add(path.split('/').at(-1)); return {}; },
       RemovePackage: name => { calls.push(['release', name]); packages.delete(name); },
-      GetItemAssetByURL: url => url === 'ui://Bag/icon' ? {} : null
+      GetItemAssetByURL: url => url === 'ui://Bag/icon' ? {} : null,
+      GetItemByURL: url => ['ui://Common/click', 'ui://Common/theme'].includes(url) ? {} : null
     }
   };
   return {options: {projectName: 'test', uiBase: 'UI', host, fgui, objects, createLoader, scale}, calls, host, stage, root, listeners, event, loaders, scale, storage};
@@ -84,9 +87,9 @@ test('Unity 平台：一个每帧回调抛错照常记日志，其他回调和�
   assert.doesNotThrow(() => u.tick(16));
   assert.doesNotThrow(() => u.tick(16));
   assert.equal(healthy, 2);
-  const errors = u.platform.log.recent();
+  const errors = e.calls.filter(call => call[0] === 'log');
   assert.equal(errors.length, 2);
-  assert.ok(errors.every(entry => entry.level === 'error' && entry.message.includes('LGUI-RT-160') && entry.message.includes('frame failed')));
+  assert.ok(errors.every(([, level, message]) => level === 'error' && message.includes('LGUI-RT-160') && message.includes('frame failed')));
   u.dispose();
 });
 
@@ -189,13 +192,42 @@ test('Unity 平台：包去重、图片完成或失败时释放临时加载器�
   assert.equal(abandoned.disposed, true);
 });
 
-test('Unity 平台：日志只保留最近 200 条，音频音量和系统语言交给原生服务', async () => {
+test('Unity 平台：日志按级别写进 Unity 控制台，带分类、错误码说明、数据和堆栈', async () => {
   const e = environment(); const u = await create(e.options); const p = u.platform;
-  for (let i = 0; i < 205; i++) { e.host.Now = i; p.log.write('info', String(i)); }
-  assert.equal(p.log.recent().length, 200); assert.equal(p.log.recent()[0].message, '5');
-  assert.equal(p.log.recent().at(-1).time, 204);
-  p.audio.play('ui://Common/click', {volume: 0.5});
+  const logs = () => e.calls.filter(call => call[0] === 'log').map(([, level, message]) => [level, message]);
+  p.log.info('shop_opened', {tab: 2});
+  p.log.child({view: 'Shop'}, 'ui').warn('lgui_rt_070', {code: 'LGUI-RT-070', message: '图片加载失败。', fix: '确认地址。'});
+  p.log.error('lgui_rt_090', new Error('missing key'), () => ({key: 'a'}));
+  const [info, warn, error] = logs();
+  assert.deepEqual(info, ['info', '[game] shop_opened  {"tab":2}']);
+  assert.deepEqual(warn, ['warn', '[game.ui] lgui_rt_070  LGUI-RT-070  图片加载失败。  → 确认地址。  {"code":"LGUI-RT-070","message":"图片加载失败。","fix":"确认地址。"}  {"view":"Shop"}']);
+  assert.equal(error[0], 'error');
+  assert.match(error[1], /^\[game\] lgui_rt_090  \{"key":"a"\}  Error: missing key\n/);
+  u.dispose();
+  assert.throws(() => p.log.info('after_dispose'), error => error.code === 'LGUI-RT-027');
+});
+
+test('Unity 平台：音效、背景音乐、暂停交给原生服务；没登记的 ui:// 声音报 LGUI-RT-170，背景音乐同时停掉', async () => {
+  const e = environment(); const u = await create(e.options); const p = u.platform;
+  const errors = [];
+  p.audio.play('ui://Common/click', 0.5, error => errors.push(error));
   assert.deepEqual(e.calls.at(-1), ['audio', 'ui://Common/click', 0.5]);
+  p.audio.music('ui://Common/theme', 0.8, 300, error => errors.push(error));
+  assert.deepEqual(e.calls.at(-1), ['music', 'ui://Common/theme', 0.8, 300]);
+  p.audio.music(null, 0.8, 300, error => errors.push(error));
+  assert.deepEqual(e.calls.at(-1), ['music', '', 0.8, 300]);
+  p.audio.setPaused(true);
+  assert.deepEqual(e.calls.at(-1), ['audioPaused', true]);
+  assert.deepEqual(errors, []);
+  const before = e.calls.length;
+  p.audio.play('ui://Common/missing', 1, error => errors.push(error));
+  assert.equal(e.calls.length, before, '没登记的音效不交给原生服务');
+  p.audio.music('ui://Common/missing', 1, 300, error => errors.push(error));
+  assert.deepEqual(e.calls.at(-1), ['music', '', 1, 300]);
+  assert.deepEqual(errors.map(error => error.code), ['LGUI-RT-170', 'LGUI-RT-170']);
+  e.host.PlayAudio = () => { throw new Error('LGUI-RT-161  界面音效不存在'); };
+  p.audio.play('ui://Common/click', 1, error => errors.push(error));
+  assert.match(String(errors.at(-1)), /LGUI-RT-161/);
   assert.deepEqual(p.locale.systemLanguages(), ['zh-CN']);
   u.dispose();
 });

@@ -1,11 +1,11 @@
 // 接口层（相当于 RHI）：只导出类型和错误类。
 export type {
   Unsubscribe, Rect, PointerInput, UIObject, UIComponent, UIText, UIRichText, UIInput, UIButton,
-  UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, UIKinds, UIKind
+  UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, UILabel, UISlider, UIComboBox, UIMovieClip, UITree, UITreeNode, UIKinds, UIKind
 } from './ui';
 export type {
   Platform, TimeService, StorageService, ResourceService, InputService, KeyInput, WheelInput,
-  TextInputService, ScreenService, Insets, AudioService, LocaleService, LogService, LogEntry,
+  TextInputService, ScreenService, Insets, AudioService, LocaleService, Logger, LogLevel,
   NetService, NetResponse, NetSocket
 } from './platform';
 export type {Backend, BackendConfig} from './backend';

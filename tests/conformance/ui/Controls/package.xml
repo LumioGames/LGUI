@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="ctl00001">
+  <resources>
+    <component id="ctlpnl01" name="ControlsPanel.xml" path="/" exported="true"/>
+    <component id="slider01" name="Slider.xml" path="/"/>
+    <component id="combo001" name="ComboBox.xml" path="/"/>
+    <component id="cbpopup1" name="ComboBoxPopup.xml" path="/" exported="true"/>
+    <component id="cbitem01" name="ComboBoxItem.xml" path="/" exported="true"/>
+    <component id="label001" name="Label.xml" path="/"/>
+    <component id="treeitm1" name="TreeItem.xml" path="/" exported="true"/>
+    <movieclip id="spin0001" name="spin.jta" path="/"/>
+  </resources>
+</packageDescription>

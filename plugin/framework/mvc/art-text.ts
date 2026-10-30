@@ -4,6 +4,7 @@
 import type {UIComponent} from '../core/index';
 import {LgRuntimeError} from '../core/index';
 import {runtime} from './runtime';
+import {fault} from './log';
 
 const charNames: Record<string, string> = {'+': 'plus', '-': 'minus', x: 'x', '%': 'percent', '.': 'dot', ',': 'comma', ':': 'colon', '/': 'slash'};
 
@@ -26,17 +27,23 @@ export function artTextOf(component: UIComponent): string | undefined {
   return shown.get(component)?.text;
 }
 
-/** 把 text 拼到 ArtText 组件里。缺某个字符的图片时报 LGUI-RT-130，并指出是哪个字符。 */
+/** 把 text 拼到 ArtText 组件里。字体所在的包没加载报 LGUI-RT-171；缺某个字符的图片报 LGUI-RT-130 并指出是哪个字符。
+ * 都是写错了：开发和测试里抛错；正式构建里记 error，包没加载就什么都不拼，缺的字符跳过、其余照常拼出来。 */
 export function renderArtText(component: UIComponent, text: string, where: string): void {
   const {pkg, font, align, spacing} = parseArtText(component.customData, where);
   const backend = runtime().backend;
-  const glyphs = [...text].map(char => {
+  if (!backend.platform.resource.hasPackage(pkg)) {
+    fault(new LgRuntimeError('LGUI-RT-171', `${where} 的 ArtText 用的字体 ${pkg}/${font} 所在的包 ${pkg} 没有加载。`, `让这个界面依赖 ${pkg} 包：把 ArtText 放在 ${pkg} 包的组件里，或者在组件里引用一次 ${pkg} 包的组件。`), {where, font: `${pkg}/${font}`}, `${pkg}/${font}`);
+    return;
+  }
+  const glyphs: {url: string; size: {width: number; height: number}}[] = [];
+  for (const char of text) {
     const name = `${font}_${/[0-9]/.test(char) ? char : charNames[char] ?? char}`;
     const url = `ui://${pkg}/${name}`;
     const size = backend.imageSize(url);
-    if (!size) throw new LgRuntimeError('LGUI-RT-130', `${where} 的 ArtText 缺字符「${char}」的图片 ${url}。`, `在 ${pkg} 包的 artfont/${font}/ 下加上 ${name}.png，登记进 package.xml 并导出。`);
-    return {url, size};
-  });
+    if (size) glyphs.push({url, size});
+    else fault(new LgRuntimeError('LGUI-RT-130', `${where} 的 ArtText 缺字符「${char}」的图片 ${url}。`, `在 ${pkg} 包的 artfont/${font}/ 下加上 ${name}.png，登记进 package.xml 并导出。`), {where, char, url}, url);
+  }
   const previous = shown.get(component);
   previous?.owner?.dispose();
   if (!glyphs.length) {

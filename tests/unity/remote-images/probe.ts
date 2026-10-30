@@ -2,7 +2,7 @@ import {createUnityBackend} from '../../../plugin/framework/backends/unity/adapt
 import {setRuntime, defaultConfig} from '../../../plugin/framework/mvc/runtime';
 import {Scope} from '../../../plugin/framework/mvc/scope';
 import {applyIcon} from '../../../plugin/framework/mvc/binding/icon';
-import type {UILoader} from '../../../plugin/framework/core/index';
+import type {Logger, UILoader} from '../../../plugin/framework/core/index';
 
 declare const PROBE_BASE: string;
 declare const CS: {
@@ -16,16 +16,24 @@ globals.__lguiStart = async () => {
     const backend = createUnityBackend();
     await backend.init({projectName: 'remote-review', defaultFont: null, uiBase: 'UI'});
     await backend.loadPackage('Common');
-    setRuntime(backend, defaultConfig);
     const logs: {level: string; message: string}[] = [];
-    // Only the deliberately missing image's expected error is collected without forwarding.
+    // Only the deliberately missing image's expected failure is collected without forwarding.
     // Every other log still reaches Unity and the strict development harness.
-    const nativeWrite = backend.platform.log.write.bind(backend.platform.log);
-    backend.platform.log.write = (level, message) => {
-      logs.push({level, message});
-      if (level === 'error' && message.includes('LGUI-RT-070') && message.includes(PROBE_BASE + '/missing.png')) return;
-      nativeWrite(level, message);
+    const port = backend.platform.log;
+    const line = (event: string, data: unknown): string => {
+      const fields = data as {code?: string; message?: string} | undefined;
+      return `${fields?.code ?? event} ${fields?.message ?? ''}`;
     };
+    const expected = (message: string): boolean => message.includes('LGUI-RT-070') && message.includes(PROBE_BASE + '/missing.png');
+    const log: Logger = {
+      enabled: level => port.enabled(level),
+      debug: (event, data) => port.debug(event, data),
+      info: (event, data) => port.info(event, data),
+      warn: (event, data, error) => { const message = line(event, data); logs.push({level: 'warn', message}); if (!expected(message)) port.warn(event, data, error); },
+      error: (event, error, data) => { logs.push({level: 'error', message: line(event, data)}); port.error(event, error, data); },
+      child: (context, category) => port.child(context, category)
+    };
+    setRuntime(backend, defaultConfig, Date.now(), {}, {log});
     const wait = (ms: number): Promise<void> => new Promise(resolve => {
       const until = backend.platform.time.now() + ms;
       const off = backend.platform.time.onFrame(() => { if (backend.platform.time.now() >= until) { off(); resolve(); } });

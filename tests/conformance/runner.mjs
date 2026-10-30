@@ -14,13 +14,14 @@ import {readUiModel} from '../../plugin/tools/lib/generate/model.mjs';
 import {extractTexts, generateTranslations, translationMaps} from '../../plugin/tools/lib/generate/i18n.mjs';
 import {readTexts, runtimeConfig, webBuildOptions} from '../../plugin/tools/lib/dev/bundle.mjs';
 import {serveBuilt} from '../../plugin/tools/lib/dev/index.mjs';
+import {writeControls} from './controls.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const cases = fs.readdirSync(path.join(here, 'cases')).filter(f => f.endsWith('.ts')).map(f => f.slice(0, -3)).sort();
 
 const posix = p => p.split(path.sep).join('/');
 
-/** 测试工程：lgui init 的模板，再用 lgui new module 加三种排布模式（split、tabs、dialog）。 */
+/** 测试工程：lgui init 的模板，再用 lgui new module 加三种排布模式（split、tabs、dialog），再放进 Controls 包（新控件、齿轮和组，见 ui/Controls）。 */
 export async function conformanceProject() {
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-conf-'));
   const step = async (argv, cwd) => { const r = await run(argv, cwd); if (r.code !== 0) throw new Error(`lgui ${argv.join(' ')}：${r.stderr}`); };
@@ -29,11 +30,12 @@ export async function conformanceProject() {
   await step(['new', 'module', 'bag', '--pattern', 'split'], root);
   await step(['new', 'module', 'shop', '--pattern', 'tabs'], root);
   await step(['new', 'module', 'ask', '--pattern', 'dialog'], root);
+  writeControls(root);
   const dir = path.join(root, 'conformance');
   fs.cpSync(path.join(here, 'cases'), path.join(dir, 'cases'), {recursive: true});
   fs.copyFileSync(path.join(here, 'harness.ts'), path.join(dir, 'harness.ts'));
-  // 用例在 conformance/cases/ 里，写的是 ../src/...；把 src 映射过去。
-  fs.symlinkSync(path.join(root, 'src'), path.join(dir, 'src'), 'dir');
+  // 用例在 conformance/cases/ 里，写的是 ../src/...；把 src 映射过去（junction：Windows 没开开发者模式也能建，别的系统上当作 dir）。
+  fs.symlinkSync(path.join(root, 'src'), path.join(dir, 'src'), 'junction');
 
   const project = readProject(root);
   await generateWeb(uiProjectPath(root), webUiDir(root));
@@ -50,20 +52,22 @@ export async function conformanceProject() {
   };
 }
 
-/** 快照里要读的控件：每个组件（横版）的全部控件、控制器，列表子项里的文字。 */
+/** 快照里要读的控件：每个组件（横版）的全部控件、控制器，列表和树的子项里的文字，滑动条和下拉框的值，序列帧动画在不在播放。 */
 function layoutOf(packages) {
   const components = new Map(packages.flatMap(p => p.components.map(c => [c.name, c])));
   const isButton = name => components.get(name)?.extension === 'Button';
-  const textKinds = ['text', 'richtext', 'input'];
+  const textKinds = ['text', 'richtext', 'input', 'label', 'combobox'];
   return {
     components: [...components.values()].filter(c => !c.name.endsWith('@portrait')).map(c => ({
       name: c.name,
       controllers: c.controllers.map(x => x.name),
       children: c.children.filter(ch => ch.name).map(ch => {
-        const item = ch.kind === 'list' && ch.defaultItem ? components.get(ch.defaultItem) : null;
+        const item = (ch.kind === 'list' || ch.kind === 'tree') && ch.defaultItem ? components.get(ch.defaultItem) : null;
         return {
           name: ch.name, kind: ch.kind,
           text: textKinds.includes(ch.kind) || isButton(ch.ref),
+          value: ch.kind === 'slider' || ch.kind === 'combobox',
+          playing: ch.kind === 'movieclip',
           itemTexts: item ? item.children.filter(x => x.name && (textKinds.includes(x.kind) || isButton(x.ref))).map(x => x.name) : []
         };
       })
@@ -113,6 +117,10 @@ export async function runH5(ctx, name, browser) {
 import {createH5Backend} from ${fw(ctx, 'backends/h5/index.ts')};
 import {stage} from ${fw(ctx, 'backends/h5/scale.ts')};
 type Obj = {native: {element: HTMLElement}};
+// 新控件在 FairyGUI-dom 里的内部字段（只给一致性测试换算坐标用）。
+type Input = {native: {element: {htmlInput: HTMLInputElement}}};
+type Slider = {native: {value: number; min: number; max: number; _barMaxWidth: number; _gripObject: {element: HTMLElement}}};
+type Combo = {native: {dropdown: {getChild(name: string): {getChildAt(index: number): {element: HTMLElement}}}}};
 type Pw = (op: string, ...args: (number | string)[]) => Promise<void>;
 const pw = (window as unknown as {__pw: Pw}).__pw;
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -137,6 +145,28 @@ const sim = {
   async pinch() { throw new Error('一致性测试还没接 h5 的双指缩放'); },
   async wheel(_b: unknown, o: unknown, dy: number) { const p = center(o); await pw('wheel', p.x, p.y, dy); await wait(50); },
   async key(_b: unknown, name: string) { await pw('key', name); await wait(50); },
+  // 打字：点一下输入框、全选，再用键盘一个字一个字地输入；空字符串按退格清空。
+  async type(b: unknown, o: unknown, text: string) {
+    await sim.click(b, o);
+    (o as Input).native.element.htmlInput.select();
+    if (text) await pw('type', text); else if ((o as Input).native.element.htmlInput.value) await pw('key', 'Backspace');
+    await wait(50);
+  },
+  // 拖滑动条：按住滑块，一次移到目标位置再松开（只发一次移动，FairyGUI 只通知一次）。
+  async setValue(_b: unknown, o: unknown, value: number) {
+    const n = (o as Slider).native;
+    const from = center({native: n._gripObject});
+    const target = (Math.min(n.max, Math.max(n.min, value)) - n.min) / (n.max - n.min);
+    const dx = (target - (n.value - n.min) / (n.max - n.min)) * n._barMaxWidth * stage.scale;
+    await pw('mouseDrag', from.x, from.y, from.x + dx, from.y);
+    await wait(50);
+  },
+  // 选下拉框：点开，再点弹出列表里的那一项。
+  async choose(b: unknown, o: unknown, index: number) {
+    await sim.click(b, o);
+    const item = (o as Combo).native.dropdown.getChild('list').getChildAt(index);
+    await sim.click(b, {native: item});
+  },
   async setScreen(_b: unknown, width: number, height: number) { await pw('viewport', width, height); },
   advance: (_b: unknown, ms: number) => wait(ms),
 };
@@ -198,6 +228,8 @@ const createBackend = () => {
       }
       else if (op === 'wheel') { await page.mouse.move(a[0], a[1]); await page.mouse.wheel(0, a[2]); }
       else if (op === 'key') await page.keyboard.press(a[0]);
+      else if (op === 'type') await page.keyboard.type(a[0]);
+      else if (op === 'mouseDrag') { await page.mouse.move(a[0], a[1]); await page.mouse.down(); await page.mouse.move(a[2], a[3]); await page.mouse.up(); }
       else if (op === 'viewport') { await page.setViewportSize({width: a[0], height: a[1]}); }
       else if (op === 'touchDrag') {
         const [x, y, dx, dy, ms, steps] = a;

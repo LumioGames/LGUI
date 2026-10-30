@@ -13,7 +13,7 @@ export type NativeBackendApi = NativePlatformApi & {
 };
 
 export interface NativeBridge {
-  UnityEngine: {Rect: new (x: number, y: number, width: number, height: number) => NativeRect};
+  UnityEngine: {Rect: new (x: number, y: number, width: number, height: number) => NativeRect; Vector2: new (x: number, y: number) => unknown};
   FairyGUI: NativeBackendApi;
   LGUI: {
     Platform: NativePlatformHost;

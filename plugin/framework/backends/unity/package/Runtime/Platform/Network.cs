@@ -105,21 +105,24 @@ namespace LGUI
             {
                 var clip = UIPackage.GetItemAssetByURL(url) as NAudioClip;
                 if (clip == null || clip.nativeClip == null) throw Failure("界面音效不存在：" + url);
-                GRoot.inst.PlayOneShotSound(clip.nativeClip, Mathf.Clamp01(volume));
+                PlaySfx(clip.nativeClip, Mathf.Clamp01(volume));
                 return;
             }
             RequireHttp(url);
+            Run(DownloadSound(url, NetworkAudioType(url), Mathf.Clamp01(volume), generation));
+        }
+
+        static AudioType NetworkAudioType(string url)
+        {
             var extension = System.IO.Path.GetExtension(new Uri(url).AbsolutePath).ToLowerInvariant();
-            AudioType type;
             switch (extension)
             {
-                case ".wav": type = AudioType.WAV; break;
-                case ".ogg": type = AudioType.OGGVORBIS; break;
-                case ".mp3": type = AudioType.MPEG; break;
-                case ".aif": case ".aiff": type = AudioType.AIFF; break;
-                default: throw new NotSupportedException("LGUI-RT-001  Unity 后端尚不支持这种网络音效格式：" + extension + "。 → 使用 WAV、OGG、MP3 或 AIFF。");
+                case ".wav": return AudioType.WAV;
+                case ".ogg": return AudioType.OGGVORBIS;
+                case ".mp3": return AudioType.MPEG;
+                case ".aif": case ".aiff": return AudioType.AIFF;
+                default: throw new NotSupportedException("LGUI-RT-001  Unity 后端尚不支持这种网络声音格式：" + extension + "。 → 使用 WAV、OGG、MP3 或 AIFF。");
             }
-            Run(DownloadSound(url, type, Mathf.Clamp01(volume), generation));
         }
 
         static IEnumerator DownloadSound(string url, AudioType type, float volume, int startedGeneration)
@@ -151,7 +154,7 @@ namespace LGUI
                     yield break;
                 }
                 downloadedSounds.Add(clip);
-                GRoot.inst.PlayOneShotSound(clip, volume);
+                PlaySfx(clip, volume);
             }
             finally { Untrack(request); request.Dispose(); }
             if (clip != null)

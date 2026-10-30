@@ -4,14 +4,17 @@
     <graph id="n0" name="bg" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#070b12">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
+    <graph id="n4" name="safe" xy="0,0" size="1920,1080" touchable="false">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
     <loader id="n1" name="backdrop" xy="0,0" size="1920,1080" url="ui://main0001bkdrop01" align="center" vAlign="middle" fill="scaleNoBorder">
       <relation target="" sidePair="width-width,height-height"/>
     </loader>
     <graph id="n2" name="eventBg" xy="660,24" size="600,64" type="rect" lineSize="2" lineColor="#8a6d3b" fillColor="#cc0b1220">
-      <relation target="" sidePair="center-center,top-top"/>
+      <relation target="n4" sidePair="center-center,top-top"/>
     </graph>
     <text id="n3" name="eventText" xy="680,24" size="560,64" fontSize="28" color="#e8c27a" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="">
-      <relation target="" sidePair="center-center,top-top"/>
+      <relation target="n4" sidePair="center-center,top-top"/>
     </text>
   </displayList>
 </component>

@@ -1,15 +1,30 @@
 // FairyGUI-unity 对象 → 引擎无关接口。缓存包装对象，所有原生事件均有成对的 Add/Remove。
-import type {PointerInput, Rect, UIObject, UIComponent, UIText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, Unsubscribe} from '../../../core/index';
+import type {PointerInput, Rect, UIObject, UIComponent, UIText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, Unsubscribe,
+  UILabel, UISlider, UIComboBox, UIMovieClip, UITree, UITreeNode, WheelInput} from '../../../core/index';
 import {LgRuntimeError} from '../../../core/index';
-import type {NativeColor, NativeComponent, NativeController, NativeEventContext, NativeEventHandler, NativeEventListener, NativeFairyGUI, NativeGraph, NativeImage, NativeInputEvent, NativeList, NativeLoader, NativeObject, NativeProgress, NativeRect, NativeText, NativeTextInput, NativeButton, NativeTransition} from './native-ui';
+import type {NativeColor, NativeComponent, NativeController, NativeEventContext, NativeEventHandler, NativeEventListener, NativeFairyGUI, NativeGraph, NativeImage, NativeInputEvent, NativeList, NativeLoader, NativeObject, NativeProgress, NativeRect, NativeText, NativeTextInput, NativeButton, NativeTransition,
+  NativeLabel, NativeSlider, NativeComboBox, NativeMovieClip, NativeTree, NativeTreeNode} from './native-ui';
 
 const fillMethods = ['none', 'horizontal', 'vertical', 'radial90', 'radial180', 'radial360'] as const;
 const byte = (value: number): string => Math.round(Math.max(0, Math.min(1, value)) * 255).toString(16).padStart(2, '0');
 const rgb = (color: NativeColor): string => byte(color.r) + byte(color.g) + byte(color.b);
 const colorText = (color: NativeColor, alpha = false): string => '#' + (alpha && color.a < 1 ? byte(color.a) : '') + rgb(color);
+type Key = string | number;
+
+/** 对象层要用的宿主能力。FairyGUI 不公开按钮音效的地址和动效的自动播放设置，由 LGUI.Platform 读出来。 */
+export interface ObjectServices {
+  /** 这一次滚轮的横向滚动量。 */
+  wheelDeltaX(): number;
+  /** 设计尺寸里 (x, y) 上最上面那个接收输入的控件，没有时是 null。 */
+  hitTest(x: number, y: number): NativeObject | null;
+  /** 按钮在 ui/ 里设的点击音效地址，没设是空字符串。 */
+  buttonSound(button: NativeButton): string;
+  /** 动效在 ui/ 里写的设置（delay 是毫秒）。 */
+  transitionSettings(transition: NativeTransition): UITransition['settings'];
+}
 
 /** 为一个 Unity 后端创建独立的对象和事件缓存，不能混用另一个后端的对象。 */
-export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toPoint: (x: number, y: number) => {x: number; y: number}, toRect: (x: number, y: number, width: number, height: number) => NativeRect, onComponentReleased?: (component: UIComponent) => void) {
+export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toPoint: (x: number, y: number) => {x: number; y: number}, toRect: (x: number, y: number, width: number, height: number) => NativeRect, services: ObjectServices, onComponentReleased?: (component: UIComponent) => void) {
   const cache = new WeakMap<NativeObject, UnityObject>();
   const natives = new WeakMap<UIObject, NativeObject>();
   const names = new WeakMap<NativeObject, string>();
@@ -17,7 +32,7 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
   const transitions = new WeakMap<NativeTransition, UITransition>();
   const pointers = new Map<NativeObject, Set<(input: PointerInput) => void>>();
   const activeObjects = new Set<UnityObject>();
-  const activeLists = new Set<UnityList>();
+  const activeLists = new Set<UnityList | UnityTree>();
   let converted = new WeakMap<NativeInputEvent, PointerInput>();
 
   function fromColor(value: string): NativeColor {
@@ -53,6 +68,12 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
     get name(): string { return this.native.name; }
     get visible(): boolean { return this.native.visible; }
     set visible(value: boolean) { this.native.visible = value; }
+    // 真的显示：在舞台上（被齿轮或组藏起来时 FairyGUI 把显示对象从父容器里移走），一路往上每一级显示对象都显示。
+    get shown(): boolean {
+      if (!this.native.onStage) return false;
+      for (let display = this.native.displayObject; display; display = display.parent) if (!display.visible) return false;
+      return true;
+    }
     get enabled(): boolean { return !this.native.grayed; }
     set enabled(value: boolean) { this.native.enabled = value; }
     get touchable(): boolean { return this.native.touchable; }
@@ -72,6 +93,23 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
       return this.track(() => listener.Remove(callback));
     }
     release(): void { for (const off of [...this.subscriptions]) off(); }
+    // FairyGUI 的命中测试（跳过不接收输入的控件），再按 GObject 一级级往上数到自己。
+    hitDepth(x: number, y: number): number {
+      let depth = 0;
+      for (let object = services.hitTest(x, y); object; object = object.parent, depth++) if (object === this.native) return depth;
+      return -1;
+    }
+    // 滚轮事件从命中的显示对象往上冒泡，所以只有落在自己（或里面的控件）上的才收到。
+    onWheel(handler: (event: WheelInput) => void): Unsubscribe {
+      const display = this.native.displayObject;
+      if (!display) throw new LgRuntimeError('LGUI-RT-032', `${this.name} 没有显示对象（组），收不到滚轮。`, '把 wheel 绑在组里的控件或外面的组件上。');
+      return this.listen(display.onMouseWheel, context => {
+        const input = context.inputEvent;
+        if (!input) return;
+        const point = toPoint(input.x, input.y);
+        handler({...point, deltaX: services.wheelDeltaX(), deltaY: input.mouseWheelDelta});
+      });
+    }
     onPointer(handler: (event: PointerInput) => void): Unsubscribe {
       let owners = pointers.get(this.native);
       if (!owners) { owners = new Set(); pointers.set(this.native, owners); }
@@ -117,10 +155,11 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
     }
     transition(name: string): UITransition | null {
       const native = this.native.GetTransition(name);
-      if (!native) return null;
-      let result = transitions.get(native);
-      if (!result) { result = new UnityTransition(native); transitions.set(native, result); }
-      return result;
+      return native ? transitionOf(native) : null;
+    }
+    allTransitions(): readonly UITransition[] {
+      const list = this.native.Transitions;
+      return Array.from({length: list.Count}, (_, index) => transitionOf(list.get_Item(index)));
     }
     addChild(child: UIObject): void { this.native.AddChild(nativeOf(child)); }
     removeChild(child: UIObject): void { this.native.RemoveChild(nativeOf(child)); }
@@ -147,6 +186,8 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
     set icon(value: string) { this.native.icon = value; }
     get selected(): boolean { return this.native.selected; }
     set selected(value: boolean) { this.native.selected = value; }
+    get sound(): string { return services.buttonSound(this.native); }
+    get soundVolume(): number { return this.native.soundVolumeScale; }
   }
   class UnityImage extends UnityObject implements UIImage {
     constructor(readonly native: NativeImage) { super(native); }
@@ -231,6 +272,105 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
     get max(): number { return this.native.max; }
     set max(value: number) { this.native.max = value; }
   }
+  class UnityLabel extends UnityComponent implements UILabel {
+    constructor(readonly native: NativeLabel, name: string) { super(native, name); }
+    get title(): string { return this.native.title ?? ''; }
+    set title(value: string) { this.native.title = value; }
+    get icon(): string { return this.native.icon ?? ''; }
+    set icon(value: string) { this.native.icon = value; }
+  }
+  class UnitySlider extends UnityComponent implements UISlider {
+    constructor(readonly native: NativeSlider, name: string) { super(native, name); }
+    get value(): number { return this.native.value; }
+    set value(value: number) { this.native.value = value; }
+    get min(): number { return this.native.min; }
+    set min(value: number) { this.native.min = value; }
+    get max(): number { return this.native.max; }
+    set max(value: number) { this.native.max = value; }
+    // FairyGUI 只在用户拖动或点击时发 onChanged，代码设置不发。
+    onChange(handler: (value: number) => void): Unsubscribe { return this.listen(this.native.onChanged, () => handler(this.native.value)); }
+  }
+  // 下拉框：选中序号统一成「在范围内，否则 -1」。FairyGUI 给 items 时会把 -1 改成 0、把超出的改成最后一项，这里改回来，和 h5、headless 一致。
+  class UnityComboBox extends UnityComponent implements UIComboBox {
+    constructor(readonly native: NativeComboBox, name: string) { super(native, name); }
+    get items(): readonly string[] { const list = this.native.itemList; return Array.from({length: list.Count}, (_, index) => list.get_Item(index)); }
+    set items(value: readonly string[]) {
+      const keep = this.selectedIndex;
+      const list = this.native.itemList;
+      list.Clear();
+      for (const item of value) list.Add(item);
+      this.native.ApplyListChange();
+      this.selectedIndex = keep;
+    }
+    get selectedIndex(): number { const index = this.native.selectedIndex; return index >= 0 && index < this.native.itemList.Count ? index : -1; }
+    set selectedIndex(value: number) { this.native.selectedIndex = value >= 0 && value < this.native.itemList.Count ? value : -1; }
+    get text(): string { return this.native.text ?? ''; }
+    onChange(handler: (index: number) => void): Unsubscribe { return this.listen(this.native.onChanged, () => handler(this.selectedIndex)); }
+  }
+  class UnityMovieClip extends UnityObject implements UIMovieClip {
+    constructor(readonly native: NativeMovieClip) { super(native); }
+    get playing(): boolean { return this.native.playing; }
+    set playing(value: boolean) { this.native.playing = value; }
+    get frame(): number { return this.native.frame; }
+    set frame(value: number) { this.native.frame = value; }
+  }
+  // 树：每次换数据整棵重建（子项组件回到 FairyGUI 的对象池再复用），展开状态按 key 记下来；选中项自己记一份（和列表一样）。
+  class UnityTree extends UnityObject implements UITree {
+    private renderer: ((key: Key, item: UIComponent) => void) | null = null;
+    private readonly nodes = new Map<Key, NativeTreeNode>();
+    private readonly keys = new Map<NativeTreeNode, Key>();
+    private readonly expanded = new Map<Key, boolean>();
+    private selected: Key | null = null;
+    constructor(readonly native: NativeTree) { super(native); }
+    get nodeRenderer(): ((key: Key, item: UIComponent) => void) | null { return this.renderer; }
+    set nodeRenderer(value: ((key: Key, item: UIComponent) => void) | null) {
+      this.renderer = value;
+      this.native.treeNodeRender = value ? (node, cell) => { const key = this.keys.get(node); if (key !== undefined) value(key, wrapComponent(cell)); } : null;
+      if (value) activeLists.add(this); else activeLists.delete(this);
+    }
+    setNodes(list: readonly UITreeNode[]): void {
+      for (const [key, node] of this.nodes) this.expanded.set(key, node.expanded);
+      const pane = this.native.scrollPane;
+      const position = {x: pane?.posX ?? 0, y: pane?.posY ?? 0};
+      this.native.rootNode.RemoveChildren(0, -1);
+      this.nodes.clear();
+      this.keys.clear();
+      const add = (parent: NativeTreeNode, items: readonly UITreeNode[]): void => {
+        for (const item of items) {
+          const node = new fgui.GTreeNode(item.children.length > 0);
+          node.expanded = this.expanded.get(item.key) ?? true;
+          this.nodes.set(item.key, node);
+          this.keys.set(node, item.key);
+          parent.AddChild(node);
+          add(node, item.children);
+        }
+      };
+      add(this.native.rootNode, list);
+      for (const key of [...this.expanded.keys()]) if (!this.nodes.has(key)) this.expanded.delete(key);
+      this.selectedKey = this.selected !== null && this.nodes.has(this.selected) ? this.selected : null;
+      if (pane) { this.native.EnsureBoundsCorrect(); pane.SetPosX(position.x, false); pane.SetPosY(position.y, false); }
+    }
+    get selectedKey(): Key | null { return this.selected; }
+    set selectedKey(key: Key | null) {
+      this.selected = key;
+      this.native.ClearSelection();
+      const node = key === null ? undefined : this.nodes.get(key);
+      if (node) this.native.SelectNode(node, false);
+    }
+    get numItems(): number { return this.native.numChildren; }
+    itemAt(index: number): UIComponent | null { return index >= 0 && index < this.native.numChildren ? wrapComponent(this.native.GetChildAt(index)) : null; }
+    onClickNode(handler: (key: Key) => void): Unsubscribe {
+      return this.listen(this.native.onClickItem, event => {
+        for (const [node, key] of this.keys) {
+          if (node.cell !== event.data) continue;
+          this.selected = key;
+          handler(key);
+          return;
+        }
+      });
+    }
+    override release(): void { super.release(); this.nodeRenderer = null; }
+  }
   class UnityGraph extends UnityObject implements UIGraph {
     constructor(readonly native: NativeGraph) { super(native); }
     get color(): string { return colorText(this.native.color, true); }
@@ -254,7 +394,13 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
   class UnityTransition implements UITransition {
     constructor(readonly native: NativeTransition) {}
     get name(): string { return this.native.name; }
-    play(options: {times?: number; delay?: number} = {}): Promise<void> { return new Promise(resolve => this.native.Play(options.times ?? 1, options.delay ?? 0, resolve)); }
+    get settings(): UITransition['settings'] { return services.transitionSettings(this.native); }
+    get playing(): boolean { return this.native.playing; }
+    play(options: {times?: number; delay?: number} = {}, onComplete?: () => void): void {
+      // FairyGUI 重播时会把上一次当作放完（调用它的回调）；先不带回调停掉，只有正常放完才通知。FairyGUI 的 delay 是秒。
+      this.native.Stop(true, false);
+      this.native.Play(options.times ?? 1, (options.delay ?? 0) / 1000, () => onComplete?.());
+    }
     stop(): void { this.native.Stop(true, false); }
     setPaused(paused: boolean): void { this.native.SetPaused(paused); }
   }
@@ -267,6 +413,11 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
     if (object instanceof UnityComponent) onComponentReleased?.(object);
     if (native instanceof fgui.GComponent) for (let index = 0; index < native.numChildren; index++) releaseTree(native.GetChildAt(index));
   }
+  function transitionOf(native: NativeTransition): UITransition {
+    let result = transitions.get(native);
+    if (!result) { result = new UnityTransition(native); transitions.set(native, result); }
+    return result;
+  }
   function setComponentName(native: NativeObject, name: string): void { names.set(native, name); }
   function wrap(native: NativeObject): UIObject {
     const existing = cache.get(native);
@@ -274,15 +425,20 @@ export function createObjectAdapter(fgui: NativeFairyGUI, now: () => number, toP
     const item = native.packageItem;
     const name = names.get(native) ?? (item ? `${item.owner.name}/${item.name}` : '');
     let result: UnityObject;
-    if (native instanceof fgui.GList) result = new UnityList(native);
+    if (native instanceof fgui.GTree) result = new UnityTree(native);
+    else if (native instanceof fgui.GList) result = new UnityList(native);
     else if (native instanceof fgui.GButton) result = new UnityButton(native, name);
     else if (native instanceof fgui.GProgressBar) result = new UnityProgress(native, name);
+    else if (native instanceof fgui.GLabel) result = new UnityLabel(native, name);
+    else if (native instanceof fgui.GSlider) result = new UnitySlider(native, name);
+    else if (native instanceof fgui.GComboBox) result = new UnityComboBox(native, name);
     else if (native instanceof fgui.GComponent) result = new UnityComponent(native, name);
     else if (native instanceof fgui.GTextInput) result = new UnityInput(native);
     else if (native instanceof fgui.GTextField) result = new UnityText(native);
     else if (native instanceof fgui.GImage) result = new UnityImage(native);
     else if (native instanceof fgui.GLoader) result = new UnityLoader(native);
     else if (native instanceof fgui.GGraph) result = new UnityGraph(native);
+    else if (native instanceof fgui.GMovieClip) result = new UnityMovieClip(native);
     else result = new UnityObject(native);
     cache.set(native, result); natives.set(result, native);
     return result;

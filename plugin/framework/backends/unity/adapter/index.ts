@@ -56,8 +56,21 @@ export function createUnityBackend(bridge?: NativeBridge): Backend {
       config = options;
       const fgui = found.FairyGUI;
       if (options.defaultFont) fgui.UIConfig.defaultFont = options.defaultFont;
-      objects = createObjectAdapter(fgui, () => found.LGUI.Platform.Now, (x, y) => ({x: x / scale.value, y: y / scale.value}),
-        (x, y, width, height) => new found.UnityEngine.Rect(x, y, width, height), component => { containers.delete(component); });
+      // FairyGUI-unity 的按钮、动效会自己放声音（网页版的 FairyGUI 不放）。LGUI 的声音都由框架经 platform.audio 放，所以关掉 FairyGUI 自己的。
+      fgui.Stage.inst.soundVolume = 0;
+      const host = found.LGUI.Platform;
+      objects = createObjectAdapter(fgui, () => host.Now, (x, y) => ({x: x / scale.value, y: y / scale.value}),
+        (x, y, width, height) => new found.UnityEngine.Rect(x, y, width, height), {
+          wheelDeltaX: () => host.WheelDeltaX,
+          hitTest(x, y) {
+            // 舞台坐标 = 设计坐标 × 缩放比；没有命中控件时 FairyGUI 返回舞台自己（它不属于任何 GObject）。
+            let display = fgui.Stage.inst.HitTest(new found.UnityEngine.Vector2(x * scale.value, y * scale.value), true);
+            while (display && !display.gOwner) display = display.parent;
+            return display?.gOwner ?? null;
+          },
+          buttonSound: button => host.ButtonSoundUrl(button),
+          transitionSettings: transition => ({autoPlay: host.TransitionAutoPlay(transition), times: host.TransitionAutoPlayTimes(transition), delay: Math.round(host.TransitionAutoPlayDelay(transition) * 1000)})
+        }, component => { containers.delete(component); });
       nativePlatform = createUnityPlatform({
         projectName: options.projectName, uiBase: options.uiBase, host: found.LGUI.Platform,
         fgui, objects, createLoader: () => new found.LGUI.LGUIResourceLoader(), scale

@@ -1,5 +1,5 @@
 // PuerTS 暴露的 LGUI C# 服务；这里只描述本适配器实际调用的原生 API。
-import type {NativeComponent, NativeEventContext, NativeFairyGUI, NativeLoader, NativeObject} from './native-ui';
+import type {NativeButton, NativeComponent, NativeDisplayObject, NativeEventContext, NativeFairyGUI, NativeLoader, NativeObject, NativeTransition} from './native-ui';
 import type {PointerInput} from '../../../core/index';
 
 export interface NativePlatformHost {
@@ -21,16 +21,24 @@ export interface NativePlatformHost {
   SetInputMode(mode: string): void;
   Log(level: string, message: string): void;
   PlayAudio(url: string, volume: number): void;
+  /** 背景音乐换成 url（空字符串是停掉），新旧两首用 fadeMs 毫秒淡入淡出；和正在放的一样时只改音量。 */
+  PlayMusic(url: string, volume: number, fadeMs: number): void;
+  /** 暂停或恢复 LGUI 的全部声音。 */
+  SetAudioPaused(paused: boolean): void;
+  /** 按钮在 ui/ 里设的点击音效的 ui:// 地址；没设是空字符串。 */
+  ButtonSoundUrl(button: NativeButton): string;
+  /** 动效在 ui/ 里设的自动播放、播放次数和自动播放前等多久（秒）。 */
+  TransitionAutoPlay(transition: NativeTransition): boolean;
+  TransitionAutoPlayTimes(transition: NativeTransition): number;
+  TransitionAutoPlayDelay(transition: NativeTransition): number;
   Fetch(url: string, method: string, headersJson: string, body: string, complete: (responseJson: string) => void): void;
-}
-
-export interface NativeDisplayObject {
-  readonly gOwner: NativeObject | null;
-  readonly parent: NativeDisplayObject | null;
 }
 
 export interface NativeStage {
   readonly touchTarget: NativeDisplayObject | null;
+  /** 舞台坐标（屏幕像素，y 向下）上最上面那个显示对象；forTouch 时跳过不接收输入的。没有命中时返回舞台自己。 */
+  HitTest(stagePoint: unknown, forTouch: boolean): NativeDisplayObject | null;
+  soundVolume: number;
   AddCapture(type: string, callback: (context: NativeEventContext) => void): void;
   RemoveCapture(type: string, callback: (context: NativeEventContext) => void): void;
 }

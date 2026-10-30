@@ -1,5 +1,5 @@
 // 一个最小的假后端：证明接口层能被完整实现，并用来测事件订阅和取消。
-import type {Backend, Platform, UIComponent, UIObject, UIController, PointerInput, Unsubscribe, Rect} from '../../../plugin/framework/core/index';
+import type {Backend, Logger, Platform, UIComponent, UIObject, UIController, PointerInput, WheelInput, Unsubscribe, Rect} from '../../../plugin/framework/core/index';
 import {LgRuntimeError, notImplemented} from '../../../plugin/framework/core/index';
 
 // 简单的事件源：订阅返回取消函数。
@@ -20,8 +20,12 @@ class FakeObject implements UIObject {
   rect: Rect = {x: 0, y: 0, width: 100, height: 100};
   customData = '';
   readonly pointer = new Emitter<PointerInput>();
+  readonly wheels = new Emitter<WheelInput>();
   constructor(readonly name: string) {}
+  get shown(): boolean { return this.visible; }
   onPointer(handler: (event: PointerInput) => void): Unsubscribe { return this.pointer.on(handler); }
+  hitDepth(): number { return -1; }
+  onWheel(handler: (event: WheelInput) => void): Unsubscribe { return this.wheels.on(handler); }
 }
 
 export class FakeController implements UIController<'a' | 'b'> {
@@ -41,6 +45,7 @@ export class FakeComponent extends FakeObject implements UIComponent {
   child(path: string): UIObject | null { return this.children.find(c => c.name === path) ?? null; }
   controller(name: string): UIController | null { return name === 'tabs' ? this.tabs : null; }
   transition(): null { return null; }
+  allTransitions(): readonly [] { return []; }
   childNames(): readonly string[] { return this.children.map(c => c.name); }
   addChild(child: UIObject): void { this.children.push(child); }
   removeChild(child: UIObject): void { this.children.splice(this.children.indexOf(child), 1); }
@@ -48,6 +53,9 @@ export class FakeComponent extends FakeObject implements UIComponent {
 }
 
 const unsupported = (feature: string): never => { throw notImplemented(feature, 'fake'); };
+
+// 什么都不记的日志出口。
+const silentLog: Logger = {enabled: () => false, debug: () => {}, info: () => {}, warn: () => {}, error: () => {}, child: () => silentLog};
 
 export function createFakeBackend(): Backend {
   const frame = new Emitter<number>();
@@ -58,9 +66,9 @@ export function createFakeBackend(): Backend {
     input: {onPointer: () => () => {}, onKey: () => () => {}, onWheel: () => () => {}, setInputMode: () => {}},
     textInput: {isComposing: () => false},
     screen: {size: () => ({width: 1920, height: 1080}), safeArea: () => ({top: 0, right: 0, bottom: 0, left: 0}), onResize: () => () => {}, applyDesignSize: () => ({x: 0, y: 0, width: 1920, height: 1080})},
-    audio: {play: () => {}},
+    audio: {play: () => {}, music: () => {}, setPaused: () => {}},
     locale: {systemLanguages: () => ['zh-CN']},
-    log: {write: () => {}, recent: () => []},
+    log: silentLog,
     net: {fetch: () => unsupported('网络'), webSocket: () => unsupported('WebSocket')}
   };
   return {

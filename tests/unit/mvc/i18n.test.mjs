@@ -45,15 +45,15 @@ test('没有 Intl 时的退路：复数用内置规则，格式化用内置实�
   });
 });
 
-test('找不到键：显示键名，记一条 LGUI-RT-090（同一个键只记一次）', async () => {
+test('找不到键：开发模式抛 LGUI-RT-090，记一条 error（同一个键只记一次，日志写明是哪个文本表）', async () => {
   const {fw, backend} = await headless();
   const {lgui, setTexts} = fw;
   setTexts(tables, 'en');
-  assert.equal(lgui.t('nope.key'), 'nope.key');
-  lgui.t('nope.key');
-  const errors = backend.state.logs.filter(l => /LGUI-RT-090/.test(l.message));
+  assert.throws(() => lgui.t('nope.key'), e => e.code === 'LGUI-RT-090');
+  assert.throws(() => lgui.t('nope.key'), e => e.code === 'LGUI-RT-090');
+  const errors = backend.state.logs.filter(l => l.event === 'lgui_rt_090');
   assert.equal(errors.length, 1);
-  assert.match(errors[0].message, /i18n\/en\.json/);
+  assert.match(errors[0].data.message, /i18n\/en\.json/);
 });
 
 test('启动时选语言：系统语言里第一个工程支持的，都不支持就用默认语言', async () => {

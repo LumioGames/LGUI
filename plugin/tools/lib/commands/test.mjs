@@ -41,14 +41,16 @@ const env = {
   deps: ${JSON.stringify(deps)},
   config: ${JSON.stringify(runtimeConfig(project))},
   texts: ${JSON.stringify(texts)},
-  current: null as null | {snapshot(): unknown}
+  current: null as null | {snapshot(): unknown; checkLogs(): void}
 };
 (globalThis as unknown as {__lguiTest: typeof env}).__lguiTest = env;
 
 const snapshots: Record<string, unknown> = {};
 afterEach(t => {
-  try { if (env.current) snapshots[t.name] = env.current.snapshot(); } catch (error) { snapshots[t.name] = String(error); }
+  const current = env.current;
   env.current = null;
+  try { if (current) snapshots[t.name] = current.snapshot(); } catch (error) { snapshots[t.name] = String(error); }
+  current?.checkLogs(); // 测试里记了 error 级的日志：这个测试失败（LGUI-RT-176）
 });
 // 每个测试文件在自己的进程里跑，各写一份快照，lgui test 跑完再合并。
 process.on('exit', () => { if (process.env.LGUI_TEST_SNAPSHOTS) writeFileSync(process.env.LGUI_TEST_SNAPSHOTS + '/snapshots-' + process.pid + '.json', JSON.stringify(snapshots)); });
@@ -86,6 +88,7 @@ export async function runProjectTests(root, project) {
     try {
       await esbuild().build({
         entryPoints: [file], bundle: true, platform: 'node', format: 'esm', target: 'es2020', outfile,
+        // LGUI_DEV = true：开发模式，写错了直接抛错（见 dev/bundle.mjs 的 webBuildOptions）。
         alias: {lgui: frameworkEntry(root)}, inject: [env], define: {LGUI_DEV: 'true'}, keepNames: true, absWorkingDir: root, logLevel: 'silent', sourcemap: 'inline'
       });
     } catch (error) {

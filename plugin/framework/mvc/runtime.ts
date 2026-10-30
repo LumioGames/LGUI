@@ -1,5 +1,5 @@
-// 框架运行时：当前用的后端和工程配置。由 lgui 启动时（网页、测试、Unity）设置。
-import type {Backend} from '../core/index';
+// 框架运行时：当前用的后端、工程配置和日志、声音的出口。由 lgui 启动时（网页、测试、Unity）设置。
+import type {AudioService, Backend, Logger} from '../core/index';
 import {LgRuntimeError} from '../core/index';
 
 /** 框架用到的工程配置（来自 .lgui/project.json）。 */
@@ -24,7 +24,7 @@ export interface RuntimeConfig {
   requestTimeoutMs: number;
   /** 默认占位图。 */
   placeholder: string;
-  /** 按钮音效。 */
+  /** 按钮的默认音效（ui/ 里按钮没写音效时用），null 表示不放。 */
   sounds: {click: string | null};
 }
 
@@ -47,14 +47,32 @@ interface Current {
   monoBase: number;
   /** 和服务器的时间差（毫秒）。 */
   serverOffset: number;
+  /** 日志出口：lgui.app({ platform: { log } }) 交进来的，没交就是后端自带的。 */
+  log: Logger;
+  /** 声音出口：lgui.app({ platform: { audio } }) 交进来的，没交就是后端自带的。 */
+  audio: AudioService;
+}
+
+/** lgui.app({ platform }) 里能换掉的平台服务。 */
+export interface PlatformOverrides {
+  /** 日志出口（形状和 Lumio 引擎的 Logger 一样）。 */
+  log?: Logger;
+  /** 声音出口。 */
+  audio?: AudioService;
 }
 
 let current: Current | null = null;
 
-/** 内部用：设置当前后端。 */
-export function setRuntime(backend: Backend, config: RuntimeConfig, wallBase = Date.now(), deps: Record<string, string[]> = {}): void {
-  current = {backend, config, deps, ui: null, wallBase, monoBase: backend.platform.time.now(), serverOffset: 0};
+/** 内部用：设置当前后端。platform 里给了的服务换掉后端自带的，其余用后端的。 */
+export function setRuntime(backend: Backend, config: RuntimeConfig, wallBase = Date.now(), deps: Record<string, string[]> = {}, platform: PlatformOverrides = {}): void {
+  current = {
+    backend, config, deps, ui: null, wallBase, monoBase: backend.platform.time.now(), serverOffset: 0,
+    log: platform.log ?? backend.platform.log, audio: platform.audio ?? backend.platform.audio
+  };
 }
+
+/** 框架启动了没有。 */
+export function hasRuntime(): boolean { return current !== null; }
 
 /** 内部用：清掉（测试之间用）。 */
 export function clearRuntime(): void { current = null; }

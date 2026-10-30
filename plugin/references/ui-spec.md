@@ -8,7 +8,7 @@
 2. 新界面用 `lgui new view <包>/<组件> --pattern <模式>` 一次生成横竖两版骨架（第 7 节）；改已有界面就直接编辑 `ui/` 里的 XML。
 3. 改完运行 `lgui check`，把报错全部改掉。
 4. `lgui dev` 打开预览看效果。
-5. `lgui verify` 按标准尺寸横竖各截一张图，逐张看一遍。
+5. `lgui verify` 按标准尺寸横竖截图（同一个画面只截一次，按尺寸模拟刘海），逐张看一遍。
 
 编辑器开着时不要直接改 XML：同一时间只有一方修改 `ui/`。
 
@@ -42,12 +42,12 @@ ui/
 | 包名 | 大写开头的驼峰 | `Bag`、`Common` |
 | 组件名 | 大写开头的驼峰 | `BagPanel`、`ItemSlot` |
 | 竖版组件 | 横版名加 `@portrait` | `BagPanel@portrait` |
-| 控件名、控制器名 | 小写开头的驼峰，只用字母和数字 | `sellButton`、`tabs` |
+| 控件名、控制器名、动效名 | 小写开头的驼峰，只用字母和数字 | `sellButton`、`tabs`、`enter` |
 | 带字图片的各语言版本 | 图片名加 `@<语言>` | `title.png`、`title@en.png` |
 | 图片名 | 小写开头的驼峰或带数字 | `sword`、`btnBg` |
 
 - **控件名就是绑定表的键名。** 每个要在代码里用到的控件都要起名；只做装饰的控件也要起名（`deco1` 这类），因为名字要在组件内唯一。
-- 同一个组件里，控件名不能重复，控件和控制器也不能重名。
+- 同一个组件里，控件名不能重复，控件、控制器、动效也不能重名（动效名也是绑定表的键）。
 - **要生成类型的组件标「导出」**：在 `package.xml` 里写 `exported="true"`。代码里用 `View`、`ItemView`、`PartView` 对应的组件都必须导出；只在别的组件里当子组件、代码不直接绑的，可以不导出。
 
 ## 4. ID 规则
@@ -74,6 +74,7 @@ ui/
     <component id="bagpnl02" name="BagPanel@portrait.xml" path="/" exported="true"/>
     <image id="sword001" name="sword.png" path="/icons/" exported="true"/>
     <image id="frame001" name="frame.png" path="/" scale="9grid" scale9grid="12,12,40,40"/>
+    <sound id="coin0001" name="coin.mp3" path="/sfx/" exported="true"/>
   </resources>
 </packageDescription>
 ```
@@ -81,6 +82,7 @@ ui/
 - 每个组件 XML 和图片都要登记；登记的文件必须存在，存在的文件也都要登记。
 - **九宫格：** 在图片上写 `scale="9grid"` 和 `scale9grid="左,上,宽,高"`（中间可拉伸区域），区域不能超出图片。边距按图片真实的边框像素取，不要统一取边长的四分之一。
 - **图集不用手管：** 生成时按包自动打图集。
+- **声音：** mp3，登记成 `<sound>` 并导出（`exported="true"`）。代码和 View 的 `static music` 里写 `ui://<包名>/<声音名>`（`ui://Bag/coin`）；按钮的 `sound` 属性和别的资源引用一样写 `ui://<包ID><资源ID>`（`ui://bag00001coin0001`）。用法见 MVC 开发规范第 15 节。
 - `lgui art split` 拆出来的小图会自动登记。
 
 ## 6. 最小写法模板
@@ -114,7 +116,7 @@ ui/
 
 <!-- 按钮：引用一个 extention="Button" 的组件（按钮组件本身可以写 <Button mode="Check"/> 或 "Radio"，让它保持选中，见第 12 节） -->
 <component id="n4" name="sellButton" src="btn00001" xy="20,250" size="160,56">
-  <Button title="出售"/>
+  <Button title="出售" sound="ui://bag00001coin0001" volume="80"/>   <!-- 点击音效和音量（百分比），都可以不写 -->
 </component>
 
 <!-- 子组件 -->
@@ -125,6 +127,21 @@ ui/
 
 <!-- 列表：defaultItem 必须指向一个导出的组件 -->
 <list id="n7" name="list" xy="40,160" size="840,600" layout="flow_hz" lineGap="12" colGap="12" defaultItem="ui://bag00001slot0001" overflow="scroll" scrollBar="hidden"/>
+
+<!-- 树：列表加 treeView="true"；clickToExpand="1" 单击节点展开或收起（"2" 双击，不写或 "0" 点了不展开），见第 12 节 -->
+<list id="n10" name="tree" xy="40,160" size="400,600" layout="column" treeView="true" indent="20" clickToExpand="1" defaultItem="ui://bag00001node0001" overflow="scroll"/>
+
+<!-- 序列帧动画：src 是同包登记的 movieclip 资源（.jta）；playing 是初始是否播放 -->
+<movieclip id="n11" name="spin" src="spin0001" xy="0,0" size="64,64" playing="true"/>
+
+<!-- 标签、滑动条、下拉框：引用一个扩展类型是 Label / Slider / ComboBox 的组件（组件模板见下面）；实例上写初始值 -->
+<component id="n12" name="badge" src="label001" xy="20,320" size="300,60">
+  <Label title="徽章"/>
+</component>
+<component id="n13" name="volume" src="slider01" xy="20,400" size="400,40">
+  <Slider value="50" max="100"/>
+</component>
+<component id="n14" name="mode" src="combo001" xy="20,460" size="300,60"/>
 
 <!-- 图形 -->
 <graph id="n8" name="mask" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#80000000"/>
@@ -150,17 +167,77 @@ ui/
 </component>
 ```
 
+**标签组件**（`extention="Label"`，标题和图标控件名固定为 `title`、`icon`；不能点选，要点的用按钮）：
+
+```xml
+<component size="300,60" extention="Label">
+  <displayList>
+    <loader id="n0" name="icon" xy="0,0" size="60,60" align="center" vAlign="middle" fill="scale"/>
+    <text id="n1" name="title" xy="70,0" size="230,60" fontSize="24" color="#ffffff" vAlign="middle" autoSize="shrink" singleLine="true" text=""/>
+  </displayList>
+  <Label/>
+</component>
+```
+
+**滑动条组件**（`extention="Slider"`，控件名固定：`bar` 是随值变长的条，`grip` 是滑块，`grip` 用关联贴在 `bar` 的右边；`wholeNumbers="true"` 时用户拖出来的值取整）：
+
+```xml
+<component size="400,40" extention="Slider">
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="400,40" type="rect" lineSize="0" fillColor="#22344d">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n1" name="bar" xy="0,0" size="400,40" type="rect" lineSize="0" fillColor="#6aa7ff"/>
+    <graph id="n2" name="grip" xy="390,0" size="20,40" type="rect" lineSize="0" fillColor="#ffffff">
+      <relation target="n1" sidePair="left-right"/>
+    </graph>
+  </displayList>
+  <Slider wholeNumbers="true" changeOnClick="true"/>
+</component>
+```
+
+**下拉框组件**（`extention="ComboBox"`，选中项的文字显示在 `title` 里；`dropdown` 指向弹出的组件，它里面要有一个名为 `list` 的列表，子项是按钮。弹出组件和子项都放在下拉框所在的包里并导出）：
+
+```xml
+<!-- ComboBox.xml -->
+<component size="300,60" extention="ComboBox">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <graph id="n0" name="bg" xy="0,0" size="300,60" type="rect" lineSize="2" lineColor="#6aa7ff" fillColor="#22344d">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1" name="title" xy="0,0" size="300,60" fontSize="24" color="#ffffff" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="">
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+  </displayList>
+  <ComboBox dropdown="ui://bag00001cbpopup1"/>
+</component>
+
+<!-- ComboBoxPopup.xml（cbpopup1）：子项 cbitem01 是一个带 title 的按钮组件 -->
+<component size="300,180">
+  <displayList>
+    <list id="n0" name="list" xy="0,0" size="300,180" layout="column" defaultItem="ui://bag00001cbitem01" overflow="scroll">
+      <relation target="" sidePair="width-width,height-height"/>
+    </list>
+  </displayList>
+</component>
+```
+
+**按钮音效：** 按钮实例上的 `sound`、`volume` 优先，其次是按钮组件自己 `<Button sound="…" volume="…"/>` 写的；都没写就用工程配置 `sounds.click`。**`volume="0"` 表示这个按钮不出声**（写在按钮组件上就是这个组件的所有按钮）。编辑器里在按钮的「音效」「音量」里设。
+
 **控制器、齿轮：** `pages` 是「页ID,页名」成对排列；齿轮的 `pages` 写页 ID，不是页名。
 
 ```xml
 <controller name="state" pages="0,locked,1,ready,2,claimed" selected="0"/>
-<text id="n3" name="stateText" xy="0,0" size="200,40" fontSize="22" autoSize="shrink" text="未达成">
-  <gearText controller="state" pages="0,1,2" values="未达成|可领取|已领取" default="未达成"/>
-</text>
 <image id="n4" name="doneMark" src="done0001" xy="0,0" size="40,40">
   <gearDisplay controller="state" pages="2"/>
 </image>
 ```
+
+- **用户能看到的文字不写在 `gearText` 里**：这些字不会被提取翻译，`lgui test` 里也看不到，`lgui check` 报 `LGUI-UI-060`。随状态变的文字在绑定表里写：`` stateText: { text: pick(taskModel, s => lgui.t(`task.${s.state}`)) } ``，文字放进 `i18n/<语言>.json`。
+- **按钮不直接绑控制器**（`<Button controller="tabs" page="1"/>`，点了就切页）：这样切页不经过 Model，`lgui test` 里也不会切，`lgui check` 报 `LGUI-UI-061`。点击写在绑定表里调用 Controller（`click: () => shopController.switchTab('second')`），控制器的页由 `page: pick(…)` 决定。
+- 显示齿轮（`gearDisplay`，再加条件的 `gearDisplay2`：`condition="0"` 是「并且」、`"1"` 是「或者」）和组（`<group>`，控件上写 `group="组的元素 ID"`）在网页和 `lgui test` 里一样生效：被藏起来的控件 `t.visible` 是 `false`，点它报 `LGUI-RT-032`。别的齿轮（`gearXY`、`gearText` 等）`lgui test` 不模拟。
+- **序列帧动画：** 网页端（FairyGUI-dom）目前不画序列帧的画面，只有 `playing`、当前帧这些状态（绑定表的 `playing` 照常生效）。
 
 **关联**（同一方向内适配不同宽高比，第 7.3 节）：
 
@@ -176,10 +253,19 @@ ui/
 **动效：**
 
 ```xml
-<transition name="enter">
+<transition name="enter" autoPlay="true">
   <item time="0" type="Alpha" target="n0" duration="12" tween="true" startValue="0" endValue="1"/>
 </transition>
+<transition name="glow" autoPlayRepeat="-1">
+  <item time="0" type="Alpha" target="n1" duration="12" tween="true" startValue="1" endValue="0.6" repeat="1" yoyo="true"/>
+</transition>
 ```
+
+- `time`、`duration` 的单位是帧，帧率是 `frameRate`（不写是每秒 24 帧）；`repeat` 是这一项再重复几次（`-1` 一直重复）。
+- `autoPlay="true"`：界面创建时自动播放（旋转、换语言重建组件时会再播一次）；`autoPlayDelay` 是自动播放前等几秒。
+- `autoPlayRepeat`：播放次数，`-1` 一直循环；绑定表里的 `playing` 也按它放。
+- 代码里按条件播放、重播、放完通知，用动效名当绑定表的键（MVC 开发规范第 6.4 节）。
+- `lgui test` 的 headless 后端按这里写的时长走假时钟，放完才算完，和网页一样。
 
 动效的设计方法见技能 `lgui-ui`。
 
@@ -189,13 +275,13 @@ ui/
 
 - 横屏 1920×1080，竖屏 1080×1920。两者短边相同，按钮、图标、字号在两种方向下一样大，美术资源直接共用。
 - 全屏界面的根组件尺寸写设计尺寸：横版 `size="1920,1080"`，竖版 `size="1080,1920"`。
-- 框架保证整个设计区域完整显示：缩放比 = min(屏幕宽 / 设计宽, 屏幕高 / 设计高)，所以一个方向刚好铺满，另一个方向多出空间。全屏界面的根组件被拉到整个可见区域（设计单位下比设计尺寸大），多出来的空间交给关联；不是全屏的界面（弹窗等）放在可见区域正中。
+- 框架保证整个设计区域完整显示：缩放比 = min(屏幕宽 / 设计宽, 屏幕高 / 设计高)，所以一个方向刚好铺满，另一个方向多出空间。全屏界面的根组件被拉到整个可见区域（设计单位下比设计尺寸大），多出来的空间交给关联；不是全屏的界面（弹窗等）放在安全区正中（第 7.3 节）。
 
 ### 7.2 横竖两版组件
 
 - 需要两种排法的界面做两个组件：横版 `BagPanel` 和竖版 `BagPanel@portrait`，都要导出。
 - **两版的控件名和类型必须完全一致**（包括控制器和页名），代码只写一份。不一致时 `lgui check` 报 `LGUI-UI-007`。
-- **两版的固定文字也要一样**：两版共用一个文本键（`<包>/<组件>/<控件>`），`lgui i18n extract` 和翻译都以横版的文字为准，竖版写了不同的字会被丢掉。两版要说不一样的话，就用代码里的 `lgui.t`。
+- **两版的固定文字也要一样**：两版共用一个文本键（`<包>/<组件>/<控件>`），`lgui i18n extract` 和翻译都取横版的文字。两版写了不同的字，`lgui check` 警告 `LGUI-UI-063`：默认语言下两版各显示各的，换了语言竖版也显示横版的翻译。两版要说不一样的话，就用代码里的 `lgui.t`。
 - 按钮、道具格子这类子组件两版共用。
 - 弹窗这类没有竖版的组件，两种方向通用，只靠关联适配。
 - **全屏界面必须有竖版**；确实两种方向都用同一版的，在 View 里写 `static bothOrientations = true`（见 MVC 开发规范）。
@@ -213,6 +299,31 @@ ui/
 | `center-center`、`middle-middle` | 水平居中 / 垂直居中 |
 
   一个方向只写一条（比如右上角的关闭按钮写 `right-right,top-top`）。其他取值照 FairyGUI 的关联规则。
+- **安全区：** 手机的刘海、圆角、底部横条会挡住屏幕边上的一部分，剩下不被挡住的叫安全区。
+  - 全屏界面的根组件照样铺满整个可见区域，背景画到屏幕边上。
+  - 全屏界面的组件（横竖两版）在 `bg` 后面放一个名为 `safe` 的空图形，铺满组件。打开、旋转、屏幕尺寸变化时，框架把它摆到安全区（设计单位，平台给的屏幕像素按缩放比换算）。
+  - 背景关联到组件本身（`target=""`）；贴边的控件和要点的内容关联到 `safe`（`target` 写它的元素 ID）。
+  - 不是全屏的界面放在安全区正中。
+  - 全屏界面没有 `safe` 时 `lgui check` 报 `LGUI-UI-064`。`lgui init` 和 `lgui new view` 生成的全屏界面已经这样写好了：
+
+```xml
+<graph id="n0" name="bg" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#0e1621">
+  <relation target="" sidePair="width-width,height-height"/>
+</graph>
+<graph id="n4" name="safe" xy="0,0" size="1920,1080" touchable="false">
+  <relation target="" sidePair="width-width,height-height"/>
+</graph>
+<component id="n2" name="closeButton" pkg="cmn00001" src="button01" xy="1620,32" size="240,72">
+  <relation target="n4" sidePair="right-right,top-top"/>
+  <Button title="关闭"/>
+</component>
+<list id="n3" name="list" xy="60,140" size="1800,820" layout="flow_hz" defaultItem="ui://bag00001slot0001" overflow="scroll">
+  <relation target="n4" sidePair="left-left,top-top,width-width,height-height"/>
+</list>
+```
+
+  - 关联到 `safe` 时，`left-left` 这类写法表示跟着 `safe` 的边移动，`width-width` 表示跟着 `safe` 变宽变窄；铺满安全区的内容四条都写。
+  - 测试里用 `t.setSafeArea({ top, right, bottom, left })`（屏幕像素）模拟刘海。
 - **底部留空：** 操作提示栏（第 10 节）占屏幕底部 64 设计像素，全屏界面底部的按钮和内容要留出这段高度。
 - **列表：** 用列表的自动排布（`layout="flow_hz"`），按宽度决定每行几个，不在代码里算列数。
 - **代码里不写坐标和尺寸**，布局只在 `ui/` 里定义。
@@ -231,7 +342,7 @@ ui/
 ## 8. 文字
 
 - **默认字体**在工程配置 `defaultFont` 里设置；XML 里不写 `font`，除非这一处必须用别的字体。
-- **最小字号 20**（按设计尺寸）。小于 20 时 `lgui check` 报 `LGUI-UI-011`。
+- **最小字号 20**（按设计尺寸）。小于 20 时 `lgui check` 报 `LGUI-UI-011`；没写 `fontSize` 的按 FairyGUI 默认的 12 号算，也报。
 - **每个文字控件都要声明文字超长时怎么处理**，就是 `autoSize` 的取值：
 
 | 写法 | 效果 |
@@ -251,9 +362,9 @@ ui/
 - 第一版不支持从右往左排版的语言。
 - **固定文字**写在 `ui/` 里，`lgui i18n extract` 把它们提取到默认语言的 `i18n/<语言>.json`，键名是 `<包>/<组件>/<控件路径>`，比如 `Bag/BagPanel/sellButton`、`Bag/BagPanel/header.count`。按钮的标题、输入框的提示文字也一样提取。
 - **默认语言的固定文字以 `ui/` 为准**：要改默认语言的文字，直接改 `ui/`；默认语言文本表里的这些键只是给翻译看的原文。
-- 其他语言的 `i18n/<语言>.json` 照同样的键翻译。只编辑这些 JSON，不碰生成的翻译 XML。
+- 其他语言的 `i18n/<语言>.json` 照同样的键翻译。只编辑这些 JSON，不碰生成的翻译 XML。翻译和默认语言的原文一字不差时，`lgui check` 警告 `LGUI-UI-062`（多半是还没翻，比如 `lgui new` 先填进去的原文）。
 - 占位符写成 `{count}`，各语言的占位符必须一致。
-- **带字的图片**按 `@<语言>` 命名提供各语言版本，比如 `title.png`（默认）和 `title@en.png`。必须有不带后缀的默认版本；后缀的语言必须在工程配置 `languages` 里。界面里用**装载器**放它，在绑定表里写 `icon: 'ui://<包>/<图片名>'`（不带后缀），框架按当前语言换成对应版本；图片控件（`<image>`）不会随语言换，`lgui check` 报 `LGUI-UI-017`。
+- **带字的图片**按 `@<语言>` 命名提供各语言版本，比如 `title.png`（默认）和 `title@en.png`。必须有不带后缀的默认版本；后缀的语言必须在工程配置 `languages` 里。界面里用**装载器**放它，在绑定表里写 `icon: 'ui://<包>/<图片名>'`（不带后缀），框架按当前语言换成对应版本；图片控件（`<image>`）、在 `ui/` 里写死的装载器 `url` 和按钮 `icon` 都不会随语言换，`lgui check` 报 `LGUI-UI-017`。
 - 布局要给翻译留空间：英文、德文通常比中文长 40% 以上。用 `lgui verify --lang pseudo` 检查（文字加长 40%）。
 
 ## 10. Common 包（`lgui init` 自带）
@@ -312,6 +423,8 @@ ui/
 - 框架默认开虚拟列表，只创建看得见的子项，数据多也不卡。所以子项组件的尺寸要固定。
 - **显示选中项：** 子项组件做成按钮（`extention="Button"`，带 `button` 控制器），根节点下写 `<Button mode="Radio"/>`；选中时 `button` 控制器在 `down` 页（鼠标悬停时是 `selectedOver`），用 `<gearDisplay controller="button" pages="1,3"/>` 挂一个选中框。普通模式（不写 `mode`）的按钮不保持选中，列表选了也看不出来。`lgui new view --pattern split|grid` 生成的子项已经这样写好了。
 - 列表里不要放手写的子项，子项都由代码给数据生成。
+- **拖放的格子：** 拖起时跟手的图标默认用被拖控件自己的图片，所以子项里放一个加载器（比如叫 `icon`），代码把 `dragData`、`drop` 写在它上面；格子本身不动，拖放以后由数据重新生成。
+- **树：** 列表写 `treeView="true"` 就是树，每个节点用 `defaultItem` 的组件显示（做成 Radio 模式的按钮就能显示选中，和列表一样）。绑定表和列表用同样的词，节点的子节点放在数据的 `children` 字段里，`key` 必须写。节点默认展开；`clickToExpand="1"` 时单击有子节点的节点展开或收起，`"2"` 时双击；选中一个收起的节点里的子节点时，框架先展开它的父节点。树不是虚拟列表，节点多（几百个以上）时用列表。
 
 ## 13. 检查规则表
 
@@ -323,23 +436,29 @@ ui/
 | `LGUI-UI-002` | 资源 ID 是 8 位小写字母和数字，包内唯一 | `id="sword001"` | `id="sword"`、两个资源都叫 `sword001` |
 | `LGUI-UI-003` | 元素 ID 在组件内唯一 | `n0`、`n1` | 两个控件都是 `n3` |
 | `LGUI-UI-004` | 控件名、控制器名是小写开头的驼峰，组件内唯一 | `sellButton` | `SellButton`、`sell_button`、两个 `title` |
-| `LGUI-UI-005` | 控件和控制器不能重名 | 控制器 `tabs`，控件 `tabBar` | 控制器 `tabs`，控件也叫 `tabs` |
+| `LGUI-UI-005` | 控件、控制器、动效不能重名 | 控制器 `tabs`，控件 `tabBar` | 控制器 `tabs`，控件也叫 `tabs`；动效叫 `title`，控件也叫 `title` |
 | `LGUI-UI-006` | 包名、组件名是大写开头的驼峰；后缀只能是 `@portrait`（组件）或 `@<语言>`（图片） | `BagPanel@portrait.xml` | `bagPanel.xml`、`BagPanel_portrait.xml` |
 | `LGUI-UI-007` | 横竖两版的控件名、类型、控制器和页名完全一致 | 两版都有 `sellButton`（按钮） | 竖版少了 `sellButton`，或者竖版里它是文字 |
 | `LGUI-UI-009` | 引用的资源存在；跨包引用的资源已导出 | `src="sword001"`（存在） | 引用了已删掉的资源 |
 | `LGUI-UI-010` | 文字控件写了超长处理（`autoSize` 是 `shrink`、`height`、`ellipsis`、`both` 之一） | `autoSize="ellipsis" singleLine="true"` | 不写 `autoSize`，或写 `none` |
-| `LGUI-UI-011` | 字号不小于 20 | `fontSize="22"` | `fontSize="14"` |
+| `LGUI-UI-011` | 字号不小于 20；没写 `fontSize` 按 FairyGUI 默认的 12 号算 | `fontSize="22"` | `fontSize="14"`、不写 `fontSize` |
 | `LGUI-UI-012` | 绑定了 `redDot` 的控件里有名为 `redDot` 的子控件 | 按钮里放了 `redDot` | 绑了 `redDot`，按钮里没有这个子控件 |
 | `LGUI-UI-013` | ArtText 的 `customData` 格式对，字体目录存在 | `font=Bag/dmg;align=center` | `font=dmg`、字体目录不存在 |
 | `LGUI-UI-014` | Common 包里的固定组件和必有控件都在 | `Common/Confirm` 里有 `ok`、`cancel` | 删了 `Common/Toast`，或 `Confirm` 里没有 `ok` |
 | `LGUI-UI-015` | 九宫格：`scale="9grid"` 和 `scale9grid` 成对出现，区域不超出图片 | `scale="9grid" scale9grid="12,12,40,40"` | 只写了 `scale="9grid"` |
 | `LGUI-UI-016` | 列表的 `defaultItem` 指向一个存在、已导出的组件 | `defaultItem="ui://bag00001slot0001"` | 不写 `defaultItem` |
-| `LGUI-UI-017` | `@<语言>` 图片有默认版本，语言在 `languages` 里；带字图片用装载器放（图片控件不随语言换） | `title.png` + `title@en.png`，装载器 + `icon: 'ui://Bag/title'` | 只有 `title@en.png`，或 `title@xx.png`；`<image src="title 的 ID">` |
-| `LGUI-UI-018` | `package.xml` 登记的文件都存在，包目录里的组件和图片都已登记 | 新图片登记进 `package.xml` | 放了图片没登记 |
+| `LGUI-UI-017` | `@<语言>` 图片有默认版本，语言在 `languages` 里；带字图片用装载器放，地址写在绑定表里（图片控件、`ui/` 里写死的装载器 `url` 和按钮 `icon` 都不随语言换） | `title.png` + `title@en.png`，装载器 + `icon: 'ui://Bag/title'` | 只有 `title@en.png`，或 `title@xx.png`；`<image src="title 的 ID">`；`<loader url="ui://Bag/title">` |
+| `LGUI-UI-018` | `package.xml` 登记的文件都存在，包目录里的组件、图片和音效都已登记 | 新图片登记进 `package.xml` | 放了图片没登记 |
 | `LGUI-UI-019` | 代码里用到的组件（View 的 `component`、列表子项）已导出 | `exported="true"` | 没写 `exported` |
 | `LGUI-UI-020`（警告） | 跨包引用写成编辑器能保存的样子：子组件跨包只写 `pkg` + `src`，不写 `fileName`；图片不跨包引用 | `pkg="cmn00001" src="button01"` | `fileName="Button.xml" pkg="cmn00001"`；`<image … pkg="cmn00001">` |
-| `LGUI-UI-030` | 代码里 `lgui.t` 用到的键、绑定的固定文字，在每种语言的文本表里都有 | 各语言都有 `bag.sold` | `en.json` 里缺 `bag.sold` |
+| `LGUI-UI-030` | 代码里 `lgui.t` 用到的键（包括 View 的 `keys` 表里的 `hint`）、`ui/` 里的固定文字，在每种语言的文本表里都有 | 各语言都有 `bag.sold` | `en.json` 里缺 `bag.sold` |
 | `LGUI-UI-031`（警告） | 文本表里没有用不到的键（用模板字符串拼的键 `` lgui.t(`item.${kind}.name`) ``、条件表达式两边的键都算用到了；用变量传进来的键查不出来，所以只是警告） | — | 删掉了按钮，`Bag/BagPanel/oldButton` 还在表里 |
 | `LGUI-UI-032` | 同一个键在各语言里的占位符一致 | `已售出 {count} 件` / `Sold {count}` | `Sold {num}` |
+| `LGUI-UI-060` | 用户能看到的文字不写在 `gearText` 里 | `gearDisplay` + 绑定表 `text: pick(…, s => lgui.t(…))` | `<gearText … values="未达成\|可领取"/>` |
+| `LGUI-UI-061` | 按钮不直接绑控制器（点了就切页） | 绑定表 `click: () => shopController.switchTab('second')` | `<Button controller="tabs" page="1"/>` |
+| `LGUI-UI-062`（警告） | 别的语言的翻译和默认语言的原文不一样（一字不差多半是还没翻；不含文字的值不算） | `"Main/MainView/button": "Tap me"` | `en.json` 里写 `"点我"` |
+| `LGUI-UI-063`（警告） | 横竖两版同一个控件的固定文字一样 | 两版都是 `text="背包"` | 竖版写 `text="我的背包"` |
+| `LGUI-UI-064` | 全屏界面（`static fullScreen = true`）的组件，横竖两版都有名为 `safe` 的直接子控件 | 见第 7.3 节 | 全屏界面没有 `safe` |
+| `LGUI-UI-065` | 音效（按钮的 `sound`、工程配置的 `sounds.click`）指向存在、已登记的 mp3；`sound=""` 表示不出声 | `<Button sound="ui://Bag/click"/>`，`click.mp3` 登记在 Bag 包里 | 没登记、文件不存在、`click.wav` |
 
 靠人看、机器查不出的：图里不放文字；同一个工程的图风格一致；文字在各尺寸下没有被截断（看 `lgui verify` 的截图）。
