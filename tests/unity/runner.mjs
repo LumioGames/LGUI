@@ -136,7 +136,10 @@ const sim = {
     const item=(o as {native: {dropdown: {GetChild(name: string): {GetChildAt(i: number): Native}}}}).native.dropdown.GetChild('list').GetChildAt(index);
     await sim.click(b,{native: item});
   },
-  async setSafeArea() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接安全区模拟（t.setSafeArea）。'); },
+  async setSafeArea(_b: unknown,insets: {top: number; right: number; bottom: number; left: number}) {
+    (globalThis as {__lguiSafeArea?: unknown}).__lguiSafeArea={...insets};
+    await rendered(); await rendered();
+  },
   async wheel(_b: unknown,o: unknown,dy: number) { await rendered();const p=center(o);native.Wheel(p.x,p.y,0,dy);await wait(50); },
   async key(_b: unknown,key: string) { await rendered();native.Key(key);await wait(50); },
   async setScreen(_b: unknown,width: number,height: number) {

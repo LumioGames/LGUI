@@ -140,6 +140,58 @@ test('Unity 平台：设计尺寸、安全区、旋转通知和原始输入使�
   u.dispose();
 });
 
+test('Unity 平台：安全区注入返回屏幕像素边距，移除后恢复原生边距', async t => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, '__lguiSafeArea');
+  t.after(() => {
+    if (original) Object.defineProperty(globalThis, '__lguiSafeArea', original);
+    else delete globalThis.__lguiSafeArea;
+  });
+  delete globalThis.__lguiSafeArea;
+  const e = environment(); const u = await create(e.options); const p = u.platform;
+  t.after(() => u.dispose());
+  assert.deepEqual(p.screen.safeArea(), {top: 10, right: 20, bottom: 30, left: 40});
+  globalThis.__lguiSafeArea = {top: 50, right: 60, bottom: 70, left: 80};
+  p.screen.applyDesignSize({width: 1920, height: 1080});
+  assert.deepEqual(p.screen.safeArea(), {top: 50, right: 60, bottom: 70, left: 80});
+  p.screen.safeArea().top = 999;
+  assert.equal(globalThis.__lguiSafeArea.top, 50, '读取结果不能修改注入源');
+  delete globalThis.__lguiSafeArea;
+  assert.deepEqual(p.screen.safeArea(), {top: 10, right: 20, bottom: 30, left: 40});
+});
+
+test('Unity 平台：安全区变化在下一帧只发一次 resize，同值不重复并支持恢复原生边距', async t => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, '__lguiSafeArea');
+  t.after(() => {
+    if (original) Object.defineProperty(globalThis, '__lguiSafeArea', original);
+    else delete globalThis.__lguiSafeArea;
+  });
+  delete globalThis.__lguiSafeArea;
+  const e = environment(); const u = await create(e.options); const sizes = [];
+  t.after(() => u.dispose());
+  u.platform.screen.onResize(value => sizes.push(value));
+  globalThis.__lguiSafeArea = {top: 50, right: 60, bottom: 70, left: 80};
+  assert.equal(sizes.length, 0);
+  u.tick(16);
+  assert.deepEqual(sizes, [{width: 1280, height: 720}]);
+  u.tick(16);
+  globalThis.__lguiSafeArea = {...globalThis.__lguiSafeArea};
+  u.tick(16);
+  assert.equal(sizes.length, 1, '相同的四个边距不能重复通知');
+  globalThis.__lguiSafeArea.left = 90;
+  u.tick(16);
+  assert.equal(sizes.length, 2, '原注入对象的边距改变也应通知');
+  e.host.ScreenWidth = 720; e.host.ScreenHeight = 1280;
+  globalThis.__lguiSafeArea.top = 51;
+  u.tick(16);
+  assert.equal(sizes.length, 3, '尺寸和边距在同一帧改变只通知一次');
+  assert.deepEqual(sizes.at(-1), {width: 720, height: 1280});
+  delete globalThis.__lguiSafeArea;
+  assert.deepEqual(u.platform.screen.safeArea(), {top: 10, right: 20, bottom: 30, left: 40});
+  assert.equal(sizes.length, 3);
+  u.tick(16); u.tick(16);
+  assert.equal(sizes.length, 4, '恢复原生边距后只通知一次');
+});
+
 test('Unity 平台：HTTP 回调转成响应；网络失败与未实现的 WebSocket 明确报错', async () => {
   const e = environment(); const u = await create(e.options); const p = u.platform;
   const request = p.net.fetch('https://game.test/a', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: '{}'});
