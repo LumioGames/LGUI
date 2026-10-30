@@ -53,4 +53,4 @@ node scripts/build-editor/build.mjs
 
 ## 许可
 
-原创贡献按 MIT 提供。第三方素材要写明许可和来源。
+原创贡献按 [LICENSE](LICENSE) 提供（PolyForm Shield 1.0.0 加 LumioGames 的附加许可）。提交贡献，就表示你同意 LumioGames 按这份许可发布你的贡献，也可以按别的条件单独授权给他人（比如集成进别的引擎）。第三方素材要写明许可和来源。

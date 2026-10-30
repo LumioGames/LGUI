@@ -42,6 +42,6 @@ node ../../plugin/tools/lgui.mjs dev
 
 ## 美术来源
 
-`ui/art-src/` 里的原图是 0.2.0 时用图像生成、裁切和抠图得到的素材，不是 FairyGUI 官方示例资产，按仓库 LICENSE 的 MIT 条款提供；生成提示词记录在 `ui/art-src/prompts.json`。标题字、金币图标和金币美术字是用 SVG 画的。
+`ui/art-src/` 里的原图是 0.2.0 时用图像生成、裁切和抠图得到的素材，不是 FairyGUI 官方示例资产，按仓库的 [LICENSE](../../LICENSE) 提供；生成提示词记录在 `ui/art-src/prompts.json`。标题字、金币图标和金币美术字是用 SVG 画的。
 
 旧示例（0.2.0）的源文件在 tag `v0.2.0-final` 的 `examples/inventory/legacy/` 里。
