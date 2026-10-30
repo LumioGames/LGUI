@@ -23,6 +23,10 @@ abstract class ViewBase<UI> {
   __component: UIComponent | null = null;
   /** 内部用：当前这一次绑定的清理清单（换版重新绑定时只清这一份）。 */
   private __bindScope: Scope | null = null;
+  /** 内部用：这个界面里的部件和列表子项（定时器跟着这个界面暂停、恢复）。 */
+  private readonly __children = new Set<{__timers: ViewTimers}>();
+  /** 内部用：现在是不是被盖住了。 */
+  private __paused = false;
   /** 绑定表（子类覆盖）。 */
   abstract bind: object;
 
@@ -62,16 +66,27 @@ abstract class ViewBase<UI> {
     this.__scope.dispose();
   }
 
-  /** 内部用：被盖住时暂停定时器和动效。 */
+  /** 内部用：登记一个部件或列表子项，它的定时器跟着这个界面暂停、恢复（界面正被盖住时马上暂停）。返回取消登记。 */
+  __adopt(child: {__timers: ViewTimers}): () => void {
+    this.__children.add(child);
+    if (this.__paused) child.__timers.pause();
+    return () => { this.__children.delete(child); };
+  }
+
+  /** 内部用：被盖住时暂停定时器（含部件和列表子项的）和动效。 */
   __pause(): void {
+    this.__paused = true;
     this.__timers.pause();
+    for (const child of this.__children) child.__timers.pause();
     this.__motion.pause(this.__component);
   }
 
   /** 内部用：露出来时恢复定时器和动效。 */
   __resume(): void {
+    this.__paused = false;
     this.__motion.resume();
     this.__timers.resume();
+    for (const child of this.__children) child.__timers.resume();
   }
 
   /** 内部用：绑定和清理清单里一共登记了多少项（给调试快照用）。 */

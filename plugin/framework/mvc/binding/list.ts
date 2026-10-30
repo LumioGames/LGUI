@@ -4,7 +4,7 @@ import {LgRuntimeError} from '../../core/index';
 import {asActor} from '../actor';
 import type {ItemKey} from '../types';
 import type {BindContext} from './index';
-import {watch} from './index';
+import {adoptChild, watch} from './index';
 
 /** 列表子项 View 的内部接口（ItemView 实现它）。 */
 export interface ItemViewInstance {
@@ -21,6 +21,7 @@ export function bindList(list: UIList, binding: Record<string, unknown>, ctx: Bi
   let items: readonly unknown[] = [];
   let selectedKey: ItemKey | null = null;
   const views = new Map<UIComponent, ItemViewInstance>();
+  const adopted: (() => void)[] = [];
   if (!list.virtual) list.virtual = true;
   list.itemRenderer = (index, component) => {
     if (!ItemClass) return;
@@ -28,13 +29,14 @@ export function bindList(list: UIList, binding: Record<string, unknown>, ctx: Bi
       throw new LgRuntimeError('LGUI-RT-064', `${ctx.where} 的列表 ${key} 的子项是 ${component.componentName}，但 item 写的是 ${ItemClass.name}（${ItemClass.component}）。`, '让 ItemView 的 static component 和列表的 defaultItem 一致。');
     }
     let view = views.get(component);
-    if (!view) { view = new ItemClass(); views.set(component, view); }
+    if (!view) { view = new ItemClass(); views.set(component, view); adopted.push(adoptChild(ctx.owner, view)); }
     view.__render(component, items[index], ctx.isActive, ctx.owner);
   };
   ctx.scope.add(() => {
     list.itemRenderer = null;
     for (const view of views.values()) view.__dispose();
     views.clear();
+    for (const off of adopted.splice(0)) off();
   });
   const indexOf = (k: ItemKey | null): number => k === null ? -1 : items.findIndex((item, i) => (keyOf ? keyOf(item) : i) === k);
   const applySelected = (): void => { list.selectedIndex = indexOf(selectedKey); };

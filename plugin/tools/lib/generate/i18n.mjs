@@ -1,5 +1,5 @@
 // 多语言：从 ui/ 提取用户能看到的固定文字；按文本表生成 FairyGUI 的翻译文件。
-// 键名：<包>/<组件>/<控件名>（竖版和横版共用一个键，原文取横版的）。FairyGUI 翻译文件里的名字：<包ID><组件ID>-<元素ID>[-prompt]。
+// 键名：<包>/<组件>/<控件名>（竖版和横版共用一个键，原文取横版的）；输入框的提示是 <控件名>@prompt，下拉框的第 j 项是 <控件名>@item<j>。FairyGUI 翻译文件里的名字：<包ID><组件ID>-<元素ID>[-prompt]。
 import fs from 'node:fs';
 import path from 'node:path';
 import {LgCliError} from '../errors.mjs';
@@ -33,6 +33,17 @@ export function extractTexts(model) {
         if (child.tag === 'component') {
           const button = child.children.find(node => node.tag === 'Button');
           if (button) add(key, button.attrs.title ?? '', name, component);
+          const label = child.children.find(node => node.tag === 'Label');
+          if (label) add(key, label.attrs.title ?? '', name, component);
+          // 下拉框：第 j 项的键是 <控件名>@item<j>，翻译名是 <元素ID>-<j>。FairyGUI 按标题文字认出选中项，所以标题跟着它对应的那一项一起翻译。
+          const combo = child.children.find(node => node.tag === 'ComboBox');
+          if (combo) {
+            combo.children.filter(node => node.tag === 'item').forEach((item, j) => {
+              const text = item.attrs.title ?? '';
+              add(`${key}@item${j}`, text, `${name}-${j}`, component);
+              if (text && combo.attrs.title === text) add(`${key}@item${j}`, text, name, component);
+            });
+          }
         }
       }
     }

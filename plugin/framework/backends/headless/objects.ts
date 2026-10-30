@@ -408,6 +408,8 @@ function buildChild(child: ChildDescriptor, lookup: Lookup, owner: string | unde
   const p = {...child.props};
   if (translated !== undefined) { if (child.kind === 'button' || child.kind === 'label') p.title = translated; else p.text = translated; }
   if (prompt !== undefined) p.promptText = prompt;
+  // 下拉框的固定选项：第 j 项的翻译名是 <元素ID>-<j>（和 FairyGUI 一样）。
+  if (key && tr && child.kind === 'combobox' && p.items) p.items = p.items.map((item, j) => tr.translation[`${key}-${j}`] ?? item);
   let object: HeadlessObject;
   switch (child.kind) {
     case 'text': case 'richtext': { const t = new HeadlessText(child.name, child.kind); t.text = p.text ?? ''; object = t; break; }

@@ -5,6 +5,7 @@ import type {UIComponent} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
 import type {Scope} from '../scope';
 import type {BindContext} from './index';
+import {adoptChild} from './index';
 
 /** 部件 View 的内部接口（PartView 实现它）。 */
 export interface PartViewInstance {
@@ -36,7 +37,8 @@ export function bindPart(component: UIComponent, PartClass: unknown, ctx: BindCo
   if (inItem || !owner.__scope) {
     // 列表子项里的部件：跟着这一次绑定一起清理。
     part = new Part();
-    ctx.scope.add(() => (part as PartViewInstance).__dispose());
+    const off = adoptChild(ctx.owner, part);
+    ctx.scope.add(() => { off(); (part as PartViewInstance).__dispose(); });
   } else {
     let parts = kept.get(owner);
     if (!parts) {
@@ -46,7 +48,7 @@ export function bindPart(component: UIComponent, PartClass: unknown, ctx: BindCo
       parts = map;
     }
     part = parts.get(key);
-    if (!part) { part = new Part(); parts.set(key, part); }
+    if (!part) { part = new Part(); parts.set(key, part); owner.__scope.add(adoptChild(ctx.owner, part)); }
     // 换版重新绑定时只解开旧组件上的绑定，实例留着。
     ctx.scope.add(() => (part as PartViewInstance).__unmount());
   }

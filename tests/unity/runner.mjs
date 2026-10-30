@@ -98,10 +98,38 @@ const sim = {
   drag: (_b: unknown,o: unknown,dx: number,dy: number) => move(o,dx,dy,400,10),
   swipe: (_b: unknown,o: unknown,dx: number,dy: number) => move(o,dx,dy,80,4),
   async pinch() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接双指缩放输入。'); },
-  async dragTo() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接拖放输入（t.dragTo）。'); },
+  // 拖放：按住来源，先挪 20 像素（超过拖动门槛），再在 400 毫秒里分 10 步挪到目标中心松手（和 headless、h5 一样）。
+  async dragTo(_b: unknown,from: unknown,to: unknown) {
+    await rendered();
+    const a=center(from), z=center(to);
+    await consumed(native.Pointer(a.x,a.y,true,true),true);
+    await wait(40); native.Pointer(a.x+20,a.y,true,true);
+    for (let i=2;i<=10;i++) { await wait(40); const k=(i-1)/9; native.Pointer(a.x+20+(z.x-a.x-20)*k,a.y+(z.y-a.y)*k,true,true); }
+    await consumed(native.Pointer(z.x,z.y,false,true),false); await wait(50);
+  },
   async type() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接输入框打字（t.type）。'); },
-  async setValue() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接拖动滑动条（t.setValue）。'); },
-  async choose() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接下拉框选择（t.choose）。'); },
+  // 拖滑动条：按住滑块（子控件 grip），一次挪到目标值对应的位置再松开。
+  async setValue(_b: unknown,o: unknown,value: number) {
+    await rendered();
+    // bar 的宽度跟着值变；一致性用例的滑动条 bar 铺满整个滑动条，所以按滑动条的宽度换算。
+    const s=o as {min: number; max: number; value: number; native: Native & {GetChild(name: string): Native | null}};
+    const grip=s.native.GetChild('grip');
+    if(!grip)throw new Error('LGUI-RT-001 Unity 开发运行器只认带 grip 子控件的横向滑动条。');
+    const from=center({native: grip});
+    const scale=backend.platform.screen.size().width/backend.root.rect.width;
+    const target=(Math.min(s.max,Math.max(s.min,value))-s.min)/(s.max-s.min);
+    const dx=(target-(s.value-s.min)/(s.max-s.min))*s.native.width*scale;
+    await consumed(native.Pointer(from.x,from.y,true,false),true); await wait(20);
+    native.Pointer(from.x+dx,from.y,true,false); await wait(20);
+    await consumed(native.Pointer(from.x+dx,from.y,false,false),false); await wait(50);
+  },
+  // 选下拉框：点开，再点弹出列表（dropdown 里名为 list 的列表）里的那一项。
+  async choose(b: unknown,o: unknown,index: number) {
+    await sim.click(b,o);
+    await rendered();
+    const item=(o as {native: {dropdown: {GetChild(name: string): {GetChildAt(i: number): Native}}}}).native.dropdown.GetChild('list').GetChildAt(index);
+    await sim.click(b,{native: item});
+  },
   async setSafeArea() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接安全区模拟（t.setSafeArea）。'); },
   async wheel(_b: unknown,o: unknown,dy: number) { await rendered();const p=center(o);native.Wheel(p.x,p.y,0,dy);await wait(50); },
   async key(_b: unknown,key: string) { await rendered();native.Key(key);await wait(50); },
