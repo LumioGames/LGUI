@@ -13,7 +13,14 @@ import {bundleErrors, createWebContext, writeWebBootstrap} from './bundle.mjs';
 import {openInBrowser} from '../browser.mjs';
 import {copyFramework} from '../commands/init.mjs';
 
-const shell = fs.readFileSync(fileURLToPath(new URL('./shell.html', import.meta.url)));
+// shell.html 是页面本身（scripts/build-demo.mjs 的静态构建原样用它）；开发服务另外加上自动刷新和错误推送。
+const liveReload = `<script>
+  const events = new EventSource('/__lgui/events');
+  events.addEventListener('reload', () => location.reload());
+  events.addEventListener('errors', e => window.__lguiShowErrors(JSON.parse(e.data)));
+</script>
+`;
+const shell = fs.readFileSync(fileURLToPath(new URL('./shell.html', import.meta.url)), 'utf8').replace('</body>', `${liveReload}</body>`);
 const types = {'.js': 'text/javascript; charset=utf-8', '.map': 'application/json', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.xml': 'application/octet-stream', '.mp3': 'audio/mpeg'};
 
 /** 返回 .lgui/build/web/ 下的生成物（/ui/ 是界面包）；只读，不在里面就 404。 */

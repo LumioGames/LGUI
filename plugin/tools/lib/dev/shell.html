@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LGUI 预览</title>
+<link rel="icon" href="data:,">
 <style>
   html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
   #lgui-overlay { display: none; position: fixed; inset: 0; z-index: 100000; padding: 24px; box-sizing: border-box; background: rgba(20, 0, 0, .92); color: #ffd6d6; font: 14px/1.6 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; overflow: auto; }
@@ -14,20 +15,17 @@
 <div id="lgui-overlay"></div>
 <div id="lgui-debug"></div>
 <script>
-  // 生成或打包失败时盖一层错误提示；改好后自动刷新，提示就没了。F8 打开调试面板。
+  // 出错时盖一层错误提示（lgui dev 还会推送生成、打包的错误，改好后自动刷新，见 index.mjs）。开发模式下 F8 打开调试面板。
   const overlay = document.getElementById('lgui-overlay');
   const debug = document.getElementById('lgui-debug');
   window.__lguiShowErrors = errors => {
     overlay.textContent = errors.map(e => `${e.file ? e.file + (e.line ? ':' + e.line : '') + '  ' : ''}${e.code}  ${e.message}${e.fix ? '\n  → ' + e.fix : ''}`).join('\n\n');
     overlay.style.display = 'block';
   };
-  const events = new EventSource('/__lgui/events');
-  events.addEventListener('reload', () => location.reload());
-  events.addEventListener('errors', e => window.__lguiShowErrors(JSON.parse(e.data)));
   window.addEventListener('error', e => window.__lguiShowErrors([{code: e.error && e.error.code || 'LGUI-RT', message: String(e.error && e.error.message || e.message)}]));
   window.addEventListener('unhandledrejection', e => window.__lguiShowErrors([{code: e.reason && e.reason.code || 'LGUI-RT', message: String(e.reason && e.reason.message || e.reason)}]));
   window.addEventListener('keydown', e => {
-    if (e.key !== 'F8') return;
+    if (e.key !== 'F8' || !window.__lgui) return;
     if (debug.style.display === 'block') { debug.style.display = 'none'; return; }
     let text;
     try { text = JSON.stringify(window.__lgui.snapshot(), null, 2); } catch (error) { text = String(error && error.message || error); }
@@ -35,6 +33,6 @@
     debug.style.display = 'block';
   });
 </script>
-<script type="module" src="/app.js"></script>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
