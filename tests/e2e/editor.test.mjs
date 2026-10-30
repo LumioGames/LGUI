@@ -12,7 +12,7 @@ import {startEditor} from '../../plugin/tools/lib/commands/editor.mjs';
 import {readUiModel, findComponent} from '../../plugin/tools/lib/generate/model.mjs';
 
 // 每次请求有个上限：导入时编辑器会换一个新的会话，发给旧会话的请求可能永远不回，不能卡在它上面。
-// state 很快，最多等 2 秒；query 要把组件整个读出来，CI 的机器没有显卡时一次就可能超过 2 秒，最多等 20 秒。
+// CI 的机器没有显卡，导入以后编辑器很忙，state、query 一次都可能超过 2 秒（超时放弃的请求还在编辑器里排着），所以都最多等 20 秒。
 const ask = (page, request, ms) => page.evaluate(async ({r, ms}) => {
   const timeout = new Promise(resolve => setTimeout(() => resolve(null), ms));
   return Promise.race([window.fairyEditorAgent.request(r), timeout]);
@@ -32,9 +32,9 @@ async function openEditor(context, server, component, expected) {
     const selector = {packageId: component.pkg.id, componentResourceId: component.id, displayNodeId: component.children.find(c => c.name === 'title').id};
     const deadline = Date.now() + 120000; // CI 的机器没有显卡，编辑器导入要慢得多
     for (let last = null; ; await sleep(500)) {
-      const state = await ask(page, {method: 'state'}, 2000);
+      const state = await ask(page, {method: 'state'}, 20000);
       const ready = state?.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession;
-      answer = ready ? await ask(page, {method: 'query', selector}, 20000) : 'not ready';
+      answer = ready ? await ask(page, {method: 'query', selector}, 20000) : {notReady: state ?? 'state timed out'};
       last = answer?.data?.entity?.text ?? null;
       if (last === expected) break;
       if (Date.now() > deadline) throw new Error(`等了 120 秒，title 还是 ${JSON.stringify(last)}，不是 ${JSON.stringify(expected)}`);
