@@ -1,7 +1,7 @@
 // lgui art cut <整页图> --pkg <包> --names <名字列表或文件> [--size 宽x高] [--scale 比例] [--pad 像素] [--gap 像素] [--speck 像素] [--defringe 像素]
 // 把 AI 生成的一页图集拆成小图：按透明区域找出每个物件（不按格子平均切），从上到下、每行从左到右对上名字（EMPTY 跳过）；
-// 裁掉空白，整页用同一个缩放比例放进各自的尺寸；去掉半透明边缘的白边；拉伸图重拼成「两端 + 中间 1 像素」并写 scale9grid，平铺图检查左右接缝。
-// 存成 ui/assets/<包>/<名字>.png 并登记进 package.xml，原图复制到 ui/art-src/<包>/，检查图写到 .lgui/build/art/<包>/<页名>-sheet.png。
+// 裁掉空白，整页用同一个缩放比例放进各自的尺寸（写了 fit 的拉伸图单独缩放）；去掉半透明边缘的白边；拉伸图重拼成「两端 + 中间 1 像素」并写 scale9grid，平铺图检查左右接缝。
+// 存成 ui/assets/<包>/<名字>.png 并登记进 package.xml（每项可以用 pkg= 存进别的包），原图复制到 ui/art-src/<--pkg>/，检查图写到 .lgui/build/art/<--pkg>/<页名>-sheet.png。
 // 有一项不对就报错，什么都不写。
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,8 +22,8 @@ function count(value, flag, fallback) {
   return Number(value);
 }
 
-// 名字列表：直接写时用逗号分开，每项是 名字 或 名字=宽x高；写在文件里时一行一项，后面可以跟 9grid=左,上,右,下 或 tile。
-function readEntries(spec, {cwd, projectRoot, defaultSize, pad}) {
+// 名字列表：直接写时用逗号分开，每项是 名字 或 名字=宽x高；写在文件里时一行一项，后面可以跟 9grid=左,上,右,下、tile、fit、pkg=包。
+function readEntries(spec, {cwd, projectRoot, defaultSize, defaultPkg, pad}) {
   const file = path.resolve(cwd, spec);
   const fromFile = fs.existsSync(file);
   const lines = fromFile ? fs.readFileSync(file, 'utf8').split(/\r?\n/) : spec.split(',');
@@ -48,12 +48,15 @@ function readEntries(spec, {cwd, projectRoot, defaultSize, pad}) {
       size = [Number(m[1]), Number(m[2])];
     }
     if (!size) fail(`${name} 没写尺寸。`, `写成 ${name}=120x120，或者加 --size 120x120 作为默认尺寸。`);
-    const entry = {name, width: size[0], height: size[1], grid: null, tile: false};
+    const entry = {name, width: size[0], height: size[1], grid: null, tile: false, fit: false, pkg: defaultPkg};
     for (const option of options) {
       const m = /^9grid=(\d+),(\d+),(\d+),(\d+)$/.exec(option);
+      const pkg = /^pkg=([A-Z][A-Za-z0-9]*)$/.exec(option);
       if (m) entry.grid = m.slice(1).map(Number);
+      else if (pkg) entry.pkg = pkg[1];
       else if (option === 'tile') entry.tile = true;
-      else fail(`${name} 后面的「${option}」看不懂。`, '只能写 9grid=左,上,右,下（边距，0 表示这个方向不拉伸）或 tile（横向平铺）。');
+      else if (option === 'fit') entry.fit = true;
+      else fail(`${name} 后面的「${option}」看不懂。`, '只能写 9grid=左,上,右,下（边距，0 表示这个方向不拉伸）、tile（横向平铺）、fit（单独缩放，不拉伸的方向正好等于尺寸）、pkg=包名（存进别的包）。');
     }
     if (entry.grid && entry.tile) fail(`${name} 不能既是九宫格又是平铺。`, '二选一。');
     if (entry.grid) {
@@ -62,6 +65,7 @@ function readEntries(spec, {cwd, projectRoot, defaultSize, pad}) {
       if (l + r >= entry.width || t + b >= entry.height) fail(`${name} 的 9grid 边距加起来不比尺寸 ${entry.width}×${entry.height} 小。`, '左 + 右要小于宽，上 + 下要小于高。');
     }
     const free = freeAxes(entry);
+    if (entry.fit && !(free.h !== free.v)) fail(`${name} 写了 fit，但它${free.h ? '两个方向都拉伸' : '不是九宫格或平铺图'}。`, 'fit 只用在一个方向拉伸（或平铺）、另一个方向固定的图上：固定的方向缩放到正好等于尺寸。');
     if ((!free.h && 2 * pad >= entry.width) || (!free.v && 2 * pad >= entry.height)) fail(`--pad ${pad} 太大，${name}（${entry.width}×${entry.height}）里放不下东西。`, '把 --pad 改小。');
     entries.push(entry);
   });
@@ -261,10 +265,7 @@ export async function artCut({projectRoot, args, flags, cwd}) {
   const source = args[0] ? path.resolve(cwd, args[0]) : null;
   if (!source || !fs.existsSync(source)) throw new LgCliError('LGUI-CLI-080', `找不到整页图 ${args[0] ?? '（没写）'}。`, {fix: `用法：${USAGE}`});
   if (!flags.pkg) throw new LgCliError('LGUI-CLI-080', '没写 --pkg（存进哪个包）。', {fix: '加 --pkg Lobby。'});
-  const pkgDir = path.join(projectRoot, 'ui', 'assets', flags.pkg);
-  const descriptor = path.join(pkgDir, 'package.xml');
-  if (!fs.existsSync(descriptor)) throw new LgCliError('LGUI-CLI-083', `ui/assets/${flags.pkg}/package.xml 不存在，没有这个包。`, {fix: '先建这个包（lgui new view 会建），或者写一个已有的包名。'});
-  if (!flags.names) throw new LgCliError('LGUI-CLI-080', '没写 --names。', {fix: '写成 --names iconA=120x120,iconB=88x88,… 或者一个一行一项的文件（可以写 9grid=左,上,右,下、tile、EMPTY）。'});
+  if (!flags.names) throw new LgCliError('LGUI-CLI-080', '没写 --names。', {fix: '写成 --names iconA=120x120,iconB=88x88,… 或者一个一行一项的文件（可以写 9grid=左,上,右,下、tile、fit、pkg=包、EMPTY）。'});
   const defaultSize = flags.size ? pair(flags.size, 'size') : null;
   const pad = count(flags.pad, 'pad', 0), gap = count(flags.gap, 'gap', 24), speck = count(flags.speck, 'speck', 64), radius = count(flags.defringe, 'defringe', 2);
   let fixedScale = null;
@@ -272,14 +273,18 @@ export async function artCut({projectRoot, args, flags, cwd}) {
     fixedScale = Number(flags.scale);
     if (!(fixedScale > 0)) throw new LgCliError('LGUI-CLI-080', `--scale 要写一个正数，比如 0.5（现在是 ${flags.scale}）。`, {fix: USAGE});
   }
-  const entries = readEntries(flags.names, {cwd, projectRoot, defaultSize, pad});
+  const entries = readEntries(flags.names, {cwd, projectRoot, defaultSize, defaultPkg: flags.pkg, pad});
   if (!entries.length) throw new LgCliError('LGUI-CLI-080', '名字列表是空的。', {fix: '每个物件写一个名字。'});
   const names = entries.map(e => e.name);
   const dup = names.filter((n, i) => names.indexOf(n) !== i);
   if (dup.length) throw new LgCliError('LGUI-CLI-081', `名字重复了：${[...new Set(dup)].join('、')}。`, {fix: '每个物件一个不同的名字。'});
-  const targets = names.map(n => path.join(pkgDir, `${n}.png`));
-  const xml = fs.readFileSync(descriptor, 'utf8');
-  const taken = [...new Set([...targets.filter(f => fs.existsSync(f)).map(f => path.basename(f, '.png')), ...names.filter(n => xml.includes(`name="${n}.png"`))])];
+  // 一页图可以分给几个包：每项存进自己的包（pkg=），没写的存进 --pkg
+  const packages = new Map([flags.pkg, ...entries.map(e => e.pkg)].map(pkg => [pkg, path.join(projectRoot, 'ui', 'assets', pkg)]));
+  const missing = [...packages].filter(([, dir]) => !fs.existsSync(path.join(dir, 'package.xml')));
+  if (missing.length) throw new LgCliErrors(missing.map(([pkg]) => new LgCliError('LGUI-CLI-083', `ui/assets/${pkg}/package.xml 不存在，没有这个包。`, {fix: '先建这个包（lgui new view 会建），或者写一个已有的包名。'})));
+  const xmls = new Map([...packages].map(([pkg, dir]) => [pkg, fs.readFileSync(path.join(dir, 'package.xml'), 'utf8')]));
+  const targets = entries.map(e => path.join(packages.get(e.pkg), `${e.name}.png`));
+  const taken = [...new Set(entries.filter((e, i) => fs.existsSync(targets[i]) || xmls.get(e.pkg).includes(`name="${e.name}.png"`)).map(e => `${e.pkg}/${e.name}`))];
   if (taken.length) throw new LgCliError('LGUI-CLI-082', `这些图片已经存在：${taken.join('、')}，不会覆盖。`, {fix: '换名字，或者先删掉旧图片（连同 package.xml 里的登记）。'});
   const artSrc = path.join(projectRoot, 'ui', 'art-src', flags.pkg, path.basename(source));
   if (fs.existsSync(artSrc)) throw new LgCliError('LGUI-CLI-082', `ui/art-src/${flags.pkg}/${path.basename(source)} 已经存在，不会覆盖。`, {fix: '给整页图换个文件名。'});
@@ -306,19 +311,25 @@ export async function artCut({projectRoot, args, flags, cwd}) {
   const crops = objects.map(o => defringe(cropObject(page, labels, o), radius));
   const limits = entries.flatMap((e, i) => {
     const free = freeAxes(e);
+    if (e.fit) return [];
     return [!free.h && (e.width - 2 * pad) / crops[i].width, !free.v && (e.height - 2 * pad) / crops[i].height].filter(Boolean);
   });
-  if (!fixedScale && !limits.length) throw new LgCliError('LGUI-CLI-085', '这一页全是九宫格或平铺图，没有固定尺寸的方向，算不出统一的缩放比例。', {fix: '加 --scale（比如 AI 按 2 倍画的写 --scale 0.5），几页之间用同一个比例。'});
-  const scale = fixedScale ?? Math.min(...limits);
+  // 写了 fit 的项单独缩放，不参与也不用整页的比例
+  const needScale = entries.some(e => !e.fit);
+  if (needScale && !fixedScale && !limits.length) throw new LgCliError('LGUI-CLI-085', '这一页（不算写了 fit 的）全是两个方向都拉伸的九宫格，没有固定尺寸的方向，算不出统一的缩放比例。', {fix: '加 --scale（比如 AI 按 2 倍画的写 --scale 0.5），几页之间用同一个比例。'});
+  const scale = needScale ? fixedScale ?? Math.min(...limits) : null;
 
   // 3. 缩放、留边、九宫格重拼、平铺检查；全部算完、没有错再写文件
   const errors = [];
   const results = [];
   for (const [i, e] of entries.entries()) {
     const crop = crops[i], free = freeAxes(e);
-    let width = Math.max(1, Math.round(crop.width * scale)), height = Math.max(1, Math.round(crop.height * scale));
     const room = [e.width - 2 * pad, e.height - 2 * pad];
-    if ((!free.h && crop.width * scale > room[0] + 0.5) || (!free.v && crop.height * scale > room[1] + 0.5)) {
+    // fit：固定的方向正好等于尺寸（减去留边）
+    const own = e.fit ? (free.h ? room[1] / crop.height : room[0] / crop.width) : scale;
+    let width = Math.max(1, Math.round(crop.width * own)), height = Math.max(1, Math.round(crop.height * own));
+    if (e.fit) [width, height] = free.h ? [width, room[1]] : [room[0], height];
+    if (!e.fit && (!free.h && crop.width * scale > room[0] + 0.5) || (!free.v && crop.height * scale > room[1] + 0.5)) {
       const fit = Math.min(...[!free.h && room[0] / crop.width, !free.v && room[1] / crop.height].filter(Boolean));
       errors.push(new LgCliError('LGUI-CLI-085', `${e.name} 按比例 ${scale} 缩放后是 ${width}×${height}，放不进 ${e.width}×${e.height}（四边各留 ${pad}）。`, {fix: `把 --scale 改到 ${Math.floor(fit * 1000) / 1000} 或更小，或者去掉 --scale 自动算。`}));
       continue;
@@ -347,32 +358,39 @@ export async function artCut({projectRoot, args, flags, cwd}) {
       display = remap(img, range(0, img.width * 2).map(x => x % img.width), range(0, img.height));
     }
     const o = objects[i];
-    results.push({entry: e, img, grid, tile, display, file: targets[i], source: {x: o.x0, y: o.y0, width: o.x1 - o.x0, height: o.y1 - o.y0}});
+    results.push({entry: e, img, grid, tile, display, scale: own, file: targets[i], source: {x: o.x0, y: o.y0, width: o.x1 - o.x0, height: o.y1 - o.y0}});
   }
   if (errors.length) throw new LgCliErrors(errors);
 
   for (const r of results) await toPng(r.img).toFile(r.file);
-  const ids = nextIds(xml, results.length);
-  const lines = results.map((r, i) => `    <image id="${ids[i]}" name="${r.entry.name}.png" path="/" exported="true" width="${r.img.width}" height="${r.img.height}"${r.grid ? ` scale="9grid" scale9grid="${r.grid.join(',')}"` : ''}/>`);
-  fs.writeFileSync(descriptor, xml.replace(/(\s*)<\/resources>/, `\n${lines.join('\n')}$1</resources>`));
+  const ids = new Map();
+  for (const [pkg, xml] of xmls) {
+    const mine = results.filter(r => r.entry.pkg === pkg);
+    if (!mine.length) continue;
+    nextIds(xml, mine.length).forEach((id, i) => ids.set(mine[i], id));
+    const lines = mine.map(r => `    <image id="${ids.get(r)}" name="${r.entry.name}.png" path="/" exported="true" width="${r.img.width}" height="${r.img.height}"${r.grid ? ` scale="9grid" scale9grid="${r.grid.join(',')}"` : ''}/>`);
+    fs.writeFileSync(path.join(packages.get(pkg), 'package.xml'), xml.replace(/(\s*)<\/resources>/, `\n${lines.join('\n')}$1</resources>`));
+  }
   fs.mkdirSync(path.dirname(artSrc), {recursive: true});
   fs.copyFileSync(source, artSrc);
   const sheet = path.join(projectRoot, '.lgui', 'build', 'art', flags.pkg, `${path.parse(source).name}-sheet.png`);
   await contactSheet(results.map(r => ({img: r.display, label: `${r.entry.name} ${r.entry.width}×${r.entry.height}`})), sheet);
 
-  const scaleText = Math.round(scale * 1000) / 1000;
+  const round = n => (n === null ? null : Math.round(n * 1000) / 1000);
+  const perPackage = [...xmls.keys()].map(pkg => [pkg, results.filter(r => r.entry.pkg === pkg).length]).filter(([, n]) => n).map(([pkg, n]) => `ui/assets/${pkg}/ ${n} 张`).join('、');
+  const fitted = results.filter(r => r.entry.fit).map(r => r.entry.name);
   return {
     data: {
-      images: results.map((r, i) => ({
-        name: r.entry.name, id: ids[i], file: rel(projectRoot, r.file), url: `ui://${flags.pkg}/${r.entry.name}`,
+      images: results.map(r => ({
+        name: r.entry.name, package: r.entry.pkg, id: ids.get(r), file: rel(projectRoot, r.file), url: `ui://${r.entry.pkg}/${r.entry.name}`,
         width: r.img.width, height: r.img.height, exportSize: {width: r.entry.width, height: r.entry.height},
-        scale9grid: r.grid ? r.grid.join(',') : null, seam: r.tile, source: r.source
+        scale: round(r.scale), scale9grid: r.grid ? r.grid.join(',') : null, seam: r.tile, source: r.source
       })),
-      scale: scaleText, source: rel(projectRoot, artSrc), sheet: rel(projectRoot, sheet), specks, merged
+      scale: round(scale), source: rel(projectRoot, artSrc), sheet: rel(projectRoot, sheet), specks, merged
     },
     summary: [
-      `在 ${path.basename(source)}（${page.width}×${page.height}）里找到 ${results.length} 个物件（并进旁边物件的碎片 ${merged} 块，丢掉的杂点 ${specks} 个），整页缩放比例 ${scaleText}：`,
-      `  存进 ui/assets/${flags.pkg}/（${results.length} 张，已登记进 package.xml${results.some(r => r.grid) ? '，九宫格写了 scale9grid' : ''}），原图放在 ui/art-src/${flags.pkg}/。`,
+      `在 ${path.basename(source)}（${page.width}×${page.height}）里找到 ${results.length} 个物件（并进旁边物件的碎片 ${merged} 块，丢掉的杂点 ${specks} 个），整页缩放比例 ${scale === null ? '不需要（都写了 fit）' : round(scale)}${fitted.length ? `，单独缩放（fit）：${fitted.join('、')}` : ''}：`,
+      `  存进 ${perPackage}（已登记进 package.xml${results.some(r => r.grid) ? '，九宫格写了 scale9grid' : ''}），原图放在 ui/art-src/${flags.pkg}/。`,
       `  检查图：${rel(projectRoot, sheet)}，看一遍描边粗细、颜色、大小是否一致，名字有没有对错。`,
       '接着运行 lgui check。'
     ]

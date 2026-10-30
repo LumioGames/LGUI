@@ -157,3 +157,45 @@ test('lgui art cut：物件数和名字数对不上报 LGUI-CLI-081 并列出找
   assert.equal(fs.readFileSync(xmlFile, 'utf8'), before);
   assert.ok(!fs.existsSync(path.join(root, 'ui/assets/Main/a.png')) && !fs.existsSync(path.join(root, 'ui/art-src/Main/bad.png')));
 });
+
+test('lgui art cut：一页图分给两个包（pkg=），各包各自登记、各自取 ID；fit 的九宫格单独缩放到正好等于尺寸，其余照用整页比例；包不存在报 LGUI-CLI-083', async () => {
+  const root = await project();
+  const page = canvas(800, 300);
+  page.rect(20, 20, 100, 100, [200, 0, 0]);    // iconA → Main，50×50，决定整页比例 0.5
+  page.rect(200, 20, 80, 80, [0, 200, 0]);     // iconB → Common，按整页比例出 40×40
+  page.rect(20, 150, 300, 100, (x) => (x < 35 ? [220, 40, 40] : x >= 265 ? [40, 40, 220] : [40, 200, 40]));  // btnLarge → Common，fit
+  await page.save(path.join(root, 'mixed.png'));
+  const commonXml = path.join(root, 'ui/assets/Common/package.xml');
+  const commonBefore = fs.readFileSync(commonXml, 'utf8');
+
+  fs.writeFileSync(path.join(root, 'nope.txt'), 'iconA=50x50\niconB=50x50 pkg=Nope\nbtnLarge=547x186 9grid=64,0,64,0 fit pkg=Common\n');
+  const nope = await cut(root, ['mixed.png', '--pkg', 'Main', '--names', 'nope.txt']);
+  assert.deepEqual(nope.errors.map(e => e.code), ['LGUI-CLI-083']);
+  assert.match(nope.errors[0].message, /ui\/assets\/Nope\/package\.xml/);
+  fs.writeFileSync(path.join(root, 'bad-fit.txt'), 'iconA=50x50 fit\n');
+  assert.equal((await cut(root, ['mixed.png', '--pkg', 'Main', '--names', 'bad-fit.txt'])).errors[0].code, 'LGUI-CLI-080');
+
+  fs.writeFileSync(path.join(root, 'mixed.txt'), 'iconA=50x50\niconB=50x50 pkg=Common\nbtnLarge=547x186 9grid=64,0,64,0 fit pkg=Common\n');
+  const result = await cut(root, ['mixed.png', '--pkg', 'Main', '--names', 'mixed.txt']);
+  assert.equal(result.ok, true, JSON.stringify(result.errors));
+  assert.equal(result.data.scale, 0.5, 'fit 的项不参与整页比例');
+  const [a, b, btn] = result.data.images;
+  assert.deepEqual([a.package, a.file, a.scale], ['Main', 'ui/assets/Main/iconA.png', 0.5]);
+  assert.deepEqual([b.package, b.file, b.url, b.scale], ['Common', 'ui/assets/Common/iconB.png', 'ui://Common/iconB', 0.5]);
+  assert.deepEqual([btn.package, btn.width, btn.height, btn.scale9grid, btn.scale], ['Common', 129, 186, '64,0,1,186', 1.86]);
+  assert.deepEqual(opaqueBox(await read(path.join(root, 'ui/assets/Common/iconB.png'))), {width: 40, height: 40});
+  const btnImg = await read(path.join(root, 'ui/assets/Common/btnLarge.png'));
+  assert.deepEqual([btnImg.at(10, 93), btnImg.at(64, 93), btnImg.at(120, 93)], [[220, 40, 40, 255], [40, 200, 40, 255], [40, 40, 220, 255]]);
+  assert.deepEqual([btnImg.at(64, 0)[3], btnImg.at(64, 185)[3]], [255, 255], '固定方向正好 186 高，上下没有留空');
+
+  const main = fs.readFileSync(path.join(root, 'ui/assets/Main/package.xml'), 'utf8');
+  const common = fs.readFileSync(commonXml, 'utf8');
+  assert.match(main, /<image id="art00000" name="iconA\.png" path="\/" exported="true" width="50" height="50"\/>/);
+  assert.ok(!main.includes('iconB') && !main.includes('btnLarge'));
+  assert.match(common, /<image id="art00000" name="iconB\.png" path="\/" exported="true" width="50" height="50"\/>/);
+  assert.match(common, /<image id="art00001" name="btnLarge\.png" path="\/" exported="true" width="129" height="186" scale="9grid" scale9grid="64,0,1,186"\/>/);
+  assert.notEqual(common, commonBefore);
+  assert.ok(fs.existsSync(path.join(root, 'ui/art-src/Main/mixed.png')) && !fs.existsSync(path.join(root, 'ui/art-src/Common')));
+  const check = JSON.parse((await run(['check', '--json'], root)).stdout);
+  assert.equal(check.ok, true, JSON.stringify(check.errors));
+});

@@ -20,7 +20,7 @@ license: MIT
 | 连功能骨架一起生成 | `lgui new module <名字> --pattern <模式>` |
 | 查现有组件和控件名 | `lgui ui list` |
 | AI 出的网格大图拆成小图 | `lgui art split <大图> --grid 6x4 --size 128x128 --pkg <包> --names <名字>`（原图放进 `ui/art-src/`） |
-| AI 出的图集页（物件漂过格线、大小不一、自由排布的九宫格零件）拆成小图 | `lgui art cut <整页图> --pkg <包> --names <名字文件>`：按透明区域找物件、整页统一缩放、去白边、九宫格重拼并写 `scale9grid`、检查平铺接缝，出一张检查图（规范第 5 节） |
+| AI 出的图集页（物件漂过格线、大小不一、自由排布的九宫格零件）拆成小图 | `lgui art cut <整页图> --pkg <包> --names <名字文件>`：按透明区域找物件、整页统一缩放、去白边、九宫格重拼并写 `scale9grid`、检查平铺接缝，出一张检查图；每项可以写自己的尺寸、`fit`（拉伸图的固定方向正好等于尺寸）、`pkg=`（存进用它的包）（规范第 5 节） |
 | 检查规范 | `lgui check`（`LGUI-UI-xxx`） |
 | 看效果 | `lgui dev`；截图 `lgui verify` |
 | 和人一起在编辑器里改 | `lgui editor`；编辑器开着时改已有控件的属性：`lgui editor props <组件> <控件> <属性>=<值> ...` |
