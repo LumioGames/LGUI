@@ -5,7 +5,7 @@ import {LgRuntimeError} from '../../core/index';
 import {asActor} from '../actor';
 import type {ItemKey} from '../types';
 import type {BindContext} from './index';
-import {watch} from './index';
+import {adoptChild, watch} from './index';
 import type {ItemViewInstance} from './list';
 
 type ItemViewConstructor = (new () => ItemViewInstance) & {component?: string};
@@ -17,19 +17,21 @@ export function bindTree(tree: UITree, binding: Record<string, unknown>, ctx: Bi
   if ('items' in binding && !keyOf) throw new LgRuntimeError('LGUI-RT-152', `${ctx.where} 的树 ${key} 没写 key。`, '树要写 key（认出同一个节点，展开状态和选中项靠它），比如 key: (n: TreeNode) => n.id。');
   const data = new Map<ItemKey, unknown>();
   const views = new Map<UIComponent, ItemViewInstance>();
+  const adopted: (() => void)[] = [];
   tree.nodeRenderer = (k, component) => {
     if (!ItemClass) return;
     if (ItemClass.component && component.componentName && ItemClass.component !== component.componentName) {
       throw new LgRuntimeError('LGUI-RT-064', `${ctx.where} 的树 ${key} 的节点是 ${component.componentName}，但 item 写的是 ${ItemClass.name}（${ItemClass.component}）。`, '让 ItemView 的 static component 和树的 defaultItem 一致。');
     }
     let view = views.get(component);
-    if (!view) { view = new ItemClass(); views.set(component, view); }
+    if (!view) { view = new ItemClass(); views.set(component, view); adopted.push(adoptChild(ctx.owner, view)); }
     view.__render(component, data.get(k), ctx.isActive, ctx.owner);
   };
   ctx.scope.add(() => {
     tree.nodeRenderer = null;
     for (const view of views.values()) view.__dispose();
     views.clear();
+    for (const off of adopted.splice(0)) off();
   });
   // 数据 → 节点：key 认出同一个节点，children 字段里是子节点。
   const toNodes = (items: readonly unknown[]): UITreeNode[] => items.map(item => {

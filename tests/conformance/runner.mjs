@@ -167,6 +167,14 @@ const sim = {
     const item = (o as Combo).native.dropdown.getChild('list').getChildAt(index);
     await sim.click(b, {native: item});
   },
+  // 拖放：按住来源，先挪 20 像素（超过拖动的门槛），再在 400 毫秒里分 10 步挪到目标中心松手（和 headless 的 t.dragTo 一样）。
+  async dragTo(_b: unknown, from: unknown, to: unknown) { const a = center(from), b = center(to); await pw('touchPath', a.x, a.y, b.x, b.y, 400, 10); await wait(50); },
+  // 安全区：和 lgui verify 一样用 __lguiSafeArea 注入，再发一次 resize 让框架重新排。
+  async setSafeArea(_b: unknown, insets: {top: number; right: number; bottom: number; left: number}) {
+    (window as unknown as {__lguiSafeArea: unknown}).__lguiSafeArea = {...insets};
+    window.dispatchEvent(new Event('resize'));
+    await wait(50);
+  },
   async setScreen(_b: unknown, width: number, height: number) { await pw('viewport', width, height); },
   advance: (_b: unknown, ms: number) => wait(ms),
 };
@@ -229,6 +237,19 @@ const createBackend = () => {
       else if (op === 'wheel') { await page.mouse.move(a[0], a[1]); await page.mouse.wheel(0, a[2]); }
       else if (op === 'key') await page.keyboard.press(a[0]);
       else if (op === 'type') await page.keyboard.type(a[0]);
+      else if (op === 'touchPath') {
+        const [x0, y0, x1, y1, ms, steps] = a;
+        const touch = (type, px, py) => inputCommand('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x: px, y: py, id: 1}]});
+        const sleep = t => new Promise(resolve => setTimeout(resolve, t));
+        await touch('touchStart', x0, y0);
+        await sleep(ms / steps); await touch('touchMove', x0 + 20, y0);
+        for (let i = 2; i <= steps; i++) {
+          await sleep(ms / steps);
+          const k = (i - 1) / (steps - 1);
+          await touch('touchMove', x0 + 20 + (x1 - x0 - 20) * k, y0 + (y1 - y0) * k);
+        }
+        await touch('touchEnd');
+      }
       else if (op === 'mouseDrag') { await page.mouse.move(a[0], a[1]); await page.mouse.down(); await page.mouse.move(a[2], a[3]); await page.mouse.up(); }
       else if (op === 'viewport') { await page.setViewportSize({width: a[0], height: a[1]}); }
       else if (op === 'touchDrag') {

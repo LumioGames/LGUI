@@ -228,3 +228,9 @@ export function applyBindings(component: UIComponent, table: Table, ctx: BindCon
 }
 
 export type {UIImage};
+
+/** 部件、列表子项登记到所在的界面，定时器跟着它暂停；ctx.owner 不是界面（测试里直接绑）时不登记。 */
+export function adoptChild(owner: object, child: object): () => void {
+  const adopt = (owner as {__adopt?: (c: object) => () => void}).__adopt;
+  return typeof adopt === 'function' ? adopt.call(owner, child) : () => {};
+}

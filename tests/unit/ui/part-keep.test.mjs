@@ -72,3 +72,33 @@ test('列表子项里的 PartView 跟着子项重建', async () => {
   assert.deepEqual(dots.map(p => p.__scope.isClosed), [true, true, false, false]);
   lgui.ui.close(BagView);
 });
+
+test('界面被全屏界面盖住时，部件和列表子项的定时器也暂停，露出来接着走', async () => {
+  const {fw, backend, sim} = await setup();
+  const {lgui, View, PartView, ItemView, pick} = fw;
+  const parts = [], items = [];
+  const list = lgui.Model({ids: [1, 2]});
+  class CurrencyBarView extends PartView { static component = 'Common/CurrencyBar'; bind = {}; constructor() { super(); parts.push(this); } }
+  class BtnView extends ItemView { static component = 'Bag/Btn'; bind = {}; constructor() { super(); items.push(this); } }
+  class BagView extends View { static component = 'Bag/BagPanel'; static layer = 'page'; static fullScreen = true;
+    bind = {topBar: {view: CurrencyBarView}, buttons: {items: pick(list, s => s.ids), item: BtnView}}; }
+  class CoverView extends View { static component = 'Common/Loading'; static layer = 'popup'; static fullScreen = true; static bothOrientations = true; }
+  await lgui.ui.open(BagView);
+  let partTicks = 0, itemTicks = 0;
+  parts[0].every(100, () => partTicks++);
+  items[0].every(100, () => itemTicks++);
+  await sim.advance(backend, 250);
+  assert.deepEqual([partTicks, itemTicks], [2, 2]);
+  await lgui.ui.open(CoverView);
+  await sim.advance(backend, 500);
+  assert.deepEqual([partTicks, itemTicks], [2, 2], '被盖住时不走');
+  list.set({ids: [1, 2, 3]}); // 盖住时新出现的子项也先停着
+  const added = items.at(-1);
+  let addedTicks = 0;
+  added.every(100, () => addedTicks++);
+  await sim.advance(backend, 300);
+  assert.equal(addedTicks, 0);
+  lgui.ui.close(CoverView);
+  await sim.advance(backend, 250);
+  assert.ok(partTicks >= 4 && itemTicks >= 4 && addedTicks >= 2, JSON.stringify({partTicks, itemTicks, addedTicks}));
+});

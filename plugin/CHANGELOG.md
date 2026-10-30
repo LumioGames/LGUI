@@ -37,6 +37,10 @@
 - `lgui.log`（`debug` / `info` / `warn` / `error` / `child`，形状和 Lumio 引擎的 `Logger` 一样）；`lgui.app({ platform: { log, audio } })` 只换给出的平台服务。
 - 界面声音：View 的 `static music`（栈里最上面写了的界面决定，同一首接着放，换曲淡入淡出，切到后台暂停，解锁后才放）、`ui/` 里按钮的音效（`volume="0"` 不出声，没写用 `sounds.click`）、`lgui.sound.play`、音乐和音效两个声道的音量和静音（`lgui.sound.settings` 能用 `pick` 读，自动存进本地存储）；mp3 登记在 `ui/` 的包里，网页界面包带上它们；测试里 `t.sounds()`、`t.music()`。
 - `lgui.time.wait` 和请求超时用同一个按帧等待。
+- 界面被盖住时，里面的部件（PartView）和列表子项（ItemView）的定时器也暂停，露出来接着走。
+- 下拉框弹出的列表可以放在别的包里：生成包依赖时算上 `dropdown` 指向的包。
+- `lgui i18n extract` 也提取标签的固定标题和下拉框的固定选项（`<控件名>@item<j>`）；headless 换语言时选项跟着翻译。
+- 一致性测试：网页一侧接上 `t.dragTo`、`t.setSafeArea`，加了拖放用例；Unity 开发运行器接上 `t.dragTo`、`t.setValue`、`t.choose`。
 - H5 手势保留 DOM 输入实际发生的时间，避免主线程延迟把慢拖误成快滑；浏览器一致性测试按指定坐标和真实间隔派发触摸，不逐步等待驱动应答，不让应答迟到拉长动作。
 
 **Unity**
