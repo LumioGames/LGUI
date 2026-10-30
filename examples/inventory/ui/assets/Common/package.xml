@@ -25,5 +25,6 @@
     <image id="coinf009" name="coin_9.png" path="/artfont/coin/" exported="true"/>
     <image id="coinf010" name="coin_plus.png" path="/artfont/coin/" exported="true"/>
     <image id="coinf011" name="coin_minus.png" path="/artfont/coin/" exported="true"/>
+    <sound id="click001" name="click.mp3" path="/" exported="true"/>
   </resources>
 </packageDescription>

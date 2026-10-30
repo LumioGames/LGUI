@@ -18,6 +18,9 @@ node ../../plugin/tools/lgui.mjs dev
 
 `check`、`test`、`verify` 同理。仓库的 `npm test` 也会跑这个示例的 `lgui check` 和 `lgui test`（`tests/e2e/inventory.test.mjs`）。
 
+普通按钮默认使用 `ui://Common/click` 的短点击音；对应的 `ui/assets/Common/click.mp3` 由程序合成，不含第三方素材。
+Unity 播放声音需要场景里有且只有一个启用的 `AudioListener`。
+
 ## 功能在哪
 
 | 功能 | 在哪 |
