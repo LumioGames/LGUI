@@ -1,6 +1,6 @@
 # 第三方组件与素材通知
 
-LGUI 的 MIT 许可（[LICENSE](LICENSE)）只覆盖 LumioGames 的原创代码、脚本和文档，不重新许可第三方源码、编辑器界面资源、品牌、原生库、字体或图片。本文按插件里实际打包的东西逐项列出；许可原文附在文末。
+LGUI 的许可（[LICENSE](LICENSE)：PolyForm Shield 1.0.0 加 LumioGames 的附加许可和商标说明）只覆盖 LumioGames 的原创代码、脚本和文档，不重新许可第三方源码、编辑器界面资源、品牌、原生库、字体或图片。本文按插件里实际打包的东西逐项列出；许可原文附在文末。
 
 ## 现在打包在插件里的
 
@@ -9,7 +9,7 @@ LGUI 的 MIT 许可（[LICENSE](LICENSE)）只覆盖 LumioGames 的原创代码�
 | [FairyGUI-dom](https://github.com/fairygui/FairyGUI-dom/tree/fade49fc33bdcd5673351e04637d4cc08d2297f3) 运行时 | `framework/backends/h5/vendor/` | 提交 `fade49fc33bdcd5673351e04637d4cc08d2297f3` | MIT，Copyright (c) 2021 FairyGUI；许可原文同目录 `FairyGUI-LICENSE.txt`，并见文末 |
 | [FairyGUI-unity](https://github.com/fairygui/FairyGUI-unity/tree/8cc8f214cca79685532eef13372d0a4f74acdf08) 运行时 | `framework/backends/unity/package/FairyGUI/` | 提交 `8cc8f214cca79685532eef13372d0a4f74acdf08` 的 `Assets/Scripts`，以及同提交必需的 Image、Text、BMFont 三个 shader | MIT，Copyright (c) 2015 fairygui.com；原 LICENSE 随源码附带。保留 DOTween 条款链接、Robert Penner BSD 声明及 RTLSupport 的单独声明，见下方 |
 | PuerTS 兼容补丁 | `framework/backends/unity/patches/puerts-3.0.3-unity-6.6-unbox.patch` | 针对 [PuerTS Unity_v3.0.3](https://github.com/Tencent/puerts/releases/tag/Unity_v3.0.3)（源码提交 `d8871238a3774fd10600995a5325e4b2ab4e39fb`） | 补丁内含 PuerTS 源码片段：BSD-3-Clause，Copyright (C) 2020 Tencent，许可原文见文末。补丁只把固定 C++ 模板里四处 `Object::Unbox` 改为公开的 `il2cpp_object_unbox`，用于 Unity 6000.6，不改变原许可 |
-| 技能 `skills/` | `skills/` | — | LumioGames 原创，MIT。`lgui-ui` 的动效说明改写自 0.2.0 的 `lgui-author`（其 references 并入过团队提供的 fairygui-ui 设计技能：2026-10-16 维护者确认「团队原创，可随 LGUI 按 MIT 发布」，原包 SHA256 `e0ac8457ea7214d34a74f3297b570d5cff7096a87e06cb383a94b4504d25a858`） |
+| 技能 `skills/` | `skills/` | — | LumioGames 原创，按 LGUI 的许可（[LICENSE](LICENSE)）提供。`lgui-ui` 的动效说明改写自 0.2.0 的 `lgui-author`（其 references 并入过团队提供的 fairygui-ui 设计技能：2026-10-16 维护者确认「团队原创，可随 LGUI 按 MIT 发布」，这部分按 MIT 授权并入，原包 SHA256 `e0ac8457ea7214d34a74f3297b570d5cff7096a87e06cb383a94b4504d25a858`） |
 | TypeScript | `tools/vendor/node_modules/typescript/` | 5.9.3 | Apache-2.0，Copyright (c) Microsoft Corporation；许可原文在包内 `LICENSE.txt` |
 | esbuild（含 `@esbuild/darwin-arm64`、`darwin-x64`、`linux-x64`、`win32-x64`） | `tools/vendor/node_modules/esbuild/`、`@esbuild/*` | 0.25.10 | MIT，Copyright (c) 2020 Evan Wallace；许可原文在 `esbuild/LICENSE.md`，四个平台包沿用同一许可 |
 | OpenFairyGUI core / functions / backend / cli | `tools/vendor/node_modules/@openfairygui/*` | 0.7.0 | MIT，Copyright (c) 2026 OpenFairyGUI Contributors；许可原文见文末和各包 `LICENSE` |
@@ -26,7 +26,7 @@ LGUI 的 MIT 许可（[LICENSE](LICENSE)）只覆盖 LumioGames 的原创代码�
 | 编辑器内嵌：OpenFairyGUI 浏览器后端（含 fast-xml-parser 5.10.1、jpeg-js 0.4.4、pako 2.2.0、property-graph 4.1.0） | `editor/resources/editor/runtime/` | OpenFairyGUI 0.2.4 | MIT（jpeg-js 为 BSD-3-Clause，pako 为 MIT AND Zlib）；明细见 `editor/THIRD_PARTY_NOTICES.md` |
 | 编辑器内嵌：fflate | `editor/assets/` 的打包脚本里 | 0.8.3 | MIT，Copyright (c) 2026 Arjun Barrett |
 | 编辑器的界面资源（编辑器自己的 UI 工程生成的包和图标） | `editor/resources/ui/` | 随上游子模块 `vendor/FairyGUI-Editor` | 来自官方 [FairyGUI-Editor](https://github.com/fairygui/FairyGUI-Editor) 界面工程。上游 README 写「可以自由使用」，但没有独立的标准许可文件；见下方说明 |
-| 编辑器的 LGUI Logo | `editor/resources/ui/` 里替换后的 `logo128` | — | LumioGames 原创，MIT（源文件在仓库 `scripts/build-editor/brand/`） |
+| 编辑器的 LGUI Logo | `editor/resources/ui/` 里替换后的 `logo128` | — | LumioGames 原创，按 LGUI 的许可提供；Logo 同时受 LICENSE 里的商标说明约束（源文件在仓库 `scripts/build-editor/brand/`） |
 
 FairyGUI-dom 的 `src/tween/EaseManager.ts` 含 Daniele Giardini/DOTween 条款链接及 Robert Penner 的 BSD 声明，随运行时一起保留。
 

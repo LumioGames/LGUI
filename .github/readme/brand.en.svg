@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 260" width="1280" height="260" role="img" aria-label="Made by LumioGames · Lumio, games bring joy · lumio.games">
+<defs>
+  <linearGradient id="bbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5546C4"/><stop offset=".55" stop-color="#6659DB"/><stop offset="1" stop-color="#8A93F5"/></linearGradient>
+  <radialGradient id="bglow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#5DE2C6" stop-opacity=".35"/><stop offset="1" stop-color="#5DE2C6" stop-opacity="0"/></radialGradient>
+  <pattern id="bdots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#fff" fill-opacity=".14"/></pattern>
+  <clipPath id="bclip"><rect width="1280" height="260" rx="28"/></clipPath>
+</defs>
+<g clip-path="url(#bclip)">
+  <rect width="1280" height="260" fill="url(#bbg)"/>
+  <rect width="1280" height="260" fill="url(#bdots)"/>
+  <circle cx="1180" cy="40" r="260" fill="url(#bglow)"/>
+  <path d="M90 36C92.64 55.36 92.64 55.36 112 58C92.64 60.64 92.64 60.64 90 80C87.36 60.64 87.36 60.64 68 58C87.36 55.36 87.36 55.36 90 36Z" fill="#fff" opacity="0.5"/><path d="M1000 196C1001.68 208.32 1001.68 208.32 1014 210C1001.68 211.68 1001.68 211.68 1000 224C998.32 211.68 998.32 211.68 986 210C998.32 208.32 998.32 208.32 1000 196Z" fill="#fff" opacity="0.5"/><path d="M1230 141C1231.08 148.92 1231.08 148.92 1239 150C1231.08 151.08 1231.08 151.08 1230 159C1228.92 151.08 1228.92 151.08 1221 150C1228.92 148.92 1228.92 148.92 1230 141Z" fill="#fff" opacity="0.5"/><path d="M560 32C560.96 39.04 560.96 39.04 568 40C560.96 40.96 560.96 40.96 560 48C559.04 40.96 559.04 40.96 552 40C559.04 39.04 559.04 39.04 560 32Z" fill="#fff" opacity="0.5"/>
+  <rect x="64" y="56" width="148" height="148" rx="40" fill="#fff" fill-opacity=".14"/>
+  <g transform="translate(78 70) scale(1.2)">
+  <defs><linearGradient id="brandMark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6659db"/><stop offset="1" stop-color="#9aa6ff"/></linearGradient></defs>
+  <rect width="100" height="100" rx="29" fill="url(#brandMark)"/><rect x="25" y="22" width="16" height="16" rx="4" fill="#fff"/><rect x="25" y="42" width="16" height="16" rx="4" fill="#fff"/><rect x="25" y="62" width="16" height="16" rx="4" fill="#fff"/><rect x="45" y="62" width="16" height="16" rx="4" fill="#fff" fill-opacity=".6"/><rect x="65" y="62" width="16" height="16" rx="4" fill="#5de2c6"/><path d="M70 19C71.56 28.1 73.9 30.44 83 32C73.9 33.56 71.56 35.9 70 45C68.44 35.9 66.1 33.56 57 32C66.1 30.44 68.44 28.1 70 19Z" fill="#fff"/></g>
+  <text x="252" y="128" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="64" font-weight="800" fill="#fff">Lumio</text>
+  <text x="256" y="168" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="22" font-weight="800" letter-spacing="9" fill="#fff">GAMES</text>
+  <path d="M488 70V190" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>
+  <text font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" fill="#fff">
+    <tspan x="528" y="112" font-size="30" font-weight="800">LGUI is made by LumioGames</tspan>
+    <tspan x="528" y="152" font-size="19" fill-opacity=".85">Lumio · Games bring joy</tspan>
+  </text>
+  <g transform="translate(528 172)">
+    <rect width="262" height="44" rx="22" fill="#fff"/>
+    <text x="22" y="29" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="17" font-weight="800" fill="#5546C4">Visit lumio.games</text>
+    <g transform="translate(228 15)" fill="none" stroke="#5546C4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12L12 2M5 2H12V9"/></g>
+  </g>
+</g>
+</svg>

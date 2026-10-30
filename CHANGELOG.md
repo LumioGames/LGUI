@@ -4,6 +4,10 @@
 
 和 0.2.0 不兼容：目录结构、命令行、框架都是新的。0.2.0 的全部内容在 tag `v0.2.0-final` 里。
 
+**许可**
+
+- 许可从 MIT 改成 PolyForm Shield 1.0.0，另加 LumioGames 的附加许可和商标说明（见 `LICENSE`）。可以用 LGUI 做游戏、应用、网站，包括商业产品；不能拿它或改过的版本做 UI 框架、UI 工具、UI 编辑器、游戏开发工具这类竞品，也不能改名换皮重新发布。LGUI、Lumio、LumioGames 的名字和图标不在授权里。换许可之前按 MIT 发布的提交和版本仍按 MIT。
+
 **安装和工程**
 
 - 发布面只有 `plugin/`；Claude Code、Codex 用仓库里的 marketplace 安装，其他客户端直接用 `plugin/` 目录。
@@ -69,3 +73,4 @@
 **示例**
 
 - `examples/inventory/`：用新框架重写的背包示例（营地、背包、商店、领奖），用到框架的每一项功能。
+- 背包示例的网页版发布在 GitHub Pages：https://lumiogames.github.io/LGUI/ 。仓库的 `scripts/build-demo.mjs` 做静态正式构建，`.github/workflows/pages.yml` 在 main 更新时部署。为此 `lgui dev` 生成的页面改用相对路径（`./app.js`、`./ui`、`./i18n`），自动刷新只在 `lgui dev` 里加；正式构建不挂调试面板用的 `window.__lgui`。

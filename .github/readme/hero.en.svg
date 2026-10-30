@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 560" width="1280" height="560" role="img" aria-label="Made by LumioGames · LGUI: no game engine needed, build game UI in a browser · lumio.games">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12152B"/><stop offset="1" stop-color="#1D2148"/></linearGradient>
+  <radialGradient id="gTeal" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#6659DB" stop-opacity=".55"/><stop offset="1" stop-color="#6659DB" stop-opacity="0"/></radialGradient>
+  <radialGradient id="gAmber" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFB86B" stop-opacity=".20"/><stop offset="1" stop-color="#FFB86B" stop-opacity="0"/></radialGradient>
+  <radialGradient id="gViolet" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#5DE2C6" stop-opacity=".14"/><stop offset="1" stop-color="#5DE2C6" stop-opacity="0"/></radialGradient>
+  <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="1.1" fill="#8CA0FF" fill-opacity=".16"/></pattern>
+  <clipPath id="round"><rect width="1280" height="560" rx="28"/></clipPath>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity=".45"/></filter>
+</defs>
+<g clip-path="url(#round)">
+  <rect width="1280" height="560" fill="url(#bg)"/>
+  <rect width="1280" height="560" fill="url(#dots)"/>
+  <circle cx="980" cy="150" r="380" fill="url(#gTeal)"/>
+  <circle cx="1220" cy="560" r="320" fill="url(#gAmber)"/>
+  <circle cx="120" cy="620" r="360" fill="url(#gViolet)"/>
+
+  <!-- left: LumioGames presents -->
+  <g transform="translate(64 40) scale(0.6)">
+  <defs><linearGradient id="heroMark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6659db"/><stop offset="1" stop-color="#9aa6ff"/></linearGradient></defs>
+  <rect width="100" height="100" rx="29" fill="url(#heroMark)"/><rect x="25" y="22" width="16" height="16" rx="4" fill="#fff"/><rect x="25" y="42" width="16" height="16" rx="4" fill="#fff"/><rect x="25" y="62" width="16" height="16" rx="4" fill="#fff"/><rect x="45" y="62" width="16" height="16" rx="4" fill="#fff" fill-opacity=".6"/><rect x="65" y="62" width="16" height="16" rx="4" fill="#5de2c6"/><path d="M70 19C71.56 28.1 73.9 30.44 83 32C73.9 33.56 71.56 35.9 70 45C68.44 35.9 66.1 33.56 57 32C66.1 30.44 68.44 28.1 70 19Z" fill="#fff"/></g>
+  <text x="140.2" y="73.6" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="31.200000000000003" font-weight="800" fill="#F6F7FD">Lumio</text>
+  <text x="141.4" y="91.6" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="13.8" font-weight="700" letter-spacing="3.45" fill="#F6F7FD">GAMES</text>
+  <path d="M250 46V94" stroke="#fff" stroke-opacity=".25" stroke-width="1.5"/>
+  <text font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif">
+    <tspan x="270" y="66" font-size="19" font-weight="800" fill="#F6F7FD">Made by LumioGames</tspan>
+    <tspan x="270" y="90" font-size="15" font-weight="500" fill="#AEB5D6">Game UI framework for AI agents · source-available</tspan>
+  </text>
+
+  <g transform="translate(0 30)">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="24">
+    <path d="M76 132V214H130" stroke="#F6F7FD"/>
+    <path d="M233.3 145.7A40 40 0 1 0 245 174H210" stroke="#F6F7FD"/>
+    <path d="M282 132V180A30 30 0 0 0 342 180V132" stroke="#F6F7FD"/>
+    <path d="M386 132V214" stroke="#5DE2C6"/>
+  </g>
+  <rect x="358" y="112" width="56" height="122" fill="none" stroke="#5DE2C6" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="353.5" y="107.5" width="9" height="9" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="409.5" y="107.5" width="9" height="9" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="353.5" y="229.5" width="9" height="9" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="409.5" y="229.5" width="9" height="9" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/>
+  </g>
+
+  <text font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="38" font-weight="800" fill="#F6F7FD">
+    <tspan x="64" y="326">No game engine needed.</tspan>
+    <tspan x="64" y="380">Build game UI in a <tspan fill="#5DE2C6">browser</tspan>.</tspan>
+  </text>
+  <text font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="19" fill="#AEB5D6">
+    <tspan x="64" y="428">UI, logic and tests all run on the web.</tspan>
+    <tspan x="64" y="457">One command ships it to Unity, code unchanged.</tspan>
+  </text>
+  <rect x="64" y="488" width="92" height="34" rx="10" fill="#fff" fill-opacity="0.06" stroke="#fff" stroke-opacity="0.14" /><text x="110" y="510.5" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="15" font-weight="600" fill="#D5DAEE">Browser</text><rect x="166" y="488" width="116" height="34" rx="10" fill="#fff" fill-opacity="0.06" stroke="#fff" stroke-opacity="0.14" /><text x="224" y="510.5" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="15" font-weight="600" fill="#D5DAEE">Node tests</text><rect x="292" y="488" width="78" height="34" rx="10" fill="#fff" fill-opacity="0.06" stroke="#fff" stroke-opacity="0.14" /><text x="331" y="510.5" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="15" font-weight="600" fill="#D5DAEE">Unity</text><rect x="380" y="488" width="140" height="34" rx="10" fill="#fff" fill-opacity="0" stroke="#5DE2C6" stroke-opacity="0.8" stroke-dasharray="5 4"/><text x="450" y="510.5" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif" font-size="15" font-weight="600" fill="#5DE2C6">+ your engine</text>
+
+  <!-- right: canvas with the same screen in two orientations -->
+  <text x="1058" y="98" text-anchor="end" font-family="'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="13" fill="#7480A8">1920 × 1080</text>
+  <g filter="url(#shadow)">
+    <rect x="636" y="108" width="424" height="249" rx="16" fill="#171C34" stroke="#fff" stroke-opacity=".16" stroke-width="1.5"/>
+    <g transform="translate(648 120)">
+  <rect width="400" height="225" rx="8" fill="#131B3C"/>
+  <rect x="14" y="12" width="58" height="10" rx="5" fill="#FFB86B" opacity="0.95"/>
+  <rect x="290" y="9" width="70" height="16" rx="4" fill="none" stroke="#FFB86B" stroke-opacity=".7"/>
+  <circle cx="299" cy="17" r="4.5" fill="#FFB86B"/><rect x="318" y="15" width="34" height="4" rx="2" fill="#F6F7FD" opacity="0.8"/>
+  <rect x="366" y="9" width="22" height="16" rx="3" fill="none" stroke="#8C98FF" stroke-opacity=".8"/>
+  <rect x="14" y="34" width="38" height="11" rx="3.3" fill="#5DE2C6" fill-opacity="0.9" stroke="#8C98FF" stroke-opacity=".7" stroke-width="1"/><rect x="57" y="34" width="38" height="11" rx="3.3" fill="none" fill-opacity="0" stroke="#8C98FF" stroke-opacity=".7" stroke-width="1"/><rect x="100" y="34" width="38" height="11" rx="3.3" fill="none" fill-opacity="0" stroke="#8C98FF" stroke-opacity=".7" stroke-width="1"/><rect x="143" y="34" width="38" height="11" rx="3.3" fill="none" fill-opacity="0" stroke="#8C98FF" stroke-opacity=".7" stroke-width="1"/>
+  <rect x="14" y="54" width="36" height="36" rx="5.76" fill="#2A3466" stroke="#FFB86B" stroke-opacity=".75" stroke-width="1.2"/><path d="M32 62.64L41.36 72L32 81.36L22.64 72Z" fill="#FFB86B"/><path d="M32 62.64L41.36 72L32 72Z" fill="#fff" opacity=".35"/><rect x="56" y="54" width="36" height="36" rx="5.76" fill="#232A52" stroke="#8C98FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M74 62.64L83.36 72L74 81.36L64.64 72Z" fill="#8C98FF"/><path d="M74 62.64L83.36 72L74 72Z" fill="#fff" opacity=".35"/><rect x="98" y="54" width="36" height="36" rx="5.76" fill="#232A52" stroke="#9AA6FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M116 62.64L125.36 72L116 81.36L106.64 72Z" fill="#9AA6FF"/><path d="M116 62.64L125.36 72L116 72Z" fill="#fff" opacity=".35"/><rect x="140" y="54" width="36" height="36" rx="5.76" fill="#232A52" stroke="#5DE2C6" stroke-opacity=".75" stroke-width="1.2"/><path d="M158 62.64L167.36 72L158 81.36L148.64 72Z" fill="#5DE2C6"/><path d="M158 62.64L167.36 72L158 72Z" fill="#fff" opacity=".35"/><rect x="14" y="96" width="36" height="36" rx="5.76" fill="#232A52" stroke="#FFB86B" stroke-opacity=".75" stroke-width="1.2"/><path d="M32 104.64L41.36 114L32 123.36L22.64 114Z" fill="#FFB86B"/><path d="M32 104.64L41.36 114L32 114Z" fill="#fff" opacity=".35"/><rect x="56" y="96" width="36" height="36" rx="5.76" fill="#232A52" stroke="#5DE2C6" stroke-opacity=".75" stroke-width="1.2"/><path d="M74 104.64L83.36 114L74 123.36L64.64 114Z" fill="#5DE2C6"/><path d="M74 104.64L83.36 114L74 114Z" fill="#fff" opacity=".35"/><rect x="98" y="96" width="36" height="36" rx="5.76" fill="#232A52" stroke="#8C98FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M116 104.64L125.36 114L116 123.36L106.64 114Z" fill="#8C98FF"/><path d="M116 104.64L125.36 114L116 114Z" fill="#fff" opacity=".35"/><rect x="140" y="96" width="36" height="36" rx="5.76" fill="#232A52" stroke="#9AA6FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M158 104.64L167.36 114L158 123.36L148.64 114Z" fill="#9AA6FF"/><path d="M158 104.64L167.36 114L158 114Z" fill="#fff" opacity=".35"/><rect x="14" y="138" width="36" height="36" rx="5.76" fill="#232A52" stroke="#FF7EA6" stroke-opacity=".75" stroke-width="1.2"/><path d="M32 146.64L41.36 156L32 165.36L22.64 156Z" fill="#FF7EA6"/><path d="M32 146.64L41.36 156L32 156Z" fill="#fff" opacity=".35"/><rect x="56" y="138" width="36" height="36" rx="5.76" fill="#232A52" stroke="#5DE2C6" stroke-opacity=".75" stroke-width="1.2"/><path d="M74 146.64L83.36 156L74 165.36L64.64 156Z" fill="#5DE2C6"/><path d="M74 146.64L83.36 156L74 156Z" fill="#fff" opacity=".35"/><rect x="98" y="138" width="36" height="36" rx="5.76" fill="#232A52" stroke="#9AA6FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M116 146.64L125.36 156L116 165.36L106.64 156Z" fill="#9AA6FF"/><path d="M116 146.64L125.36 156L116 156Z" fill="#fff" opacity=".35"/><rect x="140" y="138" width="36" height="36" rx="5.76" fill="#232A52" stroke="#FFB86B" stroke-opacity=".75" stroke-width="1.2"/><path d="M158 146.64L167.36 156L158 165.36L148.64 156Z" fill="#FFB86B"/><path d="M158 146.64L167.36 156L158 156Z" fill="#fff" opacity=".35"/>
+  <rect x="12" y="52" width="40" height="40" fill="none" stroke="#5DE2C6" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="9.5" y="49.5" width="5" height="5" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="49.5" y="49.5" width="5" height="5" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="9.5" y="89.5" width="5" height="5" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="49.5" y="89.5" width="5" height="5" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/>
+  <rect x="190" y="34" width="196" height="150" rx="6" fill="#fff" fill-opacity=".03" stroke="#FFB86B" stroke-opacity=".45"/>
+  <path d="M222 52L242 72L222 92L202 72Z" fill="#FFB86B"/><path d="M222 52L242 72L222 72Z" fill="#fff" opacity=".35"/>
+  <rect x="254" y="56" width="74" height="9" rx="4.5" fill="#F6F7FD" opacity="0.85"/><rect x="254" y="72" width="42" height="6" rx="3" fill="#8C98FF" opacity="0.9"/>
+  <rect x="204" y="104" width="54" height="5" rx="2.5" fill="#FFB86B" opacity="0.8"/><rect x="204" y="114" width="46" height="5" rx="2.5" fill="#FFB86B" opacity="0.8"/><rect x="204" y="124" width="50" height="5" rx="2.5" fill="#FFB86B" opacity="0.8"/>
+  <rect x="204" y="138" width="150" height="4" rx="2" fill="#AEB5D6" opacity="0.5"/>
+  <rect x="204" y="150" width="84" height="13" rx="3" fill="#1D2A5C" stroke="#8C98FF" stroke-opacity=".8"/>
+  <rect x="294" y="150" width="84" height="13" rx="3" fill="#1D2A5C" stroke="#8C98FF" stroke-opacity=".8"/>
+  <rect x="204" y="167" width="84" height="13" rx="3" fill="#1D2A5C" stroke="#FF7EA6" stroke-opacity=".9"/>
+  <rect x="208" y="176" width="52" height="2" rx="1" fill="#5DE2C6" opacity="1"/>
+  <rect x="294" y="167" width="84" height="13" rx="3" fill="#1D2A5C" stroke="#8C98FF" stroke-opacity=".8"/>
+  <rect x="14" y="190" width="22" height="5" rx="2.5" fill="#F6F7FD" opacity="0.7"/><rect x="44" y="191" width="74" height="3" rx="1.5" fill="#8C98FF" opacity="0.9"/>
+  <rect x="0" y="203" width="400" height="22" fill="#000" opacity=".28"/>
+  <rect x="14" y="212" width="14" height="4" rx="2" fill="#8C98FF" opacity="0.9"/><rect x="32" y="212" width="18" height="4" rx="2" fill="#F6F7FD" opacity="0.7"/><rect x="66" y="212" width="20" height="4" rx="2" fill="#8C98FF" opacity="0.9"/><rect x="90" y="212" width="18" height="4" rx="2" fill="#F6F7FD" opacity="0.7"/></g>
+  </g>
+  <text x="1220" y="70" text-anchor="end" font-family="'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="13" fill="#7480A8">1080 × 1920</text>
+  <g filter="url(#shadow)">
+    <rect x="1084" y="80" width="146" height="300" rx="24" fill="#171C34" stroke="#fff" stroke-opacity=".16" stroke-width="1.5"/>
+    <g transform="translate(1094 95)">
+  <rect width="126" height="270" rx="12" fill="#131B3C"/>
+  <rect x="9" y="22" width="36" height="7" rx="3.5" fill="#FFB86B" opacity="0.95"/>
+  <rect x="64" y="20" width="36" height="11" rx="3" fill="none" stroke="#FFB86B" stroke-opacity=".7"/>
+  <circle cx="69.5" cy="25.5" r="3" fill="#FFB86B"/>
+  <rect x="104" y="20" width="13" height="11" rx="2" fill="none" stroke="#8C98FF" stroke-opacity=".8"/>
+  <rect x="9" y="38" width="24" height="8" rx="2.4" fill="#5DE2C6" fill-opacity="0.9" stroke="#8C98FF" stroke-opacity=".7" stroke-width="1"/><rect x="36.6" y="38" width="24" height="8" rx="2.4" fill="none" fill-opacity="0" stroke="#8C98FF" stroke-opacity=".7" stroke-width="1"/><rect x="64.2" y="38" width="24" height="8" rx="2.4" fill="none" fill-opacity="0" stroke="#8C98FF" stroke-opacity=".7" stroke-width="1"/><rect x="91.80000000000001" y="38" width="24" height="8" rx="2.4" fill="none" fill-opacity="0" stroke="#8C98FF" stroke-opacity=".7" stroke-width="1"/>
+  <rect x="9" y="52" width="24" height="24" rx="3.84" fill="#2A3466" stroke="#FFB86B" stroke-opacity=".75" stroke-width="1.2"/><path d="M21 57.76L27.240000000000002 64L21 70.24L14.76 64Z" fill="#FFB86B"/><path d="M21 57.76L27.240000000000002 64L21 64Z" fill="#fff" opacity=".35"/><rect x="37.6" y="52" width="24" height="24" rx="3.84" fill="#232A52" stroke="#8C98FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M49.6 57.76L55.84 64L49.6 70.24L43.36 64Z" fill="#8C98FF"/><path d="M49.6 57.76L55.84 64L49.6 64Z" fill="#fff" opacity=".35"/><rect x="66.2" y="52" width="24" height="24" rx="3.84" fill="#232A52" stroke="#9AA6FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M78.2 57.76L84.44 64L78.2 70.24L71.96000000000001 64Z" fill="#9AA6FF"/><path d="M78.2 57.76L84.44 64L78.2 64Z" fill="#fff" opacity=".35"/><rect x="94.80000000000001" y="52" width="24" height="24" rx="3.84" fill="#232A52" stroke="#5DE2C6" stroke-opacity=".75" stroke-width="1.2"/><path d="M106.80000000000001 57.76L113.04 64L106.80000000000001 70.24L100.56000000000002 64Z" fill="#5DE2C6"/><path d="M106.80000000000001 57.76L113.04 64L106.80000000000001 64Z" fill="#fff" opacity=".35"/><rect x="9" y="80.6" width="24" height="24" rx="3.84" fill="#232A52" stroke="#FFB86B" stroke-opacity=".75" stroke-width="1.2"/><path d="M21 86.36L27.240000000000002 92.6L21 98.83999999999999L14.76 92.6Z" fill="#FFB86B"/><path d="M21 86.36L27.240000000000002 92.6L21 92.6Z" fill="#fff" opacity=".35"/><rect x="37.6" y="80.6" width="24" height="24" rx="3.84" fill="#232A52" stroke="#5DE2C6" stroke-opacity=".75" stroke-width="1.2"/><path d="M49.6 86.36L55.84 92.6L49.6 98.83999999999999L43.36 92.6Z" fill="#5DE2C6"/><path d="M49.6 86.36L55.84 92.6L49.6 92.6Z" fill="#fff" opacity=".35"/><rect x="66.2" y="80.6" width="24" height="24" rx="3.84" fill="#232A52" stroke="#8C98FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M78.2 86.36L84.44 92.6L78.2 98.83999999999999L71.96000000000001 92.6Z" fill="#8C98FF"/><path d="M78.2 86.36L84.44 92.6L78.2 92.6Z" fill="#fff" opacity=".35"/><rect x="94.80000000000001" y="80.6" width="24" height="24" rx="3.84" fill="#232A52" stroke="#9AA6FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M106.80000000000001 86.36L113.04 92.6L106.80000000000001 98.83999999999999L100.56000000000002 92.6Z" fill="#9AA6FF"/><path d="M106.80000000000001 86.36L113.04 92.6L106.80000000000001 92.6Z" fill="#fff" opacity=".35"/><rect x="9" y="109.2" width="24" height="24" rx="3.84" fill="#232A52" stroke="#FF7EA6" stroke-opacity=".75" stroke-width="1.2"/><path d="M21 114.96000000000001L27.240000000000002 121.2L21 127.44L14.76 121.2Z" fill="#FF7EA6"/><path d="M21 114.96000000000001L27.240000000000002 121.2L21 121.2Z" fill="#fff" opacity=".35"/><rect x="37.6" y="109.2" width="24" height="24" rx="3.84" fill="#232A52" stroke="#5DE2C6" stroke-opacity=".75" stroke-width="1.2"/><path d="M49.6 114.96000000000001L55.84 121.2L49.6 127.44L43.36 121.2Z" fill="#5DE2C6"/><path d="M49.6 114.96000000000001L55.84 121.2L49.6 121.2Z" fill="#fff" opacity=".35"/><rect x="66.2" y="109.2" width="24" height="24" rx="3.84" fill="#232A52" stroke="#9AA6FF" stroke-opacity=".75" stroke-width="1.2"/><path d="M78.2 114.96000000000001L84.44 121.2L78.2 127.44L71.96000000000001 121.2Z" fill="#9AA6FF"/><path d="M78.2 114.96000000000001L84.44 121.2L78.2 121.2Z" fill="#fff" opacity=".35"/><rect x="94.80000000000001" y="109.2" width="24" height="24" rx="3.84" fill="#232A52" stroke="#FFB86B" stroke-opacity=".75" stroke-width="1.2"/><path d="M106.80000000000001 114.96000000000001L113.04 121.2L106.80000000000001 127.44L100.56000000000002 121.2Z" fill="#FFB86B"/><path d="M106.80000000000001 114.96000000000001L113.04 121.2L106.80000000000001 121.2Z" fill="#fff" opacity=".35"/>
+  <rect x="7.5" y="50.5" width="27" height="27" fill="none" stroke="#5DE2C6" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="5.5" y="48.5" width="4" height="4" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="32.5" y="48.5" width="4" height="4" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="5.5" y="75.5" width="4" height="4" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/><rect x="32.5" y="75.5" width="4" height="4" fill="#fff" stroke="#5DE2C6" stroke-width="1.2"/>
+  <rect x="9" y="140" width="108" height="86" rx="5" fill="#fff" fill-opacity=".03" stroke="#FFB86B" stroke-opacity=".45"/>
+  <path d="M28 149L39 160L28 171L17 160Z" fill="#FFB86B"/><path d="M28 149L39 160L28 160Z" fill="#fff" opacity=".35"/>
+  <rect x="46" y="152" width="44" height="6" rx="3" fill="#F6F7FD" opacity="0.85"/><rect x="46" y="163" width="26" height="4" rx="2" fill="#8C98FF" opacity="0.9"/>
+  <rect x="16" y="180" width="34" height="3.5" rx="1.75" fill="#FFB86B" opacity="0.8"/><rect x="16" y="187" width="30" height="3.5" rx="1.75" fill="#FFB86B" opacity="0.8"/>
+  <rect x="16" y="198" width="44" height="10" rx="2" fill="#1D2A5C" stroke="#8C98FF" stroke-opacity=".8"/>
+  <rect x="66" y="198" width="44" height="10" rx="2" fill="#1D2A5C" stroke="#8C98FF" stroke-opacity=".8"/>
+  <rect x="16" y="211" width="44" height="10" rx="2" fill="#1D2A5C" stroke="#FF7EA6" stroke-opacity=".9"/>
+  <rect x="66" y="211" width="44" height="10" rx="2" fill="#1D2A5C" stroke="#8C98FF" stroke-opacity=".8"/>
+  <rect x="9" y="234" width="16" height="4" rx="2" fill="#F6F7FD" opacity="0.7"/><rect x="30" y="235" width="46" height="2.5" rx="1.25" fill="#8C98FF" opacity="0.9"/>
+  <rect x="0" y="250" width="126" height="20" fill="#000" opacity=".28"/>
+  <rect x="9" y="258" width="10" height="3.5" rx="1.75" fill="#8C98FF" opacity="0.9"/><rect x="22" y="258" width="14" height="3.5" rx="1.75" fill="#F6F7FD" opacity="0.7"/></g>
+    <rect x="1137" y="88" width="40" height="7" rx="3.5" fill="#000" opacity=".6"/>
+  </g>
+  <!-- rotate badge -->
+  <g transform="translate(1072 232)">
+    <circle r="23" fill="#12152B" stroke="#5DE2C6" stroke-width="2"/>
+    <path d="M-10 -3A11 11 0 0 1 9 -7M10 3A11 11 0 0 1 -9 7" fill="none" stroke="#5DE2C6" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M9 -13V-6H2M-9 13V6H-2" fill="none" stroke="#5DE2C6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- cursor on the selected slot -->
+  <path d="M690 196l0 24 6.5-6 4.5 10 4-2-4.5-9.5 8.5-.5z" fill="#fff" stroke="#12152B" stroke-width="1.6" stroke-linejoin="round"/>
+  <!-- code chip -->
+  <g filter="url(#shadow)">
+    <rect x="610" y="392" width="350" height="78" rx="14" fill="#0A0F1E" fill-opacity=".94" stroke="#fff" stroke-opacity=".14"/>
+    <circle cx="630" cy="410" r="4" fill="#FF7EA6"/><circle cx="644" cy="410" r="4" fill="#FFB86B"/><circle cx="658" cy="410" r="4" fill="#5DE2C6"/>
+    <text font-family="'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="16" fill="#F6F7FD">
+      <tspan x="628" y="440"><tspan fill="#5DE2C6">lgui</tspan>.ui.open(<tspan fill="#FFB86B">BagView</tspan>)</tspan>
+      <tspan x="628" y="460" font-size="13" fill="#7480A8">// landscape + portrait, one codebase</tspan>
+    </text>
+  </g>
+  <path d="M1180 430C1181.2 438.8 1181.2 438.8 1190 440C1181.2 441.2 1181.2 441.2 1180 450C1178.8 441.2 1178.8 441.2 1170 440C1178.8 438.8 1178.8 438.8 1180 430Z" fill="#FFB86B" opacity="0.9"/><path d="M1210 465C1210.6 469.4 1210.6 469.4 1215 470C1210.6 470.6 1210.6 470.6 1210 475C1209.4 470.6 1209.4 470.6 1205 470C1209.4 469.4 1209.4 469.4 1210 465Z" fill="#5DE2C6" opacity="0.8"/><path d="M600 114C600.72 119.28 600.72 119.28 606 120C600.72 120.72 600.72 120.72 600 126C599.28 120.72 599.28 120.72 594 120C599.28 119.28 599.28 119.28 600 114Z" fill="#5DE2C6" opacity="0.7"/><path d="M1110 496C1110.48 499.52 1110.48 499.52 1114 500C1110.48 500.48 1110.48 500.48 1110 504C1109.52 500.48 1109.52 500.48 1106 500C1109.52 499.52 1109.52 499.52 1110 496Z" fill="#9AA6FF" opacity="0.9"/>
+</g>
+<rect x=".75" y=".75" width="1278.5" height="558.5" rx="27.5" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="1.5"/>
+</svg>
