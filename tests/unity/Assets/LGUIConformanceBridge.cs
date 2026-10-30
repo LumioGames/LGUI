@@ -332,6 +332,14 @@ namespace LGUI.Tests
         }
 
         [Preserve]
+        public static void TypeText(string text)
+        {
+            if (text == null) throw Unsupported("TypeText requires non-null text.");
+            foreach (char character in text)
+                GuiEvent(new Event { type = EventType.KeyDown, keyCode = KeyCode.None, character = character });
+        }
+
+        [Preserve]
         public static void Wheel(float x, float y, float dx, float dy)
         {
             if (Math.Abs(dx) > 0.0001f) throw Unsupported("FairyGUI-unity exposes vertical wheel input only.");
