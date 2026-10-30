@@ -119,7 +119,7 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-RT-170` | 声音地址 `ui://…` 没有登记在 `ui/` 的包里 | 把 mp3 放进包目录，在 `package.xml` 里登记成 `<sound … exported="true"/>`，地址写成 `ui://包名/声音名` |
 | `LGUI-RT-171` | ArtText 用的字体所在的包没有加载 | 把 ArtText 放在字体所在包的组件里，或者让界面用到那个包的组件 |
 | `LGUI-RT-172` | 没有 Common 包或 `Common/ActionHintBar`，建不了操作提示栏（开发和测试里启动就报；正式构建里不显示提示栏） | 用 `lgui init` 自带的 Common 包，不要删掉 `ActionHintBar` |
-| `LGUI-RT-173` | 网页端没配 `i18nBase` 就切换语言 | `backend.init` 时传 `i18nBase`（`lgui dev` 生成的启动入口传的是 `/i18n`） |
+| `LGUI-RT-173` | 网页端没配 `i18nBase` 就切换语言 | `backend.init` 时传 `i18nBase`（`lgui dev` 生成的启动入口传的是 `./i18n`） |
 | `LGUI-RT-174` | `lgui.sound` 的参数不对：声道不是 `music` / `sfx`，音量不在 0–1，静音不是布尔值，地址是空的 | 照 mvc-spec.md 第 15 节写 |
 | `LGUI-RT-175` | 本地存储里的声音设置读不出来，用默认值（外部失败，记 `warn`） | 不需要处理；玩家下次改音量时会重新存 |
 | `LGUI-RT-176` | `lgui test` 里这个测试记了 `error` 级的日志（报错里写明是哪条） | 按日志改代码或界面 |

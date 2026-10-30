@@ -52,15 +52,18 @@ ${viewFiles(root).map((f, i) => `import * as views${i} from ${JSON.stringify(f.s
 const views: Record<string, unknown> = {};
 for (const mod of [${viewFiles(root).map((_, i) => `views${i}`).join(', ')}] as Record<string, unknown>[]) for (const [name, value] of Object.entries(mod)) if (typeof value === 'function' && 'layer' in value) views[name] = value;
 
+declare const LGUI_DEV: boolean; // 打包时由 esbuild 的 define 换成 true / false（见 webBuildOptions）
+
 const config = ${JSON.stringify(runtimeConfig(project))};
 const deps = ${JSON.stringify(readDeps(root))};
 const texts = ${JSON.stringify(texts ?? readTexts(root, project.languages))};
 
 (async () => {
   const backend = createH5Backend();
-  await backend.init({projectName: config.name, defaultFont: ${JSON.stringify(project.defaultFont)}, uiBase: '/ui', i18nBase: '/i18n'});
-  // 开发模式下给调试面板和端到端测试用。
-  (window as unknown as {__lgui: unknown}).__lgui = {snapshot: () => lgui.debug.snapshot(), lgui, views};
+  // 相对页面的路径：页面放在子路径下（比如 GitHub Pages 的 /LGUI/）也能打开。
+  await backend.init({projectName: config.name, defaultFont: ${JSON.stringify(project.defaultFont)}, uiBase: './ui', i18nBase: './i18n'});
+  // 开发模式下给调试面板和端到端测试用；正式构建（LGUI_DEV = false）不挂。
+  if (LGUI_DEV) (window as unknown as {__lgui: unknown}).__lgui = {snapshot: () => lgui.debug.snapshot(), lgui, views};
   await boot(backend, app, config, deps, {texts});
   (window as unknown as {__lguiReady: boolean}).__lguiReady = true;
 })().catch(error => {
