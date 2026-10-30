@@ -46,13 +46,14 @@
 
 **Unity**
 
+- Unity 开发一致性运行器接上 `t.setSafeArea`：注入屏幕像素边距，下一帧通知界面重排，未注入时使用宿主安全区。
 - Unity 6000.6.x + PuerTS Core/V8 3.0.3 本地包。`unity export` 核对固定文件摘要，应用四处 Unity 6.6 兼容补丁，安装 Unity 包并生成启动场景；已有场景保留。
 - 同一份 `ui/`、`src/`、`i18n/` 生成 Unity 界面包、图集、翻译和 `game.js.txt`，放入 `Assets/LGUI/Resources/`；同时导出 `Assets/LGUI/link.xml` 保留动态调用。`upgrade` 同步已配置的 Unity 包。
 - Unity 适配层连接控件、列表、控制器、动效、原始输入和平台服务；图片请求共享和释放跟随宿主、控件生命周期。WebSocket 暂未实现，明确报告 `LGUI-RT-001`。
 - 生成 UI 图集由包内 Editor 导入器关闭 mipmap，范围限定为有对应界面包的 LGUI 图集。
 - 修复 ArtText 改字后旧字符图片未释放、Unity 父界面递归销毁后子容器仍被记录；列表写入不同滚动目标时同步提交，避免旧惯性覆盖重建前的位置；普通 modal 并发申请按 FIFO 排队，前项失败或取消不会阻塞后项。
 - Unity HTTP 启动的同步失败明确结束 Fetch、图片和音频请求；宿主关闭后的旧回调隔离。背包示例的领奖图标通过真实 PartView 组件声明图片包依赖，确认弹窗保留文本键与参数以随语言重建。
-- Unity 适配层跟上本版的新接口：标签、滑动条、下拉框、序列帧动画、树，动效的 `playing` / `play` / `done`，拖放落点、滚轮只认落在控件上的事件、`t.visible` 的「真的显示」；日志出口和引擎的 `Logger` 同形；声音由 `LGUI.Platform` 自己的 AudioSource 放（背景音乐淡入淡出、暂停），关掉 FairyGUI 自己的按钮音和动效音，和网页一致。这些还没在 Unity Editor / Player 里验收。
+- Unity 适配层跟上本版的新接口：标签、滑动条、下拉框、序列帧动画、树，动效的 `playing` / `play` / `done`，拖放落点、滚轮只认落在控件上的事件、`t.visible` 的「真的显示」；日志出口和引擎的 `Logger` 同形；声音由 `LGUI.Platform` 自己的 AudioSource 放（背景音乐淡入淡出、暂停），关掉 FairyGUI 自己的按钮音和动效音，和网页一致。功能、快照和可视像素按实际用例分别验收。
 - IL2CPP 使用 PuerTS Reflection Mode 生成必需原生桥，不依赖类型静态 wrapper。Unity 接入文档和技能包含本地安装、导出、Release 打包、横竖屏检查及错误处理。
 
 **编辑器**

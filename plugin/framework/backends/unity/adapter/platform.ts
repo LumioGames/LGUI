@@ -1,5 +1,5 @@
 // Unity 平台服务：原始输入来自 FairyGUI Stage，其余能力调用 LGUI.Platform。
-import type {KeyInput, LogLevel, Logger, NetResponse, Platform, PointerInput, Rect, Unsubscribe, WheelInput} from '../../../core/index';
+import type {Insets, KeyInput, LogLevel, Logger, NetResponse, Platform, PointerInput, Rect, Unsubscribe, WheelInput} from '../../../core/index';
 import {LgRuntimeError, notImplemented} from '../../../core/index';
 import type {NativeEventContext, NativeLoader} from './native-ui';
 import type {NativePlatformHost, UnityPlatformOptions} from './native-platform';
@@ -83,7 +83,12 @@ export function createUnityPlatform(options: UnityPlatformOptions): {platform: P
   const off: Unsubscribe[] = [];
   let disposed = false;
   const size = (): {width: number; height: number} => ({width: host.ScreenWidth, height: host.ScreenHeight});
+  const safeArea = (): Insets => {
+    const injected = (globalThis as {__lguiSafeArea?: Insets}).__lguiSafeArea;
+    return injected ? {...injected} : {top: host.SafeAreaTop, right: host.SafeAreaRight, bottom: host.SafeAreaBottom, left: host.SafeAreaLeft};
+  };
   let previousSize = size();
+  let previousSafeArea = safeArea();
   const alive = (): void => { if (disposed) throw new LgRuntimeError('LGUI-RT-027', 'Unity 后端已停止。', '重新创建并启动后端后再调用平台服务。'); };
 
   const stage = fgui.Stage.inst;
@@ -184,7 +189,7 @@ export function createUnityPlatform(options: UnityPlatformOptions): {platform: P
     textInput: {isComposing: () => host.IsComposing},
     screen: {
       size,
-      safeArea: () => ({top: host.SafeAreaTop, right: host.SafeAreaRight, bottom: host.SafeAreaBottom, left: host.SafeAreaLeft}),
+      safeArea,
       onResize: h => { alive(); return resizes.add(h); },
       applyDesignSize(design): Rect {
         alive();
@@ -251,7 +256,12 @@ export function createUnityPlatform(options: UnityPlatformOptions): {platform: P
     tick(deltaMs) {
       if (disposed) return;
       const next = size();
-      if (next.width !== previousSize.width || next.height !== previousSize.height) { previousSize = next; resizes.emit(next); }
+      const nextSafeArea = safeArea();
+      if (next.width !== previousSize.width || next.height !== previousSize.height ||
+          nextSafeArea.top !== previousSafeArea.top || nextSafeArea.right !== previousSafeArea.right ||
+          nextSafeArea.bottom !== previousSafeArea.bottom || nextSafeArea.left !== previousSafeArea.left) {
+        previousSize = next; previousSafeArea = nextSafeArea; resizes.emit(next);
+      }
       // 与 h5 相同：错误照常报告，但一个界面的回调不能终止其余回调或下一帧。
       // 异常不能越过 PuerTS 的帧桥，否则 LGUIBoot 会按宿主启动失败关闭整个环境。
       frame.emit(deltaMs, error => platform.log.error('lgui_rt_160', error, {code: 'LGUI-RT-160', message: 'Unity 每帧回调出错。', fix: '按堆栈修正该回调；其他每帧回调继续运行。'}));
