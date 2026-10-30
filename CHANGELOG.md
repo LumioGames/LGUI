@@ -74,3 +74,4 @@
 
 - `examples/inventory/`：用新框架重写的背包示例（营地、背包、商店、领奖），用到框架的每一项功能。
 - 背包示例的网页版发布在 GitHub Pages：https://lumiogames.github.io/LGUI/ 。仓库的 `scripts/build-demo.mjs` 做静态正式构建，`.github/workflows/pages.yml` 在 main 更新时部署。为此 `lgui dev` 生成的页面改用相对路径（`./app.js`、`./ui`、`./i18n`），自动刷新只在 `lgui dev` 里加；正式构建不挂调试面板用的 `window.__lgui`。
+- 网页后端在 Safari 里打不开的问题：FairyGUI-dom 用的扩展内置元素（`extends: "div"`）WebKit 不支持，iPhone 上所有浏览器（包括微信）和 Mac 上的 Safari 都报 `ele.init is not a function`。改成独立自定义元素（补丁 5，见 `framework/backends/h5/vendor/PATCHES.md`）。
