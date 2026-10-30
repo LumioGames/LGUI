@@ -30,14 +30,16 @@ async function openEditor(context, server, component, expected) {
   let answer = null; // 最后一次 query 的回答（失败时带出来：错误码，或者查到的控件）
   try {
     const selector = {packageId: component.pkg.id, componentResourceId: component.id, displayNodeId: component.children.find(c => c.name === 'title').id};
-    const deadline = Date.now() + 120000; // CI 的机器没有显卡，编辑器导入要慢得多
+    // CI 的机器没有显卡，编辑器导入要慢得多：每个请求都和导入共用一把锁（runExclusive），第二次打开时这把锁会被占住两分钟以上。
+    const started = Date.now();
+    const deadline = started + 240000;
     for (let last = null; ; await sleep(500)) {
       const state = await ask(page, {method: 'state'}, 20000);
       const ready = state?.ok && state.data.workspace.fairyPath === 'UI.fairy' && state.data.editor.liveSession;
       answer = ready ? await ask(page, {method: 'query', selector}, 20000) : {notReady: state ?? 'state timed out'};
       last = answer?.data?.entity?.text ?? null;
-      if (last === expected) break;
-      if (Date.now() > deadline) throw new Error(`等了 120 秒，title 还是 ${JSON.stringify(last)}，不是 ${JSON.stringify(expected)}`);
+      if (last === expected) { console.log(`编辑器打开到显示「${expected}」用了 ${Math.round((Date.now() - started) / 1000)} 秒`); break; }
+      if (Date.now() > deadline) throw new Error(`等了 240 秒，title 还是 ${JSON.stringify(last)}，不是 ${JSON.stringify(expected)}`);
     }
   } catch (error) {
     // 没导入成功：把编辑器自己的状态、状态栏和页面报错带出来，方便在 CI 上查原因。
@@ -51,7 +53,7 @@ async function openEditor(context, server, component, expected) {
   return page;
 }
 
-test('lgui editor：打开就是 ui/ 的内容；editor props 马上生效；改了 ui/ 再打开、重启后再打开都显示新内容', {timeout: 600000}, async t => {
+test('lgui editor：打开就是 ui/ 的内容；editor props 马上生效；改了 ui/ 再打开、重启后再打开都显示新内容', {timeout: 900000}, async t => {
   const browser = await launchBrowser();
   if (!browser) { t.skip('未找到 Chrome 或 Edge'); return; }
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-editor-'));
