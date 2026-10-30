@@ -14,6 +14,7 @@ import {verify} from './commands/verify.mjs';
 import {doctor} from './commands/doctor.mjs';
 import {upgrade} from './commands/upgrade.mjs';
 import {artSplit} from './commands/art-split.mjs';
+import {artCut} from './commands/art-cut.mjs';
 import {newModule, newView} from './commands/new.mjs';
 import {editor, editorProps} from './commands/editor.mjs';
 import {unityExport} from './commands/unity-export.mjs';
@@ -36,6 +37,7 @@ export const registry = [
   {name: 'ui list', usage: 'ui list', about: '列出 ui/ 里的组件和控件', project: 'required', versionCheck: true, flags: {}, run: uiList},
   {name: 'i18n extract', usage: 'i18n extract', about: '从 ui/ 提取需要翻译的文字', project: 'required', versionCheck: true, flags: {}, run: i18nExtract},
   {name: 'art split', usage: 'art split <大图> --grid 列x行 --size 宽x高 --pkg 包 --names 名字列表或文件', about: '把 AI 生成的网格大图拆成小图，并缩放到指定尺寸', project: 'required', versionCheck: true, flags: {grid: 'string', size: 'string', pkg: 'string', names: 'string'}, run: artSplit},
+  {name: 'art cut', usage: 'art cut <整页图> --pkg 包 --names 名字列表或文件 [--size 宽x高] [--scale 比例] [--pad 像素] [--gap 像素] [--speck 像素] [--defringe 像素]', about: '按透明区域把 AI 生成的一页图集拆成小图：统一缩放、去白边、九宫格重拼、出检查图', project: 'required', versionCheck: true, flags: {pkg: 'string', names: 'string', size: 'string', scale: 'string', pad: 'string', gap: 'string', speck: 'string', defringe: 'string'}, run: artCut},
   {name: 'unity export', usage: 'unity export --to <Unity 工程路径>', about: '导出到 Unity', project: 'required', versionCheck: true, flags: {to: 'string'}, run: unityExport},
   {name: 'upgrade', usage: 'upgrade', about: '把插件里的新版框架和 Unity 包复制进工程', project: 'required', versionCheck: false, flags: {}, run: upgrade}
 ];

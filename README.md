@@ -97,7 +97,7 @@ Once it is installed, open a new session and try "use LGUI to build a shop scree
 | Controls | Button, text, image, loader, list, tree, label, input, slider, combo box, movie clip, art text |
 | Motion | Transitions made in `ui/` can be played from code and awaited; they pause while the view is covered and stop when it closes |
 | Editor | `lgui editor` opens a visual editor that saves back to `ui/`. While it is open, an agent can change control properties and the editor updates right away |
-| AI&nbsp;art | Have the AI draw one big grid image; `lgui art split` cuts it into pieces and resizes them, so the whole set keeps one style |
+| AI&nbsp;art | Have the AI draw one big grid image; `lgui art split` / `lgui art cut` cuts it into pieces (finding each object by transparency, one scale per page, halo removal, clean 9-slices), so the whole set keeps one style |
 | Localization | Text tables, `lgui.t`, plurals and formatting, switching language at runtime, per-language images with text, pseudo-translation checks. `lgui i18n extract` pulls the text to translate out of `ui/` |
 
 ### Writing logic
