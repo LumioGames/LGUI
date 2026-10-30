@@ -174,7 +174,6 @@ function hero(t) {
     <path d="M282 132V180A30 30 0 0 0 342 180V132" stroke="${C.text}"/>
     <path d="M386 132V214" stroke="${C.teal}"/>
   </g>
-  ${selection(358, 112, 56, 122, 9)}
   </g>
 
   <text font-family="${SANS}" font-size="${t.hSize ?? 40}" font-weight="800" fill="${C.text}">
