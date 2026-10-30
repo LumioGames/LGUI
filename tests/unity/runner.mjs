@@ -44,7 +44,7 @@ declare const CS: {
     readonly RenderedFrame: number;
     readonly ConsumedPointerDown: number; readonly ConsumedPointerUp: number;
     Complete(json: string): void; Pointer(x: number,y: number,down: boolean,touch: boolean): number;
-    Key(key: string): void; Wheel(x: number,y: number,dx: number,dy: number): void;
+    Key(key: string): void; TypeText(text: string): void; Wheel(x: number,y: number,dx: number,dy: number): void;
     SetScreen(width: number,height: number): void; SizeMatches(width: number,height: number): boolean;
   }}};
 };
@@ -107,7 +107,13 @@ const sim = {
     for (let i=2;i<=10;i++) { await wait(40); const k=(i-1)/9; native.Pointer(a.x+20+(z.x-a.x-20)*k,a.y+(z.y-a.y)*k,true,true); }
     await consumed(native.Pointer(z.x,z.y,false,true),false); await wait(50);
   },
-  async type() { throw new Error('LGUI-RT-001 Unity 开发运行器尚未接输入框打字（t.type）。'); },
+  async type(b: unknown,o: unknown,text: string) {
+    await sim.click(b,o);
+    const input=(o as {native: {text: string; SetSelection(start: number,length: number): void}}).native;
+    input.SetSelection(0,input.text.length);
+    if(text)native.TypeText(text);else native.Key('Backspace');
+    await wait(50);
+  },
   // 拖滑动条：按住滑块（子控件 grip），一次挪到目标值对应的位置再松开。
   async setValue(_b: unknown,o: unknown,value: number) {
     await rendered();
