@@ -18,7 +18,7 @@
   "requestErrorToast": true,
   "requestTimeoutMs": 10000,
   "placeholder": "ui://Common/placeholder",
-  "sounds": {"click": null},
+  "sounds": {"click": "ui://Common/click"},
   "defaultFont": null,
   "devPort": 4173,
   "backend": "h5",
