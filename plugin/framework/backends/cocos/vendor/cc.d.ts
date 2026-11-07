@@ -95,6 +95,12 @@ export const game: Game;
 export const director: {
   /** 当前场景；启动早期可能为 null。 */
   getScene(): Scene | null;
+  /** 第一个场景加载完成后触发（自动启动的锚点）。 */
+  once(type: string, listener: (error?: unknown) => void): void;
+};
+
+export const Director: {
+  EVENT_AFTER_SCENE_LAUNCH: string;
 };
 
 export const screen: {
