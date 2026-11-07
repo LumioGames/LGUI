@@ -1,0 +1,33 @@
+{
+  "schema": "llmdoc.meta/v3",
+  "baseline": {
+    "revision": "c31fde933cb0d758597891851ae032ca7f5eeb1d",
+    "verifiedAt": "2026-11-07T13:07:30.028Z"
+  },
+  "documents": {
+    "cli/commands.mdx": {
+      "validatedRevision": "c31fde933cb0d758597891851ae032ca7f5eeb1d"
+    },
+    "runtime/framework.mdx": {
+      "validatedRevision": "c31fde933cb0d758597891851ae032ca7f5eeb1d"
+    },
+    "unity/export-pipeline.mdx": {
+      "validatedRevision": "c31fde933cb0d758597891851ae032ca7f5eeb1d"
+    },
+    "release/integrity.mdx": {
+      "validatedRevision": "c31fde933cb0d758597891851ae032ca7f5eeb1d"
+    },
+    "release/rebuild-artifacts.mdx": {
+      "validatedRevision": "c31fde933cb0d758597891851ae032ca7f5eeb1d"
+    },
+    "testing/layers.mdx": {
+      "validatedRevision": "c31fde933cb0d758597891851ae032ca7f5eeb1d"
+    }
+  },
+  "convergence": {
+    "capturedAt": "2026-11-07T12:56:05Z",
+    "source": "init",
+    "documentCount": 0,
+    "totalEstimatedTokens": 0
+  }
+}
