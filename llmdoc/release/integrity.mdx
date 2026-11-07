@@ -1,0 +1,53 @@
+---
+description: "发布完整性：plugin/ 发布面与开发目录分工、plugin.json 单一事实源与 generate 生成清单、npm run check 四项校验、FairyGUI-dom 补丁生成、CI 矩阵与贡献流程；改发布面结构、发版或动 CONTRIBUTING 约定前必读"
+kind: architecture
+code:
+  paths:
+    - plugin/plugin.json
+    - scripts/generate.mjs
+    - scripts/check.mjs
+    - scripts/sync-examples.mjs
+    - scripts/build-demo.mjs
+    - scripts/fairygui-dom/*
+    - CONTRIBUTING.md
+    - AGENTS.md
+    - package.json
+    - .github/workflows/ci.yml
+    - .github/workflows/pages.yml
+relations:
+  related:
+    - release/rebuild-artifacts.mdx
+    - cli/commands.mdx
+---
+
+# 发布完整性与仓库分工
+
+## 职责与所有权边界
+
+本域拥有「仓库怎么分」与「发布面凭什么可信」：`plugin/` 是发布面（插件市场只下发这个文件夹），`examples/`、`tests/`、`scripts/`、根目录其余文件只给开发用。日常贡献步骤的权威原文是 `CONTRIBUTING.md`（worktree、PR、跑哪些命令）；本文记录它背后的机制不变量——哪些文件是生成的、校验什么、违反了会怎样。
+
+## 机制与不变量
+
+1. **清单单一事实源**：版本与身份只改 `plugin/plugin.json`；两份宿主清单（`plugin/.claude-plugin/plugin.json`、`plugin/.codex-plugin/plugin.json`）和两份 marketplace 清单（`.claude-plugin/marketplace.json`、`.agents/plugins/marketplace.json`）只能由 `npm run generate` 生成，**不手改**（`scripts/generate.mjs:10-44`）。根目录 `CHANGELOG.md` 由 generate 原样复制为 `plugin/CHANGELOG.md`（`lgui upgrade` 要读）——改了根 CHANGELOG 必须重跑 generate。清单 schema 是 `scripts/schemas/agent-plugin-1.0.0.schema.json`。
+2. **发版前校验 `npm run check`（`scripts/check.mjs`）四项，任一失败逐条列出并退出码 1**：
+   - (a) `plugin/` 里禁止开发目录/文件（tests/、.github/、.claude/、node_modules/、.gitignore、package.json）；豁免三处：`plugin/tools/vendor`、`plugin/framework/backends/unity/package`（Unity 包模板）、`plugin/templates/project`（新建工程模板本身是用户工程）（check.mjs:22-39）。
+   - (b) `plugin/**/*.md` 相对链接必须能打开（check.mjs:41-62）。
+   - (c) 生成文件一致性 = `generate --check` + FairyGUI-dom 补丁结果比较（check.mjs:64-70）。
+   - (d) 打印 `plugin/` 总大小（只记录，不设上限）。
+3. **FairyGUI-dom 生成**：`plugin/framework/backends/h5/vendor/fairygui.module.js` = 上游 `scripts/fairygui-dom/upstream/` 文件（一字节不改，SHA-256 与 `vendor/VERSION.md` 比对）按文件名顺序打 `fairygui-patches/*.patch`；**补丁逐行精确匹配、不模糊匹配，对不上就停**；要改行为就改 `.patch` 再跑构建，不改生成物（`scripts/fairygui-dom/build.mjs:1-11,80-95`）。上游行为差异的落点在 h5 后端的 `fairygui-patches/`（见 [runtime/framework.mdx](../runtime/framework.mdx)）。
+4. **示例与在线 demo**：`examples/*/.lgui/framework/` 由 `scripts/sync-examples.mjs` 从 `plugin/framework` 复制，**不进 git**，跑示例/构建前先执行；在线 demo 由 `scripts/build-demo.mjs` 正式构建（app.js 带内容哈希、可在任意路径打开），`pages.yml` 在 main push 时部署 GitHub Pages。
+5. **CI**：`ci.yml` 三平台矩阵跑 `npm run check`、`tools-smoke`、`npm test`；**CI 不拦合入**（CONTRIBUTING.md:16），红绿都要在 PR 里写明。
+6. **贡献流程约定**（CONTRIBUTING.md）：一个任务一个 worktree + 分支 + PR，不在主目录直接改（可能有别的 Agent 同时干活）；报错一律带错误码并同步 `plugin/references/error-codes.md`；新增第三方组件同一个 PR 更新 `plugin/THIRD_PARTY_NOTICES.md`；改了用户可感知行为，同一个 PR 更新 `plugin/references/` 与技能，文档只写现状；不提交令牌/凭据/个人绝对路径。
+
+## 跨主题契约与变更后果
+
+- 发版时 `plugin/tools/vendor/` 与 `plugin/editor/` 是否需要重建，见 [release/rebuild-artifacts.mdx](../release/rebuild-artifacts.mdx)。
+- `package.json` 的 `test` script（分层与串行参数）的语义归 [testing/layers.mdx](../testing/layers.mdx)；本域只关心 check/generate 脚本入口。
+- 插件身份变更（plugin.json）会连带生成清单与 marketplace 源——只经 generate，不手改。
+
+## 典型源码锚点
+
+- `scripts/generate.mjs`（清单与 CHANGELOG 复制、--check）
+- `scripts/check.mjs`（四项校验与豁免表）
+- `scripts/fairygui-dom/build.mjs`（上游锁定 + 精确补丁）
+- `.github/workflows/ci.yml`、`pages.yml`

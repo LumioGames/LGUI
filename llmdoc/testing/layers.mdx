@@ -1,0 +1,46 @@
+---
+description: "测试体系分层：unit/e2e/conformance/check 四层随 npm test 串行跑、unity 层手动跑；conformance 双后端快照一致性、tests/helpers 契约与加用例方法；写测试、改测试或加用例前必读"
+kind: guide
+code:
+  paths:
+    - package.json
+    - tests/helpers/**
+    - tests/conformance/**
+    - tests/check/rules.test.mjs
+relations:
+  related:
+    - runtime/framework.mdx
+    - cli/commands.mdx
+    - unity/export-pipeline.mdx
+---
+
+# 测试体系分层
+
+## 触发与总入口
+
+开发验证用 `npm test`（= `node --test --test-concurrency=1 --test-timeout=120000 "tests/**/*.test.mjs"`，定义在 `package.json`）：**串行跑**是有意为之——e2e 层起本地服务、占用固定端口，并行会互踩；共 103 个 test.mjs。跑 `lgui check` 与 `npm test` 是提 PR 前的固定动作（CONTRIBUTING.md）。CI 三平台矩阵也跑同样命令，但 CI 不拦合入（见 [release/integrity.mdx](../release/integrity.mdx)）。
+
+## 分层表
+
+| 层 | 测什么 | 何时跑 |
+|---|---|---|
+| `tests/unit/` | 工具与框架各子域在 Node 里单测（binding、cli、core、headless、mvc、unity、generate、i18n、init、upgrade、vendor…） | 每次 npm test |
+| `tests/e2e/` | CLI 与浏览器端到端：dev、new、verify、editor、h5-* 渲染/横竖屏/音效等，**需要 Chrome/Edge** | 每次 npm test |
+| `tests/conformance/` | **同一用例在 headless（Node）与 h5（浏览器）双跑，完整快照必须完全一致**——数据、控件文字/可见/可用、控制器页、列表项、界面栈等 | 每次 npm test；无浏览器自动跳过 |
+| `tests/check/` | `lgui check` 每条规则一对样例（不通过报指定错误码、通过不报） | 每次 npm test |
+| `tests/unity/` | Unity 一致性（三方快照）、真实导出 Editor Play、IL2CPP Player、包体基线；**需本机 Unity 6000.6.6f1 + PuerTS 3.0.3** | 手动，不进 npm test |
+
+各层细节的权威原文：`tests/conformance/README.md`（双后端快照机制、headless 已知差异清单、输入时序回归）、`tests/unity/README.md`（运行器用法）。逐个测试文件的语义从文件名与 `npm test` 输出即得，不另建文档。
+
+## conformance 快照机制（加用例必读）
+
+同一份 harness（`tests/conformance/harness.ts`）和用例在两个后端各跑一遍比对快照：headless **不算布局不渲染**（读位置/尺寸报 LGUI-RT-260，语义见 [runtime/framework.mdx](../runtime/framework.mdx)），已知差异清单以 conformance/README.md 为准。**加用例 = `tests/conformance/cases/` 加一个文件**，自动进 npm test；Unity 侧一致性（三方对比）复用同一批用例（`tests/unity/runner.mjs`）。改 harness 或快照结构属于跨层改动：conformance、unity 两层与框架的 testing API（`plugin/framework/mvc/testing.ts`）一起审。
+
+## tests/helpers 契约
+
+`tests/helpers/` 是各层共用的测试基础设施，改它等于改所有层的运行方式：`browser.mjs`（127.0.0.1 静态服务 + Chrome/Edge 启动）、`fixture.mjs`(程序生成的 Bag/Common 小界面工程)、`framework.mjs`（框架+headless 后端+模拟操作的打包缓存）、`ts.mjs`（严格 TS 类型检查 + esbuild 打包）、`unity.mjs`（导出文件测试输入与哈希）。
+
+## 失败处理
+
+- 无 Chrome/Edge 时 e2e/conformance 的浏览器项自动跳过、不算失败；本地全绿但 CI 红时先对比平台矩阵（三平台）差异。
+- 测试失败优先怀疑被测行为回归；确认测试本身要改时，用户可感知行为的变化必须同步 `plugin/references/`（见 [release/integrity.mdx](../release/integrity.mdx) 的贡献约定）。

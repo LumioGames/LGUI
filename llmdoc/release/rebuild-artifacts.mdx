@@ -1,0 +1,38 @@
+---
+description: "重建随插件分发的生成产物：vendored 工具四平台合并（vendor-tools）与编辑器重编译（build-editor 固定提交+补丁+品牌清单）；升级上游、换工具版本、跑 smoke/compat 验收前必读"
+kind: guide
+code:
+  paths:
+    - scripts/vendor-tools.mjs
+    - scripts/tools-smoke.mjs
+    - scripts/build-editor/**
+    - plugin/tools/vendor/package.json
+    - plugin/tools/vendor/VERSIONS.md
+relations:
+  related:
+    - release/integrity.mdx
+    - cli/commands.mdx
+---
+
+# 重建随插件分发的产物
+
+两类产物以「生成后连产物一起提交进 git」的方式随插件分发，用户零安装：vendored 工具（`plugin/tools/vendor/`）和编辑器（`plugin/editor/`）。两个工作流共享同一失败模型——**上游锁定、可复现生成、产物不手改、改完必须过验收门**。操作步骤的权威原文：`CONTRIBUTING.md`（vendor 一节）与 `scripts/build-editor/README.md`。
+
+## 工作流 A：更新 vendored 工具
+
+- **触发**：升级 TypeScript/esbuild/OpenFairyGUI/sharp/playwright-core 版本，或增删第三方包。
+- **不变量**：版本表固定在 `scripts/vendor-tools.mjs` 开头（改它才改版本）；四个平台（darwin-arm64/x64、linux-x64、win32-x64）各装一次（`--ignore-scripts`）再合并，公共包取第一份、原生包按白名单各平台一份；**Linux 只带 glibc**（运行时平台外报 LGUI-CLI-005，见 [cli/commands.mdx](../cli/commands.mdx)）；单文件超 100MB（GitHub 上限）直接失败；产物 `package.json`、`package-lock.json`、`VERSIONS.md` 生成不手改，README.md 保留。
+- **验收**：`node scripts/tools-smoke.mjs` 五项全过（TS transpile、esbuild transform、sharp 缩放、OpenFairyGUI 校验、playwright 开页；无 Chrome/Edge 时浏览器项标「跳过」不算失败）。新增/换掉的包同一个 PR 更新 `plugin/THIRD_PARTY_NOTICES.md`。
+
+## 工作流 B：重编译编辑器
+
+- **触发**：升级上游编辑器提交，或改补丁/品牌。
+- **不变量**：`plugin/editor/` 由 `scripts/build-editor/build.mjs` 生成，不手改；克隆上游固定提交（当前 `45f0bef`，OpenFairyGUI 0.2.4，含子模块），按固定顺序打 5 个补丁（agent-session 实时会话中转、rebrand、project-reload 每次重读 ui/、cross-package-image 跨包图片保 pkg、rebrand-ui 打在子模块）+ 换 logo；**品牌合规是许可约束**（TRADEMARKS.md）：FairyGUI 名称/Logo 要换成 LGUI（位置清单在 build-editor/README.md 表），但格式兼容性事实陈述（「导入 FairyGUI 项目」等）保留。
+- **验收（不可跳过）**：`node scripts/build-editor/check-compat.mjs`——编辑器打开→改 1px→保存→导出→与原文件比较→随插件 OpenFairyGUI 生成→浏览器加载每个包、创建每个导出组件；默认测 init 模板 + `examples/inventory/ui` + 跨包图片用例；模板工程再跑 `lgui check` 和 `lgui verify`。升级上游提交 = 改 build.mjs 的 COMMIT、重新生成补丁、按清单查品牌、重跑兼容实测——这是适配工作，不是顺手升级。
+- **已知语义**（与 CLI 侧编辑器集成配套，见 [cli/commands.mdx](../cli/commands.mdx)）：编辑器工作副本存浏览器；`?agent=1` 时由 project-reload 补丁每次打开强制重读 `ui/`；跨包子组件仍不能带 `fileName`（丢 `fileName` 判定「不能无损保存」），跨包图片 2026-11 起已支持。
+
+## 失败处理与恢复
+
+- 两类构建都是「对不上就停」（SHA-256 不符、补丁行不匹配、文件超限），不产出半成品；修复输入后重跑。
+- 产物已提交进 git，重建失败不影响现有发布面；`npm run check` 的一致性比较会兜住「忘了重建」。
+- 编辑器/工具行为变化的用户可见面（`plugin/references/`、技能）同步责任见 [release/integrity.mdx](../release/integrity.mdx)。

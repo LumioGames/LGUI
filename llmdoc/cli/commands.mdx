@@ -1,0 +1,61 @@
+---
+description: "lgui 命令行工具的架构：registry 命令分发、--json 输出契约、错误码四前缀与登记表、vendored 工具加载（LGUI-CLI-005）、工程发现与版本门禁、dev/editor 本地服务的安全与集成不变量；加命令、改命令行为或报错方式前必读"
+kind: architecture
+code:
+  paths:
+    - plugin/tools/lgui.mjs
+    - plugin/tools/lib/cli.mjs
+    - plugin/tools/lib/output.mjs
+    - plugin/tools/lib/errors.mjs
+    - plugin/tools/lib/vendor.mjs
+    - plugin/tools/lib/paths.mjs
+    - plugin/tools/lib/project.mjs
+    - plugin/tools/lib/version.mjs
+    - plugin/tools/lib/commands/**
+    - plugin/tools/lib/dev/*
+    - plugin/tools/lib/editor/*
+    - plugin/tools/lib/check/*
+    - plugin/templates/**
+relations:
+  related:
+    - release/rebuild-artifacts.mdx
+---
+
+# lgui 命令行工具（CLI）
+
+## 职责与所有权边界
+
+`plugin/tools/` 是发布面里的命令行工具，用户工程里所有 `lgui <命令>` 都出自这里。本域拥有：命令分发与参数解析、`--json` 输出契约、错误码载体、vendored 工具加载、工程发现与版本门禁、`dev`/`editor` 两个本地服务、`check` 的规则组合方式。各命令「怎么用」的用户语义归 `plugin/references/` 规范与 `lgui --help`，本文只记录跨文件成立、从单个文件读不出来的架构决策。
+
+## 执行流
+
+入口 `plugin/tools/lgui.mjs`（5 行）把 argv 交给 `lib/cli.mjs`。全部 16 条命令登记在 `lib/cli.mjs:26-43` 的 `registry`（name、usage、flags、是否需要工程、是否比对版本），`--help` 和未实现命令报错（LGUI-CLI-000，cli.mjs:111-113）都由 registry 生成。参数解析是极简自制 `parseArgs`（cli.mjs:60-84），全局只有 `--json`/`--help`；两段式命令名（`new module`、`editor props`）先于单词匹配（cli.mjs:53-57）。**加命令 = 在 `lib/commands/` 写实现 + registry 加一行**，不引入第三方 CLI 框架。测试可注入 io（cli.mjs:87）。
+
+## 决策与不变量
+
+1. **`--json` 输出契约**：人看摘要走 stdout、错误走 stderr（`file:line  code  message  → fix` 格式）；`--json` 时只输出一个 JSON 对象 `{ok, command, data, errors}`，每个 error 是 `{code, message, file, line, fix}`（`lib/output.mjs:17-26`、`lib/errors.mjs:13-15`）。命令实现返回 `{data, summary, errors}`，emit 统一算 ok 与退出码——改任何命令的输出先改这套契约，不许各命令自定格式。
+2. **错误码四前缀分工**：`LgCliError(code, message, {file, line, fix})` 是 CLI 唯一报错形态；非 LgCliError 的异常统一包成 LGUI-CLI-999 并明说是 LGUI 缺陷，不吞异常（`lib/output.mjs:5-9`）。LGUI-CLI 由本域产生，LGUI-RT 由运行时框架产生，LGUI-UI/LGUI-MVC 由 `lgui check` 规则产生；**全部码的登记表是 `plugin/references/error-codes.md`**，新增码必须两边同步（`lib/errors.mjs:1`）。
+3. **vendor 加载**：`lib/vendor.mjs` 用 `createRequire` 指向 `plugin/tools/vendor/package.json`，统一 lazy `load(name)`，先断言平台；esbuild/sharp 原生包只带 darwin-arm64、darwin-x64、linux-x64(glibc)、win32-x64 四份，平台外报 **LGUI-CLI-005** 并列出支持平台（vendor.mjs:19-25）。工具不完整报 LGUI-CLI-072。
+4. **工程发现与版本门禁**：从 cwd 向上找 `.lgui/project.json`，找不到报 LGUI-CLI-002（`lib/paths.mjs:29-41`）；插件版本与工程 `lguiVersion` 不一致一律停下提示 `lgui upgrade`，**不做兼容处理**（`lib/version.mjs:1-18`，LGUI-CLI-003）。init/doctor/upgrade 豁免。`.lgui/project.json` 字段校验的唯一来源是 `lib/project.mjs:26-50` 的 `fields`，一次报全部错（LGUI-CLI-004）；字段文档同步在 `plugin/references/project-layout.md`。
+5. **不悄悄兜底**：devWatch 路径不存在就报错而非静默跳过（`lib/dev/index.mjs:49-52`）；init/new 目标已存在报错不覆盖（LGUI-CLI-010）；浏览器测试不支持的写法当场报 LGUI-RT-263。
+6. **生成目录隔离**：长驻命令各用各的 `.lgui/build/<命令>/`（dev/verify/test 并行互不删文件，`lib/paths.mjs:14-15`）；共写目录只「写列出文件+删多余」，不先删后建，避免并发 ENOTEMPTY；dev watcher 显式跳过 `.lgui/build` 防自触发（dev/index.mjs:142-149）。
+7. **dev 服务器安全**：只监听 127.0.0.1；Host 头必须匹配，否则 403 挡 DNS 重绑定；**不提供任何写文件接口**，生成物只读、路径越界 404（`lib/dev/index.mjs:3,97-110`）；端口占用报 LGUI-CLI-030。
+8. **editor 集成**：端口固定用工程 `editorPort`（默认 4174）——浏览器按来源记住文件夹授权，端口一换授权就丢（`lib/editor/relay.mjs:2`、commands/editor.mjs:35）；Agent 侧 RPC（`/__lgui_editor/clients`、`/__lgui_editor/rpc`）要随机 Bearer 令牌（0600 连接文件 `.lgui/build/editor-connection.json`），只转发 `query`/`transact` 两个方法，15 秒无回复按「结果未知」回 504 并提示同 requestId 重试；浏览器侧只接受编辑器页面同源请求（Sec-Fetch-Site + Origin 校验）。`/__lgui_editor/project` 是只读接口，返回 `ui/` 全部文件（排除隐藏文件与 `art-src/`）。`?agent=1` 触发编辑器补丁每次打开强制重读 `ui/`——**浏览器是工作副本、保存写回 `ui/`、每次打开强制重读**，三者合起来保证 Agent 改了 `ui/` 后编辑器不显示陈旧内容（`scripts/build-editor/patches/project-reload.patch`）。浏览器文件夹授权是用户一次性动作，CLI 不能代做。
+9. **check 组合**：类型检查直接用 vendored TypeScript 建 program（tsconfig 报 LGUI-CLI-050 并说明「用 lgui init 生成的，不要改」）；MVC 规则用语法树实现、不用字符串匹配；UI 规则读 `ui/` 模型；i18n 规则比对文本表。OpenFairyGUI 校验问题报出来但**不停下**——后面的规则能给出更具体的错误码（`lib/check/index.mjs:12-18`）。
+10. **模板生成不覆盖**：`plugin/templates/`（project/module/patterns）是 init/new 的原料；`--pattern` 只限 split/tabs/grid/dialog 四种，列表类模式额外生成 ItemView；生成的新界面文字自动补进各语言文本表，非默认语言先填原文并提醒翻译（commands/new.mjs:66-76）；`new view` 生成 `@portrait` 竖版组件并登记进 package.xml。
+
+## 跨主题契约与变更后果
+
+- 错误码：LGUI-RT 前缀语义见 [runtime/framework.mdx](../runtime/framework.mdx)；登记表在 `plugin/references/error-codes.md`，改码先读它。
+- vendored 工具的版本表与重建流程归 [release/rebuild-artifacts.mdx](../release/rebuild-artifacts.mdx)；本域只拥有加载方式（vendor.mjs）。
+- `lib/generate/`（界面单源分产）的契约归 [runtime/framework.mdx](../runtime/framework.mdx)；dev/verify/test/unity export 只是调用方。
+- 改 `lib/commands/unity-export.mjs`、`upgrade.mjs` 会同时触发 [unity/export-pipeline.mdx](../unity/export-pipeline.mdx) 的复核。
+
+## 典型源码锚点
+
+- `plugin/tools/lib/cli.mjs`（registry、parseArgs、io 注入）
+- `plugin/tools/lib/output.mjs` / `errors.mjs`（--json 契约、LgCliError、LGUI-CLI-999）
+- `plugin/tools/lib/vendor.mjs`（平台断言、LGUI-CLI-005）
+- `plugin/tools/lib/editor/relay.mjs`（Bearer 中转、`/__lgui_editor/project`）
+- `plugin/tools/lib/dev/index.mjs`（本地服务安全不变量）
+- `plugin/tools/lib/check/index.mjs`（规则组合与「报出但不停下」）

@@ -1,0 +1,55 @@
+---
+description: "lgui 运行时框架：Backend/Platform 契约、MVC 与五层界面栈生命周期、界面单源 generate 分产、横竖屏换版、i18n 与失败语义（LgRuntimeError、LGUI-RT-001）；改框架契约、后端边界或界面生成前必读"
+kind: architecture
+code:
+  paths:
+    - plugin/framework/index.ts
+    - plugin/framework/core/*
+    - plugin/framework/mvc/lgui.ts
+    - plugin/framework/mvc/boot.ts
+    - plugin/framework/mvc/view.ts
+    - plugin/framework/mvc/ui/manager.ts
+    - plugin/framework/mvc/input/gestures.ts
+    - plugin/framework/mvc/i18n.ts
+    - plugin/framework/backends/headless/**
+    - plugin/framework/backends/h5/fairygui-patches/*
+    - plugin/tools/lib/generate/*
+relations:
+  related:
+    - unity/export-pipeline.mdx
+    - testing/layers.mdx
+---
+
+# 运行时框架与后端适配
+
+## 职责与所有权边界
+
+`plugin/framework/` 是随插件下发给用户工程的 TypeScript 框架（游戏代码 `import 'lgui'`）。本域拥有：`lgui` 对外 API 与启动流程、Backend/Platform/控件三份引擎无关契约、MVC 框架（Model/View/Controller/Service、绑定、五层界面栈）、统一输入、i18n、h5 与 headless 两份后端，以及「一个界面源分产各后端包」的生成契约（代码在 `plugin/tools/lib/generate/`，决策归本域）。MVC/ui 的写法规范归 `plugin/references/mvc-spec.md` 与 `ui-spec.md`——那是权威原文，本文只记录规范读不出来的执行模型与不变量。
+
+## 执行流
+
+对外入口只有 `plugin/framework/index.ts:1-3`（re-export core + mvc）。启动流程三端共用：`mvc/boot.ts`（setRuntime → 选语言 → 注册服务 → new UIManager → setupCommonViews → startSound → app.start()）；后端由用户工程的 `AppDefinition.backend` 声明（`mvc/lgui.ts:29`），游戏源码不 import 后端。界面单源：`ui/*.fairy` 一个源 → `lib/generate/` 按后端分产 web 包（Layabox fui + manifest，`web.mjs` setProjectType(4)）、Unity 包（`<包名>_fui.bytes` + 图集，`unity.mjs` setProjectType(0)）、headless 描述 JSON、控件 TS 类型、翻译；**每次全部重新生成**（generate/index.mjs:4），不存在局部更新。
+
+## 决策与不变量
+
+1. **后端适配契约 = 两个接口**：`Backend`（`core/backend.ts:18-43`）+ `Platform`（`core/platform.ts:178-201`）是引擎边界的全部。后端只上报原始输入，**手势（点击/双击/长按/拖拽/滑动/缩放）在框架统一识别**，保证三端手感一致（`mvc/input/gestures.ts:1-2`）；新增后端不重复实现手势。
+2. **界面五层与生命周期**：`mvc/ui/manager.ts`（675 行，框架核心）拥有 hud/page/popup/modal/toast 五层栈、激活/遮挡语义（激活 = 所有层合起来最上面的可交互界面；modal 打开时下面所有层停用；遮挡 = 全屏界面盖住其下所有层，manager.ts:379-414）、modal 排队（manager.ts:118,493）、界面包按需加载 + 引用计数 + 依赖闭包（manager.ts:316-360），加载完已无人用的包立即卸载，Common 包常驻 pinned（manager.ts:194）。View 的绑定订阅、定时器、事件、动效全部登记在 Scope，关闭自动清理（`mvc/view.ts:14-19`）；被盖住 `__pause`（定时器+动效停），露出恢复（view.ts:95-110）。
+3. **横竖屏不写判断**：方向由 UIManager 按屏幕尺寸决定（防抖 150ms，manager.ts:147-157,219-223）；竖屏时组件有 `@portrait` 版本就用它（versionOf，manager.ts:229-233）；换版 `swap()` 用**同一个 View 实例**重新绑定新组件，保留列表滚动/选中，不调 onOpen/onClose（manager.ts:260-277）；换语言 `rebuildAll()` 走同一机制并清空界面缓存（manager.ts:288-292）。全屏界面必须有竖版，或声明 `static bothOrientations`（view.ts:107）；游戏代码里出现方向 if 判断是 `lgui check` 违例。
+4. **i18n**：文本表扁平「键→文字」，复数用 Intl.PluralRules（zh/ja/ko 不分单复数，`mvc/i18n.ts:47-52`）；**数字缩写三端都用内置规则、不用 Intl**，保证各端显示一致（i18n.ts:63-66）；界面固定文字只在组件创建时生效，换语言 = 后端重载包 + 重建全部打开界面（lgui.ts:230-236）；i18nBase 未配报 LGUI-RT-173。
+5. **失败语义（不悄悄兜底）**：错误一律 `LgRuntimeError` 三元组 code/message/next（`core/errors.ts:5-15`），码表在 `plugin/references/error-codes.md`。`t()` 找不到键：开发/测试抛 LGUI-RT-090，正式构建记 error 并显示键名（mvc/i18n.ts:74-83）；请求失败不抛错，交回 `{ok:false}` 记 warn，超时 LGUI-RT-100（mvc/request.ts:47-53）；单帧回调异常记 LGUI-RT-160，不拖垮同界面其他定时器和其他帧（mvc/timers.ts）。**LGUI-RT-001（未实现）**定义在 `core/errors.ts:20`（notImplemented）与 `mvc/todo.ts:5`；实际触发点：headless 的 net（backends/headless/index.ts:151）、Unity 的 webSocket（backends/unity/adapter/platform.ts:258）——h5 的 webSocket 已实现。
+6. **headless 后端是测试专用**：Node 模拟控件树，**不算布局不渲染**，读位置/尺寸/属性齿轮报 LGUI-RT-260（`backends/headless/descriptor.ts:16-19`）；已知与真实后端的差异清单在 `tests/conformance/README.md:18`。headless 的契约（descriptor 格式）与 `lib/generate/headless.mjs` 配套，改一边要审另一边。
+7. **h5 补丁边界**：h5 后端基于 vendored 的 FairyGUI-dom（生成物，见 [release/rebuild-artifacts.mdx](../release/rebuild-artifacts.mdx)），`backends/h5/fairygui-patches/` 只补 DOM 实现差异（九宫格、文字缩放、transition 等）——上游行为差异补在这里，不改生成物。
+
+## 跨主题契约与变更后果
+
+- `backends/unity/` 的启动与导出归 [unity/export-pipeline.mdx](../unity/export-pipeline.mdx)；本域只拥有「它实现 Backend 契约（core/backend.ts）」这一事实。改 `core/backend.ts`/`core/platform.ts` 必然波及 Unity 侧与三端一致性测试。
+- headless 同时是 `lgui test` 的执行后端，测试层用法见 [testing/layers.mdx](../testing/layers.mdx)。
+- LGUI-RT 错误码登记表在 `plugin/references/error-codes.md`（LGUI-CLI 见 [cli/commands.mdx](../cli/commands.mdx)）。
+
+## 典型源码锚点
+
+- `plugin/framework/core/backend.ts` / `core/platform.ts` / `core/ui.ts`（三份契约；`core/ui.ts:268-299` 的 UIKinds 是控件类型↔接口对应表）
+- `plugin/framework/mvc/ui/manager.ts`（五层栈、换版、包引用计数）
+- `plugin/framework/mvc/boot.ts`（三端共用启动）
+- `plugin/tools/lib/generate/index.mjs`（单源分产）
+- `plugin/framework/backends/headless/descriptor.ts`（headless 契约）

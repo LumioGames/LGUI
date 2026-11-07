@@ -1,0 +1,56 @@
+---
+description: "lgui unity export 与 upgrade 管线：Unity 6000.6.x + PuerTS 3.0.3 版本锚定、SHA256 补丁校验、暂存区与 LGUI 归属目录整替换、导出产物路径与 Player 验证；执行导出、升级或改导出管线前必读"
+kind: guide
+code:
+  paths:
+    - plugin/tools/lib/commands/unity-export.mjs
+    - plugin/tools/lib/commands/upgrade.mjs
+    - plugin/framework/backends/unity/adapter/index.ts
+    - plugin/framework/backends/unity/adapter/platform.ts
+    - plugin/framework/backends/unity/adapter/README.md
+    - plugin/framework/backends/unity/package/Runtime/**
+    - plugin/framework/backends/unity/patches/*
+    - tests/unity/**
+relations:
+  related:
+    - runtime/framework.mdx
+    - testing/layers.mdx
+---
+
+# Unity 导出与升级管线
+
+## 触发与何时不用
+
+- `lgui unity export`：把同一份 `ui/`、`src/`、`i18n/` 导出到 Unity 工程（界面包、图集、翻译、脚本、启动场景）。日常开发与预览不用它——那是 `lgui dev`（见 [cli/commands.mdx](../cli/commands.mdx)）。
+- `lgui upgrade`：插件新版整体替换工程 `.lgui/framework/` 与 Unity 包，打印 CHANGELOG 跨越的版本段提醒按它改代码（`lib/commands/upgrade.mjs:74-88`）。
+- 接入步骤（装 Unity、装 PuerTS、Editor Play、打 Player）的权威原文是 `plugin/references/unity.md` 与 `tests/unity/README.md`——按它操作，本文记的是它背后的安全机制与不变量。
+
+## 前置条件与版本锚定
+
+Unity 6000.6.x + 官方 PuerTS Core/V8 **3.0.3 embedded 本地包**，版本不符报 LGUI-CLI-051/052（`lib/commands/unity-export.mjs:61-80`）。PuerTS 要打四处固定补丁，按原始/补后 **SHA256 校验、对不上就停，不硬打**（unity-export.mjs:82-118）；另有 `backends/unity/patches/puerts-3.0.3-unity-6.6-unbox.patch`。版本锚定是有意为之：换 Unity/PuerTS 版本 = 重新适配整条管线，不是配置改动。
+
+## 步骤与安全分支（export）
+
+1. 校验环境（Unity/PuerTS 版本、补丁 SHA256）。
+2. 在 `.lgui/build/unity/export` 暂存区构建全部产物（unity-export.mjs:186-200）——**成功才替换 Unity 侧**，中途失败不动用户工程。
+3. 替换阶段**只整目录替换 LGUI 归属的生成物目录**（`Assets/LGUI/Resources/UI|Game`、游戏脚本目录、启动场景、link.xml），管理路径禁止符号链接逃逸（`assertOwnedPath`，unity-export.mjs:34-59）——用户在 Unity 侧的自有改动不被覆盖。
+4. 启动场景只创建一次、不覆盖（unity-export.mjs:203）；link.xml 复制到 Assets（Unity 不处理 UPM 包内的 link.xml，unity-export.mjs:205）。
+
+Unity 侧运行时是 UPM 包 `com.lumiogames.lgui`（`plugin/framework/backends/unity/package/`）：C# 宿主 `Runtime/LGUIBoot.cs` 每帧调 `__lguiFrame`、可见性 `__lguiVisibility`、销毁 `__lguiDispose`；TS 侧适配层边界见 `backends/unity/adapter/README.md`。Unity 后端**还没有 WebSocket**，用到时报 LGUI-RT-001（`adapter/platform.ts:258`）。
+
+## 验证与验收
+
+| 手段 | 测什么 | 入口 |
+|---|---|---|
+| `tests/unity/runner.mjs` | 复用 conformance 用例，Unity/headless/h5 **三方快照对比** | 手动，需本机 Unity |
+| `tests/unity/export-play.mjs` | 真实背包示例走完整 export + Editor Play 验收（验证归档摘要） | 手动 |
+| `tests/unity/player-build.mjs` | Windows IL2CPP Player 三阶段构建（普通构建锁定 `insecureHttpOption=NotAllowed`） | 手动 |
+| `tests/unity/size-baseline.mjs` | A/B/lgui 包体对照 | 手动 |
+
+三层语义与运行方式见 [testing/layers.mdx](../testing/layers.mdx)；改导出管线后至少跑 runner + export-play。
+
+## 失败处理与恢复
+
+- 版本/补丁/路径校验失败都发生在暂存前或替换前，用户工程保持原样；修好环境重跑即可。
+- 升级 PuerTS/Unity 版本属于[重建随插件产物](../release/rebuild-artifacts.mdx)级别的适配：改版本锚定、重新生成补丁、重跑全部 unity 测试层，不是一个 PR 里的顺手改动。
+- 框架侧契约（Backend/Platform）变更的后果见 [runtime/framework.mdx](../runtime/framework.mdx)——`adapter/` 实现契约，导出生成它的启动方式（`writeBootstrap`），两边一起改。
