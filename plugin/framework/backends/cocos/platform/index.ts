@@ -18,7 +18,9 @@ class Handlers<T> {
   private set = new Set<(value: T) => void>();
   add(handler: (value: T) => void): Unsubscribe { this.set.add(handler); return () => { this.set.delete(handler); }; }
   emit(value: T, onError?: (error: unknown) => void): void {
-    for (const handler of [...this.set]) {
+    for (const handler of Array.from(this.set)) {
+      // 注册了非函数是缺陷：报出值本身，别只留一句 TypeError（T007 校准诊断）。
+      if (typeof handler !== 'function') { console.error(`[lgui] Handlers 注册了非函数（${typeof handler}）：`, handler); continue; }
       if (!onError) { handler(value); continue; }
       try { handler(value); } catch (error) { onError(error); }
     }
@@ -113,11 +115,22 @@ export function createCocosPlatform(projectName: string, uiBase: string): Platfo
       loadPackage: async name => {
         if (fgui.UIPackage.getByName(name)) return;
         const loaded = await bundleReady();
-        // 路径约定：<包名>/<包名>_fui.bytes（decisions/003；T007 对齐运行库的解析细节）
-        await new Promise<void>((resolve, reject) => fgui.UIPackage.loadPackage(loaded, name, error => {
-          if (error) reject(new LgRuntimeError('LGUI-RT-012', `界面包 ${name} 加载失败（${error.message}）。`, '重新运行包同步，确认 assets/lgui-ui/ 里有这个包。'));
-          else resolve();
-        }));
+        // 路径约定：<包名>/<包名>.bin（decisions/003）。运行库拿 path 直接 bundle.load；
+        // Raw Asset（.bytes）按 CC 文档要带扩展名，老版本资源库不带——两种都试，全失败才报错（错误里带上两种路径）。
+        const withExt = `${name}/${name}.bin`;
+        const withoutExt = `${name}/${name}`;
+        let lastError: Error | null = null;
+        for (const candidate of [withExt, withoutExt]) {
+          try {
+            await new Promise<void>((resolve, reject) => fgui.UIPackage.loadPackage(loaded, candidate, error => {
+              if (error) reject(error instanceof Error ? error : new Error(String(error)));
+              else resolve();
+            }));
+            lastError = null;
+            break;
+          } catch (error) { lastError = error instanceof Error ? error : new Error(String(error)); }
+        }
+        if (lastError) throw new LgRuntimeError('LGUI-RT-012', `界面包 ${name} 加载失败（${lastError.message}；试过 ${withExt} 和 ${withoutExt}）。`, '重新运行包同步，确认 assets/lgui-ui/ 里有这个包（.bin），并把 lgui-ui 目录设为 bundle。');
       },
       releasePackage: name => { if (fgui.UIPackage.getByName(name)) fgui.UIPackage.removePackage(name); },
       hasPackage: name => fgui.UIPackage.getByName(name) !== undefined,

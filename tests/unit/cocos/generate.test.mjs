@@ -23,7 +23,7 @@ for (const [label, fairy] of Object.entries(projects)) {
       // 全部产物都在包目录里，根目录不放文件（decisions/003 的 bundle 布局）
       assert.notEqual(path.dirname(file), out, file);
     }
-    const bytes = result.files.filter(file => file.endsWith('_fui.bytes'));
+    const bytes = result.files.filter(file => file.endsWith('.bin'));
     assert.ok(bytes.length > 0);
     for (const file of bytes) assert.equal(fs.readFileSync(file).subarray(0, 4).toString(), 'FGUI');
   });
@@ -34,7 +34,7 @@ test('背包示例：五个包各自成目录，图集和声音在包目录里�
   await generateCocos(projects.inventory, out);
   for (const name of ['Bag', 'Common', 'Main', 'Reward', 'Shop']) {
     const dir = path.join(out, name);
-    assert.ok(fs.existsSync(path.join(dir, `${name}_fui.bytes`)), `${name}_fui.bytes`);
+    assert.ok(fs.existsSync(path.join(dir, `${name}.bin`)), `${name}.bin`);
   }
   assert.ok(fs.existsSync(path.join(out, 'Common', 'Common_click001.mp3')), '包里的声音跟着包目录走');
   const atlases = fs.readdirSync(out, {recursive: true}).filter(file => String(file).endsWith('_atlas0.png'));

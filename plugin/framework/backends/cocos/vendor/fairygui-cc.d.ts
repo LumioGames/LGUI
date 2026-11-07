@@ -259,10 +259,6 @@ export class UIPackage {
 /** UIConfig 只声明用到的键。 */
 export const UIConfig: {defaultFont: string};
 
-export class XML {
-  constructor(source: string);
-}
-
-export const TranslationHelper: {loadFromXML(source: XML): void};
+export const TranslationHelper: {loadFromXML(source: string): void};
 
 }

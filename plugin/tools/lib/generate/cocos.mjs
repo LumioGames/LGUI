@@ -17,7 +17,7 @@ export async function generateCocos(fairyPath, out) {
   await prepareAtlas(document, assets); // 图集上限：没写 maxAtlasSize 的包用 LGUI 的默认值，图比上限大就报 LGUI-CLI-113
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'lgui-cocos-'));
   try {
-    const {log} = await quiet(() => functions.publishNode({document, output: temp, assetsPath: assets, compressed: false, fileExtension: 'bytes', codeGeneration: false, plugins: []})).catch(error => { throw atlasError(error); });
+    const {log} = await quiet(() => functions.publishNode({document, output: temp, assetsPath: assets, compressed: false, fileExtension: 'bin', codeGeneration: false, plugins: []})).catch(error => { throw atlasError(error); });
     const names = document.getRoot().listPackages().map(pkg => pkg.getName());
     fs.rmSync(out, {recursive: true, force: true});
     fs.mkdirSync(out, {recursive: true});
@@ -25,10 +25,10 @@ export async function generateCocos(fairyPath, out) {
     for (const name of names) {
       const dir = path.join(out, name);
       fs.mkdirSync(dir, {recursive: true});
-      // 这个包的产物：二进制包 + 图集（<包名>_fui.bytes、<包名>_atlas0.png…）。带上图集的 .meta 兄弟文件不用管——OpenFairyGUI 不产它们。
-      const produced = fs.readdirSync(temp).filter(file => file.startsWith(`${name}_`));
-      if (!produced.some(file => file === `${name}_fui.bytes`)) {
-        throw new LgCliError('LGUI-CLI-021', `OpenFairyGUI 没有生成包 ${name} 的 ${name}_fui.bytes。`, {fix: '这是生成步骤的缺陷，请把输出报告给维护者。'});
+      // 这个包的产物：二进制包 + 图集（<包名>.bin、<包名>_atlas0.png…；'bin' 扩展没有 _fui 中缀）。带上图集的 .meta 兄弟文件不用管——OpenFairyGUI 不产它们。
+      const produced = fs.readdirSync(temp).filter(file => file.startsWith(`${name}.`) || file.startsWith(`${name}_`));
+      if (!produced.some(file => file === `${name}.bin`)) {
+        throw new LgCliError('LGUI-CLI-021', `OpenFairyGUI 没有生成包 ${name} 的 ${name}.bin。`, {fix: '这是生成步骤的缺陷，请把输出报告给维护者。'});
       }
       for (const file of produced) {
         fs.copyFileSync(path.join(temp, file), path.join(dir, file));
@@ -36,7 +36,7 @@ export async function generateCocos(fairyPath, out) {
       }
     }
     // 有不属于任何包的产物就停下：不悄悄丢文件，也不悄悄进错目录。
-    const known = new Set(fs.readdirSync(temp).filter(file => names.some(name => file.startsWith(`${name}_`))));
+    const known = new Set(fs.readdirSync(temp).filter(file => names.some(name => file.startsWith(`${name}.`) || file.startsWith(`${name}_`))));
     for (const file of fs.readdirSync(temp)) {
       if (!known.has(file)) throw new LgCliError('LGUI-CLI-021', `OpenFairyGUI 生成了不属于任何包的产物 ${file}。`, {fix: '这是生成步骤的缺陷，请把输出报告给维护者。'});
     }

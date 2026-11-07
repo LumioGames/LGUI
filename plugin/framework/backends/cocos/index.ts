@@ -56,9 +56,11 @@ export function createCocosBackend(): Backend {
         if (error || !asset) reject(new LgRuntimeError('LGUI-RT-141', `读不到翻译文件 ${i18nBase}/${language}（bundle 里没有）。`, '确认工程配置 languages 里有这种语言，并重新运行包同步生成翻译文件。'));
         else resolve((asset as TextAsset).text);
       }));
-      fgui.TranslationHelper.loadFromXML(new fgui.XML(xml));
+      // 官方运行库的 loadFromXML 直接收 XML 字符串（内部 DOMParser），不像 dom 版要 new XML。
+      fgui.TranslationHelper.loadFromXML(xml);
       // FairyGUI 的翻译只在组件第一次创建时写进包数据，所以已经加载的包要卸载、重新加载（同 h5）。
-      const loaded = [...loadedPackages];
+      // CC 的 babel loose 模式把 [...set] 编译成 [set]（整个 Set 成为一个元素）——框架里可迭代展开一律用 Array.from（T007 校准结论）。
+      const loaded = Array.from(loadedPackages);
       for (const name of loaded) if (fgui.UIPackage.getByName(name)) fgui.UIPackage.removePackage(name);
       for (const name of loaded) await ready().resource.loadPackage(name);
     },

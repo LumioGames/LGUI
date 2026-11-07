@@ -3,7 +3,7 @@
     "servers": {
       "funplay-cocos": {
         "type": "http",
-        "url": "http://127.0.0.1:27182/"
+        "url": "http://127.0.0.1:27182/mcp/project/eb9f65a4b212239c3b3ca609/"
       }
     }
   }
