@@ -49,3 +49,13 @@
 4. **CC babel loose 模式把 `[...set]` 编译成 `[].concat(set)`**（整个 Set 变成一个元素）——框架里可迭代展开必须用 `Array.from`。cocos 后端已改 2 处；**剩余审计项：backends/cocos 7 处、mvc/core 19 处 `[...`，数组无害、Set/Map 全中招**——真 View 跑五层栈前必须清完。
 
 其他修正：官方 loadPackage 的 bundle 路径 = `<包名>/<包名>.bin`（Raw Asset 带扩展名），两次尝试（带/不带扩展）全失败才报错；Handlers.emit 增加非函数诊断。
+
+
+## 2026-11-08（续）：真 View 五层栈全绿
+
+ 跑通：MainView（page 层）→ ConfirmView（modal 层）→ setLanguage('en')（rebuildAll 重建）→ 快照确认 layer 栈。新增坑与修法：
+
+- RuntimeConfig 字段名是 **designSize**（不是 design），sync 的 config 与框架 runtimeConfig（bundle.mjs）逐字段同构。
+-  的运行时文本表走 boot 的 **texts 选项**（readTexts 同机制）——sync 现在从工程 i18n/*.json 生成 texts 一并传入。
+- boot 不从框架 index 导出，直连 mvc/boot（生成的 h5 入口同样直连）。
+- 教训重申：对生成文件/源码的 python replace 必须带 assert（两次静默 no-op 造成假信号）。

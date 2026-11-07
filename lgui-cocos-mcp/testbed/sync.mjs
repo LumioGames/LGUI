@@ -35,18 +35,18 @@ console.log(`翻译：${project.languages.join('、')} → assets/lgui-ui/i18n/`
 console.log('框架：assets/lgui-framework/');
 
 const components = Object.fromEntries(model.packages.map(pkg => [pkg.name, pkg.components.map(component => component.name)]));
+// 与框架 runtimeConfig（bundle.mjs）同构：字段原样透传，另带 defaultFont 给 backend.init。
 const config = {
-  name: project.name,
-  languages: project.languages,
-  defaultLanguage: project.defaultLanguage,
   defaultFont: project.defaultFont,
-  design: project.designSize.landscape,
-  designPortrait: project.designSize.portrait
+  ...Object.fromEntries(['name', 'designSize', 'orientation', 'languages', 'defaultLanguage', 'keyMap', 'uiCache', 'requestErrorToast', 'requestTimeoutMs', 'placeholder', 'sounds'].map(key => [key, project[key]]))
 };
+// 运行时文本表（lgui.t 用）：与 bundle.mjs 的 readTexts 同机制，直接读工程 i18n/*.json。
+const texts = Object.fromEntries(project.languages.map(language => [language, JSON.parse(fs.readFileSync(path.join(projectRoot, 'i18n', `${language}.json`), 'utf8'))]));
 const generated = `// 由 sync.mjs 生成，不要手改。
 export const config = ${JSON.stringify(config, null, 2)};
 export const deps = ${JSON.stringify(deps, null, 2)};
 export const components = ${JSON.stringify(components, null, 2)};
+export const texts = ${JSON.stringify(texts, null, 2)};
 `;
 fs.writeFileSync(path.join(testbed, 'assets', 'scripts', 'lgui-config.ts'), generated);
 console.log('启动配置：assets/scripts/lgui-config.ts');

@@ -1,8 +1,11 @@
-// M1 桥接冒烟：不走 MVC，直接驱动 cocos 后端走 挂载 → 加载包 → 创建控件 → 进层 → 换设计尺寸 → 换语言。
-// 全部由 sync.mjs 生成的 lgui-config.ts 驱动；改 ui/ 或框架后先跑 sync 再刷新预览。
+// M1 冒烟：桥接（init/加载包/创建控件/设计尺寸）+ 真 View 五层栈（boot/lgui.ui）+ 换语言。
+// 换版 swap 由预览视口 resize 触发（smoke.mjs 里 setViewportSize）。config/deps/components 由 sync.mjs 生成。
 import {Component, _decorator, director, Director} from 'cc';
+import {lgui} from '../lgui-framework/index';
+import {boot} from '../lgui-framework/mvc/boot';
 import {createCocosBackend} from '../lgui-framework/backends/cocos/index';
-import {config, deps, components} from './lgui-config';
+import {config, deps, components, texts} from './lgui-config';
+import {MainView, ConfirmView} from './TestbedViews';
 
 const {ccclass} = _decorator;
 
@@ -10,8 +13,8 @@ export async function smoke(): Promise<void> {
   const backend = createCocosBackend();
   await backend.init({projectName: config.name, defaultFont: config.defaultFont, uiBase: 'lgui-ui', i18nBase: 'i18n'});
   const log = backend.platform.log;
-  const visible = backend.platform.screen.applyDesignSize(config.design);
-  log.info('lgui_smoke', () => ({step: 'init', design: config.design, visible}));
+  const visible = backend.platform.screen.applyDesignSize(config.designSize.landscape);
+  log.info('lgui_smoke', () => ({step: 'init', design: config.designSize.landscape, visible}));
 
   await backend.loadPackage('Common');
   const name = (components.Common ?? []).find(item => !item.endsWith('@portrait'));
@@ -22,14 +25,16 @@ export async function smoke(): Promise<void> {
   layer.addChild(component);
   log.info('lgui_smoke', () => ({step: 'create', component: `Common/${name}`, deps: Object.keys(deps)}));
 
-  backend.platform.screen.applyDesignSize(config.designPortrait);
-  log.info('lgui_smoke', () => ({step: 'portrait', design: config.designPortrait}));
-
+  // 真 View：五层栈 + 换版 + 换语言（换版由预览视口 resize 触发，见 smoke.mjs）
+  await boot(backend, {backend: 'cocos', async start() {}}, config, deps, {views: {MainView, ConfirmView}, texts});
+  await lgui.ui.open(MainView);
+  log.info('lgui_smoke', () => ({step: 'view-open', view: 'MainView'}));
+  await lgui.ui.open(ConfirmView);
+  log.info('lgui_smoke', () => ({step: 'modal-open', view: 'ConfirmView'}));
   const other = config.languages.find(language => language !== config.defaultLanguage) ?? 'en';
-  await backend.setLanguage(other);
+  await lgui.setLanguage(other);
   log.info('lgui_smoke', () => ({step: 'language', language: other}));
-  await backend.setLanguage(config.defaultLanguage);
-  log.info('lgui_smoke', () => ({step: 'done'}));
+  log.info('lgui_smoke', () => ({step: 'done', snapshot: JSON.stringify(lgui.debug.snapshot()).slice(0, 160)}));
 }
 
 // 不依赖场景挂件：第一个场景加载完自动跑冒烟。
