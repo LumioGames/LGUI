@@ -14,11 +14,10 @@
 
 ## In Progress
 
-（空——T007 待开工）
+- T007 testbed：工程骨架 + 同步链路已就绪（`lgui-cocos-mcp/testbed/`：package.json/settings/tsconfig 抄自 fork demo；`sync.mjs` 灌界面包+翻译+框架副本+生成 lgui-config；`Boot.ts` 桥接冒烟）。校准点 7（i18n）已在代码里消除——setLanguage 改走 bundle TextAsset。**待办：在 Creator 3.8.2 里实际打开（本机已装），设 lgui-ui 为 bundle、场景挂 LGUIBoot、跑预览**，然后按[校准清单](evidence/2026-11-07-t005-cocos-backend-skeleton.md)逐条核对；五层栈/换版 swap 等测试 View 接入。
 
 ## Next
 
-- T007 testbed：按 decisions/003 新建最小 CC 3.8.2 工程 + 包同步 dev 脚本（generateCocos + generateTranslations），跑通 GRoot 挂载 + 五层栈 + 横竖屏换版；顺带完成[骨架校准清单](evidence/2026-11-07-t005-cocos-backend-skeleton.md)的 6 项运行时核对 + [T006 遗留](evidence/2026-11-07-t006-generate-cocos.md)的 i18n 加载方式
 - T008 conformance 四方快照：headless/h5/unity/cocos（桥的实现按 Q3）
 
 ## Deferred

@@ -46,6 +46,9 @@ export class Texture2D extends Asset {}
 export class ImageAsset extends Asset {}
 export class SpriteFrame extends Asset {}
 export class BufferAsset extends Asset {}
+export class TextAsset extends Asset {
+  text: string;
+}
 export class JsonAsset extends Asset {
   json: unknown;
 }

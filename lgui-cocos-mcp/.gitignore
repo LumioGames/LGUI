@@ -11,3 +11,11 @@ native/engine/
 # 依赖与构建
 node_modules/
 dist/
+
+# testbed 生成物（node sync.mjs 产出）
+testbed/assets/lgui-ui/
+testbed/assets/lgui-framework/
+testbed/assets/scripts/lgui-config.ts
+testbed/library/
+testbed/temp/
+testbed/profiles/

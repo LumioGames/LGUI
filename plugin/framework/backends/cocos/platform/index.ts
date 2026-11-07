@@ -42,7 +42,7 @@ class FrameDriver extends Component {
 // 包加载走的 bundle 名与目录（decisions/003）：assets/lgui-ui/<包名>/。
 const bundleName = 'lgui-ui';
 let bundle: AssetManagerBundle | null = null;
-const bundleReady = (): Promise<AssetManagerBundle> => new Promise((resolve, reject) => {
+export const bundleReady = (): Promise<AssetManagerBundle> => new Promise((resolve, reject) => {
   if (bundle) { resolve(bundle); return; }
   assetManager.loadBundle(bundleName, (error, loaded) => {
     if (error) { reject(new LgRuntimeError('LGUI-RT-011', `读不到界面包 bundle ${bundleName}（${error.message}）。`, '先运行包同步把 ui/ 的产物放进 Cocos 工程的 assets/lgui-ui/，并把该目录设为 bundle。')); return; }

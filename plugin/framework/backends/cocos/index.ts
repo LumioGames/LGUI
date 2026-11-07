@@ -1,10 +1,10 @@
 // cocos 后端：fairygui-cc 加 Cocos Creator 引擎 API。从 h5 后端移植（它是基准实现）；差异点都在注释里。
 // 只能在 Cocos Creator 工程里运行（fairygui.mjs import 'cc'）；M1 目标是 Web。
-import {director} from 'cc';
+import {director, TextAsset} from 'cc';
 import * as fgui from './vendor/fairygui.mjs';
 import type {Backend, BackendConfig, Platform, UIComponent, UIObject} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
-import {createCocosPlatform} from './platform/index';
+import {createCocosPlatform, bundleReady} from './platform/index';
 import {setComponentName, wrap, wrapComponent} from './objects/index';
 
 const parseUrl = (url: string): [string, string] | null => { const m = /^ui:\/\/([^/]+)\/(.+)$/.exec(url); return m ? [m[1], m[2]] : null; };
@@ -49,11 +49,14 @@ export function createCocosBackend(): Backend {
       return wrapComponent(native) as UIComponent<Name>;
     },
     async setLanguage(language: string): Promise<void> {
-      if (!i18nBase) throw new LgRuntimeError('LGUI-RT-173', `没配 i18nBase，换不了界面上固定文字的语言（${language}）。`, 'backend.init 时传 i18nBase（生成的启动入口传的是 ./i18n）。');
-      const url = `${i18nBase}/${language}.xml`;
-      const response = await fetch(url);
-      if (!response.ok) throw new LgRuntimeError('LGUI-RT-141', `读不到翻译文件 ${url}（HTTP ${response.status}）。`, '确认工程配置 languages 里有这种语言，并重新运行包同步生成翻译文件。');
-      fgui.TranslationHelper.loadFromXML(new fgui.XML(await response.text()));
+      if (!i18nBase) throw new LgRuntimeError('LGUI-RT-173', `没配 i18nBase，换不了界面上固定文字的语言（${language}）。`, 'backend.init 时传 i18nBase（包同步生成的翻译目录，比如 i18n）。');
+      // 翻译文件在 lgui-ui bundle 里（assets/lgui-ui/i18n/<语言>.xml）；CC 的 bundle 资源 fetch 不到，用 bundle.load 读 TextAsset。
+      const uiBundle = await bundleReady();
+      const xml = await new Promise<string>((resolve, reject) => uiBundle.load(`${i18nBase}/${language}`, TextAsset, (error, asset) => {
+        if (error || !asset) reject(new LgRuntimeError('LGUI-RT-141', `读不到翻译文件 ${i18nBase}/${language}（bundle 里没有）。`, '确认工程配置 languages 里有这种语言，并重新运行包同步生成翻译文件。'));
+        else resolve((asset as TextAsset).text);
+      }));
+      fgui.TranslationHelper.loadFromXML(new fgui.XML(xml));
       // FairyGUI 的翻译只在组件第一次创建时写进包数据，所以已经加载的包要卸载、重新加载（同 h5）。
       const loaded = [...loadedPackages];
       for (const name of loaded) if (fgui.UIPackage.getByName(name)) fgui.UIPackage.removePackage(name);
