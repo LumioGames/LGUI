@@ -30,7 +30,7 @@ export async function languageSettled(): Promise<void> {
 
 function flush(): unknown[] {
   const errors: unknown[] = [];
-  const entries = [...deferred];
+  const entries = Array.from(deferred);
   deferred.clear();
   for (const [run, alive] of entries) {
     if (!alive()) continue;

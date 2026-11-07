@@ -352,7 +352,7 @@ export class UIManager {
   }
 
   /** 已加载的包和引用数。 */
-  packageRefs(): {name: string; refs: number}[] { return [...this.refs].map(([name, refs]) => ({name, refs})); }
+  packageRefs(): {name: string; refs: number}[] { return Array.from(this.refs).map(([name, refs]) => ({name, refs})); }
 
   // ---------- 查询 ----------
 

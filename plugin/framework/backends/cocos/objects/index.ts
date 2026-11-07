@@ -172,11 +172,11 @@ class CocosLoader extends CocosObject implements UILoader {
     this.native.url = value;
     if (!value) return;
     // ui:// 是包里的图片，包加载后同步就绪；网络图片用探测 img 判断成功失败（运行库的加载器不报错，同 h5）。
-    if (value.startsWith('ui://')) { for (const handler of [...this.loads]) handler(); return; }
-    if (typeof Image === 'undefined') { for (const handler of [...this.loads]) handler(); return; } // 原生目标：T012 再接网络图
+    if (value.startsWith('ui://')) { for (const handler of Array.from(this.loads)) handler(); return; }
+    if (typeof Image === 'undefined') { for (const handler of Array.from(this.loads)) handler(); return; } // 原生目标：T012 再接网络图
     const probe = new Image();
-    probe.onload = () => { if (this.current === value) for (const handler of [...this.loads]) handler(); };
-    probe.onerror = () => { if (this.current === value) for (const handler of [...this.errors]) handler(value); };
+    probe.onload = () => { if (this.current === value) for (const handler of Array.from(this.loads)) handler(); };
+    probe.onerror = () => { if (this.current === value) for (const handler of Array.from(this.errors)) handler(value); };
     probe.src = value;
   }
   onLoad(handler: () => void): Unsubscribe { this.loads.add(handler); return () => { this.loads.delete(handler); }; }
@@ -309,7 +309,7 @@ class CocosTree extends CocosObject implements UITree {
       }
     };
     add(this.native.rootNode, list);
-    for (const key of [...this.expanded.keys()]) if (!this.nodes.has(key)) this.expanded.delete(key);
+    for (const key of Array.from(this.expanded.keys())) if (!this.nodes.has(key)) this.expanded.delete(key);
     this.selectedKey = this.selected !== null && this.nodes.has(this.selected) ? this.selected : null;
     if (pane) { this.native.ensureBoundsCorrect(); pane.setPosX(position.x, false); pane.setPosY(position.y, false); }
   }

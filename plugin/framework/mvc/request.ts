@@ -11,7 +11,7 @@ export const requestHooks = {onError: (error: LgRuntimeError): void => { void er
 export function createRequest<Args extends unknown[], T>(fn: (...args: Args) => Promise<T>): Request<Args, T> {
   let state: RequestState<T> = {status: 'idle', value: undefined, error: null};
   const listeners = new Set<() => void>();
-  const set = (next: RequestState<T>): void => { state = next; for (const l of [...listeners]) l(); };
+  const set = (next: RequestState<T>): void => { state = next; for (const l of Array.from(listeners)) l(); };
   let seq = 0;
   return {
     get: () => state,

@@ -76,7 +76,7 @@ export function recognize(object: UIObject, input: InputService, time: TimeServi
   };
 
   const pair = (): [Track, Track] | null => {
-    const all = [...tracks.values()];
+    const all = Array.from(tracks.values());
     return all.length >= 2 ? [all[0], all[1]] : null;
   };
 

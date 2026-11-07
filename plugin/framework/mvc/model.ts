@@ -20,7 +20,7 @@ export function createModel<State extends object, Rules extends object>(initial:
   const listeners = new Set<() => void>();
   const set = (partial: Partial<State>): void => store.setState(partial);
   const get = (): State => store.getState();
-  store.subscribe(() => { for (const listener of [...listeners]) listener(); });
+  store.subscribe(() => { for (const listener of Array.from(listeners)) listener(); });
   const base = {
     get,
     set,

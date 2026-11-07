@@ -30,7 +30,7 @@ export class ViewTimers {
   private frame(deltaMs: number): void {
     if (this.paused) return;
     let failure: {error: unknown} | null = null;
-    for (const timer of [...this.timers]) {
+    for (const timer of Array.from(this.timers)) {
       try { if (!timer.step(deltaMs)) this.timers.delete(timer); } catch (error) { if (!failure) failure = {error}; }
     }
     if (failure) throw failure.error;

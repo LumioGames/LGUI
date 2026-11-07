@@ -11,7 +11,7 @@ export const inputType: Readable<InputType> & {set(type: InputType): void} = {
   set(type) {
     if (type === current) return;
     current = type;
-    for (const listener of [...listeners]) listener();
+    for (const listener of Array.from(listeners)) listener();
     bus.emit(builtinEvents.inputTypeChange, {inputType: type});
   }
 };

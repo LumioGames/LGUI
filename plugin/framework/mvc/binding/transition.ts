@@ -49,7 +49,7 @@ export class ViewMotion {
   /** 恢复暂停时停住的动效。 */
   resume(): void {
     this.paused = false;
-    const held = [...this.held];
+    const held = Array.from(this.held);
     this.held.clear();
     for (const t of held) t.setPaused(false);
   }
@@ -66,7 +66,7 @@ export class ViewMotion {
    * 它就一直是「暂停着的在放」，组件进了界面缓存、再打开时不会从头放，永远停在那一帧。记下的状态清掉（缓存里的组件再打开时从头算）。 */
   stop(): void {
     this.paused = false;
-    const held = [...this.held];
+    const held = Array.from(this.held);
     this.held.clear();
     for (const t of held) if (t.playing) t.stop();
     for (const t of this.bound) { ours.delete(t); lastPlaying.delete(t); if (t.playing) t.stop(); }

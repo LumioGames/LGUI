@@ -69,7 +69,7 @@ function valid(value: unknown): value is SoundSettings {
 function update(next: SoundSettings): void {
   settings = next;
   runtime().backend.platform.storage.set(SOUND_STORAGE_KEY, JSON.stringify(next));
-  for (const listener of [...listeners]) listener();
+  for (const listener of Array.from(listeners)) listener();
 }
 
 const effective = (channel: SoundChannel): number => settings[channel].muted ? 0 : settings[channel].volume;
@@ -166,7 +166,7 @@ export function startSound(ui: UIManager): void {
     else failure(new LgRuntimeError('LGUI-RT-175', `本地存储里的声音设置读不出来（${saved.slice(0, 80)}），用默认值。`, '不需要处理；玩家下次改音量时会重新存。'));
   }
   settings = restored;
-  for (const listener of [...listeners]) listener();
+  for (const listener of Array.from(listeners)) listener();
   ui.onRemoved = scheduleMusic;
   const offs = [
     bus.on(builtinEvents.viewOpened, scheduleMusic),

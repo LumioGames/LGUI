@@ -30,7 +30,7 @@ export class EventBus {
   emit<P>(event: EventDef<P>, payload: P, onError: (error: unknown) => void = error => { throw error; }): void {
     const set = this.handlers.get(event as EventDef<unknown>);
     if (!set) return;
-    for (const handler of [...set]) {
+    for (const handler of Array.from(set)) {
       try { (handler as (payload: P) => void)(payload); } catch (error) { onError(error); }
     }
   }

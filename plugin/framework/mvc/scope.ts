@@ -24,7 +24,7 @@ export class Scope {
   /** 全部取消。 */
   dispose(): void {
     this.closed = true;
-    const items = [...this.items];
+    const items = Array.from(this.items);
     this.items.clear();
     for (const cancel of items) cancel();
   }

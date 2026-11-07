@@ -27,7 +27,7 @@ export function setRedDot(path: string, value: boolean | number): void {
   if (!valid(path)) throw new LgRuntimeError('LGUI-RT-120', `红点路径 ${path} 写法不对。`, '写成用「.」分隔的英文名，比如 bag.newItem。');
   if (value === false || value === 0) values.delete(path);
   else values.set(path, value);
-  for (const listener of [...listeners]) listener();
+  for (const listener of Array.from(listeners)) listener();
 }
 
 /** 一个路径（连同它下面所有路径）的状态。 */
@@ -51,5 +51,5 @@ export function getRedDot(path: string): boolean | number {
 /** 内部用：清空（测试之间用）。 */
 export function clearRedDots(): void {
   values.clear();
-  for (const listener of [...listeners]) listener();
+  for (const listener of Array.from(listeners)) listener();
 }
