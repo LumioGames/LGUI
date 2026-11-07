@@ -363,7 +363,9 @@ export class UIManager {
   shown(layer: Layer): Entry[] { return this.stacks[layer].filter(e => e.state === 'open'); }
   top(layer?: Layer): Entry | undefined {
     // 不指定层时不算 toast（短暂提示，不接收输入）。
-    for (const l of layer ? [layer] : (['modal', 'popup', 'page', 'hud'] as const)) {
+    // 层列表不写在三目里：Cocos 的 babel 剥类型管线对带 as const 分支的三目会推导崩（T007 实测）。
+    const scanLayers: readonly Layer[] = ['modal', 'popup', 'page', 'hud'];
+    for (const l of layer ? [layer] : scanLayers) {
       const list = this.shown(l);
       if (list.length) return list[list.length - 1];
     }

@@ -5,6 +5,6 @@
     "version": "3.8.8"
   },
   "dependencies": {
-    "fairygui-cc": "file:./vendor/fairygui-cc"
+    "fairygui-cc": "1.2.2"
   }
 }

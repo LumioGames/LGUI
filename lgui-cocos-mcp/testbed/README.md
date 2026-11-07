@@ -6,6 +6,12 @@ M1 的验收场。**生成物不进 git**（界面包、框架副本、启动配
 node sync.mjs   # 灌四样：界面包 → assets/lgui-ui/、翻译 → lgui-ui/i18n/、框架 → assets/lgui-framework/、启动配置 → assets/scripts/lgui-config.ts
 ```
 
+## Funplay MCP（Agent 调试通道）
+
+扩展已装在 `extensions/funplay-cocos-mcp`（本地安装，不进 git）。端口已固定为 `funplay-cocos-mcp.config.json` 里的 27182，ZCode 工作区配置（`.zcode/config.json`）已注册 `funplay-cocos` 服务器。
+
+启用步骤（一次性）：重启 Creator（或扩展管理器里 reload 扩展）→ 菜单 **Funplay > MCP Server** 启用服务器 → 验证 `curl http://127.0.0.1:27182/health`。ZCode 新会话会自动连上这个 MCP 服务器；当期会话可以直接用 curl 调它的 JSON-RPC。
+
 ## 在 Creator 里跑通（首次）
 
 1. Dashboard 添加本目录（`lgui-cocos-mcp/testbed`），用 Creator 3.8.2 打开（会生成 `temp/`、`library/`，首次编译 tsconfig）。
