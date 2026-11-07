@@ -3,6 +3,9 @@ node_modules/
 .lgui/build/
 *.log
 
+# llmdoc 调查草稿（稳定知识在 llmdoc/）
+.llmdoc-tmp/
+
 # 本机文件和凭据
 .DS_Store
 .env
