@@ -25,8 +25,8 @@ import {switchLanguage} from './language-switch';
 
 /** 入口 main.ts 的定义。 */
 export interface AppDefinition {
-  /** 默认后端；lgui test 换成 headless，导出 Unity 时换成 unity。 */
-  backend: 'h5' | 'headless' | 'unity';
+  /** 默认后端；lgui test 换成 headless，导出 Unity 时换成 unity，Cocos Creator 工程用 cocos。 */
+  backend: 'h5' | 'headless' | 'unity' | 'cocos';
   /** 注册服务：名字 → 创建函数。 */
   services?: Record<string, () => object>;
   /** 换掉后端自带的平台服务，只换给出的几项：log（日志出口，形状和 Lumio 引擎的 Logger 一样）、audio（声音出口）、clipboard（剪贴板）。lgui test 里不生效。 */

@@ -17,7 +17,7 @@ export interface BackendConfig {
 /** 一个后端。 */
 export interface Backend {
   /** 后端名。 */
-  readonly name: 'h5' | 'headless' | 'unity';
+  readonly name: 'h5' | 'headless' | 'unity' | 'cocos';
   /** 启动：建好根节点和平台服务。 */
   init(config: BackendConfig): Promise<void>;
   /** 根节点，UIManager 在它下面放 5 个层。 */

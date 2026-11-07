@@ -16,7 +16,7 @@ LGUI 仓库的规划入口。职责分工：
 
 | ID | Plan | Affected Modules | Status | Current Phase | Last Landed | Next Target |
 |---|---|---|---|---|---|---|
-| [P001](plans/001-lgui-cocos-mcp/README.md) | lgui-cocos-mcp：Cocos Creator 接入 LGUI（MCP 驱动，替代 FGUI 工作流） | lgui-cocos-mcp, plugin/framework, plugin/tools | In Progress | M1 Cocos 后端基座（Q1/Q2 已收口，T004 基座核查 no-op） | 2026-11-07 [T004 证据](plans/001-lgui-cocos-mcp/evidence/2026-11-07-t004-upstream-base-verified.md) | T005 backends/cocos 骨架 |
+| [P001](plans/001-lgui-cocos-mcp/README.md) | lgui-cocos-mcp：Cocos Creator 接入 LGUI（MCP 驱动，替代 FGUI 工作流） | lgui-cocos-mcp, plugin/framework, plugin/tools | In Progress | M1 Cocos 后端基座（T005 骨架已落地，未在引擎里跑过） | 2026-11-07 [T005 证据](plans/001-lgui-cocos-mcp/evidence/2026-11-07-t005-cocos-backend-skeleton.md) | T006 generate/cocos 分支 |
 
 ## 其他
 
