@@ -68,6 +68,8 @@ export class Node {
   worldPosition: Vec3;
   setScale(x: number, y: number, z?: number): void;
   readonly worldScale: Vec3;
+  /** 按名字找直接子节点（GRoot.create 挂 Canvas 前的预检查用）。 */
+  getChildByName(name: string): Node | null;
   addComponent<T extends new (...args: never[]) => Component>(type: T): InstanceType<T>;
   getComponent<T extends new (...args: never[]) => Component>(type: T): InstanceType<T> | null;
 }
@@ -154,4 +156,11 @@ export class AudioSourceComponent extends Component {
   /** 放一次音效，返回退出时的播放比例（未用）。 */
   playOneShot(clip: AudioClip, volumeScale?: number): number;
 }
+}
+
+declare module 'cc/env' {
+  /** 编辑器 Scene 进程（本后端的自动冒烟只跑在预览/构建里）。 */
+  export const EDITOR: boolean;
+  export const PREVIEW: boolean;
+  export const BUILD: boolean;
 }

@@ -24,6 +24,8 @@ export function createCocosBackend(): Backend {
       if (config.defaultFont) fgui.UIConfig.defaultFont = config.defaultFont;
       i18nBase = config.i18nBase;
       // GRoot.create() 是运行库的唯一初始化入口（InputProcessor、缩放器都在里面），它挂到场景里名为 Canvas 的节点——CC 的 UI 场景约定就有 Canvas。
+      const scene = director.getScene();
+      if (!scene || !scene.getChildByName('Canvas')) throw new LgRuntimeError('LGUI-RT-028', '界面根节点挂不上去：场景里没有名为 Canvas 的节点。', '在场景根下建一个 Canvas 节点（CC 的 UI 场景默认就有），再调用 lgui.app()。');
       const nativeRoot = fgui.GRoot.create();
       if (!nativeRoot.node.parent) {
         const scene = director.getScene();

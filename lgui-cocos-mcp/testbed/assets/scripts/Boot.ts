@@ -1,6 +1,7 @@
 // M1 冒烟：桥接（init/加载包/创建控件/设计尺寸）+ 真 View 五层栈（boot/lgui.ui）+ 换语言。
 // 换版 swap 由预览视口 resize 触发（smoke.mjs 里 setViewportSize）。config/deps/components 由 sync.mjs 生成。
 import {Component, _decorator, director, Director} from 'cc';
+import {EDITOR} from 'cc/env';
 import {lgui} from '../lgui-framework/index';
 import {boot} from '../lgui-framework/mvc/boot';
 import {createCocosBackend} from '../lgui-framework/backends/cocos/index';
@@ -40,8 +41,9 @@ export async function smoke(): Promise<void> {
   backend.platform.screen.onResize(size => log.info('lgui_smoke_resize', () => ({size, snapshot: JSON.stringify(lgui.debug.snapshot()).slice(0, 240)})));
 }
 
-// 不依赖场景挂件：第一个场景加载完自动跑冒烟。
-director.once(Director.EVENT_AFTER_SCENE_LAUNCH, () => { void smoke().catch(error => { console.error('[lgui-smoke] 失败：', error); throw error; }); });
+// 不依赖场景挂件：第一个场景加载完自动跑冒烟。只在预览/构建里跑——
+// 编辑器 Scene 进程里 bundle 与场景时序都不可靠（用户重开工程时的报错即此），EDITOR 守卫跳过。
+if (!EDITOR) director.once(Director.EVENT_AFTER_SCENE_LAUNCH, () => { void smoke().catch(error => { console.error('[lgui-smoke] 失败：', error); throw error; }); });
 
 @ccclass('LGUIBoot')
 export class LGUIBoot extends Component {
