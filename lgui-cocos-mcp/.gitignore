@@ -1,0 +1,13 @@
+# Cocos Creator 工程产物
+library/
+temp/
+local/
+logs/
+build/
+profiles/
+userSettings/
+native/engine/
+
+# 依赖与构建
+node_modules/
+dist/
