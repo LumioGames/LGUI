@@ -1,14 +1,15 @@
-// 从 ui/ 生成网页和 Unity 用的界面包。不是单独的命令，由 lgui dev、verify、test、unity export 调用。每次都全部重新生成。
+// 从 ui/ 生成网页、Unity 和 Cocos Creator 用的界面包。不是单独的命令，由 lgui dev、verify、test、unity export（和 Cocos 的包同步）调用。每次都全部重新生成。
 import fs from 'node:fs';
 import path from 'node:path';
 import {generateWeb} from './web.mjs';
 import {generateUnity} from './unity.mjs';
+import {generateCocos} from './cocos.mjs';
 import {readUiProject} from './read.mjs';
 import {readUiModel} from './model.mjs';
 import {generateTypes} from './types.mjs';
 import {generateHeadless} from './headless.mjs';
 
-export {generateWeb, generateUnity, readUiModel, generateTypes, generateHeadless};
+export {generateWeb, generateUnity, generateCocos, readUiModel, generateTypes, generateHeadless};
 
 // 工程里的固定位置：界面工程 ui/UI.fairy；几条命令共用的类型和 headless 描述。网页界面包由各命令写进自己的生成目录（paths.mjs 的 buildDir）。
 export const uiProjectPath = root => path.join(root, 'ui', 'UI.fairy');
