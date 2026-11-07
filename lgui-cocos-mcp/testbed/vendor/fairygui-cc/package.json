@@ -1,7 +1,7 @@
 {
   "name": "fairygui-cc",
   "version": "1.2.2",
-  "main": "fairygui.mjs",
+  "main": "fairygui.cjs",
   "license": "MIT",
   "description": "vendored from github.com/aloasut/fairygui-cocos sdk/source dist (cd19b70)"
 }

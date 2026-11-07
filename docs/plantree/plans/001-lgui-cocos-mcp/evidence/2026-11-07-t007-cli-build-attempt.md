@@ -27,3 +27,11 @@
 - 新错误（精确）：`fairygui.mjs:9914 TypeError: Class extends value undefined` —— assets 里的 `.mjs`（内部 `import ... from 'cc'`）在 CC 的 SystemJS 执行器下拿不到 cc 绑定。**T005 的 vendored-进-assets 路线不成立**。
 - 结论与下一步：改走 demo 验证过的 **node_modules 依赖**路线——`backends/cocos` 改 `import * as fgui from 'fairygui-cc'`；类型声明改为 ambient `declare module 'fairygui-cc'`；plugin 里不再带 fairygui.mjs；testbed 提交自含的 `testbed/vendor/fairygui-cc/`（dist 拷贝 + package.json），依赖写 `file:./vendor/fairygui-cc`（机器无关）。另：demo.scene 里残留 DemoEntry 脚本引用报 missing，后续清场景。
 - 这是 T007 校准清单的正式产出之一（运行时验证的意义就在这）。
+
+
+## 第三～八轮构建（CJS 路线）
+
+- 已修：vendor package.json main 指向 fairygui.cjs；`cc/env` 用 esbuild alias 打进 shim（EDITOR=false）；恢复原始 demo.scene（我此前的场景手术破坏了 __id__ 索引——教训：CC 场景数组按 __id__ 定位，不能删元素）。
+- 现状：ESM 与 CJS 两种格式都在 `Class extends value undefined` 上失败（CJS 走 CC 的 cjs-loader，`require('cc')` 无映射）。**官方 npm fairygui-cc 1.2.2 的 main 也是同一个 ESM**——问题不在我们的产物，在「node_modules 包引用 cc 外部」在 CLI 无头构建链上的解析。
+- 下一步（基线对比法）：`npm i fairygui-cc@latest`（官方 registry 包）+ 直接无头构建 fork 自带的 `sdk/demo` 工程。demo 绿 → 对比它与我们工程的装载差异；demo 也红 → CLI 构建链对这类包有环境级问题，Creator GUI 预览（packer-driver 的 editor 目标）是真正裁决场，无头验证改走「构建产物 + 全局 cc」或其他路。
+- 本机 ~/.CocosCreator/editor/layout.json、window.json 有 JSON 截断（Unexpected end of JSON input），疑似多次无头启动竞态，建议 GUI 打开一次顺便修复。

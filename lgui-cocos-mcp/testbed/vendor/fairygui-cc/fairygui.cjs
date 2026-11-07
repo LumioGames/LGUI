@@ -1,8 +1,17 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __commonJS = (cb, mod) => function __require() {
+  try {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  } catch (e) {
+    throw mod = 0, e;
+  }
+};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -15,7 +24,23 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// lgui-cocos-mcp/testbed/vendor/fairygui-cc/cc-env.cjs
+var require_cc_env = __commonJS({
+  "lgui-cocos-mcp/testbed/vendor/fairygui-cc/cc-env.cjs"(exports, module2) {
+    "use strict";
+    module2.exports = { EDITOR: false, PREVIEW: false, BUILD: true, MINIGAME: false };
+  }
+});
 
 // ../../workspace/fairygui-cocos/sdk/source/dist/fairygui.mjs
 var fairygui_exports = {};
@@ -100,7 +125,7 @@ __export(fairygui_exports, {
 });
 module.exports = __toCommonJS(fairygui_exports);
 var import_cc = require("cc");
-var import_env = require("cc/env");
+var import_env = __toESM(require_cc_env(), 1);
 var ButtonMode;
 (function(ButtonMode2) {
   ButtonMode2[ButtonMode2["Common"] = 0] = "Common";
