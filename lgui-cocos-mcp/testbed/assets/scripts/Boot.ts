@@ -35,6 +35,9 @@ export async function smoke(): Promise<void> {
   await lgui.setLanguage(other);
   log.info('lgui_smoke', () => ({step: 'language', language: other}));
   log.info('lgui_smoke', () => ({step: 'done', snapshot: JSON.stringify(lgui.debug.snapshot()).slice(0, 160)}));
+
+  // 换版实测：预览视口 resize（smoke.mjs 切竖屏/横屏）触发 versionOf/swap，快照里看组件版本与 View 保留。
+  backend.platform.screen.onResize(size => log.info('lgui_smoke_resize', () => ({size, snapshot: JSON.stringify(lgui.debug.snapshot()).slice(0, 240)})));
 }
 
 // 不依赖场景挂件：第一个场景加载完自动跑冒烟。

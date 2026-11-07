@@ -59,3 +59,10 @@
 -  的运行时文本表走 boot 的 **texts 选项**（readTexts 同机制）——sync 现在从工程 i18n/*.json 生成 texts 一并传入。
 - boot 不从框架 index 导出，直连 mvc/boot（生成的 h5 入口同样直连）。
 - 教训重申：对生成文件/源码的 python replace 必须带 assert（两次静默 no-op 造成假信号）。
+
+
+## 2026-11-08（终）：T007 完成
+
+- 真 View 全链（boot/ui.open/modal/setLanguage）+ resize 链路实测通过：视口切竖/横两次都触发 manager 快照日志，MainView 实例保留。组件版本逐项断言（MainView@portrait swap）归 T008 四方快照。
+- 校准清单收口：包路径（.bin + bundle.load 带扩展名）、坐标/挂载（GRoot.create + fitDesign）、事件覆盖（FOGUI fui_* 常量）、双缩放（GRoot.create 后 applyDesignSize 接管，实测无冲突）、音频（AudioSource 通道）、Event.data、i18n（TextAsset）、babel loose（Array.from 审计 26 处）。
+- 遗留到 T008 之前的已知项：键盘 Web 目标走 document 事件（原生 T012）；music 交叉淡出是直停（骨架级）。
