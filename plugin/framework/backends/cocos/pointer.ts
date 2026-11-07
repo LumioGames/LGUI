@@ -2,7 +2,7 @@
 // （borrowEvent），同一次派发里舞台和控件各转一次，值相同、语义不变（h5 的去重是 DOM 特有）。
 // 运行库的事件不带时间戳，InputProcessor 从引擎输入回调里同步派发，取转换时刻即可。
 import type {PointerInput} from '../../core/index';
-import {Event} from './vendor/fairygui.mjs';
+import {Event} from 'fairygui-cc';
 
 const types: Record<string, PointerInput['type']> = {
   [Event.TOUCH_BEGIN]: 'down',

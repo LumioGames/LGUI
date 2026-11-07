@@ -1,6 +1,6 @@
 // cocos 后端的平台服务：引擎 API（Web 目标优先；差异点都在注释里标了）。
 import {game, sys, view, assetManager, Component, Game, type AssetManagerBundle} from 'cc';
-import * as fgui from '../vendor/fairygui.mjs';
+import * as fgui from 'fairygui-cc';
 import type {
   Platform, KeyInput, WheelInput, NetResponse, NetSocket, Insets, PointerInput, Rect, Unsubscribe
 } from '../../../core/index';

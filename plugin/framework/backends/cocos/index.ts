@@ -1,7 +1,7 @@
 // cocos 后端：fairygui-cc 加 Cocos Creator 引擎 API。从 h5 后端移植（它是基准实现）；差异点都在注释里。
 // 只能在 Cocos Creator 工程里运行（fairygui.mjs import 'cc'）；M1 目标是 Web。
 import {director, TextAsset} from 'cc';
-import * as fgui from './vendor/fairygui.mjs';
+import * as fgui from 'fairygui-cc';
 import type {Backend, BackendConfig, Platform, UIComponent, UIObject} from '../../core/index';
 import {LgRuntimeError} from '../../core/index';
 import {createCocosPlatform, bundleReady} from './platform/index';

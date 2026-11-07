@@ -2,7 +2,7 @@
 // 音效走 AudioSourceComponent.playOneShot；背景音乐一条常驻通道，换曲淡入淡出（帧回调里推音量）。
 // Web 目标的自动播放限制：解锁（第一次点击/按键）之前要放的音乐先记着，解锁后再放。
 import {AudioClip, AudioSourceComponent, director, Node as CcNode} from 'cc';
-import * as fgui from '../vendor/fairygui.mjs';
+import * as fgui from 'fairygui-cc';
 import type {AudioService} from '../../../core/index';
 import {LgRuntimeError} from '../../../core/index';
 

@@ -1,6 +1,6 @@
 // 把 fairygui-cc 的对象包成接口层的 UI 对象。每个对象只包一次（WeakMap 缓存），事件一律返回取消函数。
 // 从 h5 的 objects/index.ts 移植；差异都在注释里标了。
-import * as fgui from '../vendor/fairygui.mjs';
+import * as fgui from 'fairygui-cc';
 import type {
   PointerInput, Rect, UIObject, UIComponent, UIText, UIInput, UIButton, UIImage, UILoader, UIList, UIController, UITransition, UIProgress, UIGraph, Unsubscribe,
   UILabel, UISlider, UIComboBox, UIMovieClip, UITree, UITreeNode, WheelInput

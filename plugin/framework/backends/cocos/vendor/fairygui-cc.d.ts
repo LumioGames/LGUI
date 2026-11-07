@@ -1,3 +1,6 @@
+// fairygui-cc 类型子集（ambient declare module 'fairygui-cc'）——本仓库工具链用；CC 工程里用 fork dist 自带声明亦可。
+declare module 'fairygui-cc' {
+import type {Node} from 'cc';
 // fairygui.mjs（fairygui-cc，官方 ccc3.0 运行库）里 cocos 后端用到的成员的类型声明。
 // 真实签名以 fork 的 sdk/source/dist/fairygui.d.ts 为准（本文件是手写子集，同 h5 vendor 的做法）。
 // 事件名与 FairyGUI-dom 不同：这里是 Event 常量（fui_touch_begin / fui_click_item / fui_status_changed…）。
@@ -17,7 +20,7 @@ export class FguiRect {
   height: number;
 }
 
-import type {Node} from 'cc';
+
 
 /** FairyGUI 事件。listener 收到它；pos 是设计尺寸里的舞台坐标。 */
 export class Event {
@@ -261,3 +264,5 @@ export class XML {
 }
 
 export const TranslationHelper: {loadFromXML(source: XML): void};
+
+}
