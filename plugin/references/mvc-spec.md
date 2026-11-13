@@ -327,7 +327,7 @@ export class FakeBagService implements BagService {
 - 被压住：`onDeactivate`
 - 关闭：`onDeactivate`（如果当时是激活的）→ `onClose` → 解绑和清理 → 销毁或缓存 → 释放资源
 
-钩子出错时，关闭和重新算激活照样做完（清理、释放、通知打开者、放出排队的 modal），最后再抛出这个错误；界面不会卡在半关的状态。
+钩子出错时，关闭和重新算激活照样做完（清理、释放、通知打开者、放出排队的 modal，也包括定时器恢复和操作提示栏）。只把第一个错误抛给调用方，其余作为未处理的 Promise 报出来。界面不会卡在半关，也不会停在被盖住且未激活。`onOpen` 抛错仍是打开失败（`LGUI-RT-080`），界面不留下。`onOpen` 之后（`viewOpened`、遮挡和激活）出错时，这次打开的界面留在栈上，错误交给这次 `open` 的调用方。
 
 屏幕旋转、切换语言时，View 实例保留，只重建组件，不调用 `onOpen` 和 `onClose`。所以钩子里不写控件属性，只写绑定表（`lgui check` 警告 `LGUI-MVC-020`）。
 
@@ -428,7 +428,7 @@ this.on(rewardClaimed, e => …);
 this.on(lgui.events.viewClosed, e => { if (e.view === ShopView) bagController.reload(); });
 ```
 
-一个收听函数出错，其余收听者照样收到，全部调完再抛出这个错误。Model 的订阅者（绑定）也一样。
+一个收听函数出错，其余收听者照样收到。只把第一个错误抛给调用方，其余作为未处理的 Promise 报出来。Model 的订阅者（绑定）也一样。
 
 框架自己的事件在 `lgui.events` 下：`viewOpened`、`viewClosed`、`viewCovered`、`viewRevealed`、`orientationChange`、`languageChange`、`inputTypeChange`、`inputModeChange`。
 

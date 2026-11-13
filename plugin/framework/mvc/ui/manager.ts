@@ -418,15 +418,22 @@ export class UIManager {
     ordered.forEach((e, i) => { if (e.fullScreen) coveredBelow = i; });
     const deactivated: Entry[] = [];
     const activated: Entry[] = [];
-    // 钩子和收听函数出错不打断这一轮：全部状态算完、钩子都调完，最后再抛出第一个错误。
+    // 钩子、定时器恢复、提示栏出错不打断这一轮：状态先算完，全部调完再抛出第一个错误。
     const errors = new ErrorList();
     ordered.forEach((e, i) => {
       const covered = i < coveredBelow;
       if (covered !== e.covered) {
         e.covered = covered;
         if (e.component) e.component.visible = !covered;
-        if (covered) { e.view.__pause(); errors.run(() => this.hook(e, 'onCovered')); bus.emit(builtinEvents.viewCovered, {view: e.cls}, errors.add); }
-        else { e.view.__resume(); errors.run(() => this.hook(e, 'onRevealed')); bus.emit(builtinEvents.viewRevealed, {view: e.cls}, errors.add); }
+        if (covered) {
+          errors.run(() => e.view.__pause());
+          errors.run(() => this.hook(e, 'onCovered'));
+          bus.emit(builtinEvents.viewCovered, {view: e.cls}, errors.add);
+        } else {
+          errors.run(() => e.view.__resume());
+          errors.run(() => this.hook(e, 'onRevealed'));
+          bus.emit(builtinEvents.viewRevealed, {view: e.cls}, errors.add);
+        }
       }
       const isActive = e === active;
       if (e.component) e.component.touchable = isActive;
@@ -434,10 +441,10 @@ export class UIManager {
     });
     for (const e of deactivated) errors.run(() => this.hook(e, 'onDeactivate'));
     for (const e of activated) errors.run(() => this.hook(e, 'onActivate'));
-    this.updateHints();
+    errors.run(() => this.updateHints());
     if (activated.length || (deactivated.length && !active)) {
       const mode: InputMode = active ? (active.cls.inputMode ?? (active.layer === 'hud' ? 'game' : 'ui')) : 'game';
-      this.backend.platform.input.setInputMode(mode);
+      errors.run(() => this.backend.platform.input.setInputMode(mode));
       bus.emit(builtinEvents.inputModeChange, {inputMode: mode}, errors.add);
     }
     errors.throwFirst();
@@ -514,6 +521,16 @@ export class UIManager {
         abandon();
         throw new LgRuntimeError('LGUI-RT-080', `打开 ${cls.name} 失败：${error instanceof Error ? error.message : String(error)}`, '按报错改；不会显示打开了一半的界面。');
       }
+      // onOpen 已经成功。这里再出错不能拆掉界面：拆掉之后不再重新算激活，下面的界面会停在被盖住且未激活。
+      const errors = new ErrorList();
+      bus.emit(builtinEvents.viewOpened, {view: entry.cls}, errors.add);
+      errors.run(() => this.refresh());
+      try {
+        errors.throwFirst();
+      } catch (error) {
+        entry.ready = Promise.resolve(view);
+        throw error;
+      }
       return view;
     })();
     return entry.ready;
@@ -559,8 +576,6 @@ export class UIManager {
     entry.view.__mount(component, {isActive: () => entry.active && entry.state === 'open'});
     entry.state = 'open';
     this.hook(entry, 'onOpen', params ?? (entry.cls.params ? {...entry.cls.params} : undefined));
-    bus.emit(builtinEvents.viewOpened, {view: entry.cls});
-    this.refresh();
   }
 
   /** 关闭后的组件：配置了界面缓存就留着（连同包引用），否则销毁并释放资源。 */
