@@ -558,3 +558,89 @@ test('closeAll 时有一个界面的 onClose 抛错：其余界面照样全部�
   assert.equal(lgui.ui.top()?.constructor, MainView);
   assert.deepEqual(ui.packageRefs().map(p => `${p.name}:${p.refs}`).sort(), ['Bag:1', 'Common:1']);
 });
+
+test('重新露出来时定时器回调抛错：后面的钩子照样调用，最后再抛出这个错误', async () => {
+  const {fw, log, views: {HudView}} = await setup();
+  const {lgui, View} = fw;
+  class Low extends View {
+    static component = 'Bag/ItemSlot'; static layer = 'page';
+    onRevealed() { log.push('Low.onRevealed'); }
+    onActivate() { log.push('Low.onActivate'); }
+  }
+  class High extends View { static component = 'Bag/BagPanel'; static layer = 'popup'; static fullScreen = true; }
+  await lgui.ui.open(HudView);
+  const low = await lgui.ui.open(Low);
+  low.__timers.onUpdate(() => { throw new Error('每帧坏了'); });
+  await lgui.ui.open(High);
+  log.length = 0;
+  assert.throws(() => lgui.ui.close(High), /每帧坏了/);
+  assert.equal(lgui.ui.isOpen(High), false);
+  assert.equal(lgui.ui.top(), low);
+  assert.deepEqual(log, ['Hud.onRevealed', 'Low.onRevealed', 'Low.onActivate']);
+});
+
+test('打开时下层 onCovered 抛错：界面保持打开，下层保持被盖住，错误交给这次 open', async () => {
+  const {fw, log} = await setup();
+  const {lgui, View} = fw;
+  class Page extends View {
+    static component = 'Bag/BagPanel'; static layer = 'page'; static fullScreen = true;
+    onCovered() { log.push('Page.onCovered'); throw new Error('盖住坏了'); }
+  }
+  class Top extends View {
+    static component = 'Bag/ItemSlot'; static layer = 'popup'; static fullScreen = true;
+    onActivate() { log.push('Top.onActivate'); }
+  }
+  const page = await lgui.ui.open(Page);
+  log.length = 0;
+  const opening = lgui.ui.open(Top);
+  await assert.rejects(opening, /盖住坏了/);
+  assert.equal(lgui.ui.isOpen(Top), true);
+  assert.equal(lgui.ui.top()?.constructor, Top);
+  assert.equal(lgui.debug.snapshot().active, 'Top');
+  assert.equal(page.__component.visible, false, '下层仍被盖住');
+  assert.ok(log.includes('Page.onCovered'));
+  assert.ok(log.includes('Top.onActivate'));
+  assert.equal(await lgui.ui.open(Top), lgui.ui.top());
+});
+
+test('操作提示栏缺键：激活和输入模式照样算完，界面保持打开，抛出 LGUI-RT-090', async () => {
+  const {fw, backend, log} = await setup();
+  const {lgui, View} = fw;
+  class Page extends View { static component = 'Bag/BagPanel'; static layer = 'page'; static fullScreen = true; }
+  class Top extends View {
+    static component = 'Bag/ItemSlot'; static layer = 'popup';
+    keys = {confirm: {do() {}, hint: 'missing.hint.key'}};
+    onActivate() { log.push('Top.onActivate'); }
+  }
+  await lgui.ui.open(Page);
+  const modes = [];
+  const input = backend.platform.input;
+  const orig = input.setInputMode.bind(input);
+  input.setInputMode = mode => { modes.push(mode); orig(mode); };
+  log.length = 0;
+  await assert.rejects(lgui.ui.open(Top), error => error.code === 'LGUI-RT-090');
+  assert.ok(log.includes('Top.onActivate'));
+  assert.deepEqual(modes, ['ui']);
+  assert.equal(lgui.ui.isOpen(Top), true);
+  assert.equal(lgui.debug.snapshot().active, 'Top');
+});
+
+test('viewOpened 的收听函数抛错：界面保持打开，激活照样算完，错误交给这次 open', async () => {
+  const {fw, log, views: {MainView}} = await setup();
+  const {lgui, View, bus} = fw;
+  class Top extends View {
+    static component = 'Bag/ItemSlot'; static layer = 'popup';
+    onActivate() { log.push('Top.onActivate'); }
+  }
+  await lgui.ui.open(MainView);
+  const seen = [];
+  const off = bus.on(lgui.events.viewOpened, e => { seen.push(e.view.name); throw new Error('打开通知坏了'); });
+  log.length = 0;
+  await assert.rejects(lgui.ui.open(Top), /打开通知坏了/);
+  off();
+  assert.deepEqual(seen, ['Top']);
+  assert.equal(lgui.ui.isOpen(Top), true);
+  assert.equal(lgui.ui.top()?.constructor, Top);
+  assert.ok(log.includes('Top.onActivate'));
+  assert.equal(lgui.debug.snapshot().active, 'Top');
+});
