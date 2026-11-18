@@ -121,6 +121,11 @@ test('ux page：全套模式生成开发交接，没有用例的完整实现元�
   assert.equal(result.ok, true, messages(result));
   assert.deepEqual(rules(result), ['uncovered']);
   const handoff = fs.readFileSync(path.join(dir, 'handoff.md'), 'utf8');
+  // 改回设计稿模式：上次生成的交接去掉；自己放在 wireframe/ 里的文件不动
+  fs.writeFileSync(path.join(dir, 'wireframe/mine.txt'), 'keep');
+  await page({...design, mode: 'design', cases: []}, dir);
+  assert.equal(fs.existsSync(path.join(dir, 'handoff.md')), false);
+  assert.equal(fs.readFileSync(path.join(dir, 'wireframe/mine.txt'), 'utf8'), 'keep');
   for (const part of ['# demo · 开发交接', '## 范围', '## 复用：先用现成的', '`lgui.confirm`：M01', '## 要新做的', 'lgui art cut ui/art-src/atlas/A1.png --pkg Common --names', '| C-01 |', '| O-01 |']) assert.ok(handoff.includes(part), part);
 });
 

@@ -98,7 +98,9 @@ function colorOf(el) {
 function layout(screen, orient, device) {
   const [dw, dh] = C.designSize[orient];
   const els = (screen.elements || []).filter(el => per(el.rect, orient));
-  if (!device) return {W: dw, H: dh, safe: null, rects: new Map(els.map(el => [el.id, per(el.rect, orient)]))};
+  if (!device && screen.fullscreen) return {W: dw, H: dh, safe: null, rects: new Map(els.map(el => [el.id, per(el.rect, orient)]))};
+  const shown = Boolean(device);
+  device = device || {width: orient === 'portrait' ? Math.min(dw, dh) : Math.max(dw, dh), height: orient === 'portrait' ? Math.max(dw, dh) : Math.min(dw, dh)}; // 弹窗在设计尺寸下也摆到正中
   const portrait = device.height >= device.width;
   const turned = portrait !== (orient === 'portrait');
   const [w, h] = turned ? [device.height, device.width] : [device.width, device.height];
@@ -131,7 +133,7 @@ function layout(screen, orient, device) {
     const ox = safe[0] + (safe[2] - bw) / 2 - bx, oy = safe[1] + (safe[3] - bh) / 2 - by;
     for (const el of els) { const r = per(el.rect, orient); rects.set(el.id, [r[0] + ox, r[1] + oy, r[2], r[3]]); }
   }
-  return {W, H, safe, rects};
+  return {W, H, safe: shown ? safe : null, rects};
 }
 
 function textOf(el) {

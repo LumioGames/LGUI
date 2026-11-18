@@ -91,6 +91,7 @@ function sheetFiles(design) {
   return out;
 }
 
+const HANDOFF_MARK = '由 `lgui ux page` 从 `design.json` 生成';
 const SCOPE_NAME = {full: '完整实现', stub: '占位', display: '只显示'};
 const REUSE_NAME = {framework: '框架自带', reskin: '框架自带、换样子', pattern: '排布模式', project: '工程已有', new: '新建', none: '不需要'};
 
@@ -101,7 +102,7 @@ function handoff(design, report, sheets, designDir) {
   const lines = [];
   const reuseOf = item => item.reuse ? `${REUSE_NAME[item.reuse.from]}${item.reuse.ref ? ` \`${item.reuse.ref}\`` : ''}${item.reuse.to ? `（放进 ${item.reuse.to}）` : ''}` : '';
   lines.push(`# ${design.name} · 开发交接`, '');
-  lines.push('> 由 `lgui ux page` 从 `design.json` 生成，不要手改；设计变了改 `design.json` 再生成。', '');
+  lines.push(`> ${HANDOFF_MARK}，不要手改；设计变了改 \`design.json\` 再生成。`, '');
   lines.push('## 范围', '');
   lines.push(`- 按 LGUI ${design.lguiVersion ?? pluginVersion()} 出的设计稿；方向 ${c.orientation}，设计尺寸 ${orientationsOf(c).map(o => `${o} ${c.designSize[o].join('×')}`).join('、')}。`);
   lines.push(`- 语言 ${c.languages.join('、')}（默认 ${c.defaultLanguage}）；平台 ${c.platforms.join('、')}；输入 ${c.inputs.join('、')}。`);
@@ -161,8 +162,8 @@ export async function uxPage({args, cwd}) {
   const page = path.join(dir, 'prototype.html');
   fs.writeFileSync(page, template.replace('/*__LGUI_UX_DATA__*/null', () => payload).replace('__LGUI_UX_TITLE__', () => design.name));
   written.push(page);
+  // 只覆盖自己生成的文件，不清空文件夹：里面可能有用户自己放的东西。
   const wireDir = path.join(dir, 'wireframe');
-  fs.rmSync(wireDir, {recursive: true, force: true});
   fs.mkdirSync(wireDir, {recursive: true});
   for (const screen of design.screens) {
     if (screen.designed === false || !(screen.elements ?? []).length) continue;
@@ -175,7 +176,6 @@ export async function uxPage({args, cwd}) {
   }
   const sheets = sheetFiles(design);
   const artDir = path.join(dir, 'art');
-  fs.rmSync(artDir, {recursive: true, force: true});
   for (const sheet of sheets) {
     fs.mkdirSync(artDir, {recursive: true});
     const out = path.join(artDir, `${sheet.sheet}.txt`);
@@ -186,7 +186,9 @@ export async function uxPage({args, cwd}) {
   if ((design.mode ?? 'design') === 'full') {
     fs.writeFileSync(handoffFile, handoff(design, report, sheets, projectRoot ? posix(path.relative(projectRoot, dir)) : '.'));
     written.push(handoffFile);
-  } else fs.rmSync(handoffFile, {force: true});
+  } else if (fs.existsSync(handoffFile) && fs.readFileSync(handoffFile, 'utf8').includes(HANDOFF_MARK)) {
+    fs.rmSync(handoffFile); // 从全套模式改回设计稿模式：去掉上次生成的交接，免得留一份过期的
+  }
 
   const s = report.summary;
   const summary = [

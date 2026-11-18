@@ -1,6 +1,6 @@
 # design.json 的字段
 
-UX 设计稿只有这一个源文件，放在工程的 `design/<名字>/design.json`（原型图放旁边的 `reference/`）。`lgui ux page` 校验它并生成原型页；写错了报 `LGUI-CLI-163`，一次列出全部问题。所有位置和尺寸都是**设计单位**（原图像素 × `scale`）。
+UX 设计稿只有这一个源文件，放在工程的 `design/<名字>/design.json`（原型图放旁边的 `reference/`）。`lgui ux page` 校验它并生成原型页（`prototype.html`、`wireframe/<画面>-<方向>.png`、`art/<页号>.txt`、全套模式的 `handoff.md`，每次覆盖同名文件，不清空文件夹；删掉的画面留下的旧线框图自己删）；写错了报 `LGUI-CLI-163`，一次列出全部问题。所有位置和尺寸都是**设计单位**（原图像素 × `scale`）。
 
 ```json
 {
