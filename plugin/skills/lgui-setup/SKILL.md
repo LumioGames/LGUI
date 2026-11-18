@@ -21,4 +21,4 @@ license: MIT
 
 **产出：** 工程目录、预览网址、`doctor` 里还没解决的问题。
 
-**接下来：** 拼界面用 `lgui-ui`，写功能用 `lgui-code`，截图、测试和打正式网页包（`lgui build`）用 `lgui-verify`。工程目录和 `.lgui/project.json` 的字段见 [project-layout.md](../../references/project-layout.md)；错误码见 [error-codes.md](../../references/error-codes.md)。
+**接下来：** 有原型图要照着做，先用 `lgui-ux` 出 UX 设计稿；拼界面用 `lgui-ui`，写功能用 `lgui-code`，截图、测试和打正式网页包（`lgui build`）用 `lgui-verify`。工程目录和 `.lgui/project.json` 的字段见 [project-layout.md](../../references/project-layout.md)；错误码见 [error-codes.md](../../references/error-codes.md)。

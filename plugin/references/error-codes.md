@@ -74,6 +74,10 @@ LGUI 的每条报错都带错误码，并写明：哪个文件哪一行（如果
 | `LGUI-CLI-143` | `lgui unity export`：工程用了项目字体（Unity 上是 TextMesh Pro 字体），Unity 工程里没有 TMP Settings，导出要从 `com.unity.ugui` 自带的 TMP Essential Resources 资源包导入，但找不到资源包（报错里列出找过的位置：工程的 `Library/PackageCache/com.unity.ugui@…/`、`Packages/com.unity.ugui/`、Unity Hub 默认安装位置或 Windows `%LOCALAPPDATA%\Programs\Unity\<版本>` 用户安装位置里这个版本的内置包），或者资源包读不了、里面没有 TMP Settings、写入失败。什么都不写 | 用这个版本的 Unity 打开一次工程再导出；Unity 装在这些候选位置之外时，在 Unity 里点 Window → TextMeshPro → Import TMP Essential Resources 导入一次，再导出 |
 | `LGUI-CLI-144` | `lgui unity export`：工程使用了代码图标（`icon://…`、`lgui.app({ icons })` 或 `lgui.registerIcons`），Unity 后端不支持代码图标；什么都不写 | 要导出到 Unity 就把图标换成 `ui/` 包里登记的 PNG 图片，删掉代码图标定义和 `icon://` 引用；只出网页包的工程不用跑 `unity export` |
 | `LGUI-CLI-150` | `lgui build` 的输出目录（`--out`）不安全：为空、指向文件系统根目录、工程根目录或其上级目录、与 `src/` / `host/` / `ui/` / `i18n/` / `tests/` / `.lgui/framework/` / `.git/` / `node_modules/` 重叠、目标已存在但不是文件夹，或者路径经过符号链接（构建成功后会整目录替换输出目录） | 用默认的 `dist/`，或者把 `--out` 指向独立的真实文件夹（如 `--out dist`、`--out build/web`） |
+| `LGUI-CLI-160` | `lgui ux crop` / `lgui ux page` 的参数不对（图片或 design.json 找不到、`--rect` 超出图片或写法不对、`--zoom` / `--step` / `--scale` / `--colors` 不是合适的数） | 照用法写：`lgui ux crop <原型图> --rect x,y,宽,高 --scale <换算>`、`lgui ux page <design.json 所在的文件夹>` |
+| `LGUI-CLI-161` | `lgui ux crop` 读不了图片 | 用 PNG、JPG 或 WebP |
+| `LGUI-CLI-162` | `lgui ux page`：design.json 不是合法的 JSON | 按报错的位置改好；字段说明见 lgui-ux 技能的 `references/design-json.md` |
+| `LGUI-CLI-163` | `lgui ux page`：设计稿没通过校验（字段缺失或写错、编号重复、引用了不存在的画面 / 元素 / 组件 / 资源、缺某个方向的位置或贴边方式、文字没写超长处理、复用来源或框架能力指向不存在的东西、九宫格边距占满了图）。一次列出全部问题，什么都不生成 | 每条报错写了是哪个编号、怎么改；改完再运行 |
 | `LGUI-CLI-999` | 命令行内部错误（LGUI 自己的缺陷） | 把输出报告给维护者 |
 
 ## LGUI-RT-xxx

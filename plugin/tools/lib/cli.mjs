@@ -19,6 +19,8 @@ import {newModule, newView} from './commands/new.mjs';
 import {editor, editorProps} from './commands/editor.mjs';
 import {build} from './commands/build.mjs';
 import {unityExport} from './commands/unity-export.mjs';
+import {uxCrop} from './commands/ux-crop.mjs';
+import {uxPage} from './commands/ux-page.mjs';
 
 // project：'none' 不需要在工程里；'required' 必须在工程里。
 // versionCheck：运行前比对插件和工程的版本（init、doctor、upgrade 不比对）。
@@ -40,6 +42,8 @@ export const registry = [
   {name: 'i18n extract', usage: 'i18n extract', about: '从 ui/ 提取需要翻译的文字', project: 'required', versionCheck: true, flags: {}, run: i18nExtract},
   {name: 'art split', usage: 'art split <大图> --grid 列x行 --size 宽x高 --pkg 包 --names 名字列表或文件', about: '把 AI 生成的网格大图拆成小图，并缩放到指定尺寸', project: 'required', versionCheck: true, flags: {grid: 'string', size: 'string', pkg: 'string', names: 'string'}, run: artSplit},
   {name: 'art cut', usage: 'art cut <整页图> --pkg 包 --names 名字列表或文件 [--size 宽x高] [--scale 比例] [--pad 像素] [--gap 像素] [--speck 像素] [--defringe 像素]', about: '按透明区域把 AI 生成的一页图集拆成小图：统一缩放、去白边、九宫格重拼、出检查图', project: 'required', versionCheck: true, flags: {pkg: 'string', names: 'string', size: 'string', scale: 'string', pad: 'string', gap: 'string', speck: 'string', defringe: 'string'}, run: artCut},
+  {name: 'ux crop', usage: 'ux crop <原型图> [--rect x,y,宽,高] [--zoom 倍数] [--step 间隔] [--scale 换算] [--colors 颜色数] [--out 文件]', about: '把原型图的一块放大、叠上坐标网格、列出主色：量位置、尺寸、颜色用', project: 'none', versionCheck: false, flags: {rect: 'string', zoom: 'string', step: 'string', scale: 'string', colors: 'string', out: 'string'}, run: uxCrop},
+  {name: 'ux page', usage: 'ux page <design.json 或它所在的文件夹>', about: '校验 UX 设计稿，生成原型页和线框图（全套模式再生成开发交接）', project: 'none', versionCheck: false, flags: {}, run: uxPage},
   {name: 'unity export', usage: 'unity export --to <Unity 工程路径>', about: '导出到 Unity', project: 'required', versionCheck: true, flags: {to: 'string'}, run: unityExport},
   {name: 'upgrade', usage: 'upgrade', about: '把插件里的新版框架和 Unity 包复制进工程', project: 'required', versionCheck: false, flags: {}, run: upgrade}
 ];

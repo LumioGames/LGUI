@@ -152,6 +152,7 @@ The UI format is FairyGUI, which has official runtimes for Unity, Cocos Creator,
 | Skill | Use it for |
 | :-- | :-- |
 | `lgui-setup` | Create a project, check the environment, open the preview |
+| `lgui-ux` | Prototype image → UX design draft: measure positions and text, decide what each element does, mark what can be reused, and generate a clickable prototype page |
 | `lgui-ui` | Build screens: XML, layout patterns, AI art and slicing, motion, the editor |
 | `lgui-code` | Write features: Model, View, Controller, Service, tests |
 | `lgui-verify` | Screenshots, tests, debug snapshots |
