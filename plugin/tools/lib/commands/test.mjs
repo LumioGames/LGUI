@@ -244,6 +244,16 @@ import('./' + file).then(() => { window.__lguiLoaded = true; }, error => { windo
   return file;
 }
 
+// 无界面的 Chrome 里窗口和视口一样大时，能点的区域比视口小：窗口要扣掉浏览器自己的边框（实测 Chrome 158 矮 88 像素），
+// 点视口最下面那一截 Input.synthesizeTapGesture 报 Position out of bounds。所以每次定了视口大小，就把窗口放大到四边都有余量；
+// 页面看到的屏幕大小由视口决定，窗口多大不影响。
+const WINDOW_MARGIN = 400;
+async function fitWindow(page, cdp) {
+  const {width, height} = page.viewportSize();
+  const {windowId} = await cdp.send('Browser.getWindowForTarget');
+  await cdp.send('Browser.setWindowBounds', {windowId, bounds: {width: width + WINDOW_MARGIN, height: height + WINDOW_MARGIN}});
+}
+
 // 页面里的模拟操作要发的真实输入（playwright + CDP；坐标是页面像素）。
 function inputHandler(page, cdp) {
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -282,7 +292,7 @@ function inputHandler(page, cdp) {
     else if (op === 'key') await page.keyboard.press(a[0]);
     else if (op === 'type') await page.keyboard.type(a[0]);
     else if (op === 'mouseDrag') { await page.mouse.move(a[0], a[1]); await page.mouse.down(); await page.mouse.move(a[2], a[3]); await page.mouse.up(); }
-    else if (op === 'viewport') await page.setViewportSize({width: a[0], height: a[1]});
+    else if (op === 'viewport') { await page.setViewportSize({width: a[0], height: a[1]}); await fitWindow(page, cdp); }
     else throw new Error(`LGUI-RT-263  未知的模拟操作 ${op}。`);
   };
 }
@@ -332,6 +342,7 @@ export async function runBrowserTests(root, project, {files, name} = {}) {
     page.on('pageerror', e => errors.push(String(e.stack ?? e.message ?? e)));
     page.on('console', m => { if (m.type() === 'error') output.push(`  [页面控制台] ${m.text()}`); });
     const cdp = await page.context().newCDPSession(page);
+    await fitWindow(page, cdp);
     await page.exposeFunction('__lguiInput', inputHandler(page, cdp));
     await page.goto(pageUrl + encodeURIComponent(bundle));
     await page.waitForFunction(() => window.__lguiLoaded || window.__lguiLoadError, null, {timeout: 30_000});

@@ -17,6 +17,7 @@ function writeProject(root) {
     <component id="n21" name="chatBar" src="chatbar1" xy="40,120" size="400,60"><Button title="欢迎"/></component>
     <component id="n22" name="frame" src="framelb1" xy="40,200" size="400,60"><Label title="标题"/></component>
     <component id="n23" name="toggle" src="toggle01" xy="40,280" size="120,60"/>
+    <component id="n24" name="bottomToggle" src="toggle01" xy="40,1020" size="120,60"/>
   </displayList>`));
   add(path.join(main, 'MainView.xml'));
   add(path.join(main, 'MainView@portrait.xml'));
@@ -128,6 +129,14 @@ test('Check 按钮点一下选中，再点取消', async () => {
   t.end();
 });
 
+test('矮的横屏上点到最下沿', async () => {
+  const t = await lgui.testing.start(app, { screen: { width: 844, height: 390 } });
+  t.setInputType('touch');
+  await t.click('Main/MainView.bottomToggle');
+  assert.equal(t.page('Main/MainView.bottomToggle.button'), 'down');
+  t.end();
+});
+
 test('不能滚动的列表绑定数据', async () => {
   const t = await lgui.testing.start(app);
   await t.open(TagsView);
@@ -177,10 +186,10 @@ test('lgui test 和 lgui test --browser：规则类的结果一样；关联布�
   assert.equal(b.data.backend, 'h5');
   assert.deepEqual([h.data.files, b.data.files], [['tests/rules.test.ts'], ['tests/rules.test.ts']]);
   const [ho, bo] = [outcomes(h), outcomes(b)];
-  assert.equal(Object.keys(bo).length, 9, JSON.stringify(b.data.results));
+  assert.equal(Object.keys(bo).length, 10, JSON.stringify(b.data.results));
 
   // 规则类两边都通过（每个测试里断言的是具体结果）。列表虚拟化：不能滚动的列表绑定数据不开虚拟列表、两项都在；能滚动的开成虚拟列表。
-  for (const name of ['点按钮，显示点击次数', '打字遵守 maxLength', '按钮没有 title 子控件：读文字报 LGUI-RT-262', '标签的 title 写进 title 子控件', 'Check 按钮点一下选中，再点取消', '不能滚动的列表绑定数据', '能滚动的列表经绑定开成虚拟列表']) {
+  for (const name of ['点按钮，显示点击次数', '打字遵守 maxLength', '按钮没有 title 子控件：读文字报 LGUI-RT-262', '标签的 title 写进 title 子控件', 'Check 按钮点一下选中，再点取消', '矮的横屏上点到最下沿', '不能滚动的列表绑定数据', '能滚动的列表经绑定开成虚拟列表']) {
     assert.deepEqual([name, ho[name], bo[name]], [name, true, true], `${headless.stdout}\n${browserRun.stdout}`);
   }
   // headless 不算关联布局、不模拟改属性的齿轮，读到就报 LGUI-RT-260；浏览器里读得到真实的值。

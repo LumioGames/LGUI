@@ -2,6 +2,10 @@
 
 ## 未发布
 
+**`lgui test --browser`**
+
+- 修好在矮的屏幕上点不到最下面一截：新版 Chrome 无界面运行时，窗口和视口一样大，能点的区域要扣掉浏览器自己的边框（Chrome 158 实测矮 88 像素），点那一截报 `Input.synthesizeTapGesture: Position out of bounds`，比如 844×390 的横屏只能点到 302。现在开页面和每次 `t.setScreen`、`screen` 改了屏幕大小后，都把浏览器窗口放大到四边有余量，整个屏幕都点得到；页面看到的屏幕大小不变。
+
 **MVC**
 
 - 修好界面钩子、广播站收听函数、Model 订阅者出错时把界面栈弄乱：
