@@ -19,6 +19,7 @@ license: MIT
 | 新界面：按排布模式一次生成横竖两版 | `lgui new view <包>/<组件> --pattern split\|tabs\|grid\|dialog`（模式见规范 7.4） |
 | 连功能骨架一起生成 | `lgui new module <名字> --pattern <模式>` |
 | 查现有组件和控件名 | `lgui ui list` |
+| 查有哪些通用的组件、图片、字体可以直接用（框架自带和项目自己的），谁在用、哪些可以合并 | `lgui ui list --shared`（规范第 10 节；第二个地方要用时才搬进 `Common`） |
 | AI 出的网格大图拆成小图 | `lgui art split <大图> --grid 6x4 --size 128x128 --pkg <包> --names <名字>`（原图放进 `ui/art-src/`） |
 | AI 出的图集页（物件漂过格线、大小不一、自由排布的九宫格零件）拆成小图 | `lgui art cut <整页图> --pkg <包> --names <名字文件>`：按透明区域找物件、整页统一缩放、去白边、九宫格保留拉伸区并写 `scale9grid`、平铺图查接缝并写 `scale="tile"`，出一张检查图；包里已有的同名图片直接替换、资源 ID 不变；每项可以写自己的尺寸、`fit`（拉伸图的固定方向正好等于尺寸）、`pkg=`（存进哪个包）。给 AI 出图的提示词照规范第 5.1 节「art cut 对输入图的要求」写 |
 | 检查规范 | `lgui check`（`LGUI-UI-xxx`） |

@@ -4,6 +4,9 @@ import path from 'node:path';
 import {finding} from './program.mjs';
 import {members, comparePortrait, PORTRAIT} from '../generate/types.mjs';
 import {findComponent} from '../generate/model.mjs';
+import {COMMON_FIXED, resourceByUrl, duplicateImages} from '../generate/catalog.mjs';
+
+export {resourceByUrl};
 
 const ID = /^[a-z0-9]{8}$/;
 const PASCAL = /^[A-Z][A-Za-z0-9]*$/;
@@ -90,20 +93,6 @@ function iconUrlProblem(url, codeIcons) {
 
 // 动效里旋转、缩放的值都是原样（缩放 1,1、旋转 0）时不需要轴心。
 const IDENTITY = {Scale: v => v.split(',').every(n => Number(n) === 1), Rotation: v => Number(v) === 0};
-
-// Common 包里的固定组件和必有控件（UI 开发规范第 10 节）。
-const COMMON = {
-  Toast: ['text'], Confirm: ['title', 'message', 'ok', 'cancel'], Loading: ['text'], ActionHintBar: ['list'], ActionHint: ['key', 'label'],
-  RedDot: ['count'], HoldProgress: [], ArtText: []
-};
-
-/** ui:// 地址指向的资源：ui://<包ID><资源ID> 或 ui://<包名>/<资源名>。找不到返回 null。 */
-export function resourceByUrl(model, url) {
-  const m = /^ui:\/\/(?:([a-z0-9]{8})([a-z0-9]{8})|([A-Z][A-Za-z0-9]*)\/(.+))$/.exec(url ?? '');
-  const pkg = m && (m[1] ? model.byId.get(m[1]) : model.packages.find(p => p.name === m[3]));
-  const res = pkg?.resources.find(r => m[1] ? r.id === m[2] : r.name === m[4]);
-  return res ? {pkg, res} : null;
-}
 
 // 图片有 @<语言> 版本（带字图片）
 const hasLanguages = (pkg, image) => image.type === 'image' && pkg.resources.some(r => r.type === 'image' && r.name.startsWith(image.name + '@'));
@@ -284,9 +273,16 @@ export function uiRules({root, model, languages, redDots = [], texts = [], items
   }
 
   // UI-014 Common 包
+  // UI-021（警告）内容一样的图片在不同的包里各登记了一份
+  for (const group of duplicateImages(model)) {
+    const [first, ...rest] = group;
+    out.push(finding('LGUI-UI-021', `图片 ${group.map(item => `${item.pkg.name}/${item.res.name}`).join('、')} 内容完全一样，却在不同的包里各登记了一份。`, '留一份放进 Common（或公共包）并导出，别的包跨包引用（pkg + src）；确实要分开就不用管。', {file: rel(rest[0].pkg.file), line: 1, col: 1, level: 'warning'}));
+    void first;
+  }
+
   const common = model.packages.find(p => p.name === 'Common');
   if (!common) add('LGUI-UI-014', '工程里没有 Common 包。', '用 lgui init 生成的 Common 包，不要删。');
-  else for (const [name, required] of Object.entries(COMMON)) {
+  else for (const [name, required] of Object.entries(COMMON_FIXED)) {
     const c = findComponent(model, `Common/${name}`);
     if (!c) { add('LGUI-UI-014', `Common 包里缺少固定组件 ${name}。`, `把 Common/${name} 加回来（UI 开发规范第 10 节）。`, common.file); continue; }
     const names = new Set(c.children.map(ch => ch.name));
