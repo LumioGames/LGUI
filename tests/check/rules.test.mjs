@@ -51,6 +51,7 @@ const cases = {
   'LGUI-UI-018': {fail: r => fs.copyFileSync(path.join(r, 'ui/assets/Common/placeholder.png'), path.join(r, 'ui/assets/Main/stray.png'))},
   'LGUI-UI-019': {fail: r => { edit(r, MAIN_PKG, 'name="MainView.xml" path="/" exported="true"', 'name="MainView.xml" path="/"'); edit(r, MAIN_PKG, 'name="MainView@portrait.xml" path="/" exported="true"', 'name="MainView@portrait.xml" path="/"'); }},
   'LGUI-UI-020': {fail: r => edit(r, MAIN_XML, 'name="button" src="button01"', 'name="button" fileName="Button.xml" src="button01"'), warning: true},
+  'LGUI-UI-021': {fail: r => { fs.copyFileSync(path.join(r, 'ui/assets/Common/placeholder.png'), path.join(r, 'ui/assets/Main/blank.png')); edit(r, MAIN_PKG, '</resources>', '  <image id="blank001" name="blank.png" path="/"/>\n  </resources>'); }, warning: true},
   'LGUI-UI-060': {fail: r => { edit(r, MAIN_XML, '<displayList>', '<controller name="state" pages="0,a,1,b" selected="0"/>\n  <displayList>'); edit(r, MAIN_XML, /(text="你好，LGUI"[^>]*>)/, '$1\n      <gearText controller="state" pages="0,1" values="甲|乙" default="甲"/>'); }},
   'LGUI-UI-061': {fail: r => { edit(r, MAIN_XML, '<displayList>', '<controller name="tabs" pages="0,a,1,b" selected="0"/>\n  <displayList>'); edit(r, MAIN_XML, '<Button title="点我"/>', '<Button title="点我" controller="tabs" page="1"/>'); }},
   'LGUI-UI-062': {fail: r => edit(r, 'i18n/en.json', '"Main/MainView/button": "Tap me"', '"Main/MainView/button": "点我"'), warning: true},
