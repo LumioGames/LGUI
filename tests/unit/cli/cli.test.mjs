@@ -15,7 +15,7 @@ test('不带参数时列出全部命令，退出码 0', async () => {
 
 test('登记了全部正式命令（含 build 和 editor props）', () => {
   const names = registry.map(command => command.name);
-  assert.deepEqual(names.sort(), ['art cut', 'art split', 'build', 'check', 'dev', 'doctor', 'editor', 'editor props', 'i18n extract', 'init', 'new module', 'new view', 'test', 'ui list', 'unity export', 'upgrade', 'verify'].sort());
+  assert.deepEqual(names.sort(), ['art cut', 'art split', 'build', 'check', 'dev', 'doctor', 'editor', 'editor props', 'i18n extract', 'init', 'new module', 'new view', 'test', 'ui list', 'unity export', 'upgrade', 'ux crop', 'ux page', 'verify'].sort());
 });
 
 test('未知命令报 LGUI-CLI-001，并列出全部命令', async () => {

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__LGUI_UX_TITLE__ · UX 设计稿</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--line:#d9dde3;--text:#1d2433;--muted:#667085;--full:#2563eb;--stub:#c2410c;--display:#6b7280}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.5 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:var(--bg)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+header h1{font-size:16px;margin:0}
+header p{margin:0;color:var(--muted);font-size:12px}
+.tabs{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+button{font:inherit;color:inherit;cursor:pointer}
+.tabs button,.chip{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px}
+.tabs button.on,.chip.on{background:var(--text);color:#fff;border-color:var(--text)}
+main{display:grid;grid-template-columns:170px minmax(320px,1fr) 380px;gap:16px;padding:16px;align-items:start}
+@media(max-width:1000px){main{grid-template-columns:1fr}}
+nav button{display:block;width:100%;text-align:left;border:1px solid transparent;background:none;border-radius:6px;padding:6px 8px}
+nav button.on{background:var(--card);border-color:var(--line);font-weight:600}
+nav small{display:block;color:var(--muted);font-size:11px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;font-size:12px}
+.bar select,.bar input{font:inherit}
+.stagewrap{overflow:auto;padding-bottom:8px}
+.phone{position:relative;background:#e9ecf1;border:1px solid var(--line);margin:0 auto;overflow:hidden}
+.phone img{position:absolute;left:0;top:0;pointer-events:none}
+.phone .safe{position:absolute;border:1px dashed #16a34a;pointer-events:none}
+.box{position:absolute;padding:0;border-radius:4px;overflow:hidden;text-align:left}
+.box .id{position:absolute;left:0;top:0;font-size:10px;line-height:1;color:#fff;padding:2px 3px;border-radius:0 0 4px 0}
+.box .tx{position:absolute;left:0;right:0;bottom:0;font-size:10px;line-height:1.1;padding:1px 2px;white-space:nowrap;overflow:hidden;background:rgba(255,255,255,.8)}
+.box.sel{outline:3px solid #111827;z-index:5}
+.box.over .tx{background:#fee2e2;color:#b91c1c}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:12px}
+.card h2{font-size:15px;margin:0 0 6px}.card h3{font-size:13px;margin:0 0 6px}
+dl{display:grid;grid-template-columns:76px 1fr;gap:4px 8px;margin:0}
+dt{color:var(--muted)}dd{margin:0;word-break:break-word}
+.pill{display:inline-block;border-radius:4px;padding:0 6px;color:#fff;font-size:12px}
+.go{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:3px 8px;margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:4px;margin-right:10px;font-size:12px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px}
+section{display:none;padding:16px}
+table{border-collapse:collapse;width:100%;background:var(--card);font-size:13px}
+th,td{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+th{background:#eef0f3;position:sticky;top:53px}
+.warn{color:#b45309}.err{color:#b91c1c}.muted{color:var(--muted)}
+.sw{display:inline-block;width:12px;height:12px;border:1px solid var(--line);vertical-align:-2px;margin-right:3px}
+.sum{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.sum div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.sum b{display:block;font-size:20px}
+</style>
+</head>
+<body>
+<header>
+  <div><h1 id="title"></h1><p id="subtitle"></p></div>
+  <div class="tabs" id="tabs"></div>
+</header>
+<main id="proto">
+  <nav id="nav"></nav>
+  <div>
+    <div class="bar" id="bar"></div>
+    <div class="stagewrap"><div class="phone" id="phone"></div></div>
+  </div>
+  <div>
+    <div class="card" id="detail"></div>
+    <div class="card" id="flow"></div>
+    <div class="card legend" id="legend"></div>
+  </div>
+</main>
+<section id="elements"></section>
+<section id="resources"></section>
+<section id="checks"></section>
+<section id="cases"></section>
+<script>
+const DATA = /*__LGUI_UX_DATA__*/null;
+const D = DATA.design, R = DATA.report, C = R.conditions;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const ORIENT = C.orientation === 'both' ? ['portrait', 'landscape'] : [C.orientation];
+const ONAME = {portrait: '竖屏', landscape: '横屏'};
+const SCOPE = {full: ['完整实现', '#2563eb'], stub: ['占位', '#c2410c'], display: ['只显示', '#6b7280']};
+const REUSE = {framework: ['框架自带', '#059669'], reskin: ['框架自带·换样子', '#0d9488'], pattern: ['排布模式', '#0284c7'], project: ['工程已有', '#7c3aed'], new: ['新建', '#dc2626'], none: ['不需要', '#9ca3af']};
+const SOURCE = {measured: ['实测', '#2563eb'], estimated: ['估算', '#d97706'], designed: ['自己设计', '#db2777']};
+const per = (v, o) => v && typeof v === 'object' && !Array.isArray(v) && ('portrait' in v || 'landscape' in v) ? v[o] : v;
+const state = {screen: D.screens[0].id, sel: null, orient: ORIENT[0], lang: C.defaultLanguage, color: 'scope', mode: 'over', opacity: 100, device: '', tab: 'proto'};
+const screenOf = id => D.screens.find(s => s.id === id);
+const compOf = id => (D.components || []).find(c => c.id === id);
+const reuseOf = el => el.reuse || (el.component && compOf(el.component) ? compOf(el.component).reuse : null);
+const problemsOf = id => R.problems.filter(p => p.where === id || p.where.startsWith(id + '.'));
+
+function colorOf(el) {
+  if (state.color === 'reuse') { const r = reuseOf(el); return r ? REUSE[r.from][1] : '#d1d5db'; }
+  if (state.color === 'source') { const s = per(el.source, state.orient); return s ? SOURCE[s][1] : '#d1d5db'; }
+  return (SCOPE[el.scope] || SCOPE.display)[1];
+}
+
+// 把设计尺寸下的位置摆到某个屏幕上：缩放比取 min，整个设计区域完整显示；多出来的空间按 anchor 分。
+function layout(screen, orient, device) {
+  const [dw, dh] = C.designSize[orient];
+  const els = (screen.elements || []).filter(el => per(el.rect, orient));
+  if (!device) return {W: dw, H: dh, safe: null, rects: new Map(els.map(el => [el.id, per(el.rect, orient)]))};
+  const portrait = device.height >= device.width;
+  const turned = portrait !== (orient === 'portrait');
+  const [w, h] = turned ? [device.height, device.width] : [device.width, device.height];
+  const sa = device.safeArea || {top: 0, right: 0, bottom: 0, left: 0};
+  const inset = turned ? (orient === 'landscape' ? {top: sa.right, right: sa.bottom, bottom: sa.left, left: sa.top} : {top: sa.left, right: sa.top, bottom: sa.right, left: sa.bottom}) : sa;
+  const k = Math.min(w / dw, h / dh), W = w / k, H = h / k;
+  const safe = [inset.left / k, inset.top / k, W - (inset.left + inset.right) / k, H - (inset.top + inset.bottom) / k];
+  const rects = new Map();
+  const place = (el, base, target) => {
+    const [x, y, ew, eh] = per(el.rect, orient);
+    const a = String(per(el.anchor, orient) || 'left-top') === 'fill' ? ['stretch', 'stretch'] : String(per(el.anchor, orient) || 'left-top').split('-');
+    const axis = (pos, size, b0, bs, t0, ts, mode) => {
+      if (mode === 'right' || mode === 'bottom') return [t0 + ts - (b0 + bs - pos), size];
+      if (mode === 'center' || mode === 'middle') return [t0 + ts / 2 + (pos + size / 2 - (b0 + bs / 2)) - size / 2, size];
+      if (mode === 'stretch') return [t0 + (pos - b0), size + (ts - bs)];
+      return [t0 + (pos - b0), size];
+    };
+    const [nx, nw] = axis(x, ew, base[0], base[2], target[0], target[2], a[0]);
+    const [ny, nh] = axis(y, eh, base[1], base[3], target[1], target[3], a[1]);
+    rects.set(el.id, [nx, ny, nw, nh]);
+    for (const child of els.filter(c => c.parent === el.id)) place(child, [x, y, ew, eh], [nx, ny, nw, nh]);
+  };
+  if (screen.fullscreen) {
+    for (const el of els.filter(e => !e.parent)) place(el, [0, 0, dw, dh], el.anchorTo === 'screen' ? [0, 0, W, H] : safe);
+  } else {
+    // 不是全屏的界面放在安全区正中
+    const all = els.map(el => per(el.rect, orient));
+    const bx = Math.min(...all.map(r => r[0])), by = Math.min(...all.map(r => r[1]));
+    const bw = Math.max(...all.map(r => r[0] + r[2])) - bx, bh = Math.max(...all.map(r => r[1] + r[3])) - by;
+    const ox = safe[0] + (safe[2] - bw) / 2 - bx, oy = safe[1] + (safe[3] - bh) / 2 - by;
+    for (const el of els) { const r = per(el.rect, orient); rects.set(el.id, [r[0] + ox, r[1] + oy, r[2], r[3]]); }
+  }
+  return {W, H, safe, rects};
+}
+
+function textOf(el) {
+  if (!el.text || !el.text.content) return '';
+  const own = el.text.content[state.lang];
+  return own !== undefined ? own : `${el.text.content[C.defaultLanguage] ?? ''}（未译）`;
+}
+const fitOf = el => ((R.fit[el.id] || {})[state.orient] || {})[state.lang];
+const tooLong = el => { const f = fitOf(el); return f !== undefined && el.text && (el.text.overflow === 'shrink' ? f > 1.4 : el.text.overflow === 'ellipsis' ? f > 1 && !el.text.dynamic : false); };
+
+function renderBar() {
+  const devices = (C.verifySizes || []);
+  const opt = (list, cur) => list.map(([v, t]) => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}>${esc(t)}</option>`).join('');
+  $('bar').innerHTML =
+    (ORIENT.length > 1 ? `<label>方向 <select data-k="orient">${opt(ORIENT.map(o => [o, ONAME[o]]), state.orient)}</select></label>` : `<span class="muted">${ONAME[ORIENT[0]]}</span>`) +
+    `<label>语言 <select data-k="lang">${opt(C.languages.map(l => [l, l]), state.lang)}</select></label>` +
+    `<label>屏幕 <select data-k="device">${opt([['', `设计尺寸 ${C.designSize[state.orient].join('×')}`], ...devices.map(d => [d.name, `${d.name} ${d.width}×${d.height}`])], state.device)}</select></label>` +
+    `<label>上色 <select data-k="color">${opt([['scope', '做不做'], ['reuse', '复用来源'], ['source', '数值来源']], state.color)}</select></label>` +
+    [['over', '叠加'], ['ref', '只看原图'], ['wire', '只看线框']].map(([v, t]) => `<button class="chip${state.mode === v ? ' on' : ''}" data-mode="${v}">${t}</button>`).join('') +
+    `<label>原图透明度 <input type="range" min="0" max="100" value="${state.opacity}" data-k="opacity"></label>`;
+}
+
+function renderProto() {
+  const screen = screenOf(state.screen);
+  let g = '';
+  $('nav').innerHTML = D.screens.map(s => `<button class="${s.id === state.screen ? 'on' : ''}" data-screen="${esc(s.id)}">${esc(s.name)}<small>${esc(s.id)} · ${esc(s.layer)}${s.designed === false ? ' · 只记入口' : ''}${s.entry ? ' ← ' + esc(s.entry) : ''}</small></button>`).join('');
+  void g;
+  renderBar();
+  const device = (C.verifySizes || []).find(d => d.name === state.device) || null;
+  const L = layout(screen, state.orient, device);
+  const k = Math.min(560 / L.W, 760 / L.H);
+  const phone = $('phone');
+  phone.style.width = L.W * k + 'px';
+  phone.style.height = L.H * k + 'px';
+  let html = '';
+  const ref = (D.references || []).find(r => r.screen === screen.id && r.orientation === state.orient);
+  if (ref && !device && state.mode !== 'wire') {
+    const iw = ref.size ? ref.size[0] * ref.scale * k : L.W * k;
+    html += `<img alt="原型图" src="${esc(ref.file)}" style="width:${iw}px;opacity:${state.opacity / 100}">`;
+  }
+  if (L.safe) html += `<div class="safe" style="left:${L.safe[0] * k}px;top:${L.safe[1] * k}px;width:${L.safe[2] * k}px;height:${L.safe[3] * k}px"></div>`;
+  if (state.mode !== 'ref' || device) {
+    for (const el of screen.elements || []) {
+      const r = L.rects.get(el.id);
+      if (!r) continue;
+      const c = colorOf(el), on = el.id === state.sel, big = r[2] * k >= 34 && r[3] * k >= 16, t = textOf(el);
+      html += `<button class="box${on ? ' sel' : ''}${tooLong(el) ? ' over' : ''}" data-id="${esc(el.id)}" title="${esc(el.id + ' ' + el.name)}" style="left:${r[0] * k}px;top:${r[1] * k}px;width:${r[2] * k}px;height:${r[3] * k}px;border:1.5px ${el.scope === 'display' ? 'dashed' : 'solid'} ${c};background:${c}1f">` +
+        (big ? `<span class="id" style="background:${c}">${esc(el.id)}</span>` : '') + (t && r[2] * k >= 40 && r[3] * k >= 30 ? `<span class="tx">${esc(t)}</span>` : '') + `</button>`;
+    }
+  }
+  phone.innerHTML = html || '<p class="muted" style="padding:12px">这个画面只记了入口，没有设计。</p>';
+  renderDetail(screen);
+  const names = state.color === 'reuse' ? REUSE : state.color === 'source' ? SOURCE : SCOPE;
+  $('legend').innerHTML = '<h3>图例</h3>' + Object.values(names).map(([t, c]) => `<span><i style="background:${c}"></i>${t}</span>`).join('') + '<p class="muted" style="margin:6px 0 0">虚线框是只显示；黑粗框是当前选中；红底的文字是这种语言下大概放不下；绿色虚线是安全区。</p>';
+  $('flow').innerHTML = `<h3>${esc(screen.name)} · ${esc(screen.layer)}${screen.fullscreen ? ' · 全屏' : ''}${screen.pattern ? ' · 排布模式 ' + esc(screen.pattern) : ''}</h3>` + (screen.entry ? `<p>入口：${esc(screen.entry)}</p>` : '') + ((screen.flow || []).length ? `<ol style="margin:0;padding-left:18px">${screen.flow.map(f => `<li>${esc(f)}</li>`).join('')}</ol>` : '<p class="muted">没有写流程。</p>');
+}
+
+function renderDetail(screen) {
+  const el = (screen.elements || []).find(e => e.id === state.sel) || (screen.elements || [])[0];
+  if (!el) { $('detail').innerHTML = '<p class="muted">没有元素。</p>'; return; }
+  state.sel = el.id;
+  const sc = SCOPE[el.scope] || SCOPE.display, ru = reuseOf(el), comp = el.component ? compOf(el.component) : null;
+  const rects = ORIENT.map(o => { const r = per(el.rect, o); return r ? `${ONAME[o]} ${r[0]}, ${r[1]}, ${r[2]} × ${r[3]}（${esc(per(el.anchor, o) || '跟着上级')}，${(SOURCE[per(el.source, o)] || ['?'])[0]}）` : `${ONAME[o]} 没有`; });
+  const row = (k, v) => v ? `<dt>${k}</dt><dd>${v}</dd>` : '';
+  const t = el.text;
+  const fit = fitOf(el);
+  const target = el.opens && screenOf(el.opens);
+  const cases = (D.cases || []).filter(c => (c.covers || []).includes(el.id));
+  const probs = problemsOf(el.id);
+  $('detail').innerHTML = `<h2><span class="pill" style="background:${sc[1]}">${esc(el.id)}</span> ${esc(el.name)}</h2><dl>` +
+    row('类型', esc(el.type) + (el.control ? ` · 控件名 <code>${esc(el.control)}</code>` : '')) +
+    row('做不做', sc[0]) +
+    row('位置', rects.join('<br>')) +
+    row('点了做什么', esc(el.action)) +
+    row('状态', (el.states || []).map(s => `<b>${esc(s.name)}</b>：${esc(s.look)}${s.when ? `（${esc(s.when)}）` : ''}`).join('<br>')) +
+    row('数据', esc(el.data)) +
+    row('复用', ru ? `<span class="pill" style="background:${REUSE[ru.from][1]}">${REUSE[ru.from][0]}</span> ${esc(ru.ref || '')}${ru.to ? ' → 放进 ' + esc(ru.to) : ''}` : '') +
+    row('框架能力', (el.uses || []).map(u => `<code>${esc(u)}</code>`).join('、')) +
+    row('组件', comp ? `${esc(comp.id)}（${esc(comp.type)}，${comp.size.join('×')}）：${(comp.parts || []).map(p => esc(p.name)).join('、')}` : '') +
+    row('文字', t ? (t.image ? '字在图里（带字图片）' : `「${esc(textOf(el))}」${t.dynamic ? '（会变）' : ''}<br>${t.fontSize} 号 <i class="sw" style="background:${esc(t.color || '#fff')}"></i>${esc(t.color || '')}${t.stroke ? ` 描边 ${t.stroke[0]} <i class="sw" style="background:${esc(t.stroke[1])}"></i>` : ''}${t.shadow ? ` 投影 ${t.shadow[0]},${t.shadow[1]}` : ''} ${esc(t.align || '')}<br>超长：${esc(t.overflow)}${fit !== undefined ? `，这种语言大约占框宽的 ${Math.round(fit * 100)}%` : ''}`) : '') +
+    row('列表', el.list ? `${el.list.mode === 'scroll' ? '能滚动' : '固定不滚'}，${[el.list.min, el.list.typical, el.list.max].filter(v => v !== undefined).join(' / ')} 项（最少 / 常见 / 最多）` : '') +
+    row('资源', (el.assets || []).map(esc).join('、')) +
+    row('用例', cases.map(c => esc(c.id)).join('、')) +
+    row('备注', esc(el.note)) + '</dl>' +
+    (target ? `<button class="go" data-screen="${esc(target.id)}">打开「${esc(target.name)}」→</button>` : '') +
+    (probs.length ? `<div style="margin-top:8px">${probs.map(p => `<div class="${p.level === 'error' ? 'err' : 'warn'}">⚠ ${esc(p.message)}<span class="muted"> → ${esc(p.fix)}</span></div>`).join('')}</div>` : '');
+}
+
+function renderTables() {
+  const all = D.screens.flatMap(s => (s.elements || []).map(el => [s, el]));
+  $('elements').innerHTML = `<table><tr><th>编号</th><th>画面</th><th>名称</th><th>类型</th><th>做不做</th><th>点了做什么</th><th>状态</th><th>数据</th><th>复用</th><th>文字</th></tr>` +
+    all.map(([s, el]) => { const ru = reuseOf(el); return `<tr><td>${esc(el.id)}</td><td>${esc(s.name)}</td><td>${esc(el.name)}</td><td>${esc(el.type)}</td><td>${(SCOPE[el.scope] || ['?'])[0]}</td><td>${esc(el.action)}${el.opens ? ` → ${esc(el.opens)}` : ''}</td><td>${(el.states || []).map(x => esc(x.name)).join('、')}</td><td>${esc(el.data)}</td><td>${ru ? REUSE[ru.from][0] + (ru.ref ? ' ' + esc(ru.ref) : '') : ''}</td><td>${el.text && el.text.content ? C.languages.map(l => esc(el.text.content[l] ?? '—')).join(' / ') : ''}</td></tr>`; }).join('') + '</table>';
+  const used = id => all.filter(([, el]) => el.component === id || (el.assets || []).includes(id)).map(([, el]) => el.id).concat((D.components || []).filter(c => (c.parts || []).some(p => (p.assets || []).includes(id))).map(c => c.id));
+  $('resources').innerHTML = `<h3>组件（${(D.components || []).length}）</h3><table><tr><th>组件</th><th>名称</th><th>类型</th><th>尺寸</th><th>零件</th><th>复用</th><th>用在</th></tr>` +
+    (D.components || []).map(c => `<tr><td>${esc(c.id)}</td><td>${esc(c.name)}</td><td>${esc(c.type)}</td><td>${(c.size || []).join('×')}</td><td>${(c.parts || []).map(p => `${esc(p.name)}（${esc(p.type)}）`).join('、')}</td><td>${c.reuse ? REUSE[c.reuse.from][0] + ' ' + esc(c.reuse.ref || c.reuse.to || '') : ''}</td><td>${used(c.id).map(esc).join('、')}</td></tr>`).join('') + '</table>' +
+    `<h3 style="margin-top:16px">资源（${(D.assets || []).length}）</h3><table><tr><th>资源</th><th>类别</th><th>尺寸</th><th>九宫格</th><th>包</th><th>谁出</th><th>图集页</th><th>复用</th><th>用在</th><th>说明</th></tr>` +
+    (D.assets || []).map(a => `<tr><td>${esc(a.id)}</td><td>${esc(a.kind)}</td><td>${(a.size || []).join('×')}</td><td>${a.nine ? a.nine.join(',') : ''}${a.tile ? ' 平铺' : ''}</td><td>${esc(a.package || 'Common')}</td><td>${esc(a.by)}</td><td>${esc(a.sheet)}</td><td>${a.reuse ? REUSE[a.reuse.from][0] + ' ' + esc(a.reuse.ref || '') : ''}</td><td>${used(a.id).map(esc).join('、')}</td><td>${esc(a.note)}</td></tr>`).join('') + '</table>';
+  const S = R.summary, kv = (o, names) => Object.entries(o).map(([k, v]) => `${names[k][0]} ${v}`).join('、');
+  $('checks').innerHTML = `<div class="sum"><div><b>${S.screens}</b>画面</div><div><b>${S.elements}</b>元素<br><span class="muted">${kv(S.scope, SCOPE)}</span></div><div><b>${S.components}</b>组件</div><div><b>${S.assets}</b>资源</div><div><b>${S.toBuild.length}</b>要新做<br><span class="muted">${kv(S.reuse, REUSE)}</span></div><div><b>${S.open}</b>未定事项</div></div>` +
+    `<p class="muted">方向 ${esc(C.orientation)}；语言 ${C.languages.map(esc).join('、')}；平台 ${C.platforms.map(esc).join('、')}；输入 ${C.inputs.map(esc).join('、')}；按 LGUI ${esc(D.lguiVersion || DATA.generated.lguiVersion)} 出的设计稿${DATA.generated.inProject ? '' : '；不在工程里生成，「工程已有」的复用来源没有核对'}。</p>` +
+    (S.toBuild.length ? `<p><b>要新做的：</b>${S.toBuild.map(esc).join('、')}</p>` : '') +
+    (R.problems.length ? `<table><tr><th>在哪</th><th>提醒</th><th>怎么办</th></tr>${R.problems.map(p => `<tr><td>${esc(p.where)}</td><td class="${p.level === 'error' ? 'err' : 'warn'}">${esc(p.message)}</td><td>${esc(p.fix)}</td></tr>`).join('')}</table>` : '<p>没有提醒。</p>');
+  $('cases').innerHTML = `<h3>未定事项（${(D.open || []).length}）</h3>` + ((D.open || []).length ? `<table><tr><th>编号</th><th>要定什么</th><th>谁定</th><th>没人答时</th><th>结论</th><th>卡住</th></tr>${D.open.map(q => `<tr><td>${esc(q.id)}</td><td>${esc(q.question)}</td><td>${q.owner === 'agent' ? 'Agent' : '用户'}</td><td>${esc(q.default)}</td><td>${q.decided == null ? '<span class="warn">未定</span>' : esc(q.decided)}</td><td>${(q.blocks || []).map(esc).join('、')}</td></tr>`).join('')}</table>` : '<p class="muted">没有。</p>') +
+    ((D.renames || []).length ? `<h3 style="margin-top:16px">原创替换（${D.renames.length}）</h3><table><tr><th>是什么</th><th>原型图里的</th><th>换成</th></tr>${D.renames.map(r => `<tr><td>${esc(r.what)}</td><td>${esc(r.from)}</td><td>${esc(r.to)}</td></tr>`).join('')}</table>` : '') +
+    `<h3 style="margin-top:16px">行为用例（${(D.cases || []).length}）</h3>` + ((D.cases || []).length ? `<table><tr><th>编号</th><th>用例</th><th>操作</th><th>预期</th><th>覆盖</th><th>在哪跑</th></tr>${D.cases.map(c => `<tr><td>${esc(c.id)}</td><td>${esc(c.name)}</td><td>${esc(c.steps)}</td><td>${esc(c.expect)}</td><td>${(c.covers || []).map(esc).join('、')}</td><td>${esc(c.runner)}</td></tr>`).join('')}</table>` : '<p class="muted">设计稿模式不出用例；全套模式（mode: "full"）才有。</p>');
+}
+
+function render() {
+  const TABS = [['proto', '原型'], ['elements', '元素清单'], ['resources', '组件和资源'], ['checks', `检查${R.problems.length ? '（' + R.problems.length + '）' : ''}`], ['cases', '未定事项和用例']];
+  $('tabs').innerHTML = TABS.map(([k, t]) => `<button data-tab="${k}" class="${state.tab === k ? 'on' : ''}">${t}</button>`).join('');
+  for (const [k] of TABS) $(k).style.display = state.tab === k ? (k === 'proto' ? 'grid' : 'block') : 'none';
+  if (state.tab === 'proto') renderProto();
+}
+
+$('title').textContent = `${D.name} · UX 设计稿`;
+$('subtitle').textContent = `${D.mode === 'full' ? '全套（带开发交接）' : '设计稿'} · 原型图${D.source.original ? '是自己的作品' : '不是自己的作品，只对位置、尺寸、质感和颜色'} · 点方块看需求，编号一直用到资源和用例`;
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-screen],[data-id],[data-mode]');
+  if (!t) return;
+  if (t.dataset.tab) state.tab = t.dataset.tab;
+  if (t.dataset.screen) { state.screen = t.dataset.screen; state.sel = null; state.tab = 'proto'; }
+  if (t.dataset.id) state.sel = t.dataset.id;
+  if (t.dataset.mode) state.mode = t.dataset.mode;
+  render();
+});
+document.addEventListener('input', e => {
+  const k = e.target.dataset && e.target.dataset.k;
+  if (!k) return;
+  state[k] = k === 'opacity' ? Number(e.target.value) : e.target.value;
+  if (k === 'orient') state.device = '';
+  if (k === 'opacity') { const img = $('phone').querySelector('img'); if (img) img.style.opacity = state.opacity / 100; return; }
+  render();
+});
+renderTables();
+render();
+</script>
+</body>
+</html>

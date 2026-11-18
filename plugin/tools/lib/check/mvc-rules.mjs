@@ -13,6 +13,8 @@ const TRANSITION_WORDS = ['playing', 'play', 'done'];
 const LIST = ['items', 'item', 'key', 'selected'];
 const OTHER = ['view', 'lockWhilePending', 'visibleOn', 'placeholder', 'roll', 'tick'];
 const WORDS = [...DISPLAY, ...ACTIONS, ...LIST, ...OTHER];
+/** 绑定表能用的全部词（MVC 开发规范第 6.4 节），lgui ux page 核对设计稿引用的框架能力时也用。 */
+export const BINDING_WORDS = [...WORDS, ...TRANSITION_WORDS];
 const FORBIDDEN_GLOBALS = ['document', 'window', 'globalThis', 'CS', 'puer', 'localStorage', 'sessionStorage', 'fetch', 'XMLHttpRequest', 'WebSocket', 'navigator', 'location', 'setTimeout', 'setInterval', 'requestAnimationFrame'];
 const LAYOUT_PROPS = ['x', 'y', 'width', 'height', 'rect'];
 const TEXT_KEY = /^[a-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$|^[A-Z][A-Za-z0-9]*\/[A-Z][A-Za-z0-9@]*\/[A-Za-z0-9.@]+$/;

@@ -152,6 +152,7 @@ LGUI 是 [LumioGames](https://lumio.games/) 出品的游戏 UI 框架，给 AI A
 | 技能 | 什么时候用 |
 | :-- | :-- |
 | `lgui-setup` | 建工程、检查环境、打开预览 |
+| `lgui-ux` | 原型图 → UX 设计稿：量位置和文字、定每个元素做什么、标出哪些用现成的，生成可以点着看的原型页 |
 | `lgui-ui` | 拼界面：XML、排布模式、出图拆图、动效、编辑器 |
 | `lgui-code` | 写功能：Model、View、Controller、Service、测试 |
 | `lgui-verify` | 截图、测试、调试快照 |

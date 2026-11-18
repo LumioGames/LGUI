@@ -19,6 +19,12 @@ MyGame/
 │           └── BagController.ts #   处理事件、改数据、调服务
 ├── host/                      # 网页端宿主（可选，比如挂载 three.js 三维画布与 Web Audio，见 MVC 规范第 17 节）
 │   └── main.ts                #   defineWebHost({ mount(stage), audio?, services? })；不进 lgui test 和 Unity 导出
+├── design/                    # UX 设计稿（可选，lgui-ux 技能产出）：每份一个文件夹，不进游戏包
+│   └── shop/
+│       ├── design.json        #     唯一的源文件：画面、元素、组件、资源、未定事项
+│       ├── reference/         #     原型图和量图时的放大图（crops/）
+│       ├── prototype.html     #     生成的原型页，浏览器直接打开；wireframe/、handoff.md、art/ 也是生成的，不手改
+│       └── …
 ├── tests/                     # 单元测试：用测试后端在 Node 里跑，不需要浏览器
 ├── i18n/                      # 文本表：每种语言一个 <语言>.json
 ├── .lgui/                     # LGUI 自己的东西，用户不用管
