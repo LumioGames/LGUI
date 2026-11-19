@@ -5,7 +5,7 @@ UX 设计稿只有这一个源文件，放在工程的 `design/<名字>/design.j
 ```json
 {
   "name": "shop",
-  "lguiVersion": "0.5.0",
+  "lguiVersion": "0.6.0",
   "mode": "design",
   "source": {"kind": "screenshot", "original": false, "note": "只对位置、尺寸、质感和颜色"},
   "project": {"platforms": ["web"], "inputs": ["touch"]},
