@@ -2,6 +2,8 @@
 
 ## 未发布
 
+## 0.6.0（2026-11-19）
+
 **`lgui test --browser`**
 
 - 修好无头 Chrome 里点视口最下面一段报 `Input.synthesizeTapGesture: Position out of bounds`：这版 Chrome 的页面可点区域比窗口矮约 88 像素，开页面和每次换视口（`setScreen`）之后，把窗口撑到装得下视口（宽高各加 200），失败直接报错。
