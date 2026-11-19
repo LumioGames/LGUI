@@ -376,7 +376,12 @@ export default defineWebHost({
       const resized = await page.evaluate(() => window.__hostLog.resizes.at(-1));
       assert.deepEqual(resized, {width: 800, height: 600, top: 0, right: 30, bottom: 16, left: 30});
       await page.setViewportSize({width: 960, height: 540});
-      await page.waitForFunction(() => window.__lgui.snapshot().orientation === 'landscape', null, {timeout: 5000});
+      // 界面换版有 150 毫秒防抖，800×600 也是横屏，等方向不够：等界面根节点真的铺满 960×540（按新尺寸排好版）再取按钮坐标，
+      // 否则取到的是旧版面的坐标，换版落在鼠标点击和多指触控之间时，手指 1 就按空了（macOS CI 上偶发）。
+      await page.waitForFunction(() => {
+        const r = document.querySelector('fgui-stage')?.getBoundingClientRect();
+        return window.__lgui.snapshot().orientation === 'landscape' && r !== undefined && Math.round(r.width) === 960 && Math.round(r.height) === 540;
+      }, null, {timeout: 5000});
 
       // 找两个 HUD 按钮的屏幕坐标
       const rects = await page.evaluate(() => {

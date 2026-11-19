@@ -212,6 +212,13 @@ async function launchBrowser() {
   throw new LgCliError('LGUI-CLI-132', '没找到 Chrome 或 Edge，lgui test --browser 跑不了。', {fix: '装一个 Chrome 或 Edge（lgui doctor 会告诉你它在哪里找）；或者先不加 --browser，用 headless 跑。'});
 }
 
+// 无头 Chrome 的页面可点区域比窗口矮（高约 88 像素，宽也有下限），视口最底下一段 Input.synthesizeTapGesture 会报
+// Position out of bounds。开页面和换视口之后把窗口撑到装得下视口（各加余量）；只在无头模式下用，失败直接抛。
+async function fitWindowToViewport(cdp, width, height) {
+  const {windowId} = await cdp.send('Browser.getWindowForTarget');
+  await cdp.send('Browser.setWindowBounds', {windowId, bounds: {width: width + 200, height: height + 200}});
+}
+
 // 测试页面的入口：h5 后端、浏览器里的模拟操作和测试环境（test/browser-env.mjs）。
 function writeBrowserEnv(root, project, out) {
   const fw = rel => JSON.stringify(posix(path.join(root, '.lgui', 'framework', rel)));
@@ -282,7 +289,7 @@ function inputHandler(page, cdp) {
     else if (op === 'key') await page.keyboard.press(a[0]);
     else if (op === 'type') await page.keyboard.type(a[0]);
     else if (op === 'mouseDrag') { await page.mouse.move(a[0], a[1]); await page.mouse.down(); await page.mouse.move(a[2], a[3]); await page.mouse.up(); }
-    else if (op === 'viewport') await page.setViewportSize({width: a[0], height: a[1]});
+    else if (op === 'viewport') { await page.setViewportSize({width: a[0], height: a[1]}); await fitWindowToViewport(cdp, a[0], a[1]); }
     else throw new Error(`LGUI-RT-263  未知的模拟操作 ${op}。`);
   };
 }
@@ -332,6 +339,7 @@ export async function runBrowserTests(root, project, {files, name} = {}) {
     page.on('pageerror', e => errors.push(String(e.stack ?? e.message ?? e)));
     page.on('console', m => { if (m.type() === 'error') output.push(`  [页面控制台] ${m.text()}`); });
     const cdp = await page.context().newCDPSession(page);
+    await fitWindowToViewport(cdp, 1920, 1080);
     await page.exposeFunction('__lguiInput', inputHandler(page, cdp));
     await page.goto(pageUrl + encodeURIComponent(bundle));
     await page.waitForFunction(() => window.__lguiLoaded || window.__lguiLoadError, null, {timeout: 30_000});
